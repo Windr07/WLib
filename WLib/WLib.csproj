@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{69D92973-B7BC-4C0B-8038-F9063D2EB2A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WLib</RootNamespace>
+    <AssemblyName>WLib</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Realese\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Computer\HardwareInfo.cs" />
+    <Compile Include="Data\DataTableOpt.cs" />
+    <Compile Include="Data\ModelConvert.cs" />
+    <Compile Include="Data\NullableConvert.cs" />
+    <Compile Include="DesignPattern\SingletonProvider.cs" />
+    <Compile Include="Attributes\DescriptionAttribute.cs" />
+    <Compile Include="Attributes\EnumDescriptionHelper.cs" />
+    <Compile Include="ExtProgram\QQInvoke.cs" />
+    <Compile Include="Files\ArcGisFiles.cs" />
+    <Compile Include="Files\DirectoryFileAceess.cs" />
+    <Compile Include="Files\FileEncode.cs" />
+    <Compile Include="Files\FileOpt.cs" />
+    <Compile Include="Format\DateTimeFormat.cs" />
+    <Compile Include="Format\StringUtility.cs" />
+    <Compile Include="Calculate\Angle.cs" />
+    <Compile Include="Model\UniqueObject.cs" />
+    <Compile Include="Office\EOfficeVersion.cs" />
+    <Compile Include="Office\OfficeInfo.cs" />
+    <Compile Include="Print\PrintOption.cs" />
+    <Compile Include="Progress\ProgressOptManager.cs" />
+    <Compile Include="Test\Tester.cs" />
+    <Compile Include="ThreadHelper\EControlInvokeType.cs" />
+    <Compile Include="WindowsAPI\WinMsg.cs" />
+    <Compile Include="WinForm\DialogOpt.cs" />
+    <Compile Include="WinForm\WinFormOpt.cs" />
+    <Compile Include="Model\UniqueObjectExCollection.cs" />
+    <Compile Include="Model\UniqueObjectEx.cs" />
+    <Compile Include="Progress\ProLogFileInfo.cs" />
+    <Compile Include="Progress\ProLogManager.cs" />
+    <Compile Include="Format\NumberConversion.cs" />
+    <Compile Include="Progress\EventArgs.cs" />
+    <Compile Include="Progress\GroupMessages.cs" />
+    <Compile Include="Progress\ProgressMessages.cs" />
+    <Compile Include="Progress\ProgressOperation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThreadHelper\ControlOpt.cs" />
+    <Compile Include="ThreadHelper\ControlInvokeParam.cs" />
+    <Compile Include="WindowsAPI\WinApi.cs" />
+    <Compile Include="WindowsAPI\WinFormStyle.cs" />
+    <Compile Include="Xml\XmlConfig.cs" />
+    <Compile Include="Xml\XmlSaveAttrParams.cs" />
+    <Compile Include="Xml\XmlConvert.cs" />
+    <Compile Include="Zip\SharpZip.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
