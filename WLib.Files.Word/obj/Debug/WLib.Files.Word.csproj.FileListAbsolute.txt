@@ -1,0 +1,6 @@
+F:\MyCode\WLib\WLib.Files.Word\bin\Debug\WLib.Files.Word.dll
+F:\MyCode\WLib\WLib.Files.Word\bin\Debug\WLib.Files.Word.pdb
+F:\MyCode\WLib\WLib.Files.Word\obj\Debug\WLib.Files.Word.csprojAssemblyReference.cache
+F:\MyCode\WLib\WLib.Files.Word\obj\Debug\WLib.Files.Word.csproj.CoreCompileInputs.cache
+F:\MyCode\WLib\WLib.Files.Word\obj\Debug\WLib.Files.Word.dll
+F:\MyCode\WLib\WLib.Files.Word\obj\Debug\WLib.Files.Word.pdb

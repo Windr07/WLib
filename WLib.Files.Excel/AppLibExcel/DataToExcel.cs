@@ -4,7 +4,10 @@ using System.Data;
 
 namespace WLib.Files.Excel.AppLibExcel
 {
-    public class DataToExcel
+    /// <summary>
+    /// 提供将表数据写入Excel的操作
+    /// </summary>
+    public static class DataToExcel
     {
         /// <summary>
         /// 构造函数，将DataSet里面的数据写到Excel中，DataTable名称对应sheet的名称
@@ -12,7 +15,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <param name="ds">数据集</param>
         /// <param name="path"></param>
         /// <param name="fileName">Excel的名称</param>
-        public static void DataSetToExcel(DataSet ds, string path, string fileName)
+        public static void DataSetToExcel(this DataSet ds, string path, string fileName)
         {
             AppLibrary.WriteExcel.XlsDocument doc = new AppLibrary.WriteExcel.XlsDocument();
             doc.FileName = fileName;
@@ -46,7 +49,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <param name="dt">DataTable对象，DataTable名称对应sheet的名称，如果名称为空则sheet名称为Sheet1</param>
         /// <param name="path">Excel保存目录</param>
         /// <param name="fileName">Excel文件名，包含扩展名</param>
-        public static void DataTableToExcel(DataTable dt, string path, string fileName)
+        public static void DataTableToExcel(this DataTable dt, string path, string fileName)
         {
             AppLibrary.WriteExcel.XlsDocument doc = new AppLibrary.WriteExcel.XlsDocument();
             doc.FileName = fileName;
@@ -79,7 +82,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <param name="path">Excel保存目录</param>
         /// <param name="fileName">Excel文件名，包含扩展名</param>
         /// <param name="fieldNames">指定字段名称</param>
-        public static void DataTableToExcel(DataTable dt, string path, string fileName,List<string> fieldNames)
+        public static void DataTableToExcel(this DataTable dt, string path, string fileName,List<string> fieldNames)
         {
             AppLibrary.WriteExcel.XlsDocument doc = new AppLibrary.WriteExcel.XlsDocument();
             doc.FileName = fileName;

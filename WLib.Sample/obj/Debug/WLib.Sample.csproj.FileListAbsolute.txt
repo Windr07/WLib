@@ -1,0 +1,8 @@
+F:\MyCode\WLib\WLib.Sample\bin\Debug\WLib.Sample.exe
+F:\MyCode\WLib\WLib.Sample\bin\Debug\WLib.Sample.pdb
+F:\MyCode\WLib\WLib.Sample\obj\Debug\WLib.Sample.csprojAssemblyReference.cache
+F:\MyCode\WLib\WLib.Sample\obj\Debug\WLib.Sample.Properties.Resources.resources
+F:\MyCode\WLib\WLib.Sample\obj\Debug\WLib.Sample.csproj.GenerateResource.cache
+F:\MyCode\WLib\WLib.Sample\obj\Debug\WLib.Sample.csproj.CoreCompileInputs.cache
+F:\MyCode\WLib\WLib.Sample\obj\Debug\WLib.Sample.exe
+F:\MyCode\WLib\WLib.Sample\obj\Debug\WLib.Sample.pdb

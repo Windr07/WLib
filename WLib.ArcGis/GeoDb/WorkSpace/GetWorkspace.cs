@@ -30,6 +30,9 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <returns></returns>
         public static bool IsWorkspacePath(string path)
         {
+            if (!System.IO.Path.IsPathRooted(path))
+                path = AppDomain.CurrentDomain.BaseDirectory + path;
+
             if (System.IO.Directory.Exists(path)) return true;
 
             if (!System.IO.File.Exists(path)) return false;
@@ -106,15 +109,22 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// 打开工作空间
         /// </summary>
         /// <param name="strConnOrPath">工作空间的路径或连接字符串，可以是shp/gdb/txt/dwg的文件夹路径，或者mdb/xls/xlsx文件路径，或者sde/oleDb/直连sql等连接字符串</param>
-        /// <param name="eType">标识优先将strConnOrPath作为打开哪种工作空间的参数，值为Default时，根据strConnOrPath参数自动识别为shp/gdb/mdb/sde的其中一种工作空间)</param>
+        /// <param name="eType">标识优先将strConnOrPath作为打开哪种工作空间的参数，值为Default时，根据strConnOrPath参数自动识别为shp/gdb/mdb/sde的其中一种工作空间</param>
         /// <returns></returns>
         public static IWorkspace GetWorkSpace(string strConnOrPath, EWorkspaceType eType = EWorkspaceType.Default)
         {
             IWorkspace workspace = null;
+            if (IsWorkspacePath(strConnOrPath))
+                strConnOrPath = AppDomain.CurrentDomain.BaseDirectory + strConnOrPath;
+
             if (System.IO.Directory.Exists(strConnOrPath))//当参数是文件夹路径时
             {
                 if (eType == EWorkspaceType.Default)
                     workspace = strConnOrPath.ToLower().EndsWith(".gdb") ? GetGdbWorkspace(strConnOrPath) : GetShpWorkspace(strConnOrPath);
+                else if (eType == EWorkspaceType.ShapeFile)
+                    workspace = GetShpWorkspace(strConnOrPath);
+                else if (eType == EWorkspaceType.FileGDB)
+                    workspace = GetGdbWorkspace(strConnOrPath);
                 else if (eType == EWorkspaceType.Raster)
                     workspace = GetRasterWorkspace(strConnOrPath);
                 else if (eType == EWorkspaceType.CAD)

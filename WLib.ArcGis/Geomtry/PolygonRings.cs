@@ -68,7 +68,7 @@ namespace WLib.ArcGis.Geomtry
             for (int k = 0; k < interiorRingGeometryCollection.GeometryCount; k++)
             {
                 IGeometry interiorRingGeometry = interiorRingGeometryCollection.get_Geometry(k);
-                var interiorPoints = GeometryEx.GetPointList(interiorRingGeometry as IPointCollection);
+                var interiorPoints = (interiorRingGeometry as IPointCollection).GetPointList();
                 rings.Add(interiorPoints);
             }
             return rings;
@@ -108,7 +108,7 @@ namespace WLib.ArcGis.Geomtry
             {
                 IGeometry exteriorRingGeometry = exteriorRingGeometryCollection.get_Geometry(i);
                 IPointCollection exteriorRingPointCollection = exteriorRingGeometry as IPointCollection;
-                var exteriorPoints = GeometryEx.GetPointList(exteriorRingPointCollection);
+                var exteriorPoints = exteriorRingPointCollection.GetPointList();
                 rings.Add(exteriorPoints);//外部环
                 rings.AddRange(GetInteriorRingPoints(polygon, exteriorRingGeometry as IRing));//内部环
             }
@@ -130,7 +130,7 @@ namespace WLib.ArcGis.Geomtry
             {
                 IGeometry exteriorRingGeometry = exteriorRingGeometryCollection.get_Geometry(i);
                 IPointCollection exteriorRingPointCollection = exteriorRingGeometry as IPointCollection;
-                var exteriorPoints = GeometryEx.GetPointList(exteriorRingPointCollection);
+                var exteriorPoints = exteriorRingPointCollection.GetPointList();
                 if (!clockwise)//外环的点是顺时针排序的，要求逆时针排序时反序List
                      exteriorPoints.Reverse();
                 rings.Add(exteriorPoints);//外部环
@@ -155,7 +155,7 @@ namespace WLib.ArcGis.Geomtry
         public static List<IPoint> GetRingPoints(this IRing ring)
         {
             IPointCollection pointCollection = ring as IPointCollection;
-            return GeometryEx.GetPointList(pointCollection);
+            return pointCollection.GetPointList();
         }
 
 

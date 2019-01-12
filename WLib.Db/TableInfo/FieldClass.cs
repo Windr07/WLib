@@ -108,8 +108,7 @@ namespace WLib.Db.TableInfo
                     message = "长度不得大于" + Length;
                     return false;
                 }
-                else
-                    return true;
+                return true;
             }
 
             //3、类型验证
@@ -122,8 +121,7 @@ namespace WLib.Db.TableInfo
             }
             else if (FieldType == typeof(float))
             {
-                float a;
-                isOK = float.TryParse(value, out a);
+                isOK = float.TryParse(value, out _);
                 if (!isOK)
                     message = "请输入数值";
                 else
@@ -133,7 +131,7 @@ namespace WLib.Db.TableInfo
                     if (value.Length > correctLength)
                     {
                         isOK = false;
-                        message = $"要求数值的整数部分位数不能超过{(Length - DecimalDigits)}，小数位为{DecimalDigits}位";
+                        message = $"要求数值的整数部分位数不能超过{Length - DecimalDigits}，小数位为{DecimalDigits}位";
                     }
                 }
             }

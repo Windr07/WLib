@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------- 
 // auth： Windragon
 // date： 2018
-// desc： None
+// desc： Use Open Source Library: GDAL(Geospatial Data Abstraction Library) https://www.gdal.org/
 // mdfy:  None
 //----------------------------------------------------------------*/
 
@@ -13,6 +13,12 @@ using System.Text;
 using OSGeo.OGR;
 using OSGeo.OSR;
 
+/* *
+ * GDAL是开源GIS库，官网及参考文档：https://www.gdal.org/
+ * 使用当前代码库WLib.Gdal，需要引用GDAL的相关DLL，请从官网下载或者进行下列操作：
+ * 1、将WLib\DLL\GDAL下4个DLL添加到项目引用： gdal_csharp.dll、gdalconst_csharp.dll、ogr_csharp.dll、osr_csharp.dll
+ * 2、将WLib\DLL\GDAL文件夹下的全部dll复制到C#项目的生成目录下（Copy all dll to [YourProject\bin\Debug or Release]）
+ */
 namespace WLib.Gdal
 {
     /// <summary>
@@ -366,7 +372,6 @@ namespace WLib.Gdal
 
             return resultGeometries.ToArray();
         }
-
         /// <summary>
         /// 将地理坐标转成投影坐标
         /// </summary>

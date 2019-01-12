@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WLib.UserCtrls</RootNamespace>
     <AssemblyName>WLib.UserCtrls</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -123,12 +123,12 @@
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -145,112 +145,113 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddItemControl\AddItemConfigForm.cs">
+    <Compile Include="AddItemCtrl\AddItemConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\AddItemConfigForm.Designer.cs">
+    <Compile Include="AddItemCtrl\AddItemConfigForm.Designer.cs">
       <DependentUpon>AddItemConfigForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddItemControl\AddItemForm.cs">
+    <Compile Include="AddItemCtrl\AddItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\AddItemForm.Designer.cs">
+    <Compile Include="AddItemCtrl\AddItemForm.Designer.cs">
       <DependentUpon>AddItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddItemControl\ConcatItemForm.cs">
+    <Compile Include="AddItemCtrl\ConcatItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\ConcatItemForm.Designer.cs">
+    <Compile Include="AddItemCtrl\ConcatItemForm.Designer.cs">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddItemControl\ConcatPathForm.cs">
+    <Compile Include="AddItemCtrl\ConcatPathForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\ConcatPathForm.Designer.cs">
+    <Compile Include="AddItemCtrl\ConcatPathForm.Designer.cs">
       <DependentUpon>ConcatPathForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddItemControl\Base\EMatchMode.cs" />
-    <Compile Include="AddItemControl\Base\EPathSelectMode.cs" />
-    <Compile Include="AddItemControl\Base\IConcatStrConfig.cs" />
-    <Compile Include="AddItemControl\Base\IMatchModeConfig.cs" />
-    <Compile Include="AddItemControl\Base\SplitStrDef.cs" />
-    <Compile Include="ArcGisControl\AttributeForm.cs">
+    <Compile Include="AddItemCtrl\Base\EMatchMode.cs" />
+    <Compile Include="AddItemCtrl\Base\EPathSelectMode.cs" />
+    <Compile Include="AddItemCtrl\Base\IConcatStrConfig.cs" />
+    <Compile Include="AddItemCtrl\Base\IMatchModeConfig.cs" />
+    <Compile Include="AddItemCtrl\Base\SplitStrDef.cs" />
+    <Compile Include="ArcGisCtrl\AttributeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\AttributeForm.Designer.cs">
+    <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExplorerControl\ExplorerTreeView.cs">
+    <Compile Include="ArcGisCtrl\AttributeQuery.cs" />
+    <Compile Include="ExplorerCtrl\ExplorerTreeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ExplorerControl\ExplorerTreeView.designer.cs">
+    <Compile Include="ExplorerCtrl\ExplorerTreeView.designer.cs">
       <DependentUpon>ExplorerTreeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExplorerControl\ExplorerTreeViewWnd.cs">
+    <Compile Include="ExplorerCtrl\ExplorerTreeViewWnd.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ExplorerControl\ShellAPI.cs" />
-    <Compile Include="ExplorerControl\ShellItem.cs" />
-    <Compile Include="ExplorerControl\SystemImageList.cs" />
-    <Compile Include="PathControl\EObjectFilter.cs" />
-    <Compile Include="PathControl\ESelectPathType.cs" />
-    <Compile Include="PathControl\EShowButtonOption.cs" />
-    <Compile Include="OfficeControl\ExcelEmbed.cs" />
-    <Compile Include="OfficeControl\IOfficeBase.cs" />
-    <Compile Include="OfficeControl\OfficeEmbed.cs">
+    <Compile Include="ExplorerCtrl\ShellAPI.cs" />
+    <Compile Include="ExplorerCtrl\ShellItem.cs" />
+    <Compile Include="ExplorerCtrl\SystemImageList.cs" />
+    <Compile Include="PathCtrl\EObjectFilter.cs" />
+    <Compile Include="PathCtrl\ESelectPathType.cs" />
+    <Compile Include="PathCtrl\EShowButtonOption.cs" />
+    <Compile Include="OfficeCtrl\ExcelEmbed.cs" />
+    <Compile Include="OfficeCtrl\IOfficeBase.cs" />
+    <Compile Include="OfficeCtrl\OfficeEmbed.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OfficeControl\OfficeEmbed.designer.cs">
+    <Compile Include="OfficeCtrl\OfficeEmbed.designer.cs">
       <DependentUpon>OfficeEmbed.cs</DependentUpon>
     </Compile>
-    <Compile Include="OfficeControl\WordEmbed.cs" />
-    <Compile Include="PathControl\DataSelectorForm.cs">
+    <Compile Include="OfficeCtrl\WordEmbed.cs" />
+    <Compile Include="PathCtrl\DataSelectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathControl\DataSelectorForm.Designer.cs">
+    <Compile Include="PathCtrl\DataSelectorForm.Designer.cs">
       <DependentUpon>DataSelectorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathControl\PathBox.cs">
+    <Compile Include="PathCtrl\PathBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathControl\PathBox.Designer.cs">
+    <Compile Include="PathCtrl\PathBox.Designer.cs">
       <DependentUpon>PathBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathControl\PathBoxSimple.cs">
+    <Compile Include="PathCtrl\PathBoxSimple.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathControl\PathBoxSimple.Designer.cs">
+    <Compile Include="PathCtrl\PathBoxSimple.Designer.cs">
       <DependentUpon>PathBoxSimple.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathControl\WorkspaceSelector.cs">
+    <Compile Include="PathCtrl\WorkspaceSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathControl\WorkspaceSelector.Designer.cs">
+    <Compile Include="PathCtrl\WorkspaceSelector.Designer.cs">
       <DependentUpon>WorkspaceSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ArcGisControl\SymbolSelectorForm.cs">
+    <Compile Include="ArcGisCtrl\SymbolSelectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\SymbolSelectorForm.Designer.cs">
+    <Compile Include="ArcGisCtrl\SymbolSelectorForm.Designer.cs">
       <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="InputControl\InputForm.cs">
+    <Compile Include="InputCtrl\InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InputControl\InputForm.Designer.cs">
+    <Compile Include="InputCtrl\InputForm.Designer.cs">
       <DependentUpon>InputForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListControl\ListBoxPlus.cs">
+    <Compile Include="ListCtrl\ListBoxPlus.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ListControl\ListBoxPlus.Designer.cs">
+    <Compile Include="ListCtrl\ListBoxPlus.Designer.cs">
       <DependentUpon>ListBoxPlus.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\QueryForm.cs">
+    <Compile Include="ArcGisCtrl\QueryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\QueryForm.Designer.cs">
+    <Compile Include="ArcGisCtrl\QueryForm.Designer.cs">
       <DependentUpon>QueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Viewer\EPicViewerAction.cs" />
@@ -273,34 +274,34 @@
     <Compile Include="Viewer\TxtViewer.Designer.cs">
       <DependentUpon>TxtViewer.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddItemControl\AddItemConfigForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
       <DependentUpon>AddItemConfigForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddItemControl\AddItemForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\AddItemForm.resx">
       <DependentUpon>AddItemForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddItemControl\ConcatItemForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\ConcatItemForm.resx">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddItemControl\ConcatPathForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\ConcatPathForm.resx">
       <DependentUpon>ConcatPathForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\AttributeForm.resx">
+    <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExplorerControl\ExplorerTreeView.resx">
+    <EmbeddedResource Include="ExplorerCtrl\ExplorerTreeView.resx">
       <DependentUpon>ExplorerTreeView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathControl\DataSelectorForm.resx">
+    <EmbeddedResource Include="PathCtrl\DataSelectorForm.resx">
       <DependentUpon>DataSelectorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathControl\PathBox.resx">
+    <EmbeddedResource Include="PathCtrl\PathBox.resx">
       <DependentUpon>PathBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathControl\PathBoxSimple.resx">
+    <EmbeddedResource Include="PathCtrl\PathBoxSimple.resx">
       <DependentUpon>PathBoxSimple.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathControl\WorkspaceSelector.resx">
+    <EmbeddedResource Include="PathCtrl\WorkspaceSelector.resx">
       <DependentUpon>WorkspaceSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -313,16 +314,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ArcGisControl\SymbolSelectorForm.resx">
+    <EmbeddedResource Include="ArcGisCtrl\SymbolSelectorForm.resx">
       <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputControl\InputForm.resx">
+    <EmbeddedResource Include="InputCtrl\InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ListControl\ListBoxPlus.resx">
+    <EmbeddedResource Include="ListCtrl\ListBoxPlus.resx">
       <DependentUpon>ListBoxPlus.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\QueryForm.resx">
+    <EmbeddedResource Include="ArcGisCtrl\QueryForm.resx">
       <DependentUpon>QueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Viewer\PicViewer.resx">
@@ -352,6 +353,10 @@
     <ProjectReference Include="..\WLib.Envir\WLib.Envir.csproj">
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WLib.Files.Excel\WLib.Files.Excel.csproj">
+      <Project>{aeb9c1be-96cf-42f5-ab08-7a45817cf906}</Project>
+      <Name>WLib.Files.Excel</Name>
     </ProjectReference>
     <ProjectReference Include="..\WLib\WLib.csproj">
       <Project>{69d92973-b7bc-4c0b-8038-f9063d2eb2a1}</Project>

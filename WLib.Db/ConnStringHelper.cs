@@ -10,8 +10,8 @@ using System;
 namespace WLib.Db
 {
     /// <summary>
-    /// 提供构建简单常用的连接字符串的方法
-    /// <seealso cref="https://www.connectionstrings.com"/>
+    /// 提供构建简单常用的连接字符串的方法，
+    /// 连接字符串可参考 https://www.connectionstrings.com/>
     /// </summary>
     public class ConnStringHelper
     {
@@ -53,14 +53,14 @@ namespace WLib.Db
         /// 构建OLEDB.4.0连接dbf文件的连接字符串
         /// <code>
         /// //OleDb连接dbf（注意dbf文件名称长度不能超过8，否则出错）：
-        /// new DbHelper(ConnStringHelper.Dbf_OleDb4("d:\tmp")).GetDataTab("select * from d:\tmp\a.dbf");
+        /// new DbHelper(ConnStringHelper.Dbf_OleDb4("d:\tmp")).GetDataTable("select * from d:\tmp\a.dbf");
         /// </code>
         /// </summary>
         /// <param name="dbfDirectory">dbf文件所在文件夹目录（eg:d:\tmp）</param>
         /// <param name="extendedProperties">扩展属性，默认为："dBase IV"</param>
         /// <example>
         ///  var dbHelper = new DbHelper("Provider=MICROSOFT.JET.OLEDB.4.0;Data Source=d:\tmp;Extended Properties=dBase IV;");
-        ///  var dataTable = dbHelper.GetDataTab("select * from d:\tmp\a.dbf");
+        ///  var dataTable = dbHelper.GetDataTable("select * from d:\tmp\a.dbf");
         /// </example>
         /// <returns></returns>
         public static string Dbf_OleDb4(string dbfDirectory, string extendedProperties = "dBase IV")
@@ -70,20 +70,23 @@ namespace WLib.Db
 
 
         /// <summary>
-        /// 构建OLEDB.4.0连接Excel(xls或xlsx)文件的连接字符串，
+        /// 构建OLEDB.4.0连接xls，或OLEDB.12.0链接xlsx文件的连接字符串，
         /// 查询语句示例：select * from [sheet1$]
         /// </summary>
         /// <param name="filePath">Excel文件(xls或xlsx)的全路径</param>
-        /// <param name="hdr"> HeaDer Row，表示Excel表的首行是列名(字段名)，只能填写"YES"表示首行为列名，或"NO"表示不含列名，程序按F1,F2...依次命名字段</param>
+        /// <param name="hdr">HeaDer Row，填写"YES"表示首行为列名（字段名），否则应填写"NO"表示不含列名，此时程序按F1,F2...依次命名字段</param>
         /// <param name="imex">IMport EXport mode, 0为写入，1为只读，2为读取/修改/更新</param>
-        public static string Excel_OleDb4(string filePath, string hdr = "YES", int imex = 2)
+        public static string Excel_OleDb(string filePath, string hdr = "YES", int imex = 2)
         {
             if (!System.IO.File.Exists(filePath))
-                throw new Exception($"DataSource应为Excel文件路径，参数“{filePath}”不是已存在且可读的文件路径！");
+                throw new Exception($"filePath应为Excel文件路径，参数“{filePath}”不是已存在且可读的文件路径！");
 
-            string extension = System.IO.Path.GetExtension(filePath);
+            hdr = !string.IsNullOrWhiteSpace(hdr) && hdr.Trim().ToUpper() == "YES" ? "YES" : "NO";
+            imex = imex < 0 || imex > 2 ? 2 : imex;
+
+            var extension = System.IO.Path.GetExtension(filePath);
             if (extension != ".xls" && extension != ".xlsx")
-                throw new Exception($"DataSource应为Excel文件路径，参数“{filePath}”指定的不是可识别的Excel文件格式！");
+                throw new Exception($"filePath应为Excel文件路径，参数“{filePath}”指定的不是可识别的Excel文件格式！");
 
             if (extension == ".xls")
                 return $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={filePath};Extended Properties='Excel 8.0;HDR={hdr};IMEX={imex}'";

@@ -119,10 +119,10 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             #endregion
 
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
-            if (!FieldOpt.IsExsitOid(fields))
+            if (!fields.IsExsitOid())
                 fieldsEdit.AddField(FieldOpt.CreateOidField());
 
-            if (!FieldOpt.IsExsitShapeField(fields))
+            if (!fields.IsExsitShapeField())
                 fieldsEdit.AddField(FieldOpt.CreateShapeField(geometryType, spatialReference));
 
             IFeatureClass featureClass = null;
@@ -168,13 +168,13 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         public static IFeatureClass Create(IFeatureClass sourceClass, object resultObject, string name, esriGeometryType geoType, string aliasName = null)
         {
             var spatialRef = CoordinateSystem.GetSpatialReference(sourceClass);
-            var feilds = FieldOpt.CloneFeatureClassFieldsSimple(sourceClass);
+            var feilds = sourceClass.CloneFeatureClassFieldsSimple();
 
             var featureClass = Create(resultObject,
                 name, spatialRef, geoType, feilds);
 
             if (!string.IsNullOrEmpty(aliasName))
-                FeatClassOpt.RenameFeatureClassAliasName(featureClass, aliasName);
+                featureClass.RenameFeatureClassAliasName(aliasName);
             return featureClass;
         }
     }

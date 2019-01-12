@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------- 
 // auth： Windragon
 // date： 2018
-// desc： None
+// desc： WKT(Well-known text) https://en.wikipedia.org/wiki/Well-known_text
 // mdfy:  None
 //----------------------------------------------------------------*/
 

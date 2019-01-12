@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>ESRI.ArcGIS.DataSourcesOleDB</name>
+  </assembly>
+  <members>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.IESRIDataSourceCreate">
+      <summary>Provides access to members that create OLE DB Data Source objects from a workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.IESRIDataSourceCreate.CreateDataSource(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Creates an OLEDB-FDO Data Source object and connects to existing Workspace.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.IFDOToADOConnection">
+      <summary>Provides access to members that create or connect to an ADO connection from a workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.IFDOToADOConnection.Connect(ESRI.ArcGIS.Geodatabase.IWorkspace,System.Object)">
+      <summary>Connects a Workspace object to an ADO connection object.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.IFDOToADOConnection.CreateADOConnection(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Creates an ADO connection from a Workspace.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.IOleDBFDOHelper">
+      <summary>Provides access to members that attach a workspace to an OLE DB Data Source object.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.IOleDBFDOHelper.AttachWorkspace(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Attaches an existing Workspace to a Data Source object.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactory">
+      <summary>Excel Workspace Factory.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass">
+      <summary>Excel Workspace Factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB..">
+      <summary>Excel Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB.._">
+      <summary>Excel Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.#ctor">
+      <summary>Excel Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory_WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.OpenFromString(System.String,System.Int32)">
+      <summary>Opens the workspace specified by a connection string.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromString(System.String,System.Int32)">
+      <summary>Opens the workspace specified by a connection string.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.ExcelWorkspaceFactoryClass.IWorkspaceFactory2_WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnection">
+      <summary>Esri FDO to ADO Connection Object.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass">
+      <summary>Esri FDO to ADO Connection Object.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.CreateDataSource(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Creates an OLEDB-FDO Data Source object and connects to existing Workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.IESRIDataSourceCreate_CreateDataSource(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Creates an OLEDB-FDO Data Source object and connects to existing Workspace.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB..">
+      <summary>Esri FDO to ADO Connection Object. Constructor has no input arguments.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB.._">
+      <summary>Esri FDO to ADO Connection Object. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.#ctor">
+      <summary>Esri FDO to ADO Connection Object. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.Connect(ESRI.ArcGIS.Geodatabase.IWorkspace,System.Object)">
+      <summary>Connects a Workspace object to an ADO connection object.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.IFDOToADOConnection_Connect(ESRI.ArcGIS.Geodatabase.IWorkspace,System.Object)">
+      <summary>Connects a Workspace object to an ADO connection object.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.CreateADOConnection(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Creates an ADO connection from a Workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.FdoAdoConnectionClass.IFDOToADOConnection_CreateADOConnection(ESRI.ArcGIS.Geodatabase.IWorkspace)">
+      <summary>Creates an ADO connection from a Workspace.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactory">
+      <summary>OleDB Workspace Factory.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass">
+      <summary>OleDB Workspace Factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.ClearParameters(System.String)">
+      <summary>Clears OleDB connection property parameters.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IOleDBConnectionInfo_ClearParameters(System.String)">
+      <summary>Clears OleDB connection property parameters.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB..">
+      <summary>OleDB Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB.._">
+      <summary>OleDB Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.#ctor">
+      <summary>OleDB Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.SetParameters(System.String,System.String)">
+      <summary>Set OleDB connection property parameters.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IOleDBConnectionInfo_SetParameters(System.String,System.String)">
+      <summary>Set OleDB connection property parameters.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.DeleteConnectionFile(System.String)">
+      <summary>Deletes the remote database workspace connection file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IRemoteDatabaseWorkspaceFactory_DeleteConnectionFile(System.String)">
+      <summary>Deletes the remote database workspace connection file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.EditConnectionFile(System.String,System.Int32)">
+      <summary>Edits the properties of a remote database workspace connection file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IRemoteDatabaseWorkspaceFactory_EditConnectionFile(System.String,System.Int32)">
+      <summary>Edits the properties of a remote database workspace connection file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.RenameConnectionFile(System.String,System.String)">
+      <summary>Renames the remote database workspace connection file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IRemoteDatabaseWorkspaceFactory_RenameConnectionFile(System.String,System.String)">
+      <summary>Renames the remote database workspace connection file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory_WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.OpenFromString(System.String,System.Int32)">
+      <summary>Opens the workspace specified by a connection string.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromString(System.String,System.Int32)">
+      <summary>Opens the workspace specified by a connection string.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactory2_WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.ActivationExtensions">
+      <summary>Returns the active set of delimited file extensions supported by this factory.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactoryFileExtensions_ActivationExtensions">
+      <summary>Returns the active set of delimited file extensions supported by this factory.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.RelevantExtensions">
+      <summary>Returns the complete set of delimited file extensions supported by this factory.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.OLEDBWorkspaceFactoryClass.IWorkspaceFactoryFileExtensions_RelevantExtensions">
+      <summary>Returns the complete set of delimited file extensions supported by this factory.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactory">
+      <summary>Text File Workspace Factory.</summary>
+    </member>
+    <member name="T:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass">
+      <summary>Text File Workspace Factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB..">
+      <summary>Text File Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="ESRI.ArcGIS.DataSourcesOleDB.._">
+      <summary>Text File Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.#ctor">
+      <summary>Text File Workspace Factory. Constructor has no input arguments.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory_WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.OpenFromString(System.String,System.Int32)">
+      <summary>Opens the workspace specified by a connection string.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromString(System.String,System.Int32)">
+      <summary>Opens the workspace specified by a connection string.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_ContainsWorkspace(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Indicates if parentDirectory contains a valid workspace, or is a valid file-system workspace.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_Copy(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String,ESRI.ArcGIS.Geodatabase.IWorkspaceName@)">
+      <summary>Copies a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_Create(System.String,System.String,ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Creates a new workspace specified by the directory, file name, and connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_GetClassID">
+      <summary>The class ID of the WorkspaceFactory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_GetWorkspaceName(System.String,ESRI.ArcGIS.esriSystem.IFileNames)">
+      <summary>Retrieves the workspace name of a workspace from the given list of file names.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_IsWorkspace(System.String)">
+      <summary>True if the specified file identifies a workspace supported by the workspace factory.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_Move(ESRI.ArcGIS.Geodatabase.IWorkspaceName,System.String)">
+      <summary>Moves a workspace to the specified destination folder.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_Open(ESRI.ArcGIS.esriSystem.IPropertySet,System.Int32)">
+      <summary>Opens the workspace specified by the connection properties.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_OpenFromFile(System.String,System.Int32)">
+      <summary>Opens the workspace specified by the given file name.</summary>
+    </member>
+    <member name="M:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_ReadConnectionPropertiesFromFile(System.String)">
+      <summary>The connection properties from the specified file.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_WorkspaceDescription(System.Boolean)">
+      <summary>A singular or plural description of the type of workspace the workspace factory opens/creates.</summary>
+    </member>
+    <member name="P:ESRI.ArcGIS.DataSourcesOleDB.TextFileWorkspaceFactoryClass.IWorkspaceFactory2_WorkspaceType">
+      <summary>The type of workspace the workspace factory opens/creates.</summary>
+    </member>
+  </members>
+</doc>

@@ -16,19 +16,19 @@ namespace WLib.Envir.DotNet
         /// <summary>
         /// 名称（eg:v2.0）
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
         /// <summary>
         /// 版本（eg:2.0.50727.4927）
         /// </summary>
-        public string Version;
+        public string Version { get; set; }
         /// <summary>
         /// 安装路径
         /// </summary>
-        public string InstallPath;
+        public string InstallPath { get; set; }
         /// <summary>
         /// 补丁版本（eg:1）
         /// </summary>
-        public string Sp;
+        public string Sp { get; set; }
         /// <summary>
         /// .NET Framework版本信息
         /// </summary>

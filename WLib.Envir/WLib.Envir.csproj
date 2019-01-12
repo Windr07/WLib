@@ -67,10 +67,7 @@
     <Compile Include="ArcGIS\CheckArcGIS10Install.cs" />
     <Compile Include="ArcGIS\EArcGISVersion.cs" />
     <Compile Include="ArcGIS\ICheckArcGISInstall.cs" />
-    <Compile Include="DotNet\CheckDotNetEx\CheckDotNetEx.cs" />
     <Compile Include="DotNet\CheckDotNet.cs" />
-    <Compile Include="DotNet\CheckDotNetEx\RuntimeFramework.cs" />
-    <Compile Include="DotNet\CheckDotNetEx\RuntimeType.cs" />
     <Compile Include="DotNet\DotNetFrameworkInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\CheckOSVersion.cs" />

@@ -1,0 +1,898 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ESRI.ArcGIS.AnalysisTools</name>
+    </assembly>
+    <members>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Buffer">
+            <summary>Creates buffer polygons around input features to a specified distance.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Buffer.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input point, line, or polygon features to be buffered. (In, Required)</param>
+            <param name="out_feature_class">The feature class containing the output buffers. (Out, Required)</param>
+            <param name="buffer_distance_or_field">The distance around the input features that will be buffered. Distances can be provided as either a value representing a linear distance or as a field from the input features that contains the distance to buffer each feature. (In, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.in_features">
+            <summary>The input point, line, or polygon features to be buffered. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.out_feature_class">
+            <summary>The feature class containing the output buffers. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.buffer_distance_or_field">
+            <summary>The distance around the input features that will be buffered. Distances can be provided as either a value representing a linear distance or as a field from the input features that contains the distance to buffer each feature. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.line_side">
+            <summary>The side(s) of the input features that will be buffered. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.line_end_type">
+            <summary>The shape of the buffer at the end of line input features. This parameter is not valid for polygon input features. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.dissolve_option">
+            <summary>Specifies the dissolve to be performed to remove buffer overlap. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.dissolve_field">
+            <summary>The list of field(s) from the input features on which to dissolve the output buffers. Any buffers sharing attribute values in the listed fields (carried over from the input features) are dissolved. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Buffer.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Clip">
+            <summary>Extracts input features that overlay the clip features.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Clip.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The features to be clipped. (In, Required)</param>
+            <param name="clip_features">The features used to clip the input features. (In, Required)</param>
+            <param name="out_feature_class">The feature class to be created. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.in_features">
+            <summary>The features to be clipped. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.clip_features">
+            <summary>The features used to clip the input features. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.out_feature_class">
+            <summary>The feature class to be created. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates as well as the distance a coordinate can move in X or Y (or both). Set the value to be higher for data with less coordinate accuracy and lower for data with extremely high accuracy. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Clip.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Erase">
+            <summary>Creates a feature class by overlaying the Input Features with the polygons of the Erase Features. Only those portions of the input features falling outside the erase features outside boundaries are copied to the output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Erase.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input feature class or layer. (In, Required)</param>
+            <param name="erase_features">The features to be used to erase coincident features in the input. (In, Required)</param>
+            <param name="out_feature_class">The feature class that will contain only those Input Features that are not coincident with the Erase Features. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.in_features">
+            <summary>The input feature class or layer. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.erase_features">
+            <summary>The features to be used to erase coincident features in the input. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.out_feature_class">
+            <summary>The feature class that will contain only those Input Features that are not coincident with the Erase Features. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in X or Y (or both).  (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Erase.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Identity">
+            <summary>Computes a geometric intersection of the input features and identity features. The input features or portions thereof that overlap identity features will get the attributes of those identity features.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Identity.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input feature class or layer. (In, Required)</param>
+            <param name="identity_features">The identity feature class or layer. Must be polygons or the same geometry type as the input features. (In, Required)</param>
+            <param name="out_feature_class">The feature class that will be created and to which the results will be written. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.in_features">
+            <summary>The input feature class or layer. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.identity_features">
+            <summary>The identity feature class or layer. Must be polygons or the same geometry type as the input features. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.out_feature_class">
+            <summary>The feature class that will be created and to which the results will be written. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.join_attributes">
+            <summary>Determines what attributes will be transferred to the output feature class. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in X or Y (or both). (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.relationship">
+            <summary>Determines if additional spatial relationships between the in_features and the identity_features are to be written to the output. This only applies when the in_features are lines and the identity_features are polygons.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Identity.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Intersect">
+            <summary>Computes a geometric intersection of the input features. Features or portions of features which overlap in all layers and/or feature classes will be written to the output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Intersect.#ctor(System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">A list of the input feature classes or layers. When the distance between features is less than the cluster tolerance, the features with the lower rank will snap to the feature with the higher rank. The highest rank is one. For more information, see Priority ranks and Geoprocessing tools.  (In, Required)</param>
+            <param name="out_feature_class">The output feature class. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.in_features">
+            <summary>A list of the input feature classes or layers. When the distance between features is less than the cluster tolerance, the features with the lower rank will snap to the feature with the higher rank. The highest rank is one. For more information, see Priority ranks and Geoprocessing tools.  (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.out_feature_class">
+            <summary>The output feature class. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.join_attributes">
+            <summary>Determines which attributes from the Input Features will be transferred to the Output Feature Class. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in X or Y (or both). (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.output_type">
+            <summary>Choose what type of intersection you want to find. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Intersect.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.SymDiff">
+            <summary> Features or portions of features in the input and update features that do not overlap will be written to the output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.SymDiff.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input feature class or layer. (In, Required)</param>
+            <param name="update_features">The update feature class or layer. Geometry type must be the same geometry type as the input feature class or layer. (In, Required)</param>
+            <param name="out_feature_class">The feature class to which the results will be written. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.in_features">
+            <summary>The input feature class or layer. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.update_features">
+            <summary>The update feature class or layer. Geometry type must be the same geometry type as the input feature class or layer. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.out_feature_class">
+            <summary>The feature class to which the results will be written. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.join_attributes">
+            <summary>Determines which attributes will be transferred to the output feature class. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in x or y (or both). (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SymDiff.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Update">
+            <summary>Computes a geometric intersection of the Input Features and Update Features. The attributes and geometry of the input features are updated by the update features in the output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Update.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input feature class or layer. Geometry type must be polygon. (In, Required)</param>
+            <param name="update_features">The features that will be used to update the Input Features. Geometry type must be polygon. (In, Required)</param>
+            <param name="out_feature_class">The feature class to contain the results. Do not set this to be the same as the Input Features. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.in_features">
+            <summary>The input feature class or layer. Geometry type must be polygon. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.update_features">
+            <summary>The features that will be used to update the Input Features. Geometry type must be polygon. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.out_feature_class">
+            <summary>The feature class to contain the results. Do not set this to be the same as the Input Features. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.keep_borders">
+            <summary>Specifies whether the boundary of the update polygon features will be kept.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in X or Y (or both). (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Update.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Split">
+            <summary>Splitting the Input Features creates a subset of multiple output feature classes.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Split.#ctor(System.Object,System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The features to be split. (In, Required)</param>
+            <param name="split_features">The features containing a tabular field whose unique values are used to split the Input Features and provide the output feature classes' names. (In, Required)</param>
+            <param name="split_field">The character field used to split the Input Features. This field's values identify the Split Features used to create each output feature class. The Split Field's unique values provide the output feature classes' names. (In, Required)</param>
+            <param name="out_workspace">The workspace where the output feature classes are stored. (In, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.in_features">
+            <summary>The features to be split. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.split_features">
+            <summary>The features containing a tabular field whose unique values are used to split the Input Features and provide the output feature classes' names. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.split_field">
+            <summary>The character field used to split the Input Features. This field's values identify the Split Features used to create each output feature class. The Split Field's unique values provide the output feature classes' names. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.out_workspace">
+            <summary>The workspace where the output feature classes are stored. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in X or Y (or both). Set the value to be higher for data that has less coordinate accuracy and lower for datasets with extremely high accuracy. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.out_workspace2">
+            <summary>Output Workspace (out, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Split.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Near">
+            <summary>Determines the distance from each feature in the input features to the nearest feature in the near features, within the search radius.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Near.#ctor(System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input features that can be point, polyline, polygon, or multipoint type. (In, Required)</param>
+            <param name="near_features">Value used to find the nearest features from input features. There can be one or more entries of near features; each entry can be of point, polyline, polygon, or multipoint type. When multiple entries of near features are specified, a new field, NEAR_FC, is added to the input table to store the paths of the source feature class that contains the nearest features. (In, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.in_features">
+            <summary>The input features that can be point, polyline, polygon, or multipoint type. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.near_features">
+            <summary>Value used to find the nearest features from input features. There can be one or more entries of near features; each entry can be of point, polyline, polygon, or multipoint type. When multiple entries of near features are specified, a new field, NEAR_FC, is added to the input table to store the paths of the source feature class that contains the nearest features. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.search_radius">
+            <summary>Specifies the radius used to search for candidate near features. The near features within this radius are considered for calculating the nearest feature. If no value is specified, that is, the default (empty) radius is used, all near features are considered for calculation. The unit of the search radius defaults to the units of the coordinate system of the input features. The units can be changed to any other unit. However, this has no impact on the units of NEAR_DIST which is based on the units of the coordinate system of the input features. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.location">
+            <summary>Specifies whether x- and y-coordinates of the nearest location of the near feature will be written to new fields NEAR_X and NEAR_Y, respectively.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.angle">
+            <summary>Specifies whether the near angle values in decimal degrees will be calculated and written to a new field, NEAR_ANGLE. A near angle measures from the x-axis (horizontal axis) to the direction of the line connecting an input feature to its nearest feature at their closest locations, and it is within the range of 0 to 180 or 0 to -180 decimal degrees - 0 to the east, 90 to the north, 180 (-180°) to the west, and -90 to the south.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.out_feature_class">
+            <summary>Output Feature Class (out, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Near.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.PointDistance">
+            <summary>Determines the distances from input point features to all points in the near features within a specified search radius.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.PointDistance.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The point features from which distances to the near features will be calculated. (In, Required)</param>
+            <param name="near_features">The points to which distances from the input features will be calculated. Distances between points within the same feature class or layer can be determined by specifying the same feature class or layer for the input and near features. (In, Required)</param>
+            <param name="out_table">The table containing the list of input features and information about all near features within the search radius. If a search radius is not specified, distances from all input features to all near features are calculated. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.in_features">
+            <summary>The point features from which distances to the near features will be calculated. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.near_features">
+            <summary>The points to which distances from the input features will be calculated. Distances between points within the same feature class or layer can be determined by specifying the same feature class or layer for the input and near features. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.out_table">
+            <summary>The table containing the list of input features and information about all near features within the search radius. If a search radius is not specified, distances from all input features to all near features are calculated. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.search_radius">
+            <summary>Specifies the radius used to search for candidate near features. The near features within this radius are considered for calculating the nearest feature. If no value is specified (that is, the default (empty) radius is used) all near features are considered for calculation. The unit of search radius defaults to units of the input features. The units can be changed to any other unit. However, this has no impact on the units of the output DISTANCE field which is based on the units of the coordinate system of the input features. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PointDistance.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Select">
+            <summary>Extracts features from an input feature class or input feature layer, typically using a select or Structured Query Language (SQL) expression and stores them in an output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Select.#ctor(System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input feature class or layer from which features are selected. (In, Required)</param>
+            <param name="out_feature_class">The output feature class to be created. If no expression is used, it contains all input features. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.in_features">
+            <summary>The input feature class or layer from which features are selected. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.out_feature_class">
+            <summary>The output feature class to be created. If no expression is used, it contains all input features. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.where_clause">
+            <summary>An SQL expression used to select a subset of features. The syntax for the expression differs slightly depending on the data source. For example, if you're querying file or ArcSDE geodatabases, shapefiles, or coverages, enclose field names in double quotes: (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Select.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.TableSelect">
+            <summary>Selects table records matching a Structured Query Language (SQL) expression and writes them to an output table.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.TableSelect.#ctor(System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_table">The table whose records matching the specified expression will be written to the output table. (In, Required)</param>
+            <param name="out_table">The output table containing records from the input table that match the specified expression. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.in_table">
+            <summary>The table whose records matching the specified expression will be written to the output table. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.out_table">
+            <summary>The output table containing records from the input table that match the specified expression. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.where_clause">
+            <summary>An SQL expression used to select a subset of records. The syntax for the expression differs slightly depending on the data source. For example, if you're querying file or ArcSDE geodatabases, shapefiles, coverages, or dBASE or INFO tables, enclose field names in double quotes: (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TableSelect.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Frequency">
+            <summary>Reads a table and a set of fields and creates a new table containing unique field values and the number of occurrences of each unique field value.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Frequency.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_table">The table containing the field(s) that will be used to calculate frequency statistics. This table can be an INFO or OLE DB table, a dBASE or a VPF table, or a                         feature class table. (In, Required)</param>
+            <param name="out_table">The table that will store the calculated frequency statistics. (Out, Required)</param>
+            <param name="frequency_fields">The attribute field or fields that will be used to calculate frequency statistics. (In, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.in_table">
+            <summary>The table containing the field(s) that will be used to calculate frequency statistics. This table can be an INFO or OLE DB table, a dBASE or a VPF table, or a                         feature class table. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.out_table">
+            <summary>The table that will store the calculated frequency statistics. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.frequency_fields">
+            <summary>The attribute field or fields that will be used to calculate frequency statistics. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.summary_fields">
+            <summary>The attribute field or fields to sum and add to the output table. Null values are excluded from this calculation. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Frequency.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Statistics">
+            <summary>Calculates summary statistics for field(s) in a table.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Statistics.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_table">The input table containing the field(s) that will be used to calculate statistics. The input can be an INFO table, a dBASE table, an OLE DB table, a VPF table, or a feature class. (In, Required)</param>
+            <param name="out_table">The output dBASE or geodatabase table that will store the calculated statistics. (Out, Required)</param>
+            <param name="statistics_fields">The numeric field containing attribute values used to calculate the specified statistic. Multiple statistic and field combinations may be specified. Null values are excluded from all statistical calculations. (In, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.in_table">
+            <summary>The input table containing the field(s) that will be used to calculate statistics. The input can be an INFO table, a dBASE table, an OLE DB table, a VPF table, or a feature class. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.out_table">
+            <summary>The output dBASE or geodatabase table that will store the calculated statistics. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.statistics_fields">
+            <summary>The numeric field containing attribute values used to calculate the specified statistic. Multiple statistic and field combinations may be specified. Null values are excluded from all statistical calculations. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.case_field">
+            <summary>The fields in the Input Table used to calculate statistics separately for each unique attribute value (or combination of attribute values when multiple fields are specified). (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Statistics.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons">
+            <summary>Creates Thiessen polygons from point input features.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.#ctor(System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The point input features from which Thiessen polygons will be generated. (In, Required)</param>
+            <param name="out_feature_class">The output feature class containing the Thiessen polygons that are generated from the point input features. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.in_features">
+            <summary>The point input features from which Thiessen polygons will be generated. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.out_feature_class">
+            <summary>The output feature class containing the Thiessen polygons that are generated from the point input features. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.fields_to_copy">
+            <summary>Determines which attributes from the point input features will be transferred to the output feature class. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.CreateThiessenPolygons.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.SpatialJoin">
+             <summary>Joins attributes from one feature to another
+            based on the spatial relationship. The target features and the joined attributes from the join features are written to the output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.SpatialJoin.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="target_features">Attributes of the target features and the attributes from the joined features are transferred to the output feature class. However, a subset of attributes can be defined in the field map parameter. The target features can be any spatial data source supported by ArcGIS. (In, Required)</param>
+            <param name="join_features">The attributes from the join features are joined to the attributes of the target features. See the explanation of the Join Operation parameter for details on how the aggregation of joined attributes are affected by the type of join operation.  (In, Required)</param>
+            <param name="out_feature_class">A new feature class containing the attributes of the target and join features. By default, all attributes of target features and the attributes of the joined features are written to the output. However, the set of attributes to be transferred can be controlled by the field map parameter. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.target_features">
+            <summary>Attributes of the target features and the attributes from the joined features are transferred to the output feature class. However, a subset of attributes can be defined in the field map parameter. The target features can be any spatial data source supported by ArcGIS. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.join_features">
+            <summary>The attributes from the join features are joined to the attributes of the target features. See the explanation of the Join Operation parameter for details on how the aggregation of joined attributes are affected by the type of join operation.  (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.out_feature_class">
+            <summary>A new feature class containing the attributes of the target and join features. By default, all attributes of target features and the attributes of the joined features are written to the output. However, the set of attributes to be transferred can be controlled by the field map parameter. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.join_operation">
+            <summary>Determines how joins between the target features and join features will be handled in the output feature class if multiple join features are found that have the same spatial relationship with a single target feature. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.join_type">
+            <summary>Determines if all target features will be maintained in the output feature class (known as outer join), or only those that have the specified spatial relationship with the join features (inner join).
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.field_mapping">
+             <summary>Controls what attribute fields will be in the output feature class. The initial list contains all the  fields from both the target features and the join features. Fields can be added, deleted, renamed, or have their properties changed. The selected fields from the target features are transferred as is, but selected fields from the join features can be aggregated by a merge rule. For details on field mapping, see Using the field mapping control
+            and Mapping input fields to output fields. Multiple fields and statistic
+            combination may be specified. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.match_option">
+            <summary>Defines the criteria used to match rows. The match options are: (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.search_radius">
+            <summary>Join features within this distance of a target feature will be considered for the spatial join. A search radius is only valid when the spatial relationship (Match Option) INTERSECT or CLOSEST is specified. Using a search radius of 100 meters with the spatial relationship INTERSECT is the equivalent of saying: if a join feature is within 100 meters of a target feature, consider the join feature to be a match. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.distance_field_name">
+            <summary>The name of a field to be added to  the output feature class, which contains the distance between the target feature and the closest join feature. This option is only valid when the spatial relationship (Match Option) CLOSEST is specified. The value of this field is -1 if no feature is matched within a search radius. If no field name is specified, the field will not be added to the output feature class. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.SpatialJoin.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer">
+            <summary>Geoprocessing tool that creates multiple buffers at specified distances around the input features.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="Input_Features">Input Features (in)</param>
+            <param name="Output_Feature_class">Output Feature class (out)</param>
+            <param name="Distances">Distances (in)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Input_Features">
+            <summary>Input Features (in)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Output_Feature_class">
+            <summary>Output Feature class (out)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Distances">
+            <summary>Distances (in)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Buffer_Unit">
+            <summary>Buffer Unit (in, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Field_Name">
+            <summary>Field Name (in, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Dissolve_Option">
+            <summary>Dissolve Option (in, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Outside_Polygons_Only">
+            <summary>Outside Polygons Only (in, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.MultipleRingBuffer.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.GenerateNearTable">
+            <summary>Determines the distances from each feature in the input features to one or more nearby features in the near features, within the search radius. The results are recorded in the output table.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.#ctor(System.Object,System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">The input features that can be point, polyline, polygon, or multipoint type. (In, Required)</param>
+            <param name="near_features">Value used to find the nearest features from input features. There can be one or more entries of near features; each entry can be of point, polyline, polygon, or multipoint type. When multiple entries of near features are specified, a new field, NEAR_FC, is added to the input table to store the paths of the source feature class that contains the nearest features. (In, Required)</param>
+            <param name="out_table">The output table that will contain the proximity information—such as IN_FID, NEAR_FID, and NEAR_DIST—and other attributes—such as location (NEAR_X, NEAR_Y) and angle (NEAR_ANGLE)—of the near feature and the NEAR_FC, if necessary. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.in_features">
+            <summary>The input features that can be point, polyline, polygon, or multipoint type. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.near_features">
+            <summary>Value used to find the nearest features from input features. There can be one or more entries of near features; each entry can be of point, polyline, polygon, or multipoint type. When multiple entries of near features are specified, a new field, NEAR_FC, is added to the input table to store the paths of the source feature class that contains the nearest features. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.out_table">
+            <summary>The output table that will contain the proximity information—such as IN_FID, NEAR_FID, and NEAR_DIST—and other attributes—such as location (NEAR_X, NEAR_Y) and angle (NEAR_ANGLE)—of the near feature and the NEAR_FC, if necessary. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.search_radius">
+            <summary>Specifies the radius used to search for candidate near features. The near features within this radius are considered for calculating the nearest feature. If no value is specified, that is, the default (empty) radius is used, all near features are considered for calculation. The unit of the search radius defaults to the units of the coordinate system of the input features. The units can be changed to any other unit. However, this has no impact on the units of NEAR_DIST which is based on the units of the coordinate system of the input features. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.location">
+            <summary>Specifies whether x- and y-coordinates of the nearest location of the near feature will be written to new fields NEAR_X and NEAR_Y, respectively.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.angle">
+            <summary>Specifies whether the near angle values in decimal degrees will be calculated and written to a new field, NEAR_ANGLE. A near angle measures from the x-axis (horizontal axis) to the direction of the line connecting an input feature to its nearest feature at their closest locations, and it is within the range of 0 to 180 or 0 to -180 decimal degrees - 0 to the east, 90 to the north, 180 (-180°) to the west, and -90 to the south.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.closest">
+            <summary>Determines whether to locate and return only the closest features or all the features within the search radius.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.closest_count">
+            <summary>Find only the specified number of closest features. This parameter will not be used if the Find only closest feature option is checked. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.GenerateNearTable.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.Union">
+            <summary>Computes a geometric union of the input features. All features and their attributes will be written to the output feature class.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.Union.#ctor(System.Object,System.Object)">
+            <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+            <param name="in_features">A list of the input feature classes or layers. When the distance between features is less than the cluster tolerance, the features with the lower rank will snap to the feature with the higher rank. The highest rank is one. All of the input features must be polygons.  (In, Required)</param>
+            <param name="out_feature_class">The feature class that will contain the results. (Out, Required)</param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.in_features">
+            <summary>A list of the input feature classes or layers. When the distance between features is less than the cluster tolerance, the features with the lower rank will snap to the feature with the higher rank. The highest rank is one. All of the input features must be polygons.  (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.out_feature_class">
+            <summary>The feature class that will contain the results. (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.join_attributes">
+            <summary>Determines which attributes from the input features will be transferred to the output feature class. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.cluster_tolerance">
+            <summary>The minimum distance separating all feature coordinates (nodes and vertices) as well as the distance a coordinate can move in X or Y (or both). (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.gaps">
+            <summary>Gaps are areas in the output feature class that are completely enclosed by other polygons. This is not invalid, but it may be desirable to identify these for analysis. To find the gaps in the output, set this option to NO_GAPS, and a feature will be created in these areas. To select these features, query the output feature class based on all the input feature's FID values being equal to -1.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.Union.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.TabulateIntersection">
+             <summary>
+            Computes the intersection between two feature classes and cross-tabulates the area, length, or count of the  intersecting features.</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.#ctor(System.Object,System.Object,System.Object,System.Object)">
+             <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+             <param name="in_zone_features">The features used to identify zones. (In, Required)</param>
+             <param name="zone_fields"><summary>
+            The attribute field or fields that will be used to define zones.
+             (In, Required)</summary></param>
+             <param name="in_class_features"><summary>
+            The features used to identify classes.
+             (In, Required)</summary></param>
+             <param name="out_table"><summary>
+            The table that will contain the cross-tabulation of intersections between zones and classes.
+             (Out, Required)</summary></param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.in_zone_features">
+            <summary>The features used to identify zones. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.zone_fields">
+             <summary>
+            The attribute field or fields that will be used to define zones.
+             (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.in_class_features">
+             <summary>
+            The features used to identify classes.
+             (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.out_table">
+             <summary>
+            The table that will contain the cross-tabulation of intersections between zones and classes.
+             (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.class_fields">
+             <summary>
+            The attribute field or fields used to define classes.
+             (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.sum_fields">
+             <summary>
+            The fields to sum from the Input Class Features.
+             (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.xy_tolerance">
+             <summary>
+            The distance that determines the range in which features or their vertices are considered equal. By default, this is the XY Tolerance of the Input Zone Features.
+             (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.out_units">
+             <summary>
+            Units to be used to calculate area or length measurements. Setting Output Units when the 
+            Input Class Features are points is not supported. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.TabulateIntersection.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+        <member name="T:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors">
+             <summary>
+            Creates a table with statistics based on polygon contiguity (overlaps, coincident edges, or nodes).</summary>
+        </member>
+        <member name="M:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.#ctor(System.Object,System.Object)">
+             <summary>Constructor that takes all required parameters for geoprocessor execution.</summary>
+             <param name="in_features"><summary>
+            The input polygon features. (In, Required)</summary></param>
+             <param name="out_table"><summary>
+            The output table.
+             (Out, Required)</summary></param>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.in_features">
+             <summary>
+            The input polygon features. (In, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.out_table">
+             <summary>
+            The output table.
+             (Out, Required)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.in_fields">
+             <summary>
+            Input attribute field or fields used to identify unique polygons or polygon groups and represent them in the output.  
+             (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.area_overlap">
+             <summary>Determines if overlapping polygons will  be analyzed and reported in the output.  
+            
+             (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.both_sides">
+            <summary>Determines if both sides of neighbor relationships will be included in the output.
+            (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.cluster_tolerance">
+             <summary>
+            The minimum distance between coordinates before they are considered equal. By default, this is the XY Tolerance of the input  features. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.out_linear_units">
+             <summary>
+            Units used to report the total  length of the coincident edge between neighboring polygons. The default is the input feature units.
+             (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.out_area_units">
+             <summary>Units used to report the area overlap of neighboring polygons.  The default is the input feature units. 
+            This parameter is only enabled when the area_overlap parameter is set to AREA_OVERLAP. (In, Optional)</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.ToolboxDirectory">
+            <summary>The directory of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.ToolboxName">
+            <summary>The name of this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.ToolName">
+            <summary>The name of this tool.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.Alias">
+            <summary>The alias for this tool's toolbox.</summary>
+        </member>
+        <member name="P:ESRI.ArcGIS.AnalysisTools.PolygonNeighbors.ParameterInfo">
+            <summary>The parameters used by this tool. For internal use only.</summary>
+        </member>
+    </members>
+</doc>

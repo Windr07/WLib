@@ -96,7 +96,7 @@ namespace WLib.ArcGis.Data
             PropertyInfo p = null;
             if (table != null)
             {
-                var rows = TableOpt.QueryRows(table, whereClause);
+                var rows = table.QueryRows(whereClause);
                 foreach (IRow row in rows)
                 {
                     obj = ass.CreateInstance(t.FullName) as T;
@@ -128,7 +128,7 @@ namespace WLib.ArcGis.Data
             PropertyInfo p = null;
             if (featureClass != null)
             {
-                var features = FeatClassOpt.QueryFeatures(featureClass, whereClause);
+                var features = featureClass.QueryFeatures(whereClause);
                 foreach (IFeature feature in features)
                 {
                     obj = ass.CreateInstance(t.FullName) as T;
@@ -151,7 +151,7 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static T ConvertFirstRecordToObject<T>(ITable table, string whereClause = null) where T : class
         {
-            var row = TableOpt.QueryFirstRow(table, whereClause);
+            var row = table.QueryFirstRow(whereClause);
             return ConvertToObject<T>(row);
         }
         /// <summary>
@@ -163,7 +163,7 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static T ConvertFirstRecordToObject<T>(IFeatureClass featureClass, string whereClause = null) where T : class
         {
-            var feature = FeatClassOpt.QueryFirstFeature(featureClass, whereClause);
+            var feature = featureClass.QueryFirstFeature(whereClause);
             return ConvertToObject<T>(feature);
         }
 

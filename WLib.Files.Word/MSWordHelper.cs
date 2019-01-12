@@ -53,16 +53,14 @@ namespace WLib.Files.Word
         /// </summary>
         public void Quit()
         {
-            if (AppClass != null && AppClass.Application != null)
-                AppClass.Application.Quit(ref _missing, ref _missing, ref _missing);
+            AppClass?.Application?.Quit(ref _missing, ref _missing, ref _missing);
         }
         /// <summary>
         /// 关闭当前的文档
         /// </summary>
         public void CloseDocument()
         {
-            if (Document != null)
-                Document.Close();
+            Document?.Close();
         }
         /// <summary>
         /// 打开Word文档,并且返回对象oDoc
@@ -182,8 +180,7 @@ namespace WLib.Files.Word
         /// <summary>
         /// 替换标签内容
         /// </summary>
-        /// <param name="app"></param>
-        /// <param name="boomarks">标签名及对应值的键值对</param>
+        /// <param name="markNameToValue">标签名及对应值的键值对</param>
         public void ReplaceBookMark(Dictionary<string, string> markNameToValue)
         {
             Bookmarks bookmarks = Document.Bookmarks;
@@ -226,7 +223,7 @@ namespace WLib.Files.Word
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                if (i >= blanklines)//
+                if (i >= blanklines)
                 {
                     AppClass.Selection.InsertRows(1);
                 }
@@ -252,7 +249,6 @@ namespace WLib.Files.Word
         /// <returns></returns>
         public Bookmark GetBookmark(string bookmarkName)
         {
-            //return Document.Bookmarks.Cast<Bookmark>().FirstOrDefault(v => v.Name.Equals(bookmarkName));
             Bookmark theResult = null;
             Bookmarks bookmarks = Document.Bookmarks;
             foreach (Bookmark bookmark in bookmarks)
@@ -278,9 +274,7 @@ namespace WLib.Files.Word
                 foreach (Bookmark bookmark in bookmarks)
                 {
                     if (bookmark.Name == item)
-                    {
                         return bookmark;
-                    }
                 }
             }
             return null;
@@ -307,49 +301,6 @@ namespace WLib.Files.Word
             AppClass.ActiveWindow.View.Type = WdViewType.wdPrintView;
             MergeCells();
         }
-        //public void UpMergeCells(object moveCount)
-        //{
-        //    //newTable.Cell(3, 3).Select(); //选中一行 
-        //    object moveUnit = WdUnits.wdLine;
-        //    object moveExtend = WdMovementType.wdExtend;
-        //    AppClass.Selection.MoveUp(ref moveUnit, ref moveCount, ref moveExtend);
-        //    AppClass.Selection.Cells.Merge();
-
-        //}
-
-        //public void MergeCells(int tableIndex, Cell startCell, Cell endCell)
-        //{
-        //    startCell.Merge(endCell);
-        //}
-
-        ///// <summary>
-        ///// 向下合并单元格
-        ///// </summary>
-        ///// <param name="bookmarkName">从此书签处开始合并单元格</param>
-        ///// <param name="count">合并单元格数</param>
-        //public void DownMergeCells(string bookmarkName, int count)
-        //{
-        //    AppClass.ActiveWindow.View.Type = WdViewType.wdWebView;
-
-        //    Bookmarks bookmarks = AppClass.ActiveDocument.Bookmarks;
-        //    Bookmark bookmark = getBookmark(bookmarks, bookmarkName);
-        //    object what = WdGoToItem.wdGoToBookmark;
-        //    AppClass.Selection.GoTo(what, _Missing, _Missing, bookmark.Name);
-
-        //    AppClass.ActiveDocument.Bookmarks.DefaultSorting = WdBookmarkSortBy.wdSortByName;
-        //    AppClass.ActiveDocument.Bookmarks.ShowHidden = false;
-        //    object extend = WdMovementType.wdMove;
-        //    object unit = WdUnits.wdLine;
-
-
-        //    AppClass.Selection.MoveDown(unit, count, extend);
-
-
-
-        //    mergeCells();
-        //    AppClass.ActiveWindow.View.Type = WdViewType.wdPrintView;
-        //}
-
         /// <summary>
         /// 合并单元格
         /// </summary>

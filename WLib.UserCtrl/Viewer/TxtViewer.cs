@@ -1,4 +1,11 @@
-﻿using System.IO;
+﻿/*---------------------------------------------------------------- 
+// auth： XiaoJiaMing?
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+using System.IO;
 using System.Windows.Forms;
 
 namespace WLib.UserCtrls.Viewer

@@ -11,17 +11,17 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
 {
     public class Workbook
     {
-        private readonly object _oWorkbook;
+        private readonly object _workbook;
         public Workbook(object workbook)
         {
-            _oWorkbook = workbook;
+            _workbook = workbook;
         }
 
         public Worksheets Worksheets
         {
             get
             {
-                object worksheets = _oWorkbook.GetType().InvokeMember("Worksheets", System.Reflection.BindingFlags.GetProperty, null, _oWorkbook, null);
+                object worksheets = _workbook.GetType().InvokeMember("Worksheets", System.Reflection.BindingFlags.GetProperty, null, _workbook, null);
                 if (worksheets == null)
                     throw new Exception("获取工作表集合时失败!");
                 else
@@ -31,8 +31,7 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
         public void SaveAs(string fileName)
         {
             object[] parameters = new object[1] { fileName };
-            _oWorkbook.GetType().InvokeMember("SaveAs", System.Reflection.BindingFlags.InvokeMethod, null, _oWorkbook, parameters);
-
+            _workbook.GetType().InvokeMember("SaveAs", System.Reflection.BindingFlags.InvokeMethod, null, _workbook, parameters);
         }
     }
 }

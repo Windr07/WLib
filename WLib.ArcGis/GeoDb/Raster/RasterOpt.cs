@@ -12,7 +12,7 @@ using WLib.ArcGis.GeoDb.WorkSpace;
 
 namespace WLib.ArcGis.GeoDb.Raster
 {
-    public class RasterOpt
+    public static class RasterOpt
     {
         /// <summary>
         /// 打开栅格数据集（bmp/tif/jpg/img）
@@ -44,7 +44,7 @@ namespace WLib.ArcGis.GeoDb.Raster
         /// <summary>
         /// 创建影像金字塔
         /// </summary>
-        public static void CreateRasterPyramid(IRasterDataset rasterDataset)
+        public static void CreateRasterPyramid(this IRasterDataset rasterDataset)
         {
             if (rasterDataset is IRasterPyramid3 rasterPyrmid)
             {

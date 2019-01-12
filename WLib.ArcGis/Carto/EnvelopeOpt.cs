@@ -21,7 +21,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="envelopes"></param>
         /// <seealso cref="http://help.arcgis.com/en/sdk/10.0/arcobjects_net/componenthelp/index.html#//002m00000197000000"/>
         /// <returns></returns>
-        public static IEnvelope UnionEnvelope(List<IEnvelope> envelopes)
+        public static IEnvelope UnionEnvelope(IEnumerable<IEnvelope> envelopes)
         {
             IEnvelope resultEnv = new EnvelopeClass(); 
             foreach (var envelope in envelopes)

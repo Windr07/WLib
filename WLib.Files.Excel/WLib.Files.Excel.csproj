@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WLib.Files.Excel</RootNamespace>
     <AssemblyName>WLib.Files.Excel</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -42,6 +42,7 @@
     <Reference Include="AppLibrary">
       <HintPath>..\DLL\AppLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -68,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MSExcel\ExcelBind\Application.cs" />
-    <Compile Include="MSExcel\MSExcelDBHelper.cs" />
     <Compile Include="MSExcel\MSExcelHelper.cs" />
     <Compile Include="AppLibExcel\DataFromExcel.cs" />
     <Compile Include="AppLibExcel\DataToExcel.cs" />
@@ -82,6 +82,9 @@
     <Compile Include="MSExcel\ExcelBind\Worksheets.cs" />
     <Compile Include="NPOI\NPOIHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\DLL\AppLibrary.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

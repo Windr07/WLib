@@ -14,6 +14,7 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.Analysis.OnShape;
 using WLib.ArcGis.Display;
 using WLib.ArcGis.GeoDb.FeatClass;
 using WLib.ArcGis.Geomtry;
@@ -105,7 +106,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="expendRate">实际显示范围与图形范围框的比值，即放大的倍数</param>
         public static void MapZoomTo(this IActiveView activeView, List<IGeometry> geometries, double expendRate = 2)
         {
-            IGeometry uniongeo = GeometryEx.UnionGeometry(geometries);
+            IGeometry uniongeo = TopologicalOpt.UnionGeometry(geometries);
             MapZoomTo(activeView, uniongeo, expendRate);
         }
         #endregion
@@ -155,7 +156,7 @@ namespace WLib.ArcGis.Carto.Map
         public static void MapZoomToAndHightLight(this IActiveView activeView, List<IGeometry> geomtries)
         {
             activeView.GraphicsContainer.DeleteAllElements();
-            IGeometry unionGeometry = GeometryEx.UnionGeometry(geomtries);
+            IGeometry unionGeometry = TopologicalOpt.UnionGeometry(geomtries);
             foreach (IGeometry geometry in geomtries)
             {
                 HightLightGeo(activeView, geometry);
@@ -170,7 +171,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="whereClause">查询条件</param>
         public static void MapZoomToAndHightLight(this IActiveView activeView, IFeatureLayer featureLayer, string whereClause)
         {
-            var geometries = FeatClassOpt.QueryGeometries(featureLayer.FeatureClass, whereClause);
+            var geometries = featureLayer.FeatureClass.QueryGeometries(whereClause);
             MapZoomToAndHightLight(activeView, geometries);
         }
 
@@ -345,7 +346,10 @@ namespace WLib.ArcGis.Carto.Map
                 thread.Abort();
             }));
         }
-
+        /// <summary>
+        /// 停止线程的委托
+        /// </summary>
+        /// <param name="thread"></param>
         private delegate void StopThreadDelegate(Thread thread);
         #endregion
     }

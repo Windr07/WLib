@@ -11,11 +11,11 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
 {
     public class Worksheets
     {
-        private readonly object _oWorksheets;
+        private readonly object _worksheets;
 
         public Worksheets(object worksheets)
         {
-            _oWorksheets = worksheets;
+            _worksheets = worksheets;
         }
 
         public Worksheet this[int index]
@@ -23,7 +23,7 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
             get
             {
                 object[] parameters = new object[1] { index };
-                object worksheet = _oWorksheets.GetType().InvokeMember("Item", System.Reflection.BindingFlags.GetProperty, null, _oWorksheets, parameters);
+                object worksheet = _worksheets.GetType().InvokeMember("Item", System.Reflection.BindingFlags.GetProperty, null, _worksheets, parameters);
                 if (worksheet == null)
                     throw new Exception("获取工作表时出现错误!");
                 else

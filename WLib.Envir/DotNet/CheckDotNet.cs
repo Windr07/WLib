@@ -27,6 +27,10 @@ namespace WLib.Envir.DotNet
            下载地址(64位)：http://www.ddooo.com/softdown/25627.htm 
            下载地址(32位)：http://www.bkill.com/download/21488.html 
      */
+    
+    /// <summary>
+    /// 获取已安装的.NET Framework版本信息
+    /// </summary>
     public class CheckDotNet
     {
         /// <summary>

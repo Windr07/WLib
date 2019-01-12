@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\BeforeExcuteEventArgs.cs" />
+    <Compile Include="DbBase\BeforeExcuteEventArgs.cs" />
     <Compile Include="ConnStringHelper.cs" />
     <Compile Include="DbHelper.cs" />
-    <Compile Include="Base\EDbProviderType.cs" />
-    <Compile Include="Base\ProviderFactory.cs" />
+    <Compile Include="DbBase\EDbProviderType.cs" />
+    <Compile Include="DbBase\ProviderFactory.cs" />
     <Compile Include="OracleGis\SdoElemInfoFactory.cs" />
     <Compile Include="OracleGis\SdoGeomFactory.cs" />
     <Compile Include="OracleGis\SdoGeomType.cs" />

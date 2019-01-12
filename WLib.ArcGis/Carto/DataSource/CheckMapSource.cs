@@ -279,7 +279,7 @@ namespace WLib.ArcGis.Carto.DataSource
                 bool resetSpatialRef = false;
                 foreach (var keyValue in _mapLyrSources[i].ViewNames2SourceNames)
                 {
-                    IFeatureLayer featureLayer = MapQuery.GetFeatureLayer2(map, keyValue.Key);
+                    IFeatureLayer featureLayer = map.GetFeatureLayer2(keyValue.Key);
                     if (featureLayer == null)//若图层为空
                     {
                         _messages.Add(

@@ -35,12 +35,12 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// 获得字段类型的文字描述
         /// </summary>
         /// <returns></returns>
-        public string FieldTypeDesciption => FieldOpt.GetFieldTypeDesciption(FieldType);
+        public string FieldTypeDesciption => FieldType.GetFieldTypeDesciption();
         /// <summary>
         /// 获得字段类型的中文文字描述
         /// </summary>
         /// <returns></returns>
-        public string FieldTypeDesciptionCn => FieldOpt.GetFieldTypeDesciptionCn(FieldType);
+        public string FieldTypeDesciptionCn => FieldType.GetFieldTypeDesciptionCn();
 
 
         /// <summary>

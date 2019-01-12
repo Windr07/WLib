@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Geodatabase;
 
@@ -134,7 +135,6 @@ namespace WLib.ArcGis.GeoDb.Table
         {
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
-
             ICursor cursor = table.Update(queryFilter, false);
             IRow row = null;
 
@@ -191,7 +191,7 @@ namespace WLib.ArcGis.GeoDb.Table
                 Console.WriteLine(table.Fields.Field[j].Name);
             }
             ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
-            IRow row = null;
+            IRow row;
             while ((row = cursor.NextRow()) != null)
             {
                 rows.Add(row);
@@ -285,6 +285,42 @@ namespace WLib.ArcGis.GeoDb.Table
 
 
         #region 查询值
+        /// <summary>
+        /// 获取表格指定字段的唯一值（全部不重复的值）
+        /// </summary>
+        /// <param name="table">被查询的表格</param>
+        /// <param name="fieldName">字段名</param>
+        /// <param name="whereClause">条件语句</param>
+        /// <returns></returns>
+        public static List<object> GetUniqueValues(this ITable table, string fieldName, string whereClause = null)
+        {
+            ICursor cursor = table.GetSearchCursor(whereClause, fieldName, true);
+
+            IDataStatistics dataStatistics = new DataStatisticsClass();
+            dataStatistics.Field = fieldName;
+            dataStatistics.Cursor = cursor;
+            var enumerator = dataStatistics.UniqueValues;
+            enumerator.Reset();
+
+            var uniqueValues = new List<object>();
+            while (enumerator.MoveNext())
+            {
+                uniqueValues.Add(enumerator.Current);
+            }
+            uniqueValues.Sort();
+            return uniqueValues;
+        }
+        /// <summary>
+        /// 获取表格指定字段的唯一字符串值（全部不重复的值）
+        /// </summary>
+        /// <param name="table">被查询的表格</param>
+        /// <param name="fieldName">字段名</param>
+        /// <param name="whereClause">条件语句</param>
+        /// <returns></returns>
+        public static List<string> GetUniqueStrValues(this ITable table, string fieldName, string whereClause = null)
+        {
+            return GetUniqueValues(table, fieldName, whereClause).Select(v => v.ToString()).ToList(); ;
+        }
         /// <summary>
         ///  查找符合条件的第一条记录，并返回记录中指定字段的值
         /// </summary>
@@ -550,30 +586,21 @@ namespace WLib.ArcGis.GeoDb.Table
 
 
         /// <summary>
-        /// 通过IDataStatistics获取表格指定字段所有值（唯一值）
+        /// 创建查询要素的游标
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="fieldName">字段名</param>
-        /// <param name="whereClause">条件语句</param>
+        /// <param name="table">查询的要素类</param>
+        /// <param name="whereClause">查询条件</param>
+        /// <param name="subFields">查询所返回的字段，多个字段用逗号隔开：e.g. "OBJECTID，NAME"</param>
+        /// <param name="recyling"></param>
         /// <returns></returns>
-        public static List<string> GetFieldValuesByDataStatistics(this ITable table, string fieldName, string whereClause = null)
+        public static ICursor GetSearchCursor(this ITable table, string whereClause = null, string subFields = null, bool recyling = false)
         {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            queryFilter.SubFields = fieldName;
-            queryFilter.WhereClause = whereClause;
-            ICursor cursor = table.Search(queryFilter, true);
-            IDataStatistics dataStatistics = new DataStatisticsClass();
-            dataStatistics.Field = fieldName;
-            dataStatistics.Cursor = cursor;
-            System.Collections.IEnumerator enumerator = dataStatistics.UniqueValues;
-            enumerator.Reset();
-            var uniqueValueList = new List<string>();
-            while (enumerator.MoveNext())
-            {
-                uniqueValueList.Add(enumerator.Current?.ToString());
-            }
-            uniqueValueList.Sort();
-            return uniqueValueList;
+            IQueryFilter filter = new QueryFilterClass();
+            filter.WhereClause = whereClause;
+            if (!string.IsNullOrEmpty(subFields))
+                filter.SubFields = subFields;
+
+            return table.Search(filter, recyling);
         }
         /// <summary>
         /// 执行SQL语句

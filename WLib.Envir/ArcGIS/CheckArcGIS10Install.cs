@@ -10,7 +10,7 @@ using Microsoft.Win32;
 namespace WLib.Envir.ArcGIS
 {
     /// <summary>
-    /// 检查、获取ArcGIS及其子程序安装路径
+    /// 检查、获取ArcGIS10.0及其子程序安装路径
     /// </summary>
     public class CheckArcGIS10Install : ICheckArcGisInstall
     {

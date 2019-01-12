@@ -1,0 +1,9 @@
+F:\MyCode\WLib\WLib.Db\obj\Debug\WLib.Db.csprojAssemblyReference.cache
+F:\MyCode\WLib\WLib.Db\obj\Debug\WLib.Db.csproj.CoreCompileInputs.cache
+F:\MyCode\WLib\WLib.Db\bin\Debug\WLib.Db.dll
+F:\MyCode\WLib\WLib.Db\bin\Debug\WLib.Db.pdb
+F:\MyCode\WLib\WLib.Db\bin\Debug\oracle.dataaccess.dll
+F:\MyCode\WLib\WLib.Db\bin\Debug\System.Data.SQLite.dll
+F:\MyCode\WLib\WLib.Db\obj\Debug\WLib.Db.csproj.CopyComplete
+F:\MyCode\WLib\WLib.Db\obj\Debug\WLib.Db.dll
+F:\MyCode\WLib\WLib.Db\obj\Debug\WLib.Db.pdb

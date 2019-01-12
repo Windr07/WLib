@@ -14,7 +14,7 @@ namespace WLib.Data
     /// <summary>
     /// DataTable的操作
     /// </summary>
-    public class DataTableOpt
+    public static class DataTableOpt
     {
         /// <summary>
         /// 构造表格（DataTable）
@@ -59,7 +59,7 @@ namespace WLib.Data
         /// <param name="split">分隔符，用于分隔每一行的每一个值</param>
         /// <param name="containsHeader">是否包含表头</param>
         /// <returns></returns>
-        public static string DataTableToText(DataTable dataTable, string split, bool containsHeader = true)
+        public static string DataTableToText(this DataTable dataTable, string split, bool containsHeader = true)
         {
             StringBuilder sb = new StringBuilder();
             var cols = dataTable.Columns;
@@ -82,6 +82,19 @@ namespace WLib.Data
             }
             return sb.ToString();
         }
+        /// <summary>
+        /// 将DataTable中每一列的列名(ColumnName)和列标题(Caption)对调
+        /// </summary>
+        /// <param name="dataTable"></param>
+        public static void SwitchColumnNameAndCaption(this DataTable dataTable)
+        {
+            foreach (DataColumn column in dataTable.Columns)
+            {
+                var tmp = column.ColumnName;
+                column.ColumnName = column.Caption;
+                column.Caption = tmp;
+            }
+        }
 
 
         /// <summary>
@@ -89,7 +102,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="sourceTable"></param>
         /// <returns></returns>
-        public static DataTable TransposeDataTable(DataTable sourceTable)
+        public static DataTable TransposeDataTable(this DataTable sourceTable)
         {
             const string STR_NAME = "字段";
             const string STR_VALUE = "值";
@@ -126,7 +139,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="dataRow"></param>
         /// <returns></returns>
-        public static DataTable TransposeDataTable(DataRow dataRow)
+        public static DataTable TransposeDataTable(this DataRow dataRow)
         {
             return TransposeDataTable(dataRow.Table);
         }

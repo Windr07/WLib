@@ -1,4 +1,11 @@
-﻿namespace WLib.UserCtrls.Viewer
+﻿/*---------------------------------------------------------------- 
+// auth： XiaoJiaMing?
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+namespace WLib.UserCtrls.Viewer
 {
     /// <summary>
     /// picViewer控件的操作状态

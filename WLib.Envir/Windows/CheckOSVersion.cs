@@ -19,7 +19,7 @@ namespace WLib.Envir.Windows
     */
 
     /// <summary>
-    /// 提供获取操作系统类型和位数的信息
+    /// 提供获取操作系统版本和位数的信息
     /// </summary>
     public static class CheckOSVersion
     {

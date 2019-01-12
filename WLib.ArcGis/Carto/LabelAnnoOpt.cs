@@ -27,7 +27,7 @@ namespace WLib.ArcGis.Carto
     /// <summary>
     /// 标注与注记的操作
     /// </summary>
-    public class LabelAnnoOpt
+    public static class LabelAnnoOpt
     {
 
         #region 标注转地图文档注记
@@ -38,7 +38,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="map">执行标注转注记的地图</param>
         /// <param name="layerNames">需要将标注转注记的图层名称</param>
         /// <param name="whichFeatures">标示将哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</param>
-        public static void ConvertLabelsToMapAnnotation(IMap map, string[] layerNames,
+        public static void ConvertLabelsToMapAnnotation(this IMap map, string[] layerNames,
              esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures)
         {
             List<IGeoFeatureLayer> geoFeatureLayerList = new List<IGeoFeatureLayer>();
@@ -56,7 +56,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="map">执行标注转注记的地图</param>
         /// <param name="layerIndexs">需要将标注转注记的图层索引（注意这些图层必须是map中的图层，索引不能超出范围）</param>
         /// <param name="whichFeatures">标示将哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</param>
-        public static void ConvertLabelsToMapAnnotation(IMap map, int[] layerIndexs,
+        public static void ConvertLabelsToMapAnnotation(this IMap map, int[] layerIndexs,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures)
         {
             List<IGeoFeatureLayer> geoFeatureLayerList = new List<IGeoFeatureLayer>();
@@ -74,7 +74,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="map">执行标注转注记的地图</param>
         /// <param name="geoFeatureLayer">需要将标注转注记的图层（注意这些图层必须是map中的图层）</param>
         /// <param name="whichFeatures">标示将哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</param>
-        public static void ConvertLabelsToMapAnnotation(IMap map, IGeoFeatureLayer[] geoFeatureLayer,
+        public static void ConvertLabelsToMapAnnotation(this IMap map, IGeoFeatureLayer[] geoFeatureLayer,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures)
         {
             IConvertLabelsToAnnotation convertLabelsToAnnotation = new ConvertLabelsToAnnotationClass();
@@ -110,7 +110,7 @@ namespace WLib.ArcGis.Carto
         /// </summary>
         /// <param name="map">执行标注转注记的地图</param>
         /// <param name="whichFeatures">标示哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</param>
-        public static void ConvertLabelsToMapAnnotation(IMap map,
+        public static void ConvertLabelsToMapAnnotation(this IMap map,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures)
         {
             IConvertLabelsToAnnotation convertLabelsToAnnotation = new ConvertLabelsToAnnotationClass();
@@ -159,7 +159,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="whichFeatures">标示哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</param>
         /// <param name="outWorkspace">保存注记的工作空间</param>
         /// <param name="suffix">注记图层名称后缀</param>
-        public static void ConvertLabelsToGdbAnnotationLayers(IMap map, bool featureLinked = false,
+        public static void ConvertLabelsToGdbAnnotationLayers(this IMap map, bool featureLinked = false,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures, IWorkspace outWorkspace = null, string suffix = "_Anno")
         {
             IConvertLabelsToAnnotation convertLabelsToAnnotation = new ConvertLabelsToAnnotationClass();
@@ -216,6 +216,7 @@ namespace WLib.ArcGis.Carto
             IActiveView pActiveView = map as IActiveView;
             pActiveView.Refresh();
         }
+
         /// <summary>
         ///  将指定图层的标注转注记，生成注记图层存储在数据库中
         ///  (保存在数据库的注记图层是IFeatureClass/IFeatureLayer/IAnnotationLayer->IFeature as IAnnotationFeature.Annotation->IElement)
@@ -223,8 +224,9 @@ namespace WLib.ArcGis.Carto
         /// <param name="map">执行标注转注记的地图</param>
         /// <param name="layer">执行标注转注记的图层</param>
         /// <param name="featureLinked">是否关联要素（关联要素的注记必须与其所关联的要素类存储在同一地理数据库中）</param>
+        /// <param name="whichFeatures"></param>
         /// <parparam name="whichFeatures">标示哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</parparam>
-        public static void ConvertLabelsToGdbAnnotationSingleLayer(IMap map, ILayer layer, bool featureLinked = false,
+        public static void ConvertLabelsToGdbAnnotationSingleLayer(this IMap map, ILayer layer, bool featureLinked = false,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures)
         {
             IConvertLabelsToAnnotation convertLabelsToAnnotation = new ConvertLabelsToAnnotationClass();
@@ -273,7 +275,7 @@ namespace WLib.ArcGis.Carto
         /// </summary>
         /// <param name="geoLayer">要设置标注的图层(IFeatureLayer as IGeoFeatureLayer)</param>
         /// <param name="size">标注的大小</param>
-        public static void SetLabelSize(IGeoFeatureLayer geoLayer, int size)
+        public static void SetLabelSize(this IGeoFeatureLayer geoLayer, int size)
         {
             IAnnotateLayerPropertiesCollection annotateLyrProColl = geoLayer.AnnotationProperties;
             IAnnotateLayerProperties annoPros = null;
@@ -296,7 +298,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="fieldName">显示标注的字段</param>
         /// <param name="fontName">标注的字体</param>
         /// <param name="size">标注的大小</param>
-        public static void ShowLabel(IGeoFeatureLayer geoLayer, string fieldName, string fontName = "宋体", int size = 12)
+        public static void ShowLabel(this IGeoFeatureLayer geoLayer, string fieldName, string fontName = "宋体", int size = 12)
         {
             //标注属性集
             IAnnotateLayerPropertiesCollection annotateLyrProColl = geoLayer.AnnotationProperties;
@@ -327,7 +329,7 @@ namespace WLib.ArcGis.Carto
         /// 隐藏标注
         /// </summary>
         /// <param name="geoLayer">要设置标注的图层(IFeatureLayer as IGeoFeatureLayer)</param>
-        public static void HideLabel(IGeoFeatureLayer geoLayer)
+        public static void HideLabel(this IGeoFeatureLayer geoLayer)
         {
             geoLayer.DisplayAnnotation = false;
         }
@@ -342,11 +344,11 @@ namespace WLib.ArcGis.Carto
         /// <param name="graphicsLayerName"></param>
         /// <param name="fontName">注记字体（此值为""、空白字符或null，则不改变注记字体）</param>
         /// <param name="size">注记大小（此值小于等于0，则不改变注记大小）</param>
-        public static void SetAnnotationFontOnMap(IMap map, string graphicsLayerName, string fontName = null, int size = 0)
+        public static void SetAnnotationFontOnMap(this IMap map, string graphicsLayerName, string fontName = null, int size = 0)
         {
-            IGraphicsLayer graphicsLayer = MapQuery.GetGraphicsLayer(map, graphicsLayerName);
+            IGraphicsLayer graphicsLayer = map.GetGraphicsLayer(graphicsLayerName);
             IGraphicsContainer graphicContainer = graphicsLayer as IGraphicsContainer;
-            var txtElements = ElementOpt.GetTextElements(graphicContainer);
+            var txtElements = graphicContainer.GetTextElements();
             foreach (var txtElement in txtElements)
             {
                 ITextSymbol txtSymbol = txtElement.Symbol;

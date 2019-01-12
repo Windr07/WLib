@@ -5,17 +5,25 @@ using System.Linq;
 namespace WLib.Files.Excel.AppLibExcel
 {
     /// <summary>
-    /// 读取Excel
+    /// 读取Excel存入DataTable的操作
     /// </summary>
     public class DataFromExcel
     {
-        readonly AppLibrary.ReadExcel.Workbook _workbook = null;
+        /// <summary>
+        /// Excel工作簿
+        /// </summary>
+        private readonly AppLibrary.ReadExcel.Workbook _workbook;
+        /// <summary>
+        /// 读取Excel存入DataTable的操作
+        /// </summary>
+        /// <param name="filePath">xls文件路径</param>
         public DataFromExcel(string filePath)
         {
             _workbook = AppLibrary.ReadExcel.Workbook.getWorkbook(filePath);
         }
+
         /// <summary>
-        /// 按表获名称获取符合查询条件的数据行
+        /// 按sheet表格名称获取符合查询条件的数据行
         /// </summary>
         /// <param name="sheetName"></param>
         /// <param name="whereClause"></param>
@@ -26,12 +34,12 @@ namespace WLib.Files.Excel.AppLibExcel
             return dataTable.Select(whereClause);
         }
         /// <summary>
-        /// 按表获名称获取所有数据
+        /// 按sheet表格名称获取所有数据
         /// </summary>
         /// <param name="sheetName"></param>
         /// <returns></returns>
         public DataTable GetSheetData(string sheetName)
-        { 
+        {
             AppLibrary.ReadExcel.Sheet sheet = _workbook.Sheets.First(p => p.Name == sheetName);
             if (sheet == null)
                 throw new Exception("找不到表格名为：" + sheetName + " 的表格，请检查数据");
@@ -39,7 +47,7 @@ namespace WLib.Files.Excel.AppLibExcel
             return dataTable;
         }
         /// <summary>
-        /// 根据表格的索引获取数据,索引从零开始
+        /// 根据sheet表格的索引获取数据,索引从零开始
         /// </summary>
         /// <param name="sheetIndex"></param>
         /// <returns></returns>
@@ -51,9 +59,8 @@ namespace WLib.Files.Excel.AppLibExcel
             DataTable dataTable = ReadSheetData(sheet);
             return dataTable;
         }
-
         /// <summary>
-        /// 读取sheet数据转换为DataTable
+        /// 读取sheet表格数据转换为DataTable
         /// </summary>
         /// <param name="sheet"></param>
         /// <returns></returns>
@@ -69,13 +76,9 @@ namespace WLib.Files.Excel.AppLibExcel
                 {
                     AppLibrary.ReadExcel.Cell colCell = sheet.getCell(iCol, iRow);
                     if (iRow == 0)
-                    {
                         dataTable.Columns.Add(colCell.Value.ToString());
-                    }
                     else
-                    {
                         dr[iCol] = colCell.Value;
-                    }
                 }
                 if (dr != null)
                     dataTable.Rows.Add(dr);

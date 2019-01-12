@@ -1,0 +1,7 @@
+1、在Visual Studio的C#项目中添加对以下4个dll的引用（以_csharp结尾）
+gdal_csharp.dll
+gdalconst_csharp.dll
+ogr_csharp.dll
+osr_csharp.dll
+
+2、将本文件夹下的全部dll复制到C#项目的生成目录下（xx项目\bin\Debug目录）

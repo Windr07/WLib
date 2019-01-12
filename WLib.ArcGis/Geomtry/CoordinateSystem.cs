@@ -81,7 +81,7 @@ namespace WLib.ArcGis.Geomtry
         /// <returns></returns>
         public static ISpatialReference GetSpatialReference(IFields fields)
         {
-            var shapeField = FieldOpt.GetFirstFieldsByType(fields, esriFieldType.esriFieldTypeGeometry);
+            var shapeField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeGeometry);
             if (shapeField == null) throw new Exception("字段集中不包含SHAPE字段！");
 
             return GetSpatialReference(shapeField);
@@ -445,7 +445,7 @@ namespace WLib.ArcGis.Geomtry
         /// <returns></returns>
         public static bool CheckMapCoordinate(IMap map, out string message)
         {
-            var featureLayers = MapQuery.GetFeatureLayers(map);
+            var featureLayers = map.GetFeatureLayers();
             var featureClasses = featureLayers.Select(v => v.FeatureClass).ToArray();
             bool result = CheckClassesCoordinate(featureClasses, out message);
             if (result)

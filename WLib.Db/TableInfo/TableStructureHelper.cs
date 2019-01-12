@@ -15,33 +15,27 @@ namespace WLib.Db.TableInfo
     /// <summary>
     /// 
     /// </summary>
-    public class TableStructureHelper
+    public static class TableStructureHelper
     {
-        /// <summary>
-        /// 用于连接到数据库的连接字符串
-        /// </summary>
-        public static string ConnectString { get; set; }
-
-
         #region 获取字典表信息
         /// <summary>
-        /// 获取指定字段对应字典表的指定编码值
+        /// 获取指定字段对应字典表的指定名称对应的编码
         /// </summary>
         /// <param name="tableFields"></param>
         /// <param name="fieldName">表中的字段，该字段关联字典表</param>
         /// <param name="name">字典表中的值（即名称）</param>
         /// <returns></returns>
-        public static string GetDictionaryCode(TableStructure tableFields, string fieldName, string name)
+        public static string GetDictionaryCode(this TableStructure tableFields, string fieldName, string name)
         {
             return tableFields.Fields.First(v => v.Name.Equals(fieldName)).DictionaryTable.CodeNameDict.FirstOrDefault(v => v.Value.Equals(name)).Key;
         }
         /// <summary>
-        /// 获取字典表中的值（名称）
+        /// 获取指定字段对应字典表的全部值（名称）
         /// </summary>
         /// <param name="tableFields">表</param>
         /// <param name="fieldName">表中的字段，该字段关联字典表</param>
         /// <returns></returns>
-        public static string[] GetDictionaryValues(TableStructure tableFields, string fieldName)
+        public static string[] GetDictionaryValues(this TableStructure tableFields, string fieldName)
         {
             return tableFields.Fields.First(v => v.Name.Equals(fieldName)).DictionaryTable.CodeNameDict.Values.ToArray();
         }
@@ -51,33 +45,34 @@ namespace WLib.Db.TableInfo
         /// <summary>
         ///  根据条件查询表
         /// </summary>
-        /// <param name="tableFields">表结构</param>
+        /// <param name="dbHelper">数据库帮助类</param>
+        /// <param name="tableStructure">表结构</param>
         /// <param name="whereClause">筛选条件，可空</param>
         /// <param name="orderByString">排序语句，此值为null时根据UPDATEDATE排序</param>
         /// <returns></returns>
-        public static DataTable QueryTable(TableStructure tableFields, string whereClause, string orderByString)
+        public static DataTable QueryTable(DbHelper dbHelper, TableStructure tableStructure, string whereClause, string orderByString)
         {
-            if (string.IsNullOrEmpty(whereClause))
+            if (string.IsNullOrWhiteSpace(whereClause))
                 whereClause = "1=1";
-            if (string.IsNullOrEmpty(orderByString) && tableFields.ContainsFieldName("UPDATEDATE"))
+            if (string.IsNullOrWhiteSpace(orderByString) && tableStructure.ContainsFieldName("UPDATEDATE"))
                 orderByString = "order by CDate(UPDATEDATE) desc";
 
-            string fields = tableFields.Fields.Select(v => v.Name).Aggregate((a, b) => a + "," + b);
-            string sql = $"select {fields} from {tableFields.TableName} where {whereClause} {orderByString};";
+            string fields = tableStructure.Fields.Select(v => v.Name).Aggregate((a, b) => a + "," + b);
+            string sql = $"select {fields} from {tableStructure.TableName} where {whereClause} {orderByString};";
 
             //执行查询并返回结果
-            IDbHelp dbHelper = DbHelpFactory.NewDbHelper(ConnectString);
-            return dbHelper.GetDataTab(sql);
+            return dbHelper.GetDataTable(sql);
         }
         /// <summary>
         /// 根据条件查询表
         /// </summary>
-        /// <param name="tableFields">表结构</param>
+        /// <param name="dbHelper">数据库帮助类</param>
+        /// <param name="tableStructure">表结构</param>
         /// <param name="fieldClass">条件筛选的字段</param>
         /// <param name="fieldValue">条件筛选的字段值，可空</param>
         /// <param name="orderByString">排序语句，此值为null时根据UPDATEDATE排序</param>
         /// <returns></returns>
-        public static DataTable QueryTable(TableStructure tableFields, FieldClass fieldClass, string fieldValue, string orderByString)
+        public static DataTable QueryTable(DbHelper dbHelper, TableStructure tableStructure, FieldClass fieldClass, string fieldValue, string orderByString)
         {
             string whereClause = null;
             if (!string.IsNullOrEmpty(fieldValue))
@@ -89,20 +84,21 @@ namespace WLib.Db.TableInfo
                 else
                     whereClause = $"{fieldClass.Name} = {fieldValue}";
             }
-            return QueryTable(tableFields, whereClause, orderByString);
+            return QueryTable(dbHelper, tableStructure, whereClause, orderByString);
         }
         /// <summary>
         /// 根据条件查询表
         /// </summary>
-        /// <param name="tableFields">表结构</param>
+        /// <param name="dbHelper">数据库帮助类</param>
+        /// <param name="tableStructure">表结构</param>
         /// <param name="fieldName">条件筛选的字段</param>
         /// <param name="fieldValue">条件筛选的字段值，可空</param>
         /// <param name="orderbyString">排序语句，此值为null时根据UPDATEDATE排序</param>
         /// <returns></returns>
-        public static DataTable QueryTable(TableStructure tableFields, string fieldName, string fieldValue, string orderbyString)
+        public static DataTable QueryTable(DbHelper dbHelper, TableStructure tableStructure, string fieldName, string fieldValue, string orderbyString)
         {
-            FieldClass fieldClass = tableFields.Fields.FirstOrDefault(v => v.Name == fieldName);
-            return QueryTable(tableFields, fieldClass, fieldValue, orderbyString);
+            FieldClass fieldClass = tableStructure.Fields.FirstOrDefault(v => v.Name == fieldName);
+            return QueryTable(dbHelper, tableStructure, fieldClass, fieldValue, orderbyString);
         }
 
 
@@ -111,7 +107,7 @@ namespace WLib.Db.TableInfo
         /// </summary>
         /// <param name="tableFields"></param>
         /// <returns></returns>
-        public static string CreateInsertSqlFormat(TableStructure tableFields)
+        public static string CreateInsertSqlFormat(this TableStructure tableFields)
         {
             var fields = tableFields.Fields;
             string strFields = fields.Select(v => v.Name).Aggregate((a, b) => a + "," + b);
@@ -134,7 +130,7 @@ namespace WLib.Db.TableInfo
         /// </summary>
         /// <param name="tableFields"></param>
         /// <returns></returns>
-        public static string CreateUpdateSqlFormat(TableStructure tableFields)
+        public static string CreateUpdateSqlFormat(this TableStructure tableFields)
         {
             var idFields = tableFields.Fields.FirstOrDefault(v => v.IsPrimaryKey);
             var fields = tableFields.Fields.Where(v => !v.IsPrimaryKey).ToArray();

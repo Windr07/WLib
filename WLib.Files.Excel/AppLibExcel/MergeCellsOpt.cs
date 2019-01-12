@@ -14,7 +14,6 @@
         /// 表示单元格的边框、样式、字体格式等
         /// </summary>
         public AppLibrary.WriteExcel.XF Xf { get; set; }
-
         /// <summary>
         /// 实例化合并单元格操作类
         /// </summary>
@@ -24,14 +23,6 @@
         {
             this.Cells = cells;
             this.Xf = xf;
-            //xf1 = StyleHelper.CellStyle.MyNewXF(xls, new StyleHelper.CellLine()
-            //{
-            //    ShowBottom = true,
-            //    ShowLeft = true,
-            //    ShowRight = true,
-            //    ShowTop = true
-            //}, UnderlineTypes.None, 10);
-            //xf1.TextWrapRight = true;
         }
 
 
@@ -60,7 +51,6 @@
             }
             Cells.Merge(rowMin, rowMax, columnMin, columnMax);
         }
-
         /// <summary>
         /// 合并单元格：将指定单元格与其右方、下方、右下的三个单元格合并（拥有边框和默认样式xf）
         /// </summary>
@@ -75,7 +65,6 @@
             Cells.Add(row + 1, column + 1, null, Xf);
             Cells.Merge(row, row + 1, column, column + 1);
         }
-     
         /// <summary>
         /// 向下合并单元格：将指定单元格与其正下方的一个单元格进行合并（拥有边框和默认样式xf）
         /// </summary>
@@ -88,7 +77,6 @@
             Cells.Add(row + 1, column, null, Xf);
             Cells.Merge(row, row + 1, column, column);
         }
-
         /// <summary>
         /// 向下合并单元格：在指定列中，合并指定行范围的单元格（拥有边框和默认样式xf）
         /// </summary>
@@ -105,7 +93,6 @@
             }
             Cells.Merge(rowMin, rowMax, column, column);
         }
-
         /// <summary>
         /// 向右合并单元格：在指定行中，合并指定列范围的单元格（拥有边框和默认样式xf）
         /// </summary>

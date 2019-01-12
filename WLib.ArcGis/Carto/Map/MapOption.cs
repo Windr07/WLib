@@ -15,12 +15,12 @@ namespace WLib.ArcGis.Carto.Map
     /// <summary>
     /// 地图设置操作（包括设置比例尺等）
     /// </summary>
-    public class MapOption
+    public static class MapOption
     {
         /// <summary>
         /// 设置地图为固定比例尺模式，并设定其比例尺
         /// </summary>
-        public static void SetMapScale(IMap map, double scale)
+        public static void SetMapScale(this IMap map, double scale)
         {
             #region ArcGIS 10.0及以上版本使用的代码
             IMapAutoExtentOptions mapAutoExtentOptions = map as IMapAutoExtentOptions;
@@ -38,7 +38,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="scaleList">比例尺列表，将从中选取最合适的比例尺</param>
         /// <param name="bufferDistance">要素与图廓的缓冲距离(厘米)，即地图实际显示范围是featEnvelope + 2 * bufferDistance</param>
         /// <returns></returns>
-        public static double SetMapScale(IPageLayout pageLayout, IMapFrame mapFrame,
+        public static double SetMapScale(this IPageLayout pageLayout, IMapFrame mapFrame,
             IEnvelope featureEnv, double[] scaleList, double bufferDistance = 2)
         {
             esriUnits pageUnit = pageLayout.Page.Units;
@@ -71,7 +71,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="bufferDistance">要素与图廓的缓冲距离(厘米)，即地图实际显示范围是featEnvelope + 2 * bufferDistance</param>
         /// <param name="isFixedScale">是否设定固定比例尺</param>
         /// <returns></returns>
-        public static double SetMapScale(IPageLayout pageLayout, IMapFrame mapFrame,
+        public static double SetMapScale(this IPageLayout pageLayout, IMapFrame mapFrame,
             IEnvelope featureEnv, double[] scaleList, double bufferDistance = 2, bool isFixedScale = true)
         {
             double scale = SetMapScale(pageLayout, mapFrame, featureEnv, scaleList, bufferDistance);
@@ -90,7 +90,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="nScale">比例尺</param>
         /// <param name="featureEnv">显示范围，值为null时不修改显示范围</param>
         /// <param name="spatialRef">坐标系，值为null是不修改坐标系</param>
-        public static void SetMapScale(IMapFrame mapFrame, double nScale,
+        public static void SetMapScale(this IMapFrame mapFrame, double nScale,
             IEnvelope featureEnv = null, ISpatialReference spatialRef = null)
         {
             #region ArcGIS 9.3版本使用的代码

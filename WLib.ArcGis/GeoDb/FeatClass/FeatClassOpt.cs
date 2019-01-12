@@ -568,8 +568,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
 
             var geoType = feature.Shape.GeometryType;
             var spatialReference = feature.Shape.SpatialReference;
-            var fields = FieldOpt.CloneFeatureClassFieldsSimple(feature.Class as IFeatureClass);
-            var feildArray = FieldOpt.FieldsToArray(fields);
+            var fields = (feature.Class as IFeatureClass).CloneFeatureClassFieldsSimple();
+            var feildArray = fields.FieldsToArray();
             var faetureClass = FeatClassToPath.CreateToShpFile(shpPath, geoType, spatialReference, feildArray);
 
             CopyDataToFeatClass(features, faetureClass);
@@ -985,7 +985,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// </summary>
         /// <param name="featureClasses">要素类集合</param>
         /// <returns></returns>
-        public static List<IFeatureClass> SortByGeometryType(IEnumerable<IFeatureClass> featureClasses)
+        public static List<IFeatureClass> SortByGeometryType(this IEnumerable<IFeatureClass> featureClasses)
         {
             var newClasses = new List<IFeatureClass>();
             newClasses.AddRange(featureClasses.Where(v => v.ShapeType == esriGeometryType.esriGeometryPoint || v.ShapeType == esriGeometryType.esriGeometryMultipoint));
@@ -999,7 +999,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="featureClasses">要素类集合</param>
         /// <param name="geometryTypes">几何类型</param>
         /// <returns></returns>
-        public static List<IFeatureClass> FilterByGeometryType(IEnumerable<IFeatureClass> featureClasses, params esriGeometryType[] geometryTypes)
+        public static List<IFeatureClass> FilterByGeometryType(this IEnumerable<IFeatureClass> featureClasses, params esriGeometryType[] geometryTypes)
         {
             var newClasses = new List<IFeatureClass>();
             foreach (var geometryType in geometryTypes)

@@ -1,0 +1,13 @@
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\WLib.Files.Excel.dll
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\WLib.Files.Excel.pdb
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\AppLibrary.dll
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\NPOI.dll
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\NPOI.OOXML.dll
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\NPOI.OpenXml4Net.dll
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\NPOI.OpenXmlFormats.dll
+F:\MyCode\WLib\WLib.Files.Excel\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\MyCode\WLib\WLib.Files.Excel\obj\Debug\WLib.Files.Excel.csprojAssemblyReference.cache
+F:\MyCode\WLib\WLib.Files.Excel\obj\Debug\WLib.Files.Excel.csproj.CoreCompileInputs.cache
+F:\MyCode\WLib\WLib.Files.Excel\obj\Debug\WLib.Files.Excel.csproj.CopyComplete
+F:\MyCode\WLib\WLib.Files.Excel\obj\Debug\WLib.Files.Excel.dll
+F:\MyCode\WLib\WLib.Files.Excel\obj\Debug\WLib.Files.Excel.pdb

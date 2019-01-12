@@ -1,5 +1,10 @@
-﻿//原出处：http://peterzb.cnblogs.com/
-//下载来源: http://blog.csdn.net/xuwei296/article/details/8548121
+﻿/*---------------------------------------------------------------- 
+// auth： None
+// date： None
+// desc： 原出处：http://peterzb.cnblogs.com/
+//        下载来源: http://blog.csdn.net/xuwei296/article/details/8548121
+// mdfy:  None
+//----------------------------------------------------------------*/
 
 using System;
 using System.Collections.Generic;

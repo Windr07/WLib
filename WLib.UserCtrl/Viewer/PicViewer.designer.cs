@@ -27,27 +27,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this._pictureBox1 = new System.Windows.Forms.PictureBox();
+            this._pictureBox = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this._pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
-            this._pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this._pictureBox1.Name = "pictureBox1";
-            this._pictureBox1.Size = new System.Drawing.Size(600, 360);
-            this._pictureBox1.TabIndex = 1;
-            this._pictureBox1.TabStop = false;
-            this._pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            this._pictureBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDoubleClick);
-            this._pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this._pictureBox1.MouseEnter += new System.EventHandler(this.pictureBox1_MouseEnter);
-            this._pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this._pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
-            this._pictureBox1.Resize += new System.EventHandler(this.pictureBox1_Resize);
+            this._pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._pictureBox.Location = new System.Drawing.Point(0, 0);
+            this._pictureBox.Name = "pictureBox1";
+            this._pictureBox.Size = new System.Drawing.Size(600, 360);
+            this._pictureBox.TabIndex = 1;
+            this._pictureBox.TabStop = false;
+            this._pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this._pictureBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDoubleClick);
+            this._pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this._pictureBox.MouseEnter += new System.EventHandler(this.pictureBox1_MouseEnter);
+            this._pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this._pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this._pictureBox.Resize += new System.EventHandler(this.pictureBox1_Resize);
             // 
             // panel1
             // 
@@ -73,11 +73,11 @@
             // PicViewer
             // 
             this.Controls.Add(this.label1);
-            this.Controls.Add(this._pictureBox1);
+            this.Controls.Add(this._pictureBox);
             this.Controls.Add(this.panel1);
             this.Name = "PicViewer";
             this.Size = new System.Drawing.Size(600, 360);
-            ((System.ComponentModel.ISupportInitialize)(this._pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

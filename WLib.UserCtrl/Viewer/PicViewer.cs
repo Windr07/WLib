@@ -1,8 +1,10 @@
-﻿///////////////////////////////////////////////
-//简单的图片查看控件
-//如果放得越大，速度越快
-//萧嘉明20130531
-//////////////////////////////////////////////
+﻿/*---------------------------------------------------------------- 
+// auth： XiaoJiaMing
+// date： 2013/05/31
+// desc： 简单的图片查看控件
+//        如果放得越大，速度越快
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
 
 using System;
 using System.Drawing;
@@ -14,10 +16,10 @@ namespace WLib.UserCtrls.Viewer
     /// <summary>
     /// 图片简单浏览控件
     /// </summary>
-    public partial class PicViewer : UserControl,IViewer
+    public partial class PicViewer : UserControl, IViewer
     {
-        private PictureBox _pictureBox1;
-        private readonly Timer _mLabelTicker = new Timer();
+        private PictureBox _pictureBox;
+        private readonly Timer _timer = new Timer();
 
         /// <summary>
         /// 图片控件的操作类型
@@ -32,28 +34,23 @@ namespace WLib.UserCtrls.Viewer
             set
             {
                 _actionType = value;
-
-                //设置鼠标
-                if (_actionType == EPicViewerAction.ZoomIn)
-                {
-                    _pictureBox1.Cursor = _mZoomin;
-                }
+                if (_actionType == EPicViewerAction.ZoomIn)//设置鼠标
+                    _pictureBox.Cursor = _zoomIn;
                 else if (_actionType == EPicViewerAction.ZoomOut)
-                {
-                    _pictureBox1.Cursor = _mZoomout;
-                }
+                    _pictureBox.Cursor = _zoomOut;
                 else if (_actionType == EPicViewerAction.Pan)
-                {
-                    _pictureBox1.Cursor = _mPan;
-                }
+                    _pictureBox.Cursor = _pan;
             }
         }
 
         /// <summary>
         /// 图片路径
         /// </summary>
-        private string _mPicfile;
-        private Image _mImage;
+        private string _picfilePath;
+        /// <summary>
+        /// 图片
+        /// </summary>
+        private Image _image;
         /// <summary>
         /// 当前要显示的图片路径
         /// </summary>
@@ -65,19 +62,17 @@ namespace WLib.UserCtrls.Viewer
                 {
                     try
                     {
-                        _mPicfile = value;
-                        _mImage?.Dispose();
-                        _mImage = Image.FromFile(_mPicfile);
-                        //this.zoomTrackBarControl1.Value = (int)(this.Width * 1.0 / this.m_image.Width);
+                        _picfilePath = value;
+                        _image?.Dispose();
+                        _image = Image.FromFile(_picfilePath);
                         ShowPercentLabel();
                         Full();
                     }
                     catch (Exception ex)
                     {
-                        ////COM.LIB.LOG.LogOperator.WriteLog(ex.ToString());
                         if (MessageBox.Show("无法打开指定图片！是否使用浏览器打开？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            RegistryKey key = Registry.ClassesRoot.OpenSubKey(@"http\shell\open\command\"); 
+                            RegistryKey key = Registry.ClassesRoot.OpenSubKey(@"http\shell\open\command\");
                             string s = key.GetValue("").ToString();
                             string[] tt = s.Split("\"".ToCharArray());
                             System.Diagnostics.Process.Start(tt[1], "file:" + value);
@@ -86,16 +81,16 @@ namespace WLib.UserCtrls.Viewer
                 }
                 else
                 {
-                    _mPicfile = "";
-                    if (_mImage != null)
+                    _picfilePath = "";
+                    if (_image != null)
                     {
-                        _mImage.Dispose();
-                        _mImage = null;
+                        _image.Dispose();
+                        _image = null;
                     }
-                    _pictureBox1.Refresh();
+                    _pictureBox.Refresh();
                 }
             }
-            get => _mPicfile;
+            get => _picfilePath;
         }
 
         private bool CheckChrome()
@@ -113,35 +108,32 @@ namespace WLib.UserCtrls.Viewer
         /// <summary>
         /// 
         /// </summary>
-        public System.IO.Stream BackImage
-        {
-            set => _pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
-        }
+        public System.IO.Stream BackImage { set => _pictureBox.SizeMode = PictureBoxSizeMode.Normal; }
 
         /// <summary>
         /// 图片框的画图区域
         /// </summary>
-        private Rectangle _mCurDrawRect;
+        private Rectangle _curDrawRect;
         /// <summary>
         /// 图片的显示区域
         /// </summary>
-        private Rectangle _mCurImgRect;
+        private Rectangle _curImgRect;
         /// <summary>
         /// 拉框放大的区域
         /// </summary>
-        private Rectangle _mAutoZoom;
-        private Point _mPadPoint;
-        private Point _mZoomPoint;
+        private Rectangle _autoZoom;
+        private Point _padPoint;
+        private Point _zoomPoint;
 
-        private Rectangle _mTrackRectangle = new Rectangle(new Point(0, 0), new Size(0, 0));
+        private Rectangle _trackRectangle = new Rectangle(new Point(0, 0), new Size(0, 0));
 
         /// <summary>
         /// 光标
         /// </summary>
-        private readonly Cursor _mPan;
+        private readonly Cursor _pan;
         private readonly Cursor _mPaning;
-        private readonly Cursor _mZoomin;
-        private readonly Cursor _mZoomout;
+        private readonly Cursor _zoomIn;
+        private readonly Cursor _zoomOut;
 
         private Color _mBackColor = Color.White;
         /// <summary>
@@ -159,10 +151,10 @@ namespace WLib.UserCtrls.Viewer
             // 该调用是 Windows.Forms 窗体设计器所必需的。
             InitializeComponent();
 
-            _mPan = Cursors.Default;
+            _pan = Cursors.Default;
             _mPaning = Cursors.Default;
-            _mZoomin = Cursors.Default;
-            _mZoomout = Cursors.Default;
+            _zoomIn = Cursors.Default;
+            _zoomOut = Cursors.Default;
 
             //m_pan = new Cursor(GetType().Assembly.GetManifestResourceStream("CommandToolSample.PlugManage.AdvancedTools.Cursor.Pan.cur"));
             //m_paning = new Cursor(GetType().Assembly.GetManifestResourceStream("CommandToolSample.PlugManage.AdvancedTools.Cursor.Paning.cur"));
@@ -172,7 +164,7 @@ namespace WLib.UserCtrls.Viewer
             //m_backColor = Color.White;
             _mBackColor = Color.Transparent;
 
-            _pictureBox1.MouseWheel += new MouseEventHandler(pictureBox1_MouseWheel);
+            _pictureBox.MouseWheel += new MouseEventHandler(pictureBox1_MouseWheel);
             // TODO: 在 InitializeComponent 调用后添加任何初始化      
         }
 
@@ -187,11 +179,11 @@ namespace WLib.UserCtrls.Viewer
                 ZoomOut();
             }
         }
-        
+
         public void DisposeImage()
         {
-            if (_mImage != null)
-                _mImage.Dispose();
+            if (_image != null)
+                _image.Dispose();
         }
 
         private void picViewer_Load(object sender, EventArgs e)
@@ -213,7 +205,7 @@ namespace WLib.UserCtrls.Viewer
                 Height = 200;
             }
 
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
             //			this.pictureBox1.Refresh();
@@ -227,23 +219,23 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         public void ZoomIn()
         {
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
             //计算放大的范围和画图的坐标
-            int newht = (int)(_mCurDrawRect.Height * 1.2);
-            int newwt = (int)(_mCurDrawRect.Width * 1.2);
-            int ox = (int)((newwt - _mCurDrawRect.Width) / 2);
-            int oy = (int)((newht - _mCurDrawRect.Height) / 2);
-            int x = _mCurDrawRect.X - ox;
-            int y = _mCurDrawRect.Y - oy;
+            int newht = (int)(_curDrawRect.Height * 1.2);
+            int newwt = (int)(_curDrawRect.Width * 1.2);
+            int ox = (int)((newwt - _curDrawRect.Width) / 2);
+            int oy = (int)((newht - _curDrawRect.Height) / 2);
+            int x = _curDrawRect.X - ox;
+            int y = _curDrawRect.Y - oy;
 
             //如果放大超过实际图片大小的倍数则放弃操作
-            if ((newht / _mImage.Height) > 5 || (newwt / _mImage.Width) > 5)
+            if ((newht / _image.Height) > 5 || (newwt / _image.Width) > 5)
                 return;
 
-            _mCurDrawRect = new Rectangle(x, y, newwt, newht);
-            _pictureBox1.Invalidate();
+            _curDrawRect = new Rectangle(x, y, newwt, newht);
+            _pictureBox.Invalidate();
             ShowPercentLabel();
         }
 
@@ -252,18 +244,18 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         public void ZoomOut()
         {
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
             //计算放大的范围和画图的坐标
-            int pbh = _pictureBox1.Height;
-            int pbw = _pictureBox1.Width;
-            int newht = (int)(_mCurDrawRect.Height / 1.2);
-            int newwt = (int)(_mCurDrawRect.Width / 1.2);
-            int ox = (int)((_mCurDrawRect.Width - newwt) / 2);
-            int oy = (int)((_mCurDrawRect.Height - newht) / 2);
-            int x = _mCurDrawRect.X + ox;
-            int y = _mCurDrawRect.Y + oy;
+            int pbh = _pictureBox.Height;
+            int pbw = _pictureBox.Width;
+            int newht = (int)(_curDrawRect.Height / 1.2);
+            int newwt = (int)(_curDrawRect.Width / 1.2);
+            int ox = (int)((_curDrawRect.Width - newwt) / 2);
+            int oy = (int)((_curDrawRect.Height - newht) / 2);
+            int x = _curDrawRect.X + ox;
+            int y = _curDrawRect.Y + oy;
 
             //判断边缘
             if (newwt > pbw)
@@ -287,11 +279,11 @@ namespace WLib.UserCtrls.Viewer
             }
 
             //如果缩小小于图片框大小的倍数则放弃操作
-            if ((_pictureBox1.Height / newht) > 5 || (_pictureBox1.Width / newwt) > 5)
+            if ((_pictureBox.Height / newht) > 5 || (_pictureBox.Width / newwt) > 5)
                 return;
 
-            _mCurDrawRect = new Rectangle(x, y, newwt, newht);
-            _pictureBox1.Invalidate();
+            _curDrawRect = new Rectangle(x, y, newwt, newht);
+            _pictureBox.Invalidate();
             ShowPercentLabel();
         }
         /// <summary>
@@ -299,14 +291,14 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         public void Full()
         {
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
-            int pbh = _pictureBox1.Height;
-            int pbw = _pictureBox1.Width;
+            int pbh = _pictureBox.Height;
+            int pbw = _pictureBox.Width;
 
-            int ht = _mImage.Height;
-            int wt = _mImage.Width;
+            int ht = _image.Height;
+            int wt = _image.Width;
 
             int newht = pbh;
             int newwt = pbw;
@@ -354,9 +346,9 @@ namespace WLib.UserCtrls.Viewer
                 }
             }
 
-            _mCurDrawRect = new Rectangle(x, y, newwt, newht);
-            _mCurImgRect = new Rectangle(0, 0, wt, ht);
-            _pictureBox1.Invalidate();
+            _curDrawRect = new Rectangle(x, y, newwt, newht);
+            _curImgRect = new Rectangle(0, 0, wt, ht);
+            _pictureBox.Invalidate();
             ShowPercentLabel();
         }
 
@@ -365,14 +357,14 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         public void Zoom()
         {
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
-            int pbh = _pictureBox1.Height;
-            int pbw = _pictureBox1.Width;
+            int pbh = _pictureBox.Height;
+            int pbw = _pictureBox.Width;
 
-            int ht = _mImage.Height;
-            int wt = _mImage.Width;
+            int ht = _image.Height;
+            int wt = _image.Width;
 
             int newht = pbh;
             int newwt = pbw;
@@ -409,9 +401,9 @@ namespace WLib.UserCtrls.Viewer
                 newwt = wt;
             }
 
-            _mCurDrawRect = new Rectangle(x, y, newwt, newht);
-            _mCurImgRect = new Rectangle(0, 0, wt, ht);
-            _pictureBox1.Invalidate();
+            _curDrawRect = new Rectangle(x, y, newwt, newht);
+            _curImgRect = new Rectangle(0, 0, wt, ht);
+            _pictureBox.Invalidate();
             ShowPercentLabel();
         }
 
@@ -424,28 +416,28 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         private void AutoZoomIn()
         {
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
             //picturebox控件范围
-            double pbh = _pictureBox1.Height;
-            double pbw = _pictureBox1.Width;
+            double pbh = _pictureBox.Height;
+            double pbw = _pictureBox.Width;
 
             //图片实际范围
-            double drawh = _mCurDrawRect.Height;
-            double draww = _mCurDrawRect.Width;
-            double drawX = _mCurDrawRect.X;
-            double drawY = _mCurDrawRect.Y;
+            double drawh = _curDrawRect.Height;
+            double draww = _curDrawRect.Width;
+            double drawX = _curDrawRect.X;
+            double drawY = _curDrawRect.Y;
 
             //图片原始范围
-            double imgH = _mImage.Height;
-            double imgW = _mImage.Width;
+            double imgH = _image.Height;
+            double imgW = _image.Width;
 
             //zoom框范围
-            double zoomh = _mAutoZoom.Height;
-            double zoomw = _mAutoZoom.Width;
-            double zoomX = _mAutoZoom.X;
-            double zoomY = _mAutoZoom.Y;
+            double zoomh = _autoZoom.Height;
+            double zoomw = _autoZoom.Width;
+            double zoomX = _autoZoom.X;
+            double zoomY = _autoZoom.Y;
 
             //Zoom矩形不能是一条线或点，也就是width和height要大于0
             if (zoomh <= 0 || zoomw <= 0) return;
@@ -475,7 +467,7 @@ namespace WLib.UserCtrls.Viewer
             }
 
             //zoom框与图片实际显示范围的交集
-            Rectangle oldZoomDraw = Rectangle.Intersect(_mAutoZoom, _mCurDrawRect);
+            Rectangle oldZoomDraw = Rectangle.Intersect(_autoZoom, _curDrawRect);
 
             //矩形交集为空时跳出
             if (oldZoomDraw.Width <= 0 || oldZoomDraw.Height <= 0 || oldZoomDraw.X > pbw || oldZoomDraw.Y > pbh) return;
@@ -511,11 +503,11 @@ namespace WLib.UserCtrls.Viewer
             double newDrawH = imgH * newZoomImgYScale;
 
             //如果缩小小于图片框大小的倍数则放弃操作
-            if (((double)_pictureBox1.Height / newDrawH) < 0.1 || ((double)_pictureBox1.Width / newDrawW) < 0.1) return;
+            if (((double)_pictureBox.Height / newDrawH) < 0.1 || ((double)_pictureBox.Width / newDrawW) < 0.1) return;
 
-            _mCurDrawRect = new Rectangle((int)Math.Truncate(newDrawX), (int)Math.Truncate(newDrawY), (int)Math.Truncate(newDrawW), (int)Math.Truncate(newDrawH));
+            _curDrawRect = new Rectangle((int)Math.Truncate(newDrawX), (int)Math.Truncate(newDrawY), (int)Math.Truncate(newDrawW), (int)Math.Truncate(newDrawH));
 
-            _pictureBox1.Invalidate();
+            _pictureBox.Invalidate();
         }
 
         /// <summary>
@@ -523,25 +515,25 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         private void AutoZoomOut()
         {
-            if (_mImage == null)
+            if (_image == null)
                 return;
 
             //各个高宽取值
-            double pbh = _pictureBox1.Height;
-            double pbw = _pictureBox1.Width;
+            double pbh = _pictureBox.Height;
+            double pbw = _pictureBox.Width;
 
-            double drawh = _mCurDrawRect.Height;
-            double draww = _mCurDrawRect.Width;
-            double drawX = _mCurDrawRect.X;
-            double drawY = _mCurDrawRect.Y;
+            double drawh = _curDrawRect.Height;
+            double draww = _curDrawRect.Width;
+            double drawX = _curDrawRect.X;
+            double drawY = _curDrawRect.Y;
 
-            double imgH = _mImage.Height;
-            double imgW = _mImage.Width;
+            double imgH = _image.Height;
+            double imgW = _image.Width;
 
-            double zoomh = _mAutoZoom.Height;
-            double zoomw = _mAutoZoom.Width;
-            double zoomX = _mAutoZoom.X;
-            double zoomY = _mAutoZoom.Y;
+            double zoomh = _autoZoom.Height;
+            double zoomw = _autoZoom.Width;
+            double zoomX = _autoZoom.X;
+            double zoomY = _autoZoom.Y;
 
             //Zoom矩形不能是一条线或点，也就是width和height要大于0
             if (zoomh <= 0 || zoomw <= 0) return;
@@ -570,7 +562,7 @@ namespace WLib.UserCtrls.Viewer
 
             Rectangle fillZoom = new Rectangle((int)Math.Truncate(fillZoomX), (int)Math.Truncate(fillZoomY), (int)Math.Truncate(fillZoomW), (int)Math.Truncate(fillZoomH));
 
-            Rectangle oldZoomDraw = Rectangle.Intersect(fillZoom, _mCurDrawRect);
+            Rectangle oldZoomDraw = Rectangle.Intersect(fillZoom, _curDrawRect);
 
             //矩形交集为空时跳出
             if (oldZoomDraw.Width <= 0 || oldZoomDraw.Height <= 0 || oldZoomDraw.X > pbw || oldZoomDraw.Y > pbh) return;
@@ -600,11 +592,11 @@ namespace WLib.UserCtrls.Viewer
             double newDrawH = imgH * newZoomImgYScale;
 
             //如果缩小小于图片框大小的倍数则放弃操作
-            if (((double)_pictureBox1.Height / newDrawH) > 10 || ((double)_pictureBox1.Width / newDrawW) > 10) return;
+            if (((double)_pictureBox.Height / newDrawH) > 10 || ((double)_pictureBox.Width / newDrawW) > 10) return;
 
-            _mCurDrawRect = new Rectangle((int)Math.Truncate(newDrawX), (int)Math.Truncate(newDrawY), (int)Math.Truncate(newDrawW), (int)Math.Truncate(newDrawH));
+            _curDrawRect = new Rectangle((int)Math.Truncate(newDrawX), (int)Math.Truncate(newDrawY), (int)Math.Truncate(newDrawW), (int)Math.Truncate(newDrawH));
 
-            _pictureBox1.Invalidate();
+            _pictureBox.Invalidate();
         }
 
         /// <summary>
@@ -613,25 +605,25 @@ namespace WLib.UserCtrls.Viewer
         /// <param name="toPoint"></param>
         private void Pad(Point toPoint)
         {
-            int pbh = _pictureBox1.Height;
-            int pbw = _pictureBox1.Width;
+            int pbh = _pictureBox.Height;
+            int pbw = _pictureBox.Width;
 
-            int newht = _mCurDrawRect.Height;
-            int newwt = _mCurDrawRect.Width;
-            int x = _mCurDrawRect.X + (toPoint.X - _mPadPoint.X);
-            int y = _mCurDrawRect.Y + (toPoint.Y - _mPadPoint.Y);
+            int newht = _curDrawRect.Height;
+            int newwt = _curDrawRect.Width;
+            int x = _curDrawRect.X + (toPoint.X - _padPoint.X);
+            int y = _curDrawRect.Y + (toPoint.Y - _padPoint.Y);
 
-            if (_mCurDrawRect.X == x && _mCurDrawRect.Y == y)
+            if (_curDrawRect.X == x && _curDrawRect.Y == y)
                 return;
 
             Rectangle newDrawRect = new Rectangle(x, y, newwt, newht);
 
             //如果图片完全不在picturebox中则不处理
-            Rectangle picBoxRect = new Rectangle(0, 0, _pictureBox1.Width, _pictureBox1.Height);
+            Rectangle picBoxRect = new Rectangle(0, 0, _pictureBox.Width, _pictureBox.Height);
             if (newDrawRect.IntersectsWith(picBoxRect) == false) return;
 
-            _mCurDrawRect = newDrawRect;
-            _pictureBox1.Invalidate();
+            _curDrawRect = newDrawRect;
+            _pictureBox.Invalidate();
         }
         #endregion
 
@@ -644,26 +636,26 @@ namespace WLib.UserCtrls.Viewer
 
             if (_actionType == EPicViewerAction.ZoomIn || _actionType == EPicViewerAction.ZoomOut)
             {
-                if (_mAutoZoom == Rectangle.Empty)
+                if (_autoZoom == Rectangle.Empty)
                 {
                     //判断鼠标是否落在图片绘图区
-                    if ((_actionType == EPicViewerAction.ZoomIn && _mCurDrawRect.Contains(e.X, e.Y)) ||
-                        (_actionType == EPicViewerAction.ZoomOut && e.X <= _pictureBox1.Width && e.Y <= _pictureBox1.Height))
+                    if ((_actionType == EPicViewerAction.ZoomIn && _curDrawRect.Contains(e.X, e.Y)) ||
+                        (_actionType == EPicViewerAction.ZoomOut && e.X <= _pictureBox.Width && e.Y <= _pictureBox.Height))
                     {
-                        _mPadPoint = Point.Empty;
-                        _mZoomPoint = new Point(e.X, e.Y);
+                        _padPoint = Point.Empty;
+                        _zoomPoint = new Point(e.X, e.Y);
                     }
                     else
                     {
-                        _mPadPoint = Point.Empty;
-                        _mZoomPoint = Point.Empty;
+                        _padPoint = Point.Empty;
+                        _zoomPoint = Point.Empty;
                     }
                 }
             }
             else if (_actionType == EPicViewerAction.Pan)
             {
-                _mPadPoint = new Point(e.X, e.Y);
-                _mZoomPoint = Point.Empty;
+                _padPoint = new Point(e.X, e.Y);
+                _zoomPoint = Point.Empty;
                 Cursor.Current = _mPaning;
             }
         }
@@ -672,16 +664,16 @@ namespace WLib.UserCtrls.Viewer
         {
             if (_actionType == EPicViewerAction.ZoomIn || _actionType == EPicViewerAction.ZoomOut)
             {
-                if (_mZoomPoint != Point.Empty)//拉框放大,画虚线框
+                if (_zoomPoint != Point.Empty)//拉框放大,画虚线框
                 {
-                    ControlPaint.DrawReversibleFrame(_mTrackRectangle, BackColor, FrameStyle.Dashed);
+                    ControlPaint.DrawReversibleFrame(_trackRectangle, BackColor, FrameStyle.Dashed);
 
                     //鼠标不能超过的范围
                     Rectangle standardRect;
                     if (_actionType == EPicViewerAction.ZoomIn)
-                        standardRect = _mCurDrawRect;
+                        standardRect = _curDrawRect;
                     else
-                        standardRect = new Rectangle(0, 0, _pictureBox1.Width, _pictureBox1.Height);
+                        standardRect = new Rectangle(0, 0, _pictureBox.Width, _pictureBox.Height);
 
                     Point tmpPoint = new Point(e.X, e.Y);
                     if (!standardRect.Contains(tmpPoint))
@@ -696,24 +688,24 @@ namespace WLib.UserCtrls.Viewer
                             tmpPoint.Y = standardRect.Bottom;
                     }
 
-                    Point startPoint = PointToScreen(_mZoomPoint);
+                    Point startPoint = PointToScreen(_zoomPoint);
                     Point endPoint = PointToScreen(tmpPoint);
                     int width = endPoint.X - startPoint.X;
                     int height = endPoint.Y - startPoint.Y;
-                    _mTrackRectangle = new Rectangle(startPoint.X, startPoint.Y, width, height);
+                    _trackRectangle = new Rectangle(startPoint.X, startPoint.Y, width, height);
 
-                    ControlPaint.DrawReversibleFrame(_mTrackRectangle, BackColor, FrameStyle.Dashed);
+                    ControlPaint.DrawReversibleFrame(_trackRectangle, BackColor, FrameStyle.Dashed);
                 }
             }
             else if (_actionType == EPicViewerAction.Pan)
             {
                 Point thisPoint = new Point(e.X, e.Y);
-                Rectangle standardRect = new Rectangle(0, 0, _pictureBox1.Width, _pictureBox1.Height);
+                Rectangle standardRect = new Rectangle(0, 0, _pictureBox.Width, _pictureBox.Height);
                 //超出picturebox就不处理
-                if (_mPadPoint != Point.Empty && standardRect.Contains(thisPoint))//平移
+                if (_padPoint != Point.Empty && standardRect.Contains(thisPoint))//平移
                 {
                     Pad(thisPoint);
-                    _mPadPoint = thisPoint;
+                    _padPoint = thisPoint;
                 }
             }
         }
@@ -725,14 +717,14 @@ namespace WLib.UserCtrls.Viewer
             Point toPoint = new Point(e.X, e.Y);
             if (_actionType == EPicViewerAction.ZoomIn || _actionType == EPicViewerAction.ZoomOut)
             {
-                if (_mZoomPoint != Point.Empty)//拉框放大
+                if (_zoomPoint != Point.Empty)//拉框放大
                 {
                     //鼠标不能超过的范围
                     Rectangle standardRect;
                     if (_actionType == EPicViewerAction.ZoomIn)
-                        standardRect = _mCurDrawRect;
+                        standardRect = _curDrawRect;
                     else
-                        standardRect = new Rectangle(0, 0, _pictureBox1.Width, _pictureBox1.Height);
+                        standardRect = new Rectangle(0, 0, _pictureBox.Width, _pictureBox.Height);
 
                     Point tmpPoint = new Point(e.X, e.Y);
                     if (!standardRect.Contains(tmpPoint))
@@ -747,20 +739,20 @@ namespace WLib.UserCtrls.Viewer
                             tmpPoint.Y = standardRect.Bottom;
                     }
 
-                    int x = _mZoomPoint.X;
-                    int y = _mZoomPoint.Y;
+                    int x = _zoomPoint.X;
+                    int y = _zoomPoint.Y;
                     int width = Math.Abs(toPoint.X - x);
                     int height = Math.Abs(toPoint.Y - y);
 
                     if (x > toPoint.X) x = toPoint.X;
                     if (y > toPoint.Y) y = toPoint.Y;
-                    _mAutoZoom = new Rectangle(x, y, width, height);
+                    _autoZoom = new Rectangle(x, y, width, height);
 
-                    _mZoomPoint = Point.Empty;
+                    _zoomPoint = Point.Empty;
 
                     //取消掉图片上的临时框
-                    ControlPaint.DrawReversibleFrame(_mTrackRectangle, BackColor, FrameStyle.Dashed);
-                    _mTrackRectangle = new Rectangle(0, 0, 0, 0);
+                    ControlPaint.DrawReversibleFrame(_trackRectangle, BackColor, FrameStyle.Dashed);
+                    _trackRectangle = new Rectangle(0, 0, 0, 0);
 
                     ///放大和缩小
                     if (_actionType == EPicViewerAction.ZoomIn)
@@ -768,17 +760,17 @@ namespace WLib.UserCtrls.Viewer
                     else if (_actionType == EPicViewerAction.ZoomOut)
                         AutoZoomOut();
 
-                    _mAutoZoom = Rectangle.Empty;
+                    _autoZoom = Rectangle.Empty;
                 }
             }
             else if (_actionType == EPicViewerAction.Pan)
             {
-                if (_mPadPoint != Point.Empty)//平移
+                if (_padPoint != Point.Empty)//平移
                 {
-                    _mPadPoint = Point.Empty;
+                    _padPoint = Point.Empty;
                 }
 
-                Cursor = _mPan;
+                Cursor = _pan;
             }
         }
 
@@ -789,29 +781,29 @@ namespace WLib.UserCtrls.Viewer
         /// </summary>
         private void ShowPercentLabel()
         {
-            label1.Text = (_mCurDrawRect.Width * 100.0 / _mImage.Width).ToString("f0") + "%";
+            label1.Text = (_curDrawRect.Width * 100.0 / _image.Width).ToString("f0") + "%";
             label1.Visible = true;
             Application.DoEvents();
-            if (_mLabelTicker.Enabled) _mLabelTicker.Stop();
-            _mLabelTicker.Interval = 3000;
-            _mLabelTicker.Tick += new EventHandler(m_LabelTicker_Tick);
-            _mLabelTicker.Start();
+            if (_timer.Enabled) _timer.Stop();
+            _timer.Interval = 3000;
+            _timer.Tick += new EventHandler(m_LabelTicker_Tick);
+            _timer.Start();
         }
 
         void m_LabelTicker_Tick(object sender, EventArgs e)
         {
-            _mLabelTicker.Stop();
-            _mLabelTicker.Tick -= m_LabelTicker_Tick;
+            _timer.Stop();
+            _timer.Tick -= m_LabelTicker_Tick;
             label1.Visible = false;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             //无图片时不执行操作
-            if (_mImage == null)
+            if (_image == null)
                 return;
             //初始化显示图片
-            if (_mCurDrawRect == Rectangle.Empty || _mCurImgRect == Rectangle.Empty)
+            if (_curDrawRect == Rectangle.Empty || _curImgRect == Rectangle.Empty)
             {
                 Full();
                 return;
@@ -820,11 +812,11 @@ namespace WLib.UserCtrls.Viewer
             try
             {
                 //判断拉框放大的框是否还存在
-                if (_mAutoZoom != Rectangle.Empty)
+                if (_autoZoom != Rectangle.Empty)
                 {
-                    ControlPaint.DrawReversibleFrame(_mTrackRectangle, BackColor, FrameStyle.Dashed);
-                    _mTrackRectangle = new Rectangle(0, 0, 0, 0);
-                    _mAutoZoom = Rectangle.Empty;
+                    ControlPaint.DrawReversibleFrame(_trackRectangle, BackColor, FrameStyle.Dashed);
+                    _trackRectangle = new Rectangle(0, 0, 0, 0);
+                    _autoZoom = Rectangle.Empty;
                 }
 
                 //设置高质量,低速度呈现平滑程度
@@ -834,7 +826,7 @@ namespace WLib.UserCtrls.Viewer
                 //			grap.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 //清空一下画布
                 grap.Clear(_mBackColor);
-                grap.DrawImage(_mImage, _mCurDrawRect, _mCurImgRect, GraphicsUnit.Pixel);
+                grap.DrawImage(_image, _curDrawRect, _curImgRect, GraphicsUnit.Pixel);
             }
             catch (Exception ex)
             {
@@ -850,7 +842,7 @@ namespace WLib.UserCtrls.Viewer
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.DoubleBuffer, true);
-            ((Control) this).Refresh();
+            ((Control)this).Refresh();
         }
 
         /// <summary>
@@ -877,7 +869,7 @@ namespace WLib.UserCtrls.Viewer
         /// <param name="e"></param>
         private void pictureBox1_MouseEnter(object sender, EventArgs e)
         {
-            _pictureBox1.Focus();
+            _pictureBox.Focus();
         }
 
         #region IViewer 成员

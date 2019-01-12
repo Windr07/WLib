@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDb.Fields;
@@ -30,28 +31,29 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, List<string> fieldNames = null, bool ignoredUnExistField = true)
         {
-            DataTable result = new DataTable(tableName);
+            var dataTable = new DataTable(tableName);
             if (fieldNames == null)
-                fieldNames = FieldOpt.GetFieldsNames(iTable);
+                fieldNames = iTable.GetFieldsNames();
 
-            for (int i = 0; i < fieldNames.Count; i++)
+            foreach (var fieldName in fieldNames)
             {
-                int index = iTable.Fields.FindField(fieldNames[i]);
+                int index = iTable.Fields.FindField(fieldName);
                 if (index == -1)
                 {
-                    if (ignoredUnExistField)
+                    if (!ignoredUnExistField)
                         continue;
-                    else
-                        throw new Exception($"“{(iTable as IDataset).Name}”中找不到字段“{fieldNames[i]}”！");
+
+                    throw new Exception($"“{(iTable as IDataset)?.Name}”中找不到字段“{fieldName}”！");
                 }
-                IField field = iTable.Fields.get_Field(index);
-                Type type = ParseFieldType(field.Type);
-                DataColumn dc = new DataColumn(field.Name, type);
-                dc.Caption = field.AliasName;//字段别名
-                dc.DefaultValue = field.DefaultValue;//字段默认值
-                result.Columns.Add(dc);
+                var field = iTable.Fields.get_Field(index);
+                var dataColumn = new DataColumn(field.Name, ParseFieldType(field.Type))
+                {
+                    Caption = field.AliasName, //字段别名
+                    DefaultValue = field.DefaultValue//字段默认值
+                };
+                dataTable.Columns.Add(dataColumn);
             }
-            return result;
+            return dataTable;
         }
         /// <summary>
         /// 根据ITable字段创建一个只含指定字段的空DataTable
@@ -63,7 +65,7 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, Dictionary<string, string> nameToAliasNameDict, bool ignoredUnExistField = true)
         {
-            DataTable result = new DataTable(tableName);
+            DataTable dataTable = new DataTable(tableName);
             foreach (var pair in nameToAliasNameDict)
             {
                 int index = iTable.Fields.FindField(pair.Key);
@@ -71,17 +73,18 @@ namespace WLib.ArcGis.Data
                 {
                     if (ignoredUnExistField)
                         continue;
-                    else
-                        throw new Exception($"“{(iTable as IDataset).Name}”中找不到字段“{pair.Value}”！");
+
+                    throw new Exception($"“{(iTable as IDataset)?.Name}”中找不到字段“{pair.Value}”！");
                 }
-                IField field = iTable.Fields.get_Field(index);
-                Type type = ParseFieldType(field.Type);
-                DataColumn dc = new DataColumn(field.Name, type);
-                dc.Caption = pair.Value;//字段别名
-                dc.DefaultValue = field.DefaultValue;//字段默认值
-                result.Columns.Add(dc);
+                var field = iTable.Fields.get_Field(index);
+                var dataColumn = new DataColumn(field.Name, ParseFieldType(field.Type))
+                {
+                    Caption = pair.Value, //字段别名
+                    DefaultValue = field.DefaultValue //字段默认值
+                };
+                dataTable.Columns.Add(dataColumn);
             }
-            return result;
+            return dataTable;
         }
         #endregion
 
@@ -95,18 +98,12 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static DataTable CreateDataTable(this ITable iTable, string whereClause = null)
         {
-            DataTable dataTable = CreateDataTableScheme(iTable, (iTable as IDataset).Name);
-            IQueryFilter filter = null;
-            if (!string.IsNullOrEmpty(whereClause))
-            {
-                filter = new QueryFilterClass();
-                filter.WhereClause = whereClause;
-            }
-            ICursor cursor = iTable.Search(filter, false);
-            IRow row = null;
+            var dataTable = CreateDataTableScheme(iTable, (iTable as IDataset)?.Name);
+            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            IRow row;
             while ((row = cursor.NextRow()) != null)
             {
-               AddDataToTable(row, ref dataTable);
+                AddDataToTable(dataTable, row);
             }
             System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
             return dataTable;
@@ -133,18 +130,12 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static DataTable CreateDataTable(this ITable iTable, Dictionary<string, string> nameToAliasNamesDict, string whereClause = null)
         {
-            DataTable dataTable = CreateDataTableScheme(iTable, (iTable as IDataset).Name, nameToAliasNamesDict);
-            IQueryFilter filter = null;
-            if (!string.IsNullOrEmpty(whereClause))
-            {
-                filter = new QueryFilterClass();
-                filter.WhereClause = whereClause;
-            }
-            ICursor cursor = iTable.Search(filter, false);
+            var dataTable = CreateDataTableScheme(iTable, (iTable as IDataset)?.Name, nameToAliasNamesDict);
+            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, false);
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
-                AddDataToTable2(row, ref dataTable);
+                AddDataToTable(dataTable, row);
             }
             System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
             return dataTable;
@@ -153,25 +144,21 @@ namespace WLib.ArcGis.Data
 
 
         #region IFeatureClass转DataTable
+
         /// <summary>
         /// 将要素IFeatureClass指定字段数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="fieldNames">指定字段列表</param>
+        /// <param name="whereClause"></param>
         /// <returns></returns>
         public static DataTable CreateDataTable(this IFeatureClass featureClass, List<string> fieldNames, string whereClause = null)
         {
-            ITable iTable = featureClass as ITable;
+            ITable iTable = (ITable)featureClass;
             string geoTypeString = GetGeoTypeStr(featureClass.ShapeType);
-            DataTable result = CreateDataTableScheme(iTable, featureClass.AliasName, fieldNames);
+            DataTable dataTable = CreateDataTableScheme(iTable, featureClass.AliasName, fieldNames);
 
-            IQueryFilter queryFilter = null;
-            if (!string.IsNullOrEmpty(whereClause))
-            {
-                queryFilter = new QueryFilterClass();
-                queryFilter.WhereClause = whereClause;
-            }
-            IFeatureCursor featureCursor = featureClass.Search(queryFilter, false);
+            IFeatureCursor featureCursor = featureClass.Search(new QueryFilterClass { WhereClause = whereClause }, false);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
@@ -182,7 +169,7 @@ namespace WLib.ArcGis.Data
                     if (idex == -1)
                         continue;
                     IField field = feature.Fields.get_Field(idex);
-                    string value = "";
+                    string value;
                     //当图层类型为Anotation时，要素类中会有esriFieldTypeBlob类型的数据，
                     //其存储的是标注内容，如此情况需将对应的字段值设置为Element
                     if (field.Type == esriFieldType.esriFieldTypeBlob)
@@ -193,16 +180,18 @@ namespace WLib.ArcGis.Data
                         value = feature.get_Value(idex).ToString().Trim();
                     values[i] = value;
                 }
-                result.Rows.Add(values);
+                dataTable.Rows.Add(values);
             }
             System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
-            return result;
+            return dataTable;
         }
+
         /// <summary>
         /// 将要素IFeatureClass指定字段数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="nameToAliasNamesDict">字段名及别名（作为DataTable列标题）的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
+        /// <param name="whereClause"></param>
         /// <returns></returns>
         public static DataTable CreateDataTable(this IFeatureClass featureClass, Dictionary<string, string> nameToAliasNamesDict, string whereClause = null)
         {
@@ -210,14 +199,8 @@ namespace WLib.ArcGis.Data
             string geoTypeString = GetGeoTypeStr(featureClass.ShapeType);
             DataTable result = CreateDataTableScheme(iTable, featureClass.AliasName, nameToAliasNamesDict);
 
-            IQueryFilter queryFilter = null;
-            if (!string.IsNullOrEmpty(whereClause))
-            {
-                queryFilter = new QueryFilterClass();
-                queryFilter.WhereClause = whereClause;
-            }
-            IFeatureCursor featureCursor = featureClass.Search(queryFilter, false);
-            IFeature feature = null;
+            IFeatureCursor featureCursor = featureClass.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
                 object[] values = new object[nameToAliasNamesDict.Count];
@@ -254,18 +237,10 @@ namespace WLib.ArcGis.Data
         /// <returns></returns>
         public static DataTable CreateDataTable(this IFeatureClass featureClass, string tableName = "", string whereClause = null, int maxRow = int.MaxValue)
         {
-            ITable mTable = featureClass as ITable;
+            ITable table = (ITable)featureClass;
             string geoTypeString = GetGeoTypeStr(featureClass.ShapeType);
-            DataTable result = CreateDataTableScheme(mTable, tableName);
-            ICursor featureCursor;
-            if (string.IsNullOrEmpty(whereClause))
-                featureCursor = mTable.Search(null, false);
-            else
-            {
-                IQueryFilter queryFilter = new QueryFilterClass();
-                queryFilter.WhereClause = whereClause;
-                featureCursor = mTable.Search(queryFilter, false);
-            }
+            DataTable result = CreateDataTableScheme(table, tableName);
+            ICursor featureCursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
             int rownum = 0;
             IRow iRow = featureCursor.NextRow();
             while (iRow != null)
@@ -273,7 +248,7 @@ namespace WLib.ArcGis.Data
                 object[] values = new object[iRow.Fields.FieldCount];
                 for (int i = 0; i < iRow.Fields.FieldCount; i++)
                 {
-                    object value = "";
+                    object value;
                     //当图层类型为Anotation时，要素类中会有esriFieldTypeBlob类型的数据，
                     //其存储的是标注内容，如此情况需将对应的字段值设置为Element
                     if (iRow.Fields.get_Field(i).Type == esriFieldType.esriFieldTypeBlob)
@@ -306,7 +281,7 @@ namespace WLib.ArcGis.Data
             DataColumn areaDc = new DataColumn(areaColumnName, typeof(double));//, string areaColumnName
             dataTable.Columns.Add(areaDc);
             IFeatureCursor featureCursor = featureClass.Search(null, false);
-            IFeature feature = null;
+            IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
                 DataRow tempRow = dataTable.NewRow();
@@ -326,65 +301,53 @@ namespace WLib.ArcGis.Data
 
         #region IRow数据插入DataTable
         /// <summary>
-        /// 添加数据到DataTable中，IRow字段必须与dt相同
+        /// 添加数据到DataTable中，IRow字段必须与dataTable相同
         /// </summary>
-        /// <param name="rowList"></param>
-        /// <param name="dt"></param>
-        public static void AddDataToTable(List<IRow> rowList, ref DataTable dt)
+        /// <param name="dataTable"></param>
+        /// <param name="rows"></param>
+        public static void AddDataToTable(DataTable dataTable, IEnumerable<IRow> rows)
         {
-            if (rowList.Count == 0) return;
-            for (int j = 0; j < rowList.Count; j++)
+            for (int j = 0; j < rows.Count(); j++)
             {
-                IRow row = rowList[j];
+                IRow row = rows.ElementAt(j);
                 object[] values = new object[row.Fields.FieldCount];
                 for (int i = 0; i < row.Fields.FieldCount; i++)
                 {
                     values[i] = row.get_Value(i).ToString();
                 }
-                dt.Rows.Add(values);
+                dataTable.Rows.Add(values);
             }
         }
         /// <summary>
-        /// 添加数据到DataTable中，IRow字段必须与dt相同
+        /// 添加数据到DataTable中，IRow字段必须与dataTable相同
         /// </summary>
+        /// <param name="dataTable"></param>
         /// <param name="row"></param>
-        /// <param name="dt"></param>
-        public static void AddDataToTable(IRow row, ref DataTable dt)
+        public static void AddDataToTable(DataTable dataTable, IRow row)
         {
             if (row == null) return;
             object[] values = new object[row.Fields.FieldCount];
             for (int i = 0; i < row.Fields.FieldCount; i++)
             {
-                var objValue = row.get_Value(i);
-                //if (objValue.GetType() == typeof(DateTime))
-                //{
-                //    if (objValue.ToString().Contains("0:00:00"))
-                //    {
-                //        objValue =objValue.ToString().Replace("0:00:00", "").Trim();
-                //    }
-                //}
-                values[i] = objValue;
+                values[i] = row.get_Value(i);
             }
-            dt.Rows.Add(values);
+            dataTable.Rows.Add(values);
         }
         /// <summary>
-        /// 添加数据到DataTable中，选取IRow与dt共有的字段填写到dt中
+        /// 添加数据到DataTable中，选取IRow与dataTable共有的字段填写到dataTable中
         /// </summary>
         /// <param name="row"></param>
-        /// <param name="dt"></param>
-        public static void AddDataToTable2(IRow row, ref DataTable dt)
+        /// <param name="dataTable"></param>
+        public static void AddDataToTable2(DataTable dataTable, IRow row)
         {
             if (row == null) return;
-            object[] values = new object[dt.Columns.Count];
-            for (int i = 0; i < dt.Columns.Count; i++)
+            object[] values = new object[dataTable.Columns.Count];
+            for (int i = 0; i < dataTable.Columns.Count; i++)
             {
-                int index = row.Fields.FindField(dt.Columns[i].ColumnName);
-                if (index == -1)
-                    values[i] = null;
-                else
-                    values[i] = row.get_Value(index);
+                int index = row.Fields.FindField(dataTable.Columns[i].ColumnName);
+                values[i] = index == -1 ? null : row.get_Value(index);
             }
-            dt.Rows.Add(values);
+            dataTable.Rows.Add(values);
         }
         #endregion
 
@@ -416,7 +379,7 @@ namespace WLib.ArcGis.Data
 
             //将System.Data.DataTable的数据写入ESRI的ITable中
             ICursor cursor = table.Insert(true);
-            IRowBuffer rowBuffer = null;
+            IRowBuffer rowBuffer;
             int rowIndex = 0;
             try
             {
@@ -439,8 +402,7 @@ namespace WLib.ArcGis.Data
             }
             catch (Exception ex)
             {
-                string msg = $"将DataTable的第{rowIndex}行写入“{(table as IDataset).Name}”表中时出现错误：{ex.Message}";
-                throw new Exception(msg);
+                throw new Exception($"将DataTable的第{rowIndex}行写入“{(table as IDataset)?.Name}”表中时出现错误：{ex.Message}");
             }
             System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
         }

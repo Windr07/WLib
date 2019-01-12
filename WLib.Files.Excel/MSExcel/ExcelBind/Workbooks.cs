@@ -12,27 +12,19 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
 {
     public class Workbooks
     {
-        private readonly object _oWorkbooks;
-        private string _excelFileName;
+        private readonly object _workbooks;
+        private string _excelFilePath;
 
         public Workbooks(object workbooks)
         {
-            _oWorkbooks = workbooks;
+            _workbooks = workbooks;
         }
 
-        public void Open(string excelFileName)
+        public void Open(string excelFilePath)
         {
-            try
-            {
-                _excelFileName = excelFileName;
-                object[] parameters = new object[1] { excelFileName };
-                _oWorkbooks.GetType().InvokeMember("Open", BindingFlags.InvokeMethod, null, _oWorkbooks, parameters);
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _excelFilePath = excelFilePath;
+            object[] parameters = new object[] { excelFilePath };
+            _workbooks.GetType().InvokeMember("Open", BindingFlags.InvokeMethod, null, _workbooks, parameters);
         }
 
         public Workbook this[int index]
@@ -40,7 +32,7 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
             get
             {
                 object[] parameters = new object[1] { index };
-                object workbook = _oWorkbooks.GetType().InvokeMember("Item", BindingFlags.GetProperty, null, _oWorkbooks, parameters);
+                object workbook = _workbooks.GetType().InvokeMember("Item", BindingFlags.GetProperty, null, _workbooks, parameters);
                 if (workbook == null)
                     throw new Exception("获取工作薄时出现错误!");
                 else

@@ -20,9 +20,9 @@ namespace WLib.ArcGis
         void BindingArcGISRuntime(object sender, EventArgs e)
         {
             ProductCode[] supportedRuntimes = { ProductCode.Engine, ProductCode.Desktop };
-            foreach (ProductCode c in supportedRuntimes)
+            foreach (ProductCode productCode in supportedRuntimes)
             {
-                if (RuntimeManager.Bind(c))
+                if (RuntimeManager.Bind(productCode))
                     return;
             }
             MessageBox.Show("ArcGIS软件许可错误！", "提示", MessageBoxButtons.OK);

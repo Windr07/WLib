@@ -23,7 +23,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <returns></returns>
         public static List<IFeature> GetSelectionFeatures(this IMap map, string layerName)
         {
-            var featureLayer = MapQuery.GetFeatureLayer2(map, layerName);
+            var featureLayer = map.GetFeatureLayer2(layerName);
             return GetSelectionFeatures(map, featureLayer.FeatureClass);
         }
         /// <summary>

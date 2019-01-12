@@ -49,7 +49,7 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <returns></returns>
         public static ITable Create(this IFeatureWorkspace featureWorkspace, ITable sourceTable, string tableName, string tableAliasName = null)
         {
-            var feilds = FieldOpt.CloneTableFields(sourceTable, true);
+            var feilds = sourceTable.CloneTableFields(true);
             var table = Create(featureWorkspace, tableName, feilds);
 
             if (!string.IsNullOrEmpty(tableAliasName))

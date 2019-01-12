@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WLib.UserCtrls.Dev</RootNamespace>
     <AssemblyName>WLib.UserCtrls.Dev</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -254,49 +254,50 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddItemControl\AddItemConfigForm.cs">
+    <Compile Include="AddItemCtrl\AddItemConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\AddItemConfigForm.Designer.cs">
+    <Compile Include="AddItemCtrl\AddItemConfigForm.Designer.cs">
       <DependentUpon>AddItemConfigForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddItemControl\AddItemForm.cs">
+    <Compile Include="AddItemCtrl\AddItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\AddItemForm.Designer.cs">
+    <Compile Include="AddItemCtrl\AddItemForm.Designer.cs">
       <DependentUpon>AddItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddItemControl\ConcatItemForm.cs">
+    <Compile Include="AddItemCtrl\ConcatItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddItemControl\ConcatItemForm.Designer.cs">
+    <Compile Include="AddItemCtrl\ConcatItemForm.Designer.cs">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\CommonLib.cs" />
-    <Compile Include="ArcGisControl\FeatureLocationEventArgs.cs" />
-    <Compile Include="ArcGisControl\MapViewer.cs">
+    <Compile Include="ArcGisCtrl\Base\CommonLib.cs" />
+    <Compile Include="ArcGisCtrl\Base\EMeasureType.cs" />
+    <Compile Include="ArcGisCtrl\Base\FeatureLocationEventArgs.cs" />
+    <Compile Include="ArcGisCtrl\MapViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\MapViewer.Designer.cs">
+    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
       <DependentUpon>MapViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\MapViewerSimple.cs">
+    <Compile Include="ArcGisCtrl\MapViewerSimple.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\MapViewerSimple.Designer.cs">
+    <Compile Include="ArcGisCtrl\MapViewerSimple.Designer.cs">
       <DependentUpon>MapViewerSimple.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\MeasureTools.cs" />
-    <Compile Include="ArcGisControl\PagelayoutViewer.cs">
+    <Compile Include="ArcGisCtrl\Base\MeasureTools.cs" />
+    <Compile Include="ArcGisCtrl\PagelayoutViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\PagelayoutViewer.designer.cs">
+    <Compile Include="ArcGisCtrl\PagelayoutViewer.designer.cs">
       <DependentUpon>PagelayoutViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\AttributeDevForm.cs">
+    <Compile Include="ArcGisCtrl\AttributeDevForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\AttributeDevForm.designer.cs">
+    <Compile Include="ArcGisCtrl\AttributeDevForm.designer.cs">
       <DependentUpon>AttributeDevForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ChildForm\ChildForm.cs">
@@ -327,52 +328,52 @@
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EditForm\SaveEditEventArgs.cs" />
-    <Compile Include="InputControl\InputDevForm.cs">
+    <Compile Include="InputCtrl\InputDevForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InputControl\InputDevForm.Designer.cs">
+    <Compile Include="InputCtrl\InputDevForm.Designer.cs">
       <DependentUpon>InputDevForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListControl\ListBoxPlusControl.cs">
+    <Compile Include="ListCtrl\ListBoxPlusControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ListControl\ListBoxPlusControl.Designer.cs">
+    <Compile Include="ListCtrl\ListBoxPlusControl.Designer.cs">
       <DependentUpon>ListBoxPlusControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathControl\PathBoxControl.cs">
+    <Compile Include="PathCtrl\PathBoxControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathControl\PathBoxControl.Designer.cs">
+    <Compile Include="PathCtrl\PathBoxControl.Designer.cs">
       <DependentUpon>PathBoxControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathControl\WorkspaceSelectorControl.cs">
+    <Compile Include="PathCtrl\WorkspaceSelectorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathControl\WorkspaceSelectorControl.Designer.cs">
+    <Compile Include="PathCtrl\WorkspaceSelectorControl.Designer.cs">
       <DependentUpon>WorkspaceSelectorControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProbarControl\ProbarForm.cs">
+    <Compile Include="ProbarCtrl\ProbarForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProbarControl\ProbarForm.Designer.cs">
+    <Compile Include="ProbarCtrl\ProbarForm.Designer.cs">
       <DependentUpon>ProbarForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProbarControl\ProgressBarControl.cs">
+    <Compile Include="ProbarCtrl\ProgressBarControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ProbarControl\ProgressBarControl.Designer.cs">
+    <Compile Include="ProbarCtrl\ProgressBarControl.Designer.cs">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\QueryDevForm.cs">
+    <Compile Include="ArcGisCtrl\QueryDevForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\QueryDevForm.Designer.cs">
+    <Compile Include="ArcGisCtrl\QueryDevForm.Designer.cs">
       <DependentUpon>QueryDevForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisControl\SymbolSelectorDevForm.cs">
+    <Compile Include="ArcGisCtrl\SymbolSelectorDevForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisControl\SymbolSelectorDevForm.Designer.cs">
+    <Compile Include="ArcGisCtrl\SymbolSelectorDevForm.Designer.cs">
       <DependentUpon>SymbolSelectorDevForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TreeExplorer.cs">
@@ -384,28 +385,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddItemControl\AddItemConfigForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
       <DependentUpon>AddItemConfigForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddItemControl\AddItemForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\AddItemForm.resx">
       <DependentUpon>AddItemForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddItemControl\ConcatItemForm.resx">
+    <EmbeddedResource Include="AddItemCtrl\ConcatItemForm.resx">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\MapViewer.resx">
+    <EmbeddedResource Include="ArcGisCtrl\MapViewer.resx">
       <DependentUpon>MapViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\MapViewerSimple.resx">
+    <EmbeddedResource Include="ArcGisCtrl\MapViewerSimple.resx">
       <DependentUpon>MapViewerSimple.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\PagelayoutViewer.resx">
+    <EmbeddedResource Include="ArcGisCtrl\PagelayoutViewer.resx">
       <DependentUpon>PagelayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\AttributeDevForm.resx">
+    <EmbeddedResource Include="ArcGisCtrl\AttributeDevForm.resx">
       <DependentUpon>AttributeDevForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChildForm\ChildForm.resx">
@@ -420,29 +421,29 @@
     <EmbeddedResource Include="EditForm\RowDataEditForm.resx">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputControl\InputDevForm.resx">
+    <EmbeddedResource Include="InputCtrl\InputDevForm.resx">
       <DependentUpon>InputDevForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ListControl\ListBoxPlusControl.resx">
+    <EmbeddedResource Include="ListCtrl\ListBoxPlusControl.resx">
       <DependentUpon>ListBoxPlusControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathControl\PathBoxControl.resx">
+    <EmbeddedResource Include="PathCtrl\PathBoxControl.resx">
       <DependentUpon>PathBoxControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathControl\WorkspaceSelectorControl.resx">
+    <EmbeddedResource Include="PathCtrl\WorkspaceSelectorControl.resx">
       <DependentUpon>WorkspaceSelectorControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProbarControl\ProbarForm.resx">
+    <EmbeddedResource Include="ProbarCtrl\ProbarForm.resx">
       <DependentUpon>ProbarForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProbarControl\ProgressBarControl.resx">
+    <EmbeddedResource Include="ProbarCtrl\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="ArcGisControl\QueryDevForm.resx">
+    <EmbeddedResource Include="ArcGisCtrl\QueryDevForm.resx">
       <DependentUpon>QueryDevForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisControl\SymbolSelectorDevForm.resx">
+    <EmbeddedResource Include="ArcGisCtrl\SymbolSelectorDevForm.resx">
       <DependentUpon>SymbolSelectorDevForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TreeExplorer.resx">
@@ -457,6 +458,10 @@
     <ProjectReference Include="..\WLib.Envir\WLib.Envir.csproj">
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WLib.Files.Excel\WLib.Files.Excel.csproj">
+      <Project>{aeb9c1be-96cf-42f5-ab08-7a45817cf906}</Project>
+      <Name>WLib.Files.Excel</Name>
     </ProjectReference>
     <ProjectReference Include="..\WLib.UserCtrl\WLib.UserCtrls.csproj">
       <Project>{854a8e9d-31d4-4bc5-89ff-703318999065}</Project>

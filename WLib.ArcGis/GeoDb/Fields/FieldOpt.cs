@@ -19,14 +19,14 @@ namespace WLib.ArcGis.GeoDb.Fields
     /// <summary>
     /// 字段操作
     /// </summary>
-    public class FieldOpt
+    public static class FieldOpt
     {
         /// <summary>
         /// 讲自定义类FieldItem转成ArcGIS的IField对象
         /// </summary>
         /// <param name="fieldItem"></param>
         /// <returns></returns>
-        public static IField FieldItemToFiled(FieldItem fieldItem)
+        public static IField FieldItemToFiled(this FieldItem fieldItem)
         {
             return CreateField(fieldItem.Name, fieldItem.AliasName, fieldItem.FieldType);
         }
@@ -36,7 +36,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fields"></param>
         /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
         /// <returns></returns>
-        public static List<FieldItem> GetFieldItems(IFields fields, string[] fieldNames = null)
+        public static List<FieldItem> GetFieldItems(this IFields fields, string[] fieldNames = null)
         {
             List<FieldItem> fieldItems = new List<FieldItem>();
             List<IField> fieldList = FieldsToList(fields);
@@ -59,7 +59,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public static List<IField> FieldsToList(IFields fields)
+        public static List<IField> FieldsToList(this IFields fields)
         {
             List<IField> fieldList = new List<IField>();
             for (int i = 0; i < fields.FieldCount; i++)
@@ -73,7 +73,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public static IField[] FieldsToArray(IFields fields)
+        public static IField[] FieldsToArray(this IFields fields)
         {
             return FieldsToList(fields).ToArray();
         }
@@ -89,7 +89,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fieldType">重设后的字段类型</param>
         /// <param name="length">重设后的字段长度</param>
         /// <returns>返回重设后的字段索引</returns>
-        public static int ResetField(IFeatureClass featureClass, string fieldName, string fieldAliasName, esriFieldType fieldType, int length = 0)
+        public static int ResetField(this IFeatureClass featureClass, string fieldName, string fieldAliasName, esriFieldType fieldType, int length = 0)
         {
             return ResetField(featureClass as ITable, fieldName, fieldAliasName, fieldType, length);
         }
@@ -103,7 +103,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fieldType">重设后的字段类型</param>
         /// <param name="length">重设后的字段长度</param>
         /// <returns>返回重设后的字段索引</returns>
-        public static int ResetField(ITable table, string fieldName, string fieldAliasName, esriFieldType fieldType, int length = 0)
+        public static int ResetField(this ITable table, string fieldName, string fieldAliasName, esriFieldType fieldType, int length = 0)
         {
             int index = table.Fields.FindField(fieldName);
             if (index > -1)
@@ -116,14 +116,14 @@ namespace WLib.ArcGis.GeoDb.Fields
 
         #region 复制字段
         /// <summary>
-        /// 复制字段，包括几何字段、非几何字段，并设置几何字段的空间参考
+        /// 复制字段，包括几何字段、非几何字段，并设置新的几何字段的空间参考
         /// </summary>
         /// <param name="featureClass">源要素类</param>
         /// <param name="factoryCode">坐标系代码</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFields(IFeatureClass featureClass, int factoryCode)
+        public static IFields CloneFeatureClassFields(this IFeatureClass featureClass, int factoryCode)
         {
-            IFields outputFields = null;
+            IFields outputFields;
             IFieldChecker fieldChecker = new FieldCheckerClass();
             IEnumFieldError obj = null;
             fieldChecker.Validate(featureClass.Fields, out obj, out outputFields);
@@ -143,7 +143,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="featureClass">源要素类</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFields(IFeatureClass featureClass)
+        public static IFields CloneFeatureClassFields(this IFeatureClass featureClass)
         {
             IField souceGeoField = featureClass.Fields.get_Field(featureClass.FindField(featureClass.ShapeFieldName));
             int factoryCode = souceGeoField.GeometryDef.SpatialReference.FactoryCode;
@@ -157,18 +157,18 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="spatialRef">空间坐标系</param>
         /// <param name="fieldNames">指定的字段名列表，若指定的字段在源要素类中找不到，则跳过该字段</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFields(IFeatureClass featureClass, ISpatialReference spatialRef, IEnumerable<string> fieldNames)
+        public static IFields CloneFeatureClassFields(this IFeatureClass featureClass, ISpatialReference spatialRef, IEnumerable<string> fieldNames)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
-            IField souceGeoField = featureClass.Fields.get_Field(featureClass.FindField(featureClass.ShapeFieldName));
-            int factoryCode = souceGeoField.GeometryDef.SpatialReference.FactoryCode;
-            //spatialReference 
+
+            //设置坐标系
             IGeometryDef geometryDef = new GeometryDefClass();
             IGeometryDefEdit geometryDefEdit = (IGeometryDefEdit)geometryDef;
             geometryDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolygon;
             geometryDefEdit.SpatialReference_2 = spatialRef;
-            //添加字段“Shape”;
+
+            //添加Shape字段
             IField geometryField = new FieldClass();
             IFieldEdit geometryFieldEdit = (IFieldEdit)geometryField;
             geometryFieldEdit.Name_2 = featureClass.ShapeFieldName;
@@ -193,13 +193,11 @@ namespace WLib.ArcGis.GeoDb.Fields
             return fields;
         }
         /// <summary>
-        /// 复制字段，
+        /// 复制字段，OID和Shape字段除外
         /// </summary>
         /// <param name="featureClass">源要素类</param>
-        /// <param name="containsOIDField">是否复制OID字段</param>
-        /// <param name="containsShapeField">是否复制SHAPE字段</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFieldsSimple(IFeatureClass featureClass)
+        public static IFields CloneFeatureClassFieldsSimple(this IFeatureClass featureClass)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
@@ -219,7 +217,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="table">源表格</param>
         /// <param name="containsOidField">是否复制OID字段</param>
         /// <returns></returns>
-        public static IFields CloneTableFields(ITable table, bool containsOidField = false)
+        public static IFields CloneTableFields(this ITable table, bool containsOidField = false)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
@@ -346,7 +344,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="iFields"></param>
         /// <param name="otherFields"></param>
-        public static void AddFields(IFields iFields, IEnumerable<IField> otherFields)
+        public static void AddFields(this IFields iFields, IEnumerable<IField> otherFields)
         {
             var fieldsEdit = iFields as IFieldsEdit;
             if (otherFields != null)
@@ -367,7 +365,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fieldType">字段类型</param>
         /// <param name="length">字段长度，若为0则不设置长度（使用默认长度）</param>
         /// <returns>添加的字段的索引</returns>
-        public static int AddField(IFeatureClass featureClass, string name, string aliasName, esriFieldType fieldType, int length = 0)
+        public static int AddField(this IFeatureClass featureClass, string name, string aliasName, esriFieldType fieldType, int length = 0)
         {
             return AddField(featureClass as ITable, name, aliasName, fieldType, length);
         }
@@ -381,7 +379,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fieldType">字段类型</param>
         /// <param name="length">字段长度，若为0则不设置长度（使用默认长度）</param>
         /// <returns>添加的字段的索引</returns>
-        public static int AddField(ITable table, string name, string aliasName, esriFieldType fieldType, int length = 0)
+        public static int AddField(this ITable table, string name, string aliasName, esriFieldType fieldType, int length = 0)
         {
             //若存在，则不需添加
             int index = -1;
@@ -408,7 +406,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="aliasName">字段别名</param>
         /// <param name="length">字段长度，即字符串长度，若字段已存在，此参数无效</param>
         /// <returns></returns>
-        public static int AddStringField(IFeatureClass featureClass, string name, string aliasName, int length)
+        public static int AddStringField(this IFeatureClass featureClass, string name, string aliasName, int length)
         {
             return AddStringField(featureClass as ITable, name, aliasName, length);
         }
@@ -420,7 +418,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="aliasName">字段别名</param>
         /// <param name="length">字段长度，即字符串长度，若字段已存在，此参数无效</param>
         /// <returns></returns>
-        public static int AddStringField(ITable table, string name, string aliasName, int length)
+        public static int AddStringField(this ITable table, string name, string aliasName, int length)
         {
             //若存在，则不需添加
             int index = -1;
@@ -448,7 +446,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fields"></param>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static List<IField> GetFieldsByType(IFields fields, esriFieldType fieldType)
+        public static List<IField> GetFieldsByType(this IFields fields, esriFieldType fieldType)
         {
             List<IField> fieldList = new List<IField>();
             for (int i = 0; i < fields.FieldCount; i++)
@@ -465,7 +463,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fields"></param>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static IField GetFirstFieldsByType(IFields fields, esriFieldType fieldType)
+        public static IField GetFirstFieldsByType(this IFields fields, esriFieldType fieldType)
         {
             for (int i = 0; i < fields.FieldCount; i++)
             {
@@ -491,7 +489,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        public static string[] GetSystemFieldNames(ITable table)
+        public static string[] GetSystemFieldNames(this ITable table)
         {
             var featureClass = table as IFeatureClass;
             if (featureClass != null)
@@ -504,7 +502,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="featureClass"></param>
         /// <returns></returns>
-        public static string[] GetSystemFieldNames(IFeatureClass featureClass)
+        public static string[] GetSystemFieldNames(this IFeatureClass featureClass)
         {
             return new[] { featureClass.OIDFieldName, featureClass.ShapeFieldName, SHAPE_LENGTH, SHAPE_AREA };
         }
@@ -516,7 +514,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="featureClass">要素类</param>
         /// <param name="getSystemFields">是否获取系统字段(OID, SHAPE, SHAPE_LENGTH, SHAPE_AREA)</param>
         /// <returns></returns>
-        public static List<string> GetFieldsNames(IFeatureClass featureClass, bool getSystemFields = true)
+        public static List<string> GetFieldsNames(this IFeatureClass featureClass, bool getSystemFields = true)
         {
             return GetFieldsNames(featureClass as ITable, getSystemFields);
         }
@@ -526,7 +524,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="table">表格</param>
         /// <param name="getSystemFields">是否获取系统字段(OID, SHAPE, SHAPE_LENGTH, SHAPE_AREA)</param>
         /// <returns></returns>
-        public static List<string> GetFieldsNames(ITable table, bool getSystemFields = true)
+        public static List<string> GetFieldsNames(this ITable table, bool getSystemFields = true)
         {
             List<string> names = new List<string>();
             int cnt = table.Fields.FieldCount;
@@ -548,7 +546,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="featureClass"></param>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static List<string> GetFieldsNames(IFeatureClass featureClass, esriFieldType fieldType)
+        public static List<string> GetFieldsNames(this IFeatureClass featureClass, esriFieldType fieldType)
         {
             return GetFieldsNames(featureClass as ITable, fieldType);
         }
@@ -560,7 +558,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="table"></param>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static List<string> GetFieldsNames(ITable table, esriFieldType fieldType)
+        public static List<string> GetFieldsNames(this ITable table, esriFieldType fieldType)
         {
             List<string> names = new List<string>();
             int cnt = table.Fields.FieldCount;
@@ -577,7 +575,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="featureClass">要素类</param>
         /// <returns></returns>
-        public static List<string> GetFieldsAliasNames(IFeatureClass featureClass)
+        public static List<string> GetFieldsAliasNames(this IFeatureClass featureClass)
         {
             return GetFieldsAliasNames(featureClass as ITable);
         }
@@ -586,7 +584,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="table">表格</param>
         /// <returns></returns>
-        public static List<string> GetFieldsAliasNames(ITable table)
+        public static List<string> GetFieldsAliasNames(this ITable table)
         {
             List<string> names = new List<string>();
             int cnt = table.Fields.FieldCount;
@@ -600,7 +598,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         ///  获取表格的所有字段名称与别名键值对
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, string> GetFieldNameAndAliasName(ITable table)
+        public static Dictionary<string, string> GetFieldNameAndAliasName(this ITable table)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             int cnt = table.Fields.FieldCount;
@@ -619,7 +617,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="table"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static int GetFieldIndex(ITable table, string fieldName)
+        public static int GetFieldIndex(this ITable table, string fieldName)
         {
             int index = table.FindField(fieldName);
             if (index < 0)
@@ -632,7 +630,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="featureClass"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static int GetFieldIndex(IFeatureClass featureClass, string fieldName)
+        public static int GetFieldIndex(this IFeatureClass featureClass, string fieldName)
         {
             int index = featureClass.FindField(fieldName);
             if (index < 0)
@@ -649,7 +647,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="featureClass"></param>
         /// <param name="fieldNames"></param>
         /// <returns></returns>
-        public static string CheckFieldExist(IFeatureClass featureClass, params string[] fieldNames)
+        public static string CheckFieldExist(this IFeatureClass featureClass, params string[] fieldNames)
         {
             List<string> unfindFields = new List<string>();
             foreach (var fieldName in fieldNames)
@@ -668,7 +666,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="table"></param>
         /// <param name="fieldNames"></param>
         /// <returns></returns>
-        public static string CheckFieldExist(ITable table, params string[] fieldNames)
+        public static string CheckFieldExist(this ITable table, params string[] fieldNames)
         {
             List<string> unfindFields = new List<string>();
             foreach (var fieldName in fieldNames)
@@ -687,7 +685,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="fieldNames"></param>
-        public static void CheckFieldExistByException(IFeatureClass featureClass, params string[] fieldNames)
+        public static void CheckFieldExistByException(this IFeatureClass featureClass, params string[] fieldNames)
         {
             var msg = CheckFieldExist(featureClass, fieldNames);
             if (msg != null)
@@ -696,9 +694,9 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <summary>
         /// 判断表格中是否存在指定字段，找不到则直接抛出异常，异常中包含找不到哪些字段的信息
         /// </summary>
-        /// <param name="featureClass"></param>
+        /// <param name="table"></param>
         /// <param name="fieldNames"></param>
-        public static void CheckFieldExistByException(ITable table, params string[] fieldNames)
+        public static void CheckFieldExistByException(this ITable table, params string[] fieldNames)
         {
             var msg = CheckFieldExist(table, fieldNames);
             if (msg != null)
@@ -736,7 +734,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// 获得字段类型的英文文字描述
         /// </summary>
         /// <returns></returns>
-        public static string GetFieldTypeDesciption(esriFieldType eFieldType)
+        public static string GetFieldTypeDesciption(this esriFieldType eFieldType)
         {
             return eFieldType.ToString().Replace("esriFieldType", "");
         }
@@ -744,7 +742,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// 获得字段类型的中文文字描述
         /// </summary>
         /// <returns></returns>
-        public static string GetFieldTypeDesciptionCn(esriFieldType eFieldType)
+        public static string GetFieldTypeDesciptionCn(this esriFieldType eFieldType)
         {
             return FieldTypeAndCnDesriptions[eFieldType];
         }
@@ -767,7 +765,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public static bool IsExsitOid(IFields fields)
+        public static bool IsExsitOid(this IFields fields)
         {
             return IsExistFieldType(fields, esriFieldType.esriFieldTypeOID);
         }
@@ -776,7 +774,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="fieldsEdit"></param>
         /// <returns></returns>
-        public static bool IsExsitOid(IFieldsEdit fieldsEdit)
+        public static bool IsExsitOid(this IFieldsEdit fieldsEdit)
         {
             return IsExistFieldType(fieldsEdit, esriFieldType.esriFieldTypeOID);
         }
@@ -786,7 +784,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public static bool IsExsitShapeField(IFields fields)
+        public static bool IsExsitShapeField(this IFields fields)
         {
             return IsExistFieldType(fields, esriFieldType.esriFieldTypeGeometry);
         }
@@ -795,7 +793,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// </summary>
         /// <param name="fieldsEdit"></param>
         /// <returns></returns>
-        public static bool IsExsitShapeField(IFieldsEdit fieldsEdit)
+        public static bool IsExsitShapeField(this IFieldsEdit fieldsEdit)
         {
             return IsExistFieldType(fieldsEdit, esriFieldType.esriFieldTypeGeometry);
         }
@@ -806,7 +804,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fields"></param>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static bool IsExistFieldType(IFields fields, esriFieldType fieldType)
+        public static bool IsExistFieldType(this IFields fields, esriFieldType fieldType)
         {
             return IsExistFieldType(fields as IFieldsEdit, fieldType);
         }
@@ -816,7 +814,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         /// <param name="fieldsEdit"></param>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static bool IsExistFieldType(IFieldsEdit fieldsEdit, esriFieldType fieldType)
+        public static bool IsExistFieldType(this IFieldsEdit fieldsEdit, esriFieldType fieldType)
         {
             for (int i = 0; i < fieldsEdit.FieldCount; i++)
             {

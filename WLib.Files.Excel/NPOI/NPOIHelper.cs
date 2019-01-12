@@ -14,12 +14,13 @@ using NPOI.XSSF.UserModel;
 
 namespace WLib.Files.Excel.NPOI
 {
+    //NPOI是一个开源的C#读写Excel的项目（不需要安装MS Office即可读写Excel文档）:https://github.com/tonyqus/npoi
     //使用NPOI时，请注意引用NPOI.dll, NPOI.OOXML.dll, NPOI.OpenXml4Net.dll, NPOI.OpenXmlFormats.dll
 
     /// <summary>
     /// NPOI操作Excel的帮助类
     /// </summary>
-    public class NpoiHelper
+    public class NPOIHelper
     {
         /// <summary>
         /// 打开Excel工作簿（兼容xls和xlsx）
@@ -28,7 +29,7 @@ namespace WLib.Files.Excel.NPOI
         /// <returns></returns>
         public static IWorkbook OpenWorkbook(string filePath)
         {
-            IWorkbook workbook;
+            IWorkbook workbook = null;
             string fileExt = Path.GetExtension(filePath);
             using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
@@ -36,8 +37,6 @@ namespace WLib.Files.Excel.NPOI
                     workbook = new HSSFWorkbook(file);
                 else if (fileExt == ".xlsx")
                     workbook = new XSSFWorkbook(file);
-                else
-                    workbook = null;
             }
             return workbook;
         }
@@ -56,10 +55,10 @@ namespace WLib.Files.Excel.NPOI
             ICell cell = sheet.GetRow(row).GetCell(col);
             if (cell == null || cell.ToString().Trim() == string.Empty)
                 return string.Empty;
-            else if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
+            if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
                 return cell.DateCellValue.ToString("yyyy/MM/dd");
-            else
-                return cell.ToString().Trim();
+
+            return cell.ToString().Trim();
         }
 
         /// <summary>
@@ -101,8 +100,8 @@ namespace WLib.Files.Excel.NPOI
         public static void CopyCellStyle(IRow sourceStyleRow, IRow desRow)
         {
             IRow firstTargetRow = desRow;
-            ICell firstSourceCell = null;
-            ICell firstTargetCell = null;
+            ICell firstSourceCell;
+            ICell firstTargetCell;
 
             for (int m = sourceStyleRow.FirstCellNum; m < sourceStyleRow.LastCellNum; m++)
             {
@@ -200,6 +199,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="workbook">需要应用字体的工作簿</param>
         /// <param name="richText">单元格上的字符串</param>
         /// <param name="fontSize">字体大小</param>
+        /// <param name="fontName">字体名称</param>
         public static IFont ApplyFont(IWorkbook workbook, IRichTextString richText, short fontSize, string fontName = "宋体")
         {
             IFont font = workbook.CreateFont();
@@ -213,13 +213,15 @@ namespace WLib.Files.Excel.NPOI
         /// <summary>
         /// 设置字符串的字体
         /// </summary>
-        /// <param name="workbook">需要应用字体的工作簿</param>
+        /// <param name="sheet">需要应用字体的工作表</param>
         /// <param name="richText">单元格上的字符串</param>
         /// <param name="fontSize">字体大小</param>
+        /// <param name="fontName">字体名称</param>
         public static IFont ApplyFont(ISheet sheet, IRichTextString richText, short fontSize, string fontName = "宋体")
         {
             return ApplyFont(sheet.Workbook, richText, fontSize, fontName);
         }
+
         /// <summary>
         /// 在字符串的指定起止位置设置下划线
         /// </summary>
@@ -228,6 +230,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="fontSize">字体大小</param>
         /// <param name="startIndex">添加下划线的起始字符索引</param>
         /// <param name="endIndex">添加下划线的末尾字符索引</param>
+        /// <param name="fontName">字体名称</param>
         public static IFont SetUnderline(IWorkbook workbook, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
         {
             IFont font = workbook.CreateFont();
@@ -246,6 +249,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="fontSize">字体大小</param>
         /// <param name="startIndex">添加下划线的起始字符索引</param>
         /// <param name="endIndex">添加下划线的末尾字符索引</param>
+        /// <param name="fontName">字体名称</param>
         public static IFont SetUnderline(ISheet sheet, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
         {
             return SetUnderline(sheet.Workbook, richText, fontSize, startIndex, endIndex, fontName);
@@ -314,8 +318,7 @@ namespace WLib.Files.Excel.NPOI
         /// <returns></returns>
         public static IWorkbook CreatWorkbook(int createRowCount, int createColCount)
         {
-            IWorkbook workbook = null;
-            workbook = new HSSFWorkbook();
+            IWorkbook workbook = new HSSFWorkbook();
             workbook.CreateSheet("Sheet1");
             workbook.CreateSheet("Sheet2");
             workbook.CreateSheet("Sheet3");
@@ -334,7 +337,7 @@ namespace WLib.Files.Excel.NPOI
                 {
                     var cell = rows.CreateCell(j);
                     sheet.GetRow(i).GetCell(j).CellStyle = style;
-                    NpoiHelper.SetBorderLine(workbook, i, j);
+                    SetBorderLine(workbook, i, j);
                 }
             }
             return workbook;

@@ -15,7 +15,7 @@ namespace WLib.Files.Excel.AppLibExcel.StyleHelper
         /// <param name="underline">字体是下划线样式，默认没有下划线</param> 
         /// <param name="fontSize">字体大小，0表示11</param> 
         /// <returns></returns>
-        public static AppLibrary.WriteExcel.XF MyNewXf(XlsDocument doc, CellLine cellLine, UnderlineTypes underline = UnderlineTypes.None, int fontSize = 0)
+        public static AppLibrary.WriteExcel.XF NewXf(XlsDocument doc, CellLine cellLine, UnderlineTypes underline = UnderlineTypes.None, int fontSize = 0)
         {
             int size = fontSize;
             if (fontSize == 0)

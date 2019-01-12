@@ -7,12 +7,12 @@
 
 using System.Collections.Generic;
 using System.Data;
-using WLib.Db.Base;
+using WLib.Db.DbBase;
 
 namespace WLib.Db.TableInfo
 {
     /// <summary>
-    /// 
+    /// 提供获取字典表的方法
     /// </summary>
     public class DictionaryTableHelper
     {

@@ -8,7 +8,7 @@
 namespace WLib.Envir.Windows
 {
     /// <summary>
-    /// Windows 操作系统类型
+    /// Windows 操作系统版本
     /// </summary>
     public enum EWinVersion
     {

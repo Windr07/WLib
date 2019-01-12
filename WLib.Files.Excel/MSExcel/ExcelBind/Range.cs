@@ -11,23 +11,23 @@ namespace WLib.Files.Excel.MSExcel.ExcelBind
 {
     public class Range
     {
-        private readonly object _mRange;
+        private readonly object _range;
         public Range(object range)
         {
-            _mRange = range;
+            _range = range;
         }
 
         public object Value
         {
             get
             {
-                object result = _mRange.GetType().InvokeMember("Value", System.Reflection.BindingFlags.GetProperty, null, _mRange, null);
+                object result = _range.GetType().InvokeMember("Value", System.Reflection.BindingFlags.GetProperty, null, _range, null);
                 return result;
             }
             set
             {
-                object[] parameters = new Object[1] { value };
-                _mRange.GetType().InvokeMember("Value", System.Reflection.BindingFlags.SetProperty, null, _mRange, parameters);
+                object[] parameters = new Object[] { value };
+                _range.GetType().InvokeMember("Value", System.Reflection.BindingFlags.SetProperty, null, _range, parameters);
             }
         }
     }
