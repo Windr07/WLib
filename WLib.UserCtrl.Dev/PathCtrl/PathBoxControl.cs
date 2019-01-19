@@ -6,7 +6,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using WLib.UserCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.Dev.PathControl
+namespace WLib.UserCtrls.Dev.PathCtrl
 {
     /// <summary>
     /// 表示一个路径选择与显示的组合框
@@ -18,7 +18,7 @@ namespace WLib.UserCtrls.Dev.PathControl
         private string _fileFilter;
         private bool _optEnable = true;
         private bool _multiSelect = true;
-        private string DEFAUL_TTIPS = "粘贴路径于此并按下回车，或点击选择按钮";
+        private string _defaulTtips = "粘贴路径于此并按下回车，或点击选择按钮";
         private string _defultTips;
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace WLib.UserCtrls.Dev.PathControl
                         this.btnView.Location = new Point(this.Width - 113, 2);
                         this.btnSave.Visible = false;
                         break;
-                    case EShowButtonOption.ViewSave:
+                    case EShowButtonOption.ViewOpt:
                     case EShowButtonOption.Opt:
                         this.cmbPath.Width = this.Width - 77;
                         this.btnSave.Visible = true;
@@ -83,7 +83,7 @@ namespace WLib.UserCtrls.Dev.PathControl
                 }
 
                 if (value == EShowButtonOption.View || value == EShowButtonOption.ViewSelect ||
-                    value == EShowButtonOption.ViewSave || value == EShowButtonOption.All)
+                    value == EShowButtonOption.ViewOpt || value == EShowButtonOption.All)
                     this.btnView.Visible = true;
                 else
                     this.btnView.Visible = false;
@@ -234,12 +234,11 @@ namespace WLib.UserCtrls.Dev.PathControl
         {
             InitializeComponent();
 
-            SaveButtonClick = new EventHandler((object sender, EventArgs e) => { });
-            AfeterSelectPath = new EventHandler((object sender, EventArgs e) => { });
-            //this.btnView.Parent = this.PathComboBoxEdit;
+            SaveButtonClick = (sender, e) => { };
+            AfeterSelectPath = (sender, e) => { };
             this.cmbPath.GotFocus += cmbPath_GotFocus;
             this.cmbPath.LostFocus += cmbPath_LostFocus;
-            DefaultTips = DEFAUL_TTIPS;
+            DefaultTips = _defaulTtips;
         }
 
 

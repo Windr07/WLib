@@ -31,18 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PathBoxSimple));
             this.btnSelect = new System.Windows.Forms.Button();
             this.btnOperate = new System.Windows.Forms.Button();
-            this.splitContainerButtons = new System.Windows.Forms.SplitContainer();
-            this.splitContainerPathBox = new System.Windows.Forms.SplitContainer();
+            this.splitButtons = new System.Windows.Forms.SplitContainer();
+            this.splitPathBox = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.picBoxViewFile = new System.Windows.Forms.PictureBox();
             this.txtPath = new System.Windows.Forms.TextBox();
-            this.splitContainerButtons.Panel1.SuspendLayout();
-            this.splitContainerButtons.Panel2.SuspendLayout();
-            this.splitContainerButtons.SuspendLayout();
-            this.splitContainerPathBox.Panel1.SuspendLayout();
-            this.splitContainerPathBox.Panel2.SuspendLayout();
-            this.splitContainerPathBox.SuspendLayout();
+            this.splitButtons.Panel1.SuspendLayout();
+            this.splitButtons.Panel2.SuspendLayout();
+            this.splitButtons.SuspendLayout();
+            this.splitPathBox.Panel1.SuspendLayout();
+            this.splitPathBox.Panel2.SuspendLayout();
+            this.splitPathBox.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxViewFile)).BeginInit();
@@ -72,42 +72,42 @@
             // 
             // splitContainerButtons
             // 
-            this.splitContainerButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerButtons.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerButtons.Margin = new System.Windows.Forms.Padding(0);
-            this.splitContainerButtons.Name = "splitContainerButtons";
+            this.splitButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitButtons.Location = new System.Drawing.Point(0, 0);
+            this.splitButtons.Margin = new System.Windows.Forms.Padding(0);
+            this.splitButtons.Name = "splitContainerButtons";
             // 
             // splitContainerButtons.Panel1
             // 
-            this.splitContainerButtons.Panel1.Controls.Add(this.btnSelect);
+            this.splitButtons.Panel1.Controls.Add(this.btnSelect);
             // 
             // splitContainerButtons.Panel2
             // 
-            this.splitContainerButtons.Panel2.Controls.Add(this.btnOperate);
-            this.splitContainerButtons.Size = new System.Drawing.Size(146, 28);
-            this.splitContainerButtons.SplitterDistance = 72;
-            this.splitContainerButtons.SplitterWidth = 2;
-            this.splitContainerButtons.TabIndex = 3;
+            this.splitButtons.Panel2.Controls.Add(this.btnOperate);
+            this.splitButtons.Size = new System.Drawing.Size(146, 28);
+            this.splitButtons.SplitterDistance = 72;
+            this.splitButtons.SplitterWidth = 2;
+            this.splitButtons.TabIndex = 3;
             // 
             // splitContainerPathBox
             // 
-            this.splitContainerPathBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerPathBox.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainerPathBox.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerPathBox.Margin = new System.Windows.Forms.Padding(0);
-            this.splitContainerPathBox.Name = "splitContainerPathBox";
+            this.splitPathBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitPathBox.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitPathBox.Location = new System.Drawing.Point(0, 0);
+            this.splitPathBox.Margin = new System.Windows.Forms.Padding(0);
+            this.splitPathBox.Name = "splitContainerPathBox";
             // 
             // splitContainerPathBox.Panel1
             // 
-            this.splitContainerPathBox.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.splitPathBox.Panel1.Controls.Add(this.tableLayoutPanel1);
             // 
             // splitContainerPathBox.Panel2
             // 
-            this.splitContainerPathBox.Panel2.Controls.Add(this.splitContainerButtons);
-            this.splitContainerPathBox.Size = new System.Drawing.Size(464, 28);
-            this.splitContainerPathBox.SplitterDistance = 316;
-            this.splitContainerPathBox.SplitterWidth = 2;
-            this.splitContainerPathBox.TabIndex = 4;
+            this.splitPathBox.Panel2.Controls.Add(this.splitButtons);
+            this.splitPathBox.Size = new System.Drawing.Size(464, 28);
+            this.splitPathBox.SplitterDistance = 316;
+            this.splitPathBox.SplitterWidth = 2;
+            this.splitPathBox.TabIndex = 4;
             // 
             // tableLayoutPanel1
             // 
@@ -168,17 +168,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainerPathBox);
+            this.Controls.Add(this.splitPathBox);
             this.MaximumSize = new System.Drawing.Size(9999, 100);
             this.MinimumSize = new System.Drawing.Size(0, 28);
             this.Name = "PathBoxSimple";
             this.Size = new System.Drawing.Size(464, 28);
-            this.splitContainerButtons.Panel1.ResumeLayout(false);
-            this.splitContainerButtons.Panel2.ResumeLayout(false);
-            this.splitContainerButtons.ResumeLayout(false);
-            this.splitContainerPathBox.Panel1.ResumeLayout(false);
-            this.splitContainerPathBox.Panel2.ResumeLayout(false);
-            this.splitContainerPathBox.ResumeLayout(false);
+            this.splitButtons.Panel1.ResumeLayout(false);
+            this.splitButtons.Panel2.ResumeLayout(false);
+            this.splitButtons.ResumeLayout(false);
+            this.splitPathBox.Panel1.ResumeLayout(false);
+            this.splitPathBox.Panel2.ResumeLayout(false);
+            this.splitPathBox.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -191,8 +191,8 @@
 
         private System.Windows.Forms.Button btnSelect;
         private System.Windows.Forms.Button btnOperate;
-        private System.Windows.Forms.SplitContainer splitContainerButtons;
-        private System.Windows.Forms.SplitContainer splitContainerPathBox;
+        private System.Windows.Forms.SplitContainer splitButtons;
+        private System.Windows.Forms.SplitContainer splitPathBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Panel panel1;

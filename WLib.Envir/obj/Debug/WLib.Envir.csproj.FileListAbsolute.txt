@@ -1,8 +1,0 @@
-F:\MyCode\WLib\WLib.Envir\bin\Debug\WLib.Envir.dll
-F:\MyCode\WLib\WLib.Envir\bin\Debug\WLib.Envir.pdb
-F:\MyCode\WLib\WLib.Envir\obj\Debug\WLib.Envir.csprojAssemblyReference.cache
-F:\MyCode\WLib\WLib.Envir\obj\Debug\WLib.Envir.Properties.Resources.resources
-F:\MyCode\WLib\WLib.Envir\obj\Debug\WLib.Envir.csproj.GenerateResource.cache
-F:\MyCode\WLib\WLib.Envir\obj\Debug\WLib.Envir.csproj.CoreCompileInputs.cache
-F:\MyCode\WLib\WLib.Envir\obj\Debug\WLib.Envir.dll
-F:\MyCode\WLib\WLib.Envir\obj\Debug\WLib.Envir.pdb

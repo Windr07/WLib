@@ -131,6 +131,7 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </Reference>
+    <Reference Include="office" />
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -180,7 +181,7 @@
     <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeQuery.cs" />
+    <Compile Include="ArcGisCtrl\TableAttributeQuery.cs" />
     <Compile Include="ExplorerCtrl\ExplorerTreeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -196,26 +197,20 @@
     <Compile Include="PathCtrl\EObjectFilter.cs" />
     <Compile Include="PathCtrl\ESelectPathType.cs" />
     <Compile Include="PathCtrl\EShowButtonOption.cs" />
-    <Compile Include="OfficeCtrl\ExcelEmbed.cs" />
-    <Compile Include="OfficeCtrl\IOfficeBase.cs" />
-    <Compile Include="OfficeCtrl\OfficeEmbed.cs">
+    <Compile Include="FileViewer\Office\ExcelBase.cs" />
+    <Compile Include="FileViewer\Office\IOfficeBase.cs" />
+    <Compile Include="FileViewer\Office\OfficeEmbed.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OfficeCtrl\OfficeEmbed.designer.cs">
+    <Compile Include="FileViewer\Office\OfficeEmbed.designer.cs">
       <DependentUpon>OfficeEmbed.cs</DependentUpon>
     </Compile>
-    <Compile Include="OfficeCtrl\WordEmbed.cs" />
+    <Compile Include="FileViewer\Office\WordBase.cs" />
     <Compile Include="PathCtrl\DataSelectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathCtrl\DataSelectorForm.Designer.cs">
       <DependentUpon>DataSelectorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PathCtrl\PathBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PathCtrl\PathBox.Designer.cs">
-      <DependentUpon>PathBox.cs</DependentUpon>
     </Compile>
     <Compile Include="PathCtrl\PathBoxSimple.cs">
       <SubType>UserControl</SubType>
@@ -254,24 +249,24 @@
     <Compile Include="ArcGisCtrl\QueryForm.Designer.cs">
       <DependentUpon>QueryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Viewer\EPicViewerAction.cs" />
-    <Compile Include="Viewer\IViewer.cs" />
-    <Compile Include="Viewer\PicViewer.cs">
+    <Compile Include="FileViewer\Picture\EPicViewerAction.cs" />
+    <Compile Include="FileViewer\IFileViewer.cs" />
+    <Compile Include="FileViewer\Picture\PicViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Viewer\PicViewer.designer.cs">
+    <Compile Include="FileViewer\Picture\PicViewer.designer.cs">
       <DependentUpon>PicViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Viewer\RowMergeView.cs">
+    <Compile Include="RowMergeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Viewer\RowMergeView.designer.cs">
+    <Compile Include="RowMergeView.designer.cs">
       <DependentUpon>RowMergeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Viewer\TxtViewer.cs">
+    <Compile Include="FileViewer\TxtViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Viewer\TxtViewer.Designer.cs">
+    <Compile Include="FileViewer\TxtViewer.Designer.cs">
       <DependentUpon>TxtViewer.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
@@ -294,9 +289,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PathCtrl\DataSelectorForm.resx">
       <DependentUpon>DataSelectorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PathCtrl\PathBox.resx">
-      <DependentUpon>PathBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathCtrl\PathBoxSimple.resx">
       <DependentUpon>PathBoxSimple.cs</DependentUpon>
@@ -326,13 +318,13 @@
     <EmbeddedResource Include="ArcGisCtrl\QueryForm.resx">
       <DependentUpon>QueryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Viewer\PicViewer.resx">
+    <EmbeddedResource Include="FileViewer\Picture\PicViewer.resx">
       <DependentUpon>PicViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Viewer\RowMergeView.resx">
+    <EmbeddedResource Include="RowMergeView.resx">
       <DependentUpon>RowMergeView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Viewer\TxtViewer.resx">
+    <EmbeddedResource Include="FileViewer\TxtViewer.resx">
       <DependentUpon>TxtViewer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

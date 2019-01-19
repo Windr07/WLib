@@ -245,19 +245,16 @@ namespace WLib.UserCtrls.ArcGisCtrl
             object objSymbol = StyleGalleryItem.Item;
             switch (axSymbologyControl1.StyleClass)
             {
-                //点符号
-                case esriSymbologyStyleClass.esriStyleClassMarkerSymbols:
+                case esriSymbologyStyleClass.esriStyleClassMarkerSymbols://点符号
                     btnColor.BackColor = ((IMarkerSymbol)objSymbol).Color.ToColor();
                     nudAngle.Value = (decimal)((IMarkerSymbol)objSymbol).Angle;//设置点符号角度
                     nudSize.Value = (decimal)((IMarkerSymbol)objSymbol).Size;//设置点符号大小
                     break;
-                //线符号
-                case esriSymbologyStyleClass.esriStyleClassLineSymbols:
+                case esriSymbologyStyleClass.esriStyleClassLineSymbols: //线符号
                     btnColor.BackColor = ((ILineSymbol)objSymbol).Color.ToColor();
                     nudWidth.Value = (decimal)((ILineSymbol)objSymbol).Width;//设置线宽初始值
                     break;
-                //面符号
-                case esriSymbologyStyleClass.esriStyleClassFillSymbols:
+                case esriSymbologyStyleClass.esriStyleClassFillSymbols: //面符号
                     btnColor.BackColor = ((IFillSymbol)objSymbol).Color.ToColor();
                     ILineSymbol outline = ((IFillSymbol)objSymbol).Outline;
                     btnOutlineColor.BackColor = outline.Color.ToColor();

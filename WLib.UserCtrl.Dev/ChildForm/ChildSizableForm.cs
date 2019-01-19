@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using WLib.WindowsAPI;
 
@@ -9,9 +10,16 @@ namespace WLib.UserCtrls.Dev.ChildForm
     /// </summary>
     public partial class ChildSizableForm : DevExpress.XtraEditors.XtraForm
     {
-        private Form _parentForm = null;
-        Type FormType = null;
-        private bool _hasshow = false;
+        private Form _parentForm;
+        private readonly Type _formType;
+        /// <summary>
+        /// 父窗体中是否已经Show过了此类型的窗口（设置父窗体后此属性才有效）
+        /// </summary>
+        public bool HasShow { get; set; }
+        /// <summary>
+        /// 类型记录列表，用于防止打开同类型的窗体
+        /// </summary>
+        internal static List<Type> ListFormType = new List<Type>();
         /// <summary>
         /// 自定义的父窗口
         /// </summary>
@@ -25,11 +33,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
             }
         }
         /// <summary>
-        /// 父窗体中是否已经Show过了此类型的窗口（设置父窗体后此属性才有效）
-        /// </summary>
-        public bool HasShow => _hasshow;
-
-        /// <summary>
         /// 只能是无边框窗体，因为边框是自定义的
         /// </summary>
         public new FormBorderStyle FormBorderStyle
@@ -39,57 +42,62 @@ namespace WLib.UserCtrls.Dev.ChildForm
         }
 
 
+        /// <summary>
+        /// 自定义的子窗体，包含重复打开的控制
+        /// </summary>
         public ChildSizableForm()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
         }
+        /// <summary>
+        /// 自定义的子窗体，包含重复打开的控制
+        /// </summary>
+        /// <param name="parentForm"></param>
         public ChildSizableForm(Form parentForm)
             : base()
         {
             Type formType = this.GetType();
-            Type t = CommonUtility.ListFormType.Find(p => p == formType);
+            Type t = ListFormType.Find(p => p == formType);
             if (t != null)
             {
                 this.Visible = false;
-                _hasshow = true;
+                HasShow = true;
             }
             else
             {
                 InitializeComponent();
-                FormType = formType;
-                CommonUtility.ListFormType.Add(formType);
+                _formType = formType;
+                ListFormType.Add(formType);
                 FatherForm = parentForm;
             }
         }
-
-
-
         /// <summary>
         /// 设置窗体成为主窗体的子窗体
         /// </summary> 
         private void SetMidChildForm()
         {
-            this.FormClosed += new FormClosedEventHandler(ChildForm_FormClosed);
-            this.Disposed += new EventHandler(ChildForm_Disposed);
+            this.FormClosed += ChildForm_FormClosed;
+            this.Disposed += ChildForm_Disposed;
             this.Icon = _parentForm.Icon;
             WinApi.SetParent((int)this.Handle, (int)_parentForm.Handle);
         }
-        //窗体注销
+
+  
         private void ChildForm_Disposed(object sender, EventArgs e)
         {
-            if (FormType != null)
+            if (_formType != null)
             {
-                CommonUtility.ListFormType.Remove(FormType);
+                ListFormType.Remove(_formType);
                 _parentForm.Focus();
             }
         }
-        //窗体关闭
+      
         private void ChildForm_FormClosed(object sender, EventArgs e)
         {
-            if (FormType != null)
+            if (_formType != null)
             {
-                CommonUtility.ListFormType.Remove(FormType);
+                ListFormType.Remove(_formType);
                 _parentForm.Focus();
             }
         }
@@ -98,11 +106,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
         {
         }
 
-        /// <summary>
-        /// 窗体大小改变时,刷新窗体
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ChildForm_Resize(object sender, EventArgs e)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
@@ -111,9 +114,5 @@ namespace WLib.UserCtrls.Dev.ChildForm
             SetStyle(ControlStyles.DoubleBuffer, true);
             this.Refresh();
         }
-
     }
-
-
-
 }

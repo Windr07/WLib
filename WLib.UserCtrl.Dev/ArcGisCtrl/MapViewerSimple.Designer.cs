@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapViewerSimple));
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.sBtnExpend = new DevExpress.XtraEditors.SimpleButton();
-            this.axTOCControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
+            this.AxTocControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.splitterControl1 = new DevExpress.XtraEditors.SplitterControl();
             this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager();
             this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
@@ -54,23 +54,23 @@
             this.barDockControl2 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl3 = new DevExpress.XtraBars.BarDockControl();
             this.barDockControl4 = new DevExpress.XtraBars.BarDockControl();
-            this.axMapControlMainMap = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
+            this.AxMapControlMainMap = new ESRI.ArcGIS.Controls.AxMapControl();
+            this._axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AxTocControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             this.dockPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection_nav)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManagerForMap)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axMapControlMainMap)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AxMapControlMainMap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._axLicenseControl1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelControl1
             // 
             this.panelControl1.Controls.Add(this.sBtnExpend);
-            this.panelControl1.Controls.Add(this.axTOCControl1);
+            this.panelControl1.Controls.Add(this.AxTocControl1);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelControl1.Location = new System.Drawing.Point(26, 0);
             this.panelControl1.Name = "panelControl1";
@@ -90,12 +90,12 @@
             // 
             // axTOCControl1
             // 
-            this.axTOCControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.axTOCControl1.Location = new System.Drawing.Point(2, 2);
-            this.axTOCControl1.Name = "axTOCControl1";
-            this.axTOCControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTOCControl1.OcxState")));
-            this.axTOCControl1.Size = new System.Drawing.Size(196, 484);
-            this.axTOCControl1.TabIndex = 3;
+            this.AxTocControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AxTocControl1.Location = new System.Drawing.Point(2, 2);
+            this.AxTocControl1.Name = "AxTocControl1";
+            this.AxTocControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTOCControl1.OcxState")));
+            this.AxTocControl1.Size = new System.Drawing.Size(196, 484);
+            this.AxTocControl1.TabIndex = 3;
             // 
             // splitterControl1
             // 
@@ -320,24 +320,24 @@
             // 
             // axMapControlMainMap
             // 
-            this.axMapControlMainMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.axMapControlMainMap.Location = new System.Drawing.Point(26, 0);
-            this.axMapControlMainMap.Name = "axMapControlMainMap";
-            this.axMapControlMainMap.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControlMainMap.OcxState")));
-            this.axMapControlMainMap.Size = new System.Drawing.Size(673, 488);
-            this.axMapControlMainMap.TabIndex = 1;
-            this.axMapControlMainMap.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.axMapControlMainMap_OnMouseDown);
-            this.axMapControlMainMap.OnMouseMove += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseMoveEventHandler(this.axMapControlMainMap_OnMouseMove);
-            this.axMapControlMainMap.OnDoubleClick += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnDoubleClickEventHandler(this.axMapControlMainMap_OnDoubleClick);
+            this.AxMapControlMainMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AxMapControlMainMap.Location = new System.Drawing.Point(26, 0);
+            this.AxMapControlMainMap.Name = "AxMapControlMainMap";
+            this.AxMapControlMainMap.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControlMainMap.OcxState")));
+            this.AxMapControlMainMap.Size = new System.Drawing.Size(673, 488);
+            this.AxMapControlMainMap.TabIndex = 1;
+            this.AxMapControlMainMap.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.axMapControlMainMap_OnMouseDown);
+            this.AxMapControlMainMap.OnMouseMove += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseMoveEventHandler(this.axMapControlMainMap_OnMouseMove);
+            this.AxMapControlMainMap.OnDoubleClick += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnDoubleClickEventHandler(this.axMapControlMainMap_OnDoubleClick);
             // 
             // axLicenseControl1
             // 
-            this.axLicenseControl1.Enabled = true;
-            this.axLicenseControl1.Location = new System.Drawing.Point(333, 228);
-            this.axLicenseControl1.Name = "axLicenseControl1";
-            this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
-            this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
-            this.axLicenseControl1.TabIndex = 13;
+            this._axLicenseControl1.Enabled = true;
+            this._axLicenseControl1.Location = new System.Drawing.Point(333, 228);
+            this._axLicenseControl1.Name = "_axLicenseControl1";
+            this._axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
+            this._axLicenseControl1.Size = new System.Drawing.Size(32, 32);
+            this._axLicenseControl1.TabIndex = 13;
             // 
             // MapViewerSimple
             // 
@@ -345,8 +345,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitterControl1);
             this.Controls.Add(this.panelControl1);
-            this.Controls.Add(this.axLicenseControl1);
-            this.Controls.Add(this.axMapControlMainMap);
+            this.Controls.Add(this._axLicenseControl1);
+            this.Controls.Add(this.AxMapControlMainMap);
             this.Controls.Add(this.barDockControl3);
             this.Controls.Add(this.barDockControl4);
             this.Controls.Add(this.barDockControl2);
@@ -356,13 +356,13 @@
             this.Load += new System.EventHandler(this.MapViewer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AxTocControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
             this.dockPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection_nav)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManagerForMap)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axMapControlMainMap)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AxMapControlMainMap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._axLicenseControl1)).EndInit();
             this.ResumeLayout(false);
 
         }

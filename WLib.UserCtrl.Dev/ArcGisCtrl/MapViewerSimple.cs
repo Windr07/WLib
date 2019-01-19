@@ -8,24 +8,24 @@ using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.SystemUI;
 using WLib.ArcGis.Display;
 using WLib.UserCtrls.Dev.ArcGisCtrl.Base;
-using WLib.UserCtrls.Viewer;
+using WLib.UserCtrls.FileViewer;
 
 namespace WLib.UserCtrls.Dev.ArcGisCtrl
 {
-    public partial class MapViewerSimple : UserControl, IViewer
+    public partial class MapViewerSimple : UserControl, IFileViewer
     {
-        public AxMapControl axMapControlMainMap;
-        public AxTOCControl axTOCControl1;
-        private AxLicenseControl axLicenseControl1;
+        public AxMapControl AxMapControlMainMap;
+        public AxTOCControl AxTocControl1;
+        private AxLicenseControl _axLicenseControl1;
 
-        private bool m_preLeftShow = true;
-        public BarStaticItem barSICurCoors = null;
-        public BarStaticItem barSIScaleInfo = null;
+        private bool _mPreLeftShow = true;
+        public BarStaticItem BarSiCurCoors = null;
+        public BarStaticItem BarSiScaleInfo = null;
         public MapViewerSimple()
         {
             InitializeComponent();
-            barSICurCoors = new BarStaticItem();
-            barSIScaleInfo = new BarStaticItem();
+            BarSiCurCoors = new BarStaticItem();
+            BarSiScaleInfo = new BarStaticItem();
 
 
         }
@@ -37,9 +37,9 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             command = new ControlsMapPanTool();
             if (command != null)
             {
-                command.OnCreate(axMapControlMainMap.Object);
+                command.OnCreate(AxMapControlMainMap.Object);
                 if (command is ITool)
-                    axMapControlMainMap.CurrentTool = command as ITool;
+                    AxMapControlMainMap.CurrentTool = command as ITool;
                 else
                     command.OnClick();
             }
@@ -47,34 +47,34 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
 
         ~MapViewerSimple()
         {
-            axMapControlMainMap.Dispose();
+            AxMapControlMainMap.Dispose();
         }
 
         public void LoadFile(string filename)
         {
-            axMapControlMainMap.LoadMxFile(filename);
+            AxMapControlMainMap.LoadMxFile(filename);
         }
 
         public void Close()
         {
-            axMapControlMainMap.Dispose();
+            AxMapControlMainMap.Dispose();
         }
 
         public void sBtnExpend_Click(object sender, EventArgs e)
         {
-            if (m_preLeftShow)
+            if (_mPreLeftShow)
             {
-                m_preLeftShow = false;
+                _mPreLeftShow = false;
                 panelControl1.Dock = DockStyle.None;
                 panelControl1.Size = sBtnExpend.Size + new Size(2, 2); ;
-                panelControl1.Location = axMapControlMainMap.Location;
+                panelControl1.Location = AxMapControlMainMap.Location;
                 //new Size(4, 4);
                 splitterControl1.Visible = false;
                 sBtnExpend.Text = ">";
             }
             else
             {
-                m_preLeftShow = true;
+                _mPreLeftShow = true;
                 //panelControl1.Size = new System.Drawing.Size(simpleButton1.Width + 4, axMapControl1.Height);
                 panelControl1.Dock = DockStyle.Left;
                 panelControl1.Size = new Size(196, 484);
@@ -88,8 +88,8 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             int statusFlag = CommonLib.MapMouseFlag;
             if (statusFlag <= 1) return;
 
-            axMapControlMainMap.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针:十字状
-            IPoint pPoint = axMapControlMainMap.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
+            AxMapControlMainMap.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针:十字状
+            IPoint pPoint = AxMapControlMainMap.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
             #region 11-19：空间查询(画点、线、面)
             if (statusFlag >= 11 && statusFlag <= 19)
             {
@@ -104,15 +104,15 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                         symbol = RenderOpt.GetSimpleMarkerSymbol("ff0000");
                         break;
                     case 12:
-                        CommonLib.MapGeometry = axMapControlMainMap.TrackLine();
+                        CommonLib.MapGeometry = AxMapControlMainMap.TrackLine();
                         symbol = RenderOpt.GetSimpleLineSymbol("ff0000");
                         break;
                     case 13:
-                        CommonLib.MapGeometry = axMapControlMainMap.TrackPolygon();
+                        CommonLib.MapGeometry = AxMapControlMainMap.TrackPolygon();
                         symbol = RenderOpt.GetSimpleFillSymbol("99ccff", "ff0000");
                         break;
                     case 14:
-                        CommonLib.MapGeometry = axMapControlMainMap.TrackRectangle();
+                        CommonLib.MapGeometry = AxMapControlMainMap.TrackRectangle();
                         symbol = RenderOpt.GetSimpleFillSymbol("99ccff", "ff0000");
                         break;
                     default:
@@ -124,7 +124,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                 {
                     //axMapControlMainMap.Map.SelectByShape(CommonLib.MapGeometry, null, false);
                     //axMapControlMainMap.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
-                    axMapControlMainMap.DrawShape(CommonLib.MapGeometry, ref symbol);
+                    AxMapControlMainMap.DrawShape(CommonLib.MapGeometry, ref symbol);
                 }
             }
             #endregion
@@ -189,11 +189,11 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         {
             #region 主地图上移动鼠标时，状态栏显示当前坐标、比例尺等信息
             //将当前鼠标位置的点转换为地图上的坐标
-            IPoint point = axMapControlMainMap.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
+            IPoint point = AxMapControlMainMap.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
             //显示当前比例尺
-            barSIScaleInfo.Caption = " 比例尺：  1/" + ((long)axMapControlMainMap.MapScale).ToString();
+            BarSiScaleInfo.Caption = " 比例尺：  1/" + ((long)AxMapControlMainMap.MapScale).ToString();
             //显示当前坐标
-            barSICurCoors.Caption = " 当前坐标:  X=" + e.mapX.ToString() + "，  Y=" + e.mapY.ToString();
+            BarSiCurCoors.Caption = " 当前坐标:  X=" + e.mapX.ToString() + "，  Y=" + e.mapY.ToString();
             #endregion
         }
         #region 地图导航条（Navigation）
@@ -243,9 +243,9 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             }
             if (command != null)
             {
-                command.OnCreate(axMapControlMainMap.Object);
+                command.OnCreate(AxMapControlMainMap.Object);
                 if (command is ITool)
-                    axMapControlMainMap.CurrentTool = command as ITool;
+                    AxMapControlMainMap.CurrentTool = command as ITool;
                 else
                     command.OnClick();
             }

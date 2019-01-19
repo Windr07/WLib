@@ -16,13 +16,11 @@ namespace WLib.UserCtrls.Dev.EditForm
         /// <summary>
         /// 用于操作该行的ID字段,初始化时赋值
         /// </summary>
-        public int MainOpId { get; private set; }
-
+        public int MainOpId { get; }
         /// <summary>
         /// 点击保存后激活的事件，有改变的属性值保存在事件参数中
         /// </summary>
         public event EventHandler<SaveEditEventArgs> SaveEditEvent;
-       
         /// <summary>
         /// 激活点击保存事件的方法
         /// </summary>
@@ -64,16 +62,16 @@ namespace WLib.UserCtrls.Dev.EditForm
 
         private void btnSave_Click(object sender, EventArgs e)//保存
         {
-            List<EditItem> newEditItem = new List<EditItem>();
+            var newEditItems = new List<EditItem>();
             for (int i = 0; i < this.gridRowData.Rows.Count; i++)
             {
                 object o = this.gridRowData.Rows[i].Cells[1].Value;
                 string stringValue = o == null ? "" : o.ToString();
                 var item = EditRowData[i];
                 if (item.FieldValue != stringValue)
-                    newEditItem.Add(new EditItem(item.FieldName, item.FieldAliasName, stringValue));
+                    newEditItems.Add(new EditItem(item.FieldName, item.FieldAliasName, stringValue));
             }
-            OnSaveEvent(this, new SaveEditEventArgs(newEditItem)); 
+            OnSaveEvent(this, new SaveEditEventArgs(newEditItems));
         }
 
         private void btnCancel_Click(object sender, EventArgs e)//取消

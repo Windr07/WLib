@@ -16,29 +16,18 @@ namespace WLib.UserCtrls.Dev.ChildForm
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design", typeof(IDesigner))]
     public partial class DockFormControl : UserControl
     {
-        private DockingStyle _dockingStyle = DockingStyle.Left;
-        private bool _isCloseDockPanel = true;
-        private System.Drawing.Point _foatLocation = new Point(100, 100);
-        
         /// <summary>
         /// 获取或设置点击停靠面板关闭按钮时，是关闭面板(true,默认)还是隐藏面板(false)
         /// </summary>
-        public bool IsCloseDockPanel { get => this._isCloseDockPanel;
-            set => this._isCloseDockPanel = value;
-        }
+        public bool IsCloseDockPanel { get; set; } = true;
         /// <summary>
         /// 获取或设置创建面板时，面板在界面的默认停靠方位
         /// </summary>
-        public DockingStyle DockingStyle { get => this._dockingStyle;
-            set => this._dockingStyle = value;
-        }
+        public DockingStyle DockingStyle { get; set; } = DockingStyle.Left;
         /// <summary>
         /// 获取或设置创建面板时，面板出现的位置
         /// </summary>
-        public System.Drawing.Point FloatLocation { get => this._foatLocation;
-            set => this._foatLocation = value;
-        }
-
+        public Point FloatLocation { get; set; } = new Point(100, 100);
         /// <summary>
         /// 构造窗口停靠容器控件实例
         /// </summary>
@@ -58,7 +47,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
         {
             AddDockFormToTabPanel(form, 500, 600, visibility);
         }
-
         /// <summary>
         /// 创建、显示停靠面板并放置窗体（窗体的Show方法需另外指定），面板自动与已有面板组合成标签式面板。
         /// 不重复打开拥有相同窗体的面板。
@@ -70,17 +58,17 @@ namespace WLib.UserCtrls.Dev.ChildForm
         public void AddDockFormToTabPanel(Form form, int width, int height, DockVisibility visibility = DockVisibility.Visible)
         {
             // 查找包含指定窗体的DockPanel
-            var allPanels = this.dockManager1.Panels.Cast<DockPanel>();
+            var allPanels = dockManager1.Panels.Cast<DockPanel>();
             var existPanel = allPanels.FirstOrDefault(v => (v.Tag != null) && v.Tag.Equals(form.Name + form.Text));//通过Tag属性区分面板(窗体)
 
             DockPanel dockPanel = null;
             if (existPanel == null)//不存在拥有指定窗体的DockPanel，则创建之
             {
-                int panelCnt = this.dockManager1.Panels.Count;
+                int panelCnt = dockManager1.Panels.Count;
                 if (panelCnt == 1)//停靠到其他面板，形成标签面板
                 {
-                    dockPanel = this.dockManager1.AddPanel(_dockingStyle);
-                    dockPanel.DockAsTab(this.dockManager1.Panels[0]);
+                    dockPanel = dockManager1.AddPanel(DockingStyle);
+                    dockPanel.DockAsTab(dockManager1.Panels[0]);
                 }
                 else if (panelCnt > 1)//停靠到其他面板，形成标签面板
                 {
@@ -89,19 +77,19 @@ namespace WLib.UserCtrls.Dev.ChildForm
                         dockPanel = tabPanel.AddPanel();
                     else
                     {
-                        dockPanel = this.dockManager1.AddPanel(_dockingStyle);
-                        dockPanel.DockAsTab(this.dockManager1.Panels[0]);
+                        dockPanel = dockManager1.AddPanel(DockingStyle);
+                        dockPanel.DockAsTab(dockManager1.Panels[0]);
                     }
                 }
                 else//创建第一个面板
                 {
-                    dockPanel = this.dockManager1.AddPanel(_dockingStyle);
+                    dockPanel = dockManager1.AddPanel(DockingStyle);
                 }
-                dockPanel.Size = new System.Drawing.Size(width, height);
+                dockPanel.Size = new Size(width, height);
                 dockPanel.Tag = form.Name + form.Text;//标记窗体，以区分不同窗体
                 dockPanel.Text = form.Text;
                 dockPanel.Visibility = visibility;
-                dockPanel.FloatLocation = _foatLocation;
+                dockPanel.FloatLocation = FloatLocation;
 
                 //将窗体内置到面板工作区中
                 int dockPanelWnd = dockPanel.ControlContainer.Handle.ToInt32();
@@ -117,19 +105,17 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 //关闭面板时关闭窗体
                 dockPanel.ClosingPanel += delegate
                 {
-                    if (!form.IsDisposed && _isCloseDockPanel)
+                    if (!form.IsDisposed && IsCloseDockPanel)
                         form.Close();
                 };
                 dockPanel.ClosingPanel +=
-                    new DevExpress.XtraBars.Docking.DockPanelCancelEventHandler(this.dockFormPanel_ClosingPanel);
+                    dockFormPanel_ClosingPanel;
 
                 //关闭窗体时关闭面板
                 form.FormClosed += delegate
                 {
-                    //this._dockingStyle = dockPanel.Dock;
-                    this._foatLocation = dockPanel.FloatLocation;
-                    this.dockManager1.RemovePanel(dockPanel);
-                    //Invoke(new Action(() => { dockPanel.Close(); }));
+                    FloatLocation = dockPanel.FloatLocation;
+                    dockManager1.RemovePanel(dockPanel);
                 };
             }
             else
@@ -138,7 +124,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
             }
             dockPanel.Show();
         }
-
         /// <summary>
         /// 创建、显示浮动面板并放置窗体（窗体的Show方法需另外指定）。
         /// 不重复打开拥有相同窗体的面板。
@@ -147,16 +132,16 @@ namespace WLib.UserCtrls.Dev.ChildForm
         /// <param name="width">面板宽度</param>
         /// <param name="height">面板高度</param>
         /// <param name="point">面板显示位置</param>
-        public void AddDockFormToPanel(Form form, int width, int height, System.Drawing.Point point)
+        public void AddDockFormToPanel(Form form, int width, int height, Point point)
         {
             //查找已是否存在包含指定窗体的DockPanel
-            var allPanels = this.dockManager1.Panels.Cast<DockPanel>();
+            var allPanels = dockManager1.Panels.Cast<DockPanel>();
             var existPanel = allPanels.FirstOrDefault(v => (v.Tag != null) && v.Tag.Equals(form.Name + form.Text));
             DockPanel dockPanel = null;
             if (existPanel == null)
             {
-                dockPanel = this.dockManager1.AddPanel(_foatLocation);
-                dockPanel.Size = new System.Drawing.Size(width, height);
+                dockPanel = dockManager1.AddPanel(FloatLocation);
+                dockPanel.Size = new Size(width, height);
                 dockPanel.Tag = form.Name + form.Text;//标记窗体，以区分不同窗体
                 dockPanel.Text = form.Text;
 
@@ -174,16 +159,16 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 //关闭面板时关闭窗体
                 dockPanel.ClosingPanel += delegate
                 {
-                    if (!form.IsDisposed && _isCloseDockPanel)
+                    if (!form.IsDisposed && IsCloseDockPanel)
                         form.Close();
                 };
                 dockPanel.ClosingPanel +=
-                    new DevExpress.XtraBars.Docking.DockPanelCancelEventHandler(this.dockFormPanel_ClosingPanel);
+                    dockFormPanel_ClosingPanel;
 
                 //关闭窗体时关闭面板
                 form.FormClosed += delegate
                 {
-                    this.dockManager1.RemovePanel(dockPanel);
+                    dockManager1.RemovePanel(dockPanel);
                 };
             }
             else
@@ -193,7 +178,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
             dockPanel.Show();
             dockPanel.BringToFront();
         }
-
         /// <summary>
         /// 当容器大小发生改变时，窗体自适应外部容器大小
         /// </summary>
@@ -209,19 +193,19 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 innerFormHandle,
                 -2 * borderWidth,
                 -2 * borderHeight - captionHeight,
-                Form.FromHandle((IntPtr)handleId).Bounds.Width + 4 * borderWidth,
-                Form.FromHandle((IntPtr)handleId).Bounds.Height + captionHeight + 4 * borderHeight + statusHeight,
+                FromHandle((IntPtr)handleId).Bounds.Width + 4 * borderWidth,
+                FromHandle((IntPtr)handleId).Bounds.Height + captionHeight + 4 * borderHeight + statusHeight,
                 false);
             //true);
         }
 
+
         private void dockFormPanel_ClosingPanel(object sender, DockPanelCancelEventArgs e)
         {
-            if (_isCloseDockPanel)
+            if (IsCloseDockPanel)
             {
                 e.Cancel = true;    //默认情况下，点击面板的关闭按钮面板隐藏但未被销毁，设置此值以重写它的默认行为
-                //this._dockingStyle = e.Panel.Dock;
-                this._foatLocation = e.Panel.FloatLocation;
+                FloatLocation = e.Panel.FloatLocation;
                 e.Panel.Dispose();
             }
         }

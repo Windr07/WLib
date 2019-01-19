@@ -134,7 +134,7 @@ namespace WLib.UserCtrls.Dev.ListCtrl
             InitializeComponent();  
 
             ColoredItemColor = Color.Indigo;// Color.FromArgb(102, 97, 0);
-            RefrshListEvent = new EventHandler((object sender, EventArgs e) => { });
+            RefrshListEvent = (object sender, EventArgs e) => { };
         }
 
         /// <summary>

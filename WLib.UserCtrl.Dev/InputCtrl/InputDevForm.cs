@@ -11,23 +11,17 @@ namespace WLib.UserCtrls.Dev.InputCtrl
         /// <summary>
         /// 提示文字
         /// </summary>
-        public string Tips { get => this.lblTips.Text;
-            set => this.lblTips.Text = value;
-        }
+        public string Tips { get => this.lblTips.Text; set => this.lblTips.Text = value; }
         /// <summary>
         /// 确定按钮显示的文字
         /// </summary>
-        public string SearchButtonText { get => this.btnSearch.Text;
-            set => this.btnSearch.Text = value;
-        }
+        public string SearchButtonText { get => this.btnSearch.Text; set => this.btnSearch.Text = value; }
         /// <summary>
         /// 用户输入的值
         /// </summary>
-        public string KeyWord { get => this.textBox1.Text.Trim();
-            private set => this.textBox1.Text = value;
-        }
-        
-        
+        public string KeyWord { get => this.textBox1.Text.Trim(); private set => this.textBox1.Text = value; }
+
+
         /// <summary>
         /// 实例化输入框窗体
         /// </summary>

@@ -1,4 +1,11 @@
-﻿namespace WLib.ThreadHelper
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+namespace WLib.ThreadHelper
 {
     /// <summary>
     /// 枚举：表示方法的调用类型

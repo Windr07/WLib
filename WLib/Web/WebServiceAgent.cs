@@ -1,16 +1,20 @@
-﻿using Microsoft.CSharp;
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Web.Services.Description;
+using Microsoft.CSharp;
 
-namespace YYGISLib.Web
+namespace WLib.Web
 {
     /// <summary>
     /// 动态创建调用WebService的代理类，提供调用WebService服务的方法
@@ -20,11 +24,11 @@ namespace YYGISLib.Web
         /// <summary>
         /// Web服务Url
         /// </summary>
-        public string ServiceUrl { get; private set; }
+        public string ServiceUrl { get; }
         /// <summary>
         /// 客户端代理服务的命名空间
         /// </summary>
-        public string LocalNamespace { get; private set; }
+        public string LocalNamespace { get; }
 
         /// <summary>
         /// 客户端代理类的类名
@@ -41,7 +45,7 @@ namespace YYGISLib.Web
         /// <summary>
         /// Web服务提供的方法
         /// </summary>
-        public MethodInfo[] ServiceMethodInfos { get { return ServiceType.GetMethods(); } }
+        public MethodInfo[] ServiceMethodInfos => ServiceType.GetMethods();
 
         /// <summary>
         /// 动态创建调用WebService的代理类，提供调用WebService服务的方法
@@ -90,10 +94,10 @@ namespace YYGISLib.Web
             if (complierResults.Errors.HasErrors == true)
             {
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                foreach (System.CodeDom.Compiler.CompilerError ce in complierResults.Errors)
+                foreach (CompilerError compilerError in complierResults.Errors)
                 {
-                    sb.Append(ce.ToString());
-                    sb.Append(System.Environment.NewLine);
+                    sb.Append(compilerError);
+                    sb.Append(Environment.NewLine);
                 }
                 throw new Exception(sb.ToString());
             }
@@ -112,8 +116,8 @@ namespace YYGISLib.Web
         /// <returns></returns>
         public object InvokeMethod(string methodName, object[] parameters)
         {
-            MethodInfo add = ServiceType.GetMethod(methodName);
-            return add.Invoke(ServiceInstance, parameters);
+            MethodInfo methodInfo = ServiceType.GetMethod(methodName);
+            return methodInfo.Invoke(ServiceInstance, parameters);
         }
     }
 }

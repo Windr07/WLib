@@ -7,6 +7,33 @@ namespace WLib.Files
     public class FileOpt
     {
         /// <summary>
+        /// 检查文件名是否合法：文字名中不能包含字符\/:*?"&lt;>|
+        /// </summary>
+        /// <param name="fileName">文件名，不包含路径</param>
+        /// <returns></returns>
+        public static bool ValidFileName(string fileName)
+        {
+            bool isValid = true;
+            string errChars = "\\/:*?\"<>|";
+            if (string.IsNullOrEmpty(fileName))
+            {
+                isValid = false;
+            }
+            else
+            {
+                foreach (var errChar in errChars)
+                {
+                    if (fileName.Contains(errChar.ToString()))
+                    {
+                        isValid = false;
+                        break;
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
         /// 构造并返回文件路径，
         /// 若不允许覆盖同名文件，则向文件名末尾添加序号“(n)”直到不存在同名文件为止
         /// </summary>
@@ -53,7 +80,7 @@ namespace WLib.Files
         /// <returns></returns>
         public static bool CopyFile(string fromFilePath, string toDir, bool overwrite)
         {
-            bool result = false;
+            bool result;
             try
             {
                 string fromFileName = Path.GetFileName(fromFilePath);

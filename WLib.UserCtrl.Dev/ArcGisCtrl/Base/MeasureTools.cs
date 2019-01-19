@@ -30,9 +30,9 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Base
         /// <summary>
         /// 测量工具
         /// </summary>
-        internal MeasureTools()
+        internal MeasureTools(AxMapControl mapCtrl)
         {
-            Map = null;
+            MapCtrl = mapCtrl;
             _pointCollection = null;
             _newPolygonFeedback = null;
             _newLineFeedback = null;
@@ -41,9 +41,9 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Base
         }
 
         /// <summary>
-        /// Map对象，只写
+        /// Map对象
         /// </summary>
-        public AxMapControl Map { get; set; }
+        public AxMapControl MapCtrl { get; set; }
         /// <summary>
         /// 判断是否正在测量，只读
         /// </summary>
@@ -79,7 +79,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Base
         public void AngleStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Angle;
-            _newLineFeedback = new NewLineFeedbackClass { Display = Map.ActiveView.ScreenDisplay };
+            _newLineFeedback = new NewLineFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
             _newLineFeedback.Start(point);
 
             _pointCollection = new PolylineClass();
@@ -97,7 +97,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Base
         public void LengthStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Distance;
-            _newLineFeedback = new NewLineFeedbackClass {Display = Map.ActiveView.ScreenDisplay};
+            _newLineFeedback = new NewLineFeedbackClass {Display = MapCtrl.ActiveView.ScreenDisplay};
             _newLineFeedback.Start(point);
 
             _pointCollection = new PolylineClass();
@@ -114,7 +114,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Base
         public void AreaStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Area;
-            _newPolygonFeedback = new NewPolygonFeedbackClass {Display = Map.ActiveView.ScreenDisplay};
+            _newPolygonFeedback = new NewPolygonFeedbackClass {Display = MapCtrl.ActiveView.ScreenDisplay};
             _newPolygonFeedback.Start(point);
 
             _pointCollection = new PolygonClass();

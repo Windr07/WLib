@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -23,29 +24,74 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// 查询事件
         /// </summary>
         public event EventHandler Query;
-        protected AttributeQueryHelper QueryHelper { get; }
         /// <summary>
         /// 构造的查询语句
         /// </summary>
         public string WhereClause { get => txtWhereClause.Text.Trim(); set => txtWhereClause.Text = value; }
+
+
         /// <summary>
         /// 按属性查询的窗体
         /// </summary>
         ///  <param name="searchTable">要查询的表格</param>
         /// <param name="isQueryAaliasName">确定查询的是字段别名还是字段名</param>
         /// <param name="queryFieldNames">显示在属性查询窗口的，要查询的字段</param>
-        public QueryForm(ITable searchTable, bool isQueryAaliasName = false, string[] queryFieldNames = null)
+        /// <param name="queryHandler">查询事件处理</param>
+        public QueryForm(ITable searchTable, bool isQueryAaliasName = false, string[] queryFieldNames = null, EventHandler queryHandler = null)
+        {
+            InitForm(queryHandler);
+            cmbTables.Items.Add(new TableAttributeQuery(searchTable, isQueryAaliasName, queryFieldNames));
+        }
+        /// <summary>
+        /// 按属性查询的窗体
+        /// </summary>
+        ///  <param name="searchTables">要查询的表格</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public QueryForm(IEnumerable<ITable> searchTables, EventHandler queryHandler = null)
+        {
+            InitForm(queryHandler);
+            cmbTables.Items.AddRange(searchTables.Select(v => new TableAttributeQuery(v, false, null)).ToArray());
+        }
+        /// <summary>
+        /// 按属性查询的窗体
+        /// </summary>
+        ///  <param name="tableAttributeQueries">要查询的表格</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public QueryForm(IEnumerable<TableAttributeQuery> tableAttributeQueries, EventHandler queryHandler = null)
+        {
+            InitForm(queryHandler);
+            cmbTables.Items.AddRange(tableAttributeQueries.ToArray());
+        }
+        /// <summary>
+        /// 初始化窗体
+        /// </summary>
+        public void InitForm(EventHandler queryHandler)
         {
             InitializeComponent();
 
-            QueryHelper = new AttributeQueryHelper(searchTable, isQueryAaliasName, queryFieldNames);
-            Text = "按属性查询 - " + QueryHelper.TableName;
+            Query += queryHandler;
+            const string findFieldTips = @"按名称/别名查找字段";
+            const string findValueTips = @"查找字段值";
+            txtSearchFields.Text = findFieldTips;
+            txtSearchValues.Text = findValueTips;
+            txtSearchFields.MouseDown += delegate { if (txtSearchFields.Text == findFieldTips) txtSearchFields.Text = string.Empty; };
+            txtSearchValues.MouseDown += delegate { if (txtSearchValues.Text == findValueTips) txtSearchValues.Text = string.Empty; };
+            清空DToolStripMenuItem.Click += delegate { txtWhereClause.Text = string.Empty; };
+            sBtnClear.Click += delegate { txtWhereClause.Text = string.Empty; };
+            sBtnClose.Click += delegate { Close(); };
         }
 
 
-        private void QueryForm_Load(object sender, EventArgs e)//加载窗体时显示字段列表
+        private void cmbTables_SelectedIndexChanged(object sender, EventArgs e)//选择表格
         {
-            listBoxCtrlFields.Items.AddRange(QueryHelper.FieldItems);
+            var attrQuery = (TableAttributeQuery)cmbTables.SelectedItem;
+            listBoxFields.Items.AddRange(attrQuery.FieldItems);
+            Text = $"按属性查询 - {attrQuery.TableName}";
+
+            var source = new AutoCompleteStringCollection();
+            source.AddRange(panel1.Controls.Cast<Control>().Select(v => v.Tag.ToString()).ToArray());
+            source.AddRange(attrQuery.FieldItems.Select(v => v.Name).ToArray());
+            txtWhereClause.AutoCompleteCustomSource = source;
         }
 
         private void symbolControl_Click(object sender, EventArgs e)//各类符号按钮
@@ -58,63 +104,53 @@ namespace WLib.UserCtrls.ArcGisCtrl
 
         private void txtSearchFields_EditValueChanged(object sender, EventArgs e)//查找字段
         {
-            listBoxCtrlFields.SelectedItem = QueryHelper.QueryField(txtSearchFields.Text);
+            listBoxFields.SelectedItem = ((TableAttributeQuery)cmbTables.SelectedItem).QueryField(txtSearchFields.Text);
         }
 
         private void txtSearchValues_EditValueChanged(object sender, EventArgs e)//查找唯一值
         {
-            listBoxCtrlValues.SelectedItem = listBoxCtrlValues.Items.Cast<string>().FirstOrDefault(v => v.StartsWith(txtSearchValues.Text));
+            listBoxValues.SelectedItem = listBoxValues.Items.Cast<string>().FirstOrDefault(v => v.StartsWith(txtSearchValues.Text));
         }
 
         private void sBtnGetUniqueValue_Click(object sender, EventArgs e)//获取唯一值
         {
-            if (listBoxCtrlFields.SelectedIndex < 0) return;
-            listBoxCtrlValues.Items.Clear();
-            listBoxCtrlValues.Items.AddRange(QueryHelper.GetUnqiueValues((FieldItem)listBoxCtrlFields.SelectedItem));
+            if (listBoxFields.SelectedIndex < 0) return;
+            listBoxValues.Items.Clear();
+            listBoxValues.Items.AddRange(((TableAttributeQuery)cmbTables.SelectedItem).GetUnqiueValues((FieldItem)listBoxFields.SelectedItem));
         }
 
-        private void listBoxCtrlFields_MouseDoubleClick(object sender, MouseEventArgs e)//双击字段，将字段名加入到查询语句中
+        private void listBoxFields_MouseDoubleClick(object sender, MouseEventArgs e)//双击字段，将字段名加入到查询语句中
         {
-            if (listBoxCtrlFields.SelectedIndex < 0) return;
+            if (listBoxFields.SelectedIndex < 0) return;
 
-            var fieldItem = (FieldItem)listBoxCtrlFields.SelectedItem;
-            var fieldName = QueryHelper.IsQueryAaliasName ? fieldItem.AliasName : fieldItem.Name;
+            var fieldItem = (FieldItem)listBoxFields.SelectedItem;
+            var fieldName = ((TableAttributeQuery)cmbTables.SelectedItem).IsQueryAaliasName ? fieldItem.AliasName : fieldItem.Name;
             var value = $"{fieldName} ";
             var index = txtWhereClause.SelectionStart;
             txtWhereClause.Text = txtWhereClause.Text.Insert(index, value);
             txtWhereClause.SelectionStart = index + value.Length;
         }
 
-        private void listBoxCtrlValues_MouseDoubleClick(object sender, MouseEventArgs e)//双击字段值，将字段值加入到查询语句中
+        private void listBoxValues_MouseDoubleClick(object sender, MouseEventArgs e)//双击字段值，将字段值加入到查询语句中
         {
-            if (listBoxCtrlValues.SelectedIndex < 0 && listBoxCtrlFields.SelectedIndex < 0)
+            if (listBoxValues.SelectedIndex < 0 && listBoxFields.SelectedIndex < 0)
                 return;
-            var fieldType = ((FieldItem)listBoxCtrlFields.SelectedItem).FieldType;
+            var fieldType = ((FieldItem)listBoxFields.SelectedItem).FieldType;
             var format = fieldType == esriFieldType.esriFieldTypeString ? "'{0}' " : "{0} ";
-            var value = string.Format(format, listBoxCtrlValues.SelectedItem);
+            var value = string.Format(format, listBoxValues.SelectedItem);
             var index = txtWhereClause.SelectionStart;
             txtWhereClause.Text = txtWhereClause.Text.Insert(index, value);
             txtWhereClause.SelectionStart = index + value.Length;
         }
 
-        private void listBoxCtrlFields_MouseUp(object sender, MouseEventArgs e)//弹出右键菜单
+        private void listBoxFields_MouseUp(object sender, MouseEventArgs e)//弹出右键菜单
         {
-            listBoxCtrlFields.SelectedIndex = listBoxCtrlFields.IndexFromPoint(new Point(e.X, e.Y));
-            if (listBoxCtrlFields.SelectedIndex > -1 && e.Button == MouseButtons.Right)
+            listBoxFields.SelectedIndex = listBoxFields.IndexFromPoint(new Point(e.X, e.Y));
+            if (listBoxFields.SelectedIndex > -1 && e.Button == MouseButtons.Right)
             {
-                等于EToolStripMenuItem.Tag = ((FieldItem)listBoxCtrlFields.SelectedItem).FieldType == esriFieldType.esriFieldTypeString ? "=''" : "=";
-                cMenuStripFields.Show(listBoxCtrlFields, e.X, e.Y);
+                等于EToolStripMenuItem.Tag = ((FieldItem)listBoxFields.SelectedItem).FieldType == esriFieldType.esriFieldTypeString ? "=''" : "=";
+                cMenuStripFields.Show(listBoxFields, e.X, e.Y);
             }
-        }
-
-        private void sBtnClear_Click(object sender, EventArgs e)//清除查询语句
-        {
-            txtWhereClause.Text = string.Empty;
-        }
-
-        private void sBtnClose_Click(object sender, EventArgs e)//关闭窗体
-        {
-            Close();
         }
 
         private void sBtnApply_Click(object sender, EventArgs e)//应用（执行查询语句）

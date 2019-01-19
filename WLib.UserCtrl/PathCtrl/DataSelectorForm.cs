@@ -32,15 +32,7 @@ namespace WLib.UserCtrls.PathCtrl
         /// <summary>
         /// 所选的工作空间的路径
         /// </summary>
-        public string SelectWorkspacePath
-        {
-            get => SelectWorkspace.PathName;
-            set
-            {
-                workspaceSelector1.PathOrConnStr = value;
-                workspaceSelector1.LoadWorkspace(value);
-            }
-        }
+        public string SelectWorkspacePath { get => SelectWorkspace.PathName; set => workspaceSelector1.LoadWorkspace(value); }
         /// <summary>
         /// 所选的图层或表格的名称
         /// </summary>

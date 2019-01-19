@@ -11,6 +11,7 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.GeoDb.FeatClass;
 using WLib.ArcGis.GeoDb.WorkSpace;
 
 namespace WLib.ArcGis.Carto.Map
@@ -82,25 +83,20 @@ namespace WLib.ArcGis.Carto.Map
         {
             var featureClasses = workspace.GetFeatureClasses();
 
-            //对要素类进行排序，点要素类在前，多边形要素类在后
-            var ptClasses = featureClasses.Where(v => v.ShapeType == esriGeometryType.esriGeometryPoint).ToArray();
-            featureClasses.RemoveAll(v => v.ShapeType == esriGeometryType.esriGeometryPoint);
-            featureClasses.InsertRange(0, ptClasses);
-
-            var polygonClasses = featureClasses.Where(v => v.ShapeType == esriGeometryType.esriGeometryPolygon).ToArray();
-            featureClasses.RemoveAll(v => v.ShapeType == esriGeometryType.esriGeometryPolygon);
-            featureClasses.AddRange(polygonClasses);
+            featureClasses = featureClasses.SortByGeometryType();
 
             //将要素类作为图层加入地图控件中
             for (int i = featureClasses.Count - 1; i >= 0; i--)
             {
                 var featureClass = featureClasses[i];
-                IFeatureLayer layer = new FeatureLayerClass();
-                layer.FeatureClass = featureClass;
-                layer.Name = featureClass.AliasName;
+                IFeatureLayer layer = new FeatureLayerClass
+                {
+                    FeatureClass = featureClass,
+                    Name = featureClass.AliasName
+                };
                 if (!string.IsNullOrEmpty(zoomToClass))
                 {
-                    if (featureClass.AliasName == zoomToClass || (featureClass as IDataset).Name == zoomToClass)
+                    if (featureClass.AliasName == zoomToClass || ((IDataset)featureClass).Name == zoomToClass)
                         mapControl.ActiveView.Extent = layer.AreaOfInterest;
                 }
                 mapControl.AddLayer(layer);
@@ -119,15 +115,17 @@ namespace WLib.ArcGis.Carto.Map
             for (int i = 0; i < featureClasses.Count; i++)
             {
                 var featureClass = featureClasses[i];
-                if (loadClasses.Contains(featureClass.AliasName) || loadClasses.Contains((featureClass as IDataset).Name))
+                if (loadClasses.Contains(featureClass.AliasName) || loadClasses.Contains(((IDataset)featureClass).Name))
                 {
-                    IFeatureLayer layer = new FeatureLayerClass();
-                    layer.FeatureClass = featureClass;
-                    layer.Name = featureClass.AliasName;
+                    IFeatureLayer layer = new FeatureLayerClass
+                    {
+                        FeatureClass = featureClass,
+                        Name = featureClass.AliasName
+                    };
                     mapControl.AddLayer(layer);
                     if (!string.IsNullOrEmpty(zoomToClass))
                     {
-                        if (featureClass.AliasName == zoomToClass || (featureClass as IDataset).Name == zoomToClass)
+                        if (featureClass.AliasName == zoomToClass || ((IDataset)featureClass).Name == zoomToClass)
                             mapControl.ActiveView.Extent = layer.AreaOfInterest;
                     }
                 }

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+using System;
 
 namespace WLib.ThreadHelper
 {
@@ -18,7 +25,7 @@ namespace WLib.ThreadHelper
         {
             if (paras.ControlContainer.InvokeRequired)
             {
-                MultiThreaSetValueHandler prodelega = new MultiThreaSetValueHandler(Invoke);
+                MultiThreaSetValueHandler prodelega = Invoke;
                 paras.ControlContainer.Invoke(prodelega, paras, eType);
             }
             else

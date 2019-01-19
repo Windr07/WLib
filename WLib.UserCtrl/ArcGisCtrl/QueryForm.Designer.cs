@@ -28,15 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.txtSearchFields = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBoxCtrlFields = new System.Windows.Forms.ListBox();
+            this.listBoxFields = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.txtSearchValues = new System.Windows.Forms.TextBox();
-            this.listBoxCtrlValues = new System.Windows.Forms.ListBox();
+            this.listBoxValues = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button14 = new System.Windows.Forms.Button();
@@ -59,15 +58,19 @@
             this.txtWhereClause = new System.Windows.Forms.TextBox();
             this.sBtnApply = new System.Windows.Forms.Button();
             this.sBtnClose = new System.Windows.Forms.Button();
-            this.cMenuStripFields = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cMenuStripFields = new System.Windows.Forms.ContextMenuStrip();
             this.获取唯一值CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.等于EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清空DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblTables = new System.Windows.Forms.Label();
+            this.cmbTables = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.cMenuStripFields.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -80,7 +83,7 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 26);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -98,7 +101,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.txtSearchFields, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.listBoxCtrlFields, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.listBoxFields, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -112,6 +115,7 @@
             // txtSearchFields
             // 
             this.txtSearchFields.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearchFields.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtSearchFields.Location = new System.Drawing.Point(3, 246);
             this.txtSearchFields.Name = "txtSearchFields";
             this.txtSearchFields.Size = new System.Drawing.Size(130, 21);
@@ -128,24 +132,24 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "字段：";
             // 
-            // listBoxCtrlFields
+            // listBoxFields
             // 
-            this.listBoxCtrlFields.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxCtrlFields.FormattingEnabled = true;
-            this.listBoxCtrlFields.ItemHeight = 12;
-            this.listBoxCtrlFields.Location = new System.Drawing.Point(3, 25);
-            this.listBoxCtrlFields.Name = "listBoxCtrlFields";
-            this.listBoxCtrlFields.Size = new System.Drawing.Size(130, 215);
-            this.listBoxCtrlFields.TabIndex = 1;
-            this.listBoxCtrlFields.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxCtrlFields_MouseDoubleClick);
-            this.listBoxCtrlFields.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBoxCtrlFields_MouseUp);
+            this.listBoxFields.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxFields.FormattingEnabled = true;
+            this.listBoxFields.ItemHeight = 12;
+            this.listBoxFields.Location = new System.Drawing.Point(3, 25);
+            this.listBoxFields.Name = "listBoxFields";
+            this.listBoxFields.Size = new System.Drawing.Size(130, 215);
+            this.listBoxFields.TabIndex = 1;
+            this.listBoxFields.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxFields_MouseDoubleClick);
+            this.listBoxFields.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBoxFields_MouseUp);
             // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Controls.Add(this.txtSearchValues, 0, 2);
-            this.tableLayoutPanel3.Controls.Add(this.listBoxCtrlValues, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.listBoxValues, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(263, 3);
@@ -160,22 +164,23 @@
             // txtSearchValues
             // 
             this.txtSearchValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearchValues.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtSearchValues.Location = new System.Drawing.Point(3, 246);
             this.txtSearchValues.Name = "txtSearchValues";
             this.txtSearchValues.Size = new System.Drawing.Size(130, 21);
             this.txtSearchValues.TabIndex = 11;
             this.txtSearchValues.TextChanged += new System.EventHandler(this.txtSearchValues_EditValueChanged);
             // 
-            // listBoxCtrlValues
+            // listBoxValues
             // 
-            this.listBoxCtrlValues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxCtrlValues.FormattingEnabled = true;
-            this.listBoxCtrlValues.ItemHeight = 12;
-            this.listBoxCtrlValues.Location = new System.Drawing.Point(3, 24);
-            this.listBoxCtrlValues.Name = "listBoxCtrlValues";
-            this.listBoxCtrlValues.Size = new System.Drawing.Size(130, 216);
-            this.listBoxCtrlValues.TabIndex = 2;
-            this.listBoxCtrlValues.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxCtrlValues_MouseDoubleClick);
+            this.listBoxValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxValues.FormattingEnabled = true;
+            this.listBoxValues.ItemHeight = 12;
+            this.listBoxValues.Location = new System.Drawing.Point(3, 24);
+            this.listBoxValues.Name = "listBoxValues";
+            this.listBoxValues.Size = new System.Drawing.Size(130, 216);
+            this.listBoxValues.TabIndex = 2;
+            this.listBoxValues.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxValues_MouseDoubleClick);
             // 
             // label2
             // 
@@ -227,6 +232,7 @@
             this.sBtnGetUniqueValue.Name = "sBtnGetUniqueValue";
             this.sBtnGetUniqueValue.Size = new System.Drawing.Size(112, 31);
             this.sBtnGetUniqueValue.TabIndex = 11;
+            this.sBtnGetUniqueValue.Tag = " ";
             this.sBtnGetUniqueValue.Text = "获取唯一值(&C)";
             this.sBtnGetUniqueValue.UseVisualStyleBackColor = true;
             this.sBtnGetUniqueValue.Click += new System.EventHandler(this.sBtnGetUniqueValue_Click);
@@ -377,7 +383,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 281);
+            this.label3.Location = new System.Drawing.Point(7, 308);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(161, 12);
             this.label3.TabIndex = 8;
@@ -386,29 +392,30 @@
             // sBtnClear
             // 
             this.sBtnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.sBtnClear.Location = new System.Drawing.Point(321, 277);
+            this.sBtnClear.Location = new System.Drawing.Point(322, 303);
             this.sBtnClear.Name = "sBtnClear";
             this.sBtnClear.Size = new System.Drawing.Size(75, 23);
             this.sBtnClear.TabIndex = 9;
             this.sBtnClear.Text = "清空(&D)";
             this.sBtnClear.UseVisualStyleBackColor = true;
-            this.sBtnClear.Click += new System.EventHandler(this.sBtnClear_Click);
             // 
             // txtWhereClause
             // 
             this.txtWhereClause.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWhereClause.Location = new System.Drawing.Point(7, 300);
+            this.txtWhereClause.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.txtWhereClause.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.txtWhereClause.Location = new System.Drawing.Point(7, 327);
             this.txtWhereClause.Multiline = true;
             this.txtWhereClause.Name = "txtWhereClause";
-            this.txtWhereClause.Size = new System.Drawing.Size(389, 89);
+            this.txtWhereClause.Size = new System.Drawing.Size(389, 90);
             this.txtWhereClause.TabIndex = 10;
             // 
             // sBtnApply
             // 
             this.sBtnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.sBtnApply.Location = new System.Drawing.Point(222, 395);
+            this.sBtnApply.Location = new System.Drawing.Point(222, 423);
             this.sBtnApply.Name = "sBtnApply";
             this.sBtnApply.Size = new System.Drawing.Size(84, 32);
             this.sBtnApply.TabIndex = 11;
@@ -420,13 +427,12 @@
             // 
             this.sBtnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sBtnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.sBtnClose.Location = new System.Drawing.Point(312, 395);
+            this.sBtnClose.Location = new System.Drawing.Point(312, 423);
             this.sBtnClose.Name = "sBtnClose";
             this.sBtnClose.Size = new System.Drawing.Size(84, 32);
             this.sBtnClose.TabIndex = 11;
             this.sBtnClose.Text = "关闭(&X)";
             this.sBtnClose.UseVisualStyleBackColor = true;
-            this.sBtnClose.Click += new System.EventHandler(this.sBtnClose_Click);
             // 
             // cMenuStripFields
             // 
@@ -457,7 +463,37 @@
             this.清空DToolStripMenuItem.Name = "清空DToolStripMenuItem";
             this.清空DToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.清空DToolStripMenuItem.Text = "清空(&D)";
-            this.清空DToolStripMenuItem.Click += new System.EventHandler(this.sBtnClear_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.lblTables);
+            this.panel2.Controls.Add(this.cmbTables);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(402, 26);
+            this.panel2.TabIndex = 12;
+            // 
+            // lblTables
+            // 
+            this.lblTables.AutoSize = true;
+            this.lblTables.Location = new System.Drawing.Point(7, 8);
+            this.lblTables.Name = "lblTables";
+            this.lblTables.Size = new System.Drawing.Size(41, 12);
+            this.lblTables.TabIndex = 1;
+            this.lblTables.Text = "表格：";
+            // 
+            // cmbTables
+            // 
+            this.cmbTables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbTables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTables.FormattingEnabled = true;
+            this.cmbTables.Location = new System.Drawing.Point(54, 4);
+            this.cmbTables.Name = "cmbTables";
+            this.cmbTables.Size = new System.Drawing.Size(342, 20);
+            this.cmbTables.TabIndex = 0;
+            this.cmbTables.SelectedIndexChanged += new System.EventHandler(this.cmbTables_SelectedIndexChanged);
             // 
             // QueryForm
             // 
@@ -465,18 +501,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.sBtnClose;
-            this.ClientSize = new System.Drawing.Size(402, 433);
+            this.ClientSize = new System.Drawing.Size(402, 461);
             this.Controls.Add(this.sBtnClose);
             this.Controls.Add(this.sBtnApply);
             this.Controls.Add(this.txtWhereClause);
             this.Controls.Add(this.sBtnClear);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.panel2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "QueryForm";
             this.Text = "按属性查询";
-            this.Load += new System.EventHandler(this.QueryForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -484,6 +520,8 @@
             this.tableLayoutPanel3.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.cMenuStripFields.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -499,9 +537,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button sBtnClear;
         private System.Windows.Forms.TextBox txtSearchFields;
-        private System.Windows.Forms.ListBox listBoxCtrlFields;
+        private System.Windows.Forms.ListBox listBoxFields;
         private System.Windows.Forms.TextBox txtSearchValues;
-        private System.Windows.Forms.ListBox listBoxCtrlValues;
+        private System.Windows.Forms.ListBox listBoxValues;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox txtWhereClause;
@@ -525,6 +563,8 @@
         private System.Windows.Forms.ToolStripMenuItem 获取唯一值CToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 等于EToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清空DToolStripMenuItem;
-
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label lblTables;
+        private System.Windows.Forms.ComboBox cmbTables;
     }
 }

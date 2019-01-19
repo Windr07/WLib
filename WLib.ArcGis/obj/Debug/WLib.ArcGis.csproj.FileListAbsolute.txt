@@ -1,8 +1,0 @@
-F:\MyCode\WLib\WLib.ArcGis\obj\Debug\WLib.ArcGis.csprojAssemblyReference.cache
-F:\MyCode\WLib\WLib.ArcGis\obj\Debug\WLib.ArcGis.csproj.ResolveComReference.cache
-F:\MyCode\WLib\WLib.ArcGis\obj\Debug\WLib.ArcGis.csproj.CoreCompileInputs.cache
-F:\耕地质量等级系统(集成版)\Realese\WLib.ArcGis.dll
-F:\耕地质量等级系统(集成版)\Realese\WLib.ArcGis.pdb
-F:\MyCode\WLib\WLib.ArcGis\obj\Debug\WLib.ArcGis.csproj.CopyComplete
-F:\MyCode\WLib\WLib.ArcGis\obj\Debug\WLib.ArcGis.dll
-F:\MyCode\WLib\WLib.ArcGis\obj\Debug\WLib.ArcGis.pdb

@@ -275,10 +275,18 @@
     <Compile Include="ArcGisCtrl\Base\CommonLib.cs" />
     <Compile Include="ArcGisCtrl\Base\EMeasureType.cs" />
     <Compile Include="ArcGisCtrl\Base\FeatureLocationEventArgs.cs" />
-    <Compile Include="ArcGisCtrl\MapViewer.cs">
+    <Compile Include="ArcGisCtrl\MapCtrl\GisInfoItems.cs" />
+    <Compile Include="ArcGisCtrl\MapCtrl\MapDocLoader.cs" />
+    <Compile Include="ArcGisCtrl\MapCtrl\MapNavigationTools.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
+    <Compile Include="ArcGisCtrl\MapCtrl\MapNavigationTools.Designer.cs">
+      <DependentUpon>MapNavigationTools.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\MapCtrl\MapViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\MapCtrl\MapViewer.Designer.cs">
       <DependentUpon>MapViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\MapViewerSimple.cs">
@@ -288,23 +296,23 @@
       <DependentUpon>MapViewerSimple.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\Base\MeasureTools.cs" />
+    <Compile Include="ArcGisCtrl\MapCtrl\TableListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\MapCtrl\TableListBox.Designer.cs">
+      <DependentUpon>TableListBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArcGisCtrl\PagelayoutViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ArcGisCtrl\PagelayoutViewer.designer.cs">
       <DependentUpon>PagelayoutViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeDevForm.cs">
+    <Compile Include="ArcGisCtrl\AttributeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeDevForm.designer.cs">
-      <DependentUpon>AttributeDevForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ChildForm\ChildForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChildForm\ChildForm.Designer.cs">
-      <DependentUpon>ChildForm.cs</DependentUpon>
+    <Compile Include="ArcGisCtrl\AttributeForm.designer.cs">
+      <DependentUpon>AttributeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ChildForm\ChildFormLib.cs" />
     <Compile Include="ChildForm\ChildSizableForm.cs">
@@ -313,13 +321,13 @@
     <Compile Include="ChildForm\ChildSizableForm.Designer.cs">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChildForm\CommonUtility.cs" />
     <Compile Include="ChildForm\DockFormControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ChildForm\DockFormControl.Designer.cs">
       <DependentUpon>DockFormControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChildForm\EMouseDirection.cs" />
     <Compile Include="EditForm\EditItem.cs" />
     <Compile Include="EditForm\RowDataEditForm.cs">
       <SubType>Form</SubType>
@@ -364,11 +372,11 @@
     <Compile Include="ProbarCtrl\ProgressBarControl.Designer.cs">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\QueryDevForm.cs">
+    <Compile Include="ArcGisCtrl\QueryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\QueryDevForm.Designer.cs">
-      <DependentUpon>QueryDevForm.cs</DependentUpon>
+    <Compile Include="ArcGisCtrl\QueryForm.Designer.cs">
+      <DependentUpon>QueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\SymbolSelectorDevForm.cs">
       <SubType>Form</SubType>
@@ -395,7 +403,10 @@
     <EmbeddedResource Include="AddItemCtrl\ConcatItemForm.resx">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\MapViewer.resx">
+    <EmbeddedResource Include="ArcGisCtrl\MapCtrl\MapNavigationTools.resx">
+      <DependentUpon>MapNavigationTools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\MapCtrl\MapViewer.resx">
       <DependentUpon>MapViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -403,14 +414,14 @@
       <DependentUpon>MapViewerSimple.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\MapCtrl\TableListBox.resx">
+      <DependentUpon>TableListBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\PagelayoutViewer.resx">
       <DependentUpon>PagelayoutViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeDevForm.resx">
-      <DependentUpon>AttributeDevForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ChildForm\ChildForm.resx">
-      <DependentUpon>ChildForm.cs</DependentUpon>
+    <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
+      <DependentUpon>AttributeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChildForm\ChildSizableForm.resx">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
@@ -440,8 +451,8 @@
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="ArcGisCtrl\QueryDevForm.resx">
-      <DependentUpon>QueryDevForm.cs</DependentUpon>
+    <EmbeddedResource Include="ArcGisCtrl\QueryForm.resx">
+      <DependentUpon>QueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\SymbolSelectorDevForm.resx">
       <DependentUpon>SymbolSelectorDevForm.cs</DependentUpon>

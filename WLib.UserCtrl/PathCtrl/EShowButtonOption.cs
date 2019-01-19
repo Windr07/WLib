@@ -13,7 +13,7 @@ namespace WLib.UserCtrls.PathCtrl
     public enum EShowButtonOption
     {
         /// <summary>
-        /// 同时显示浏览按钮、选择按钮、保存按钮
+        /// 同时显示浏览按钮、选择按钮、操作按钮
         /// </summary>
         All,
         /// <summary>
@@ -21,9 +21,9 @@ namespace WLib.UserCtrls.PathCtrl
         /// </summary>
         ViewSelect,
         /// <summary>
-        /// 同时显示浏览按钮、保存按钮
+        /// 同时显示浏览按钮、操作按钮
         /// </summary>
-        ViewSave,
+        ViewOpt,
         /// <summary>
         /// 不显示按钮
         /// </summary>

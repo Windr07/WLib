@@ -1,4 +1,11 @@
-﻿namespace WLib.WindowsAPI
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+namespace WLib.WindowsAPI
 {
     //参考来源：https://www.cnblogs.com/xiepeixing/archive/2013/04/11/3014863.html
     //官网参考（消息分类和消息列表在网页中间部分）：https://msdn.microsoft.com/en-us/library/windows/desktop/ms644927(v=vs.85).aspx#system_defined

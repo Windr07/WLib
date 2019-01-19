@@ -1,6 +1,6 @@
 ﻿using WLib.UserCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.Dev.PathControl
+namespace WLib.UserCtrls.Dev.PathCtrl
 {
     partial class WorkspaceSelectorControl
     {

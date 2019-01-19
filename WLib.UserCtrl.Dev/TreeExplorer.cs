@@ -21,29 +21,13 @@ namespace WLib.UserCtrls.Dev
         /// <summary>
         /// 获取当前选中的文件，如果没有选中，则返回""
         /// </summary>
-        public string CurrentFile
-        {
-            get
-            {
-                string res = "";
-                try
-                {
-                    res = this.treeListFileInfo.FocusedNode[0].ToString();
-                }
-                catch { res = ""; }
-                return res;
-            }
-        }
+        public string CurrentFile => this.treeListFileInfo.FocusedNode.FirstNode.ToString();
 
         public TreeExplorer()
         {
             InitializeComponent();
             InitData(@"");
-            FocusChange = new EventHandler(UnboundMode_FocusChange);
-
-            //
-            // TODO: Add any constructor code after InitializeComponent call
-            //
+            FocusChange = UnboundMode_FocusChange;
         }
 
         void UnboundMode_FocusChange(object sender, EventArgs e)
@@ -58,15 +42,15 @@ namespace WLib.UserCtrls.Dev
         /// <summary>
         /// 根据目录初始化控件
         /// </summary>
-        /// <param name="Path"></param>
-        public void InitData(string Path)
+        /// <param name="path"></param>
+        public void InitData(string path)
         {
             try
             {
                 this.treeListFileInfo.ClearNodes();
-                InitFolders(Path, null);
+                InitFolders(path, null);
             }
-            catch { throw new Exception("无法初始化目录:" + Path); }
+            catch { throw new Exception("无法初始化目录:" + path); }
         }
 
         void treeListFileInfo_GetPreviewText(object sender, DevExpress.XtraTreeList.GetPreviewTextEventArgs e)
@@ -160,13 +144,13 @@ namespace WLib.UserCtrls.Dev
                         potentialShpSubFileIndexList.RemoveAt(i);
                 }
 
-                int i_of_potential = 0;
+                int iOfPotential = 0;
                 for (int i = 0; i < root.Length; i++)
                 {
-                    if (i_of_potential < potentialShpSubFileIndexList.Count)//如果需要跳过的shp附属文件没有检索完
-                        if (i == potentialShpSubFileIndexList[i_of_potential])//如果当前索引等于需要跳过的shp附属文件的索引号
+                    if (iOfPotential < potentialShpSubFileIndexList.Count)//如果需要跳过的shp附属文件没有检索完
+                        if (i == potentialShpSubFileIndexList[iOfPotential])//如果当前索引等于需要跳过的shp附属文件的索引号
                         {
-                            i_of_potential++;
+                            iOfPotential++;
                             continue;
                         }
 
@@ -302,6 +286,5 @@ namespace WLib.UserCtrls.Dev
 
             }
         }
-
     }
 }

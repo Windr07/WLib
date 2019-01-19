@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Windows.Forms;
+using DevExpress.XtraEditors.Controls;
 
-namespace WLib.UserCtrls.Dev.ProbarControl
+namespace WLib.UserCtrls.Dev.ProbarCtrl
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class ProgressBarControl : DevExpress.XtraEditors.XtraUserControl
     {
-        private string _tips;
-        private int _tipsLength = 31;
-        public DevExpress.XtraEditors.Controls.BorderStyles ProgressBarPanelStyle
-        {
-            get => this.panelControl1.BorderStyle;
-            set => this.panelControl1.BorderStyle = value;
-        }
-
         /// <summary>
         /// 当前进度提示
         /// </summary>
-        public String Tips
+        private string _tips;
+        /// <summary>
+        /// 当前进度提示所能显示的最大字符串长度
+        /// </summary>
+        private int _tipsLength = 31;
+        /// <summary>
+        /// 当前进度提示
+        /// </summary>
+        public string Tips
         {
             get => _tips;
             set
@@ -27,7 +31,11 @@ namespace WLib.UserCtrls.Dev.ProbarControl
                 this.labelControl1.Text = value;
             }
         }
-
+        public BorderStyles ProgressBarPanelStyle { get => this.panelControl1.BorderStyle; set => this.panelControl1.BorderStyle = value; }
+    
+        /// <summary>
+        /// 
+        /// </summary>
         public ProgressBarControl()
         {
             InitializeComponent();
@@ -37,30 +45,10 @@ namespace WLib.UserCtrls.Dev.ProbarControl
             Tips = this.labelControl1.Text;
         }
 
-        private string _messageShow;
-        public string MessageShow
-        {
-            get => _messageShow;
-            set
-            {
-                if (_messageShow != value)
-                {
-                    _messageShow = value;
-                    OnChageLabelValue(value);
-                }
-            }
-        }
-
-        private void OnChageLabelValue(string value)
-        {
-            this.Tips = value;
-        }
 
         private void panelControl1_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
-
     }
 }

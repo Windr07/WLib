@@ -86,7 +86,8 @@ namespace WLib.Data
         /// 将DataTable中每一列的列名(ColumnName)和列标题(Caption)对调
         /// </summary>
         /// <param name="dataTable"></param>
-        public static void SwitchColumnNameAndCaption(this DataTable dataTable)
+        /// <returns>对dataTable本身对调列表和列标题后返回，没有进行对象克隆</returns>
+        public static DataTable SwitchColumnNameAndCaption(this DataTable dataTable)
         {
             foreach (DataColumn column in dataTable.Columns)
             {
@@ -94,6 +95,7 @@ namespace WLib.Data
                 column.ColumnName = column.Caption;
                 column.Caption = tmp;
             }
+            return dataTable;
         }
 
 

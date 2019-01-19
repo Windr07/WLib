@@ -3,11 +3,11 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.SystemUI;
 using WLib.UserCtrls.Dev.ArcGisCtrl.Base;
-using WLib.UserCtrls.Viewer;
+using WLib.UserCtrls.FileViewer;
 
 namespace WLib.UserCtrls.Dev.ArcGisCtrl
 {
-    public partial class PagelayoutViewer : UserControl,IViewer
+    public partial class PagelayoutViewer : UserControl,IFileViewer
     {
         public PagelayoutViewer()
         {

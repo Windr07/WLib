@@ -7,7 +7,7 @@ using WLib.ArcGis.GeoDb.WorkSpace;
 using WLib.Attributes;
 using WLib.UserCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.Dev.PathControl
+namespace WLib.UserCtrls.Dev.PathCtrl
 {
     /// <summary>
     /// 工作空间选择器
@@ -20,7 +20,7 @@ namespace WLib.UserCtrls.Dev.PathControl
         /// <summary>
         /// "shp|gdb|mdb|sde|excel|sql"
         /// </summary>
-        private string DEFAULT_WORKSPACE_TYPE = "shp|gdb|mdb|sde|excel|sql";
+        private string _defaultWorkspaceType = "shp|gdb|mdb|sde|excel|sql";
         /// <summary>
         /// 可选的工作空间类别
         /// </summary>
@@ -35,7 +35,7 @@ namespace WLib.UserCtrls.Dev.PathControl
                 var description2 = EnumDescriptionHelper.GetDescriptions<EWorkspaceType>(2);
                 var workspaceTypes = value.Split('|').Where(v => description2.Contains(v)).ToArray();
                 if (workspaceTypes.Length == 0)
-                    workspaceTypes = DEFAULT_WORKSPACE_TYPE.Split('|');
+                    workspaceTypes = _defaultWorkspaceType.Split('|');
 
                 _workspaceTypeFilter = workspaceTypes.Aggregate((a, b) => a + "|" + b);
                 this.cmbADBType.Properties.Items.Clear();
@@ -97,16 +97,14 @@ namespace WLib.UserCtrls.Dev.PathControl
         /// </summary>
         internal void OnAfterSelectPath()
         {
-            if (AfterSelectPath != null)
-                AfterSelectPath(this, new EventArgs());
+            AfterSelectPath?.Invoke(this, new EventArgs());
         }
         /// <summary>
         /// 触发AfterSelectPath事件
         /// </summary>
         internal void OnWorkspaceTypeChanged()
         {
-            if (WorkspaceTypeChanged != null)
-                WorkspaceTypeChanged(this, new EventArgs());
+            WorkspaceTypeChanged?.Invoke(this, new EventArgs());
         }
         #endregion
 
@@ -126,11 +124,11 @@ namespace WLib.UserCtrls.Dev.PathControl
         /// <summary>
         /// 获取工作空间中的要素的名称
         /// </summary>
-        public string[] FeatureClassNames { get { return FeatureClasses == null ? null : FeatureClasses.Select(v => (v as IDataset).Name).ToArray(); } }
+        public string[] FeatureClassNames { get { return FeatureClasses?.Select(v => ((IDataset) v).Name).ToArray(); } }
         /// <summary>
         /// 获取工作空间中的表格的名称
         /// </summary>
-        public string[] TableNames { get { return Tables == null ? null : Tables.Select(v => (v as IDataset).Name).ToArray(); } }
+        public string[] TableNames { get { return Tables?.Select(v => ((IDataset) v).Name).ToArray(); } }
         /// <summary>
         /// 返回指定名称或别名的要素类（未连接工作空间或找不到时返回null）
         /// </summary>
@@ -141,7 +139,7 @@ namespace WLib.UserCtrls.Dev.PathControl
             if (FeatureClasses == null) return null;
             foreach (var cls in FeatureClasses)
             {
-                if (cls.AliasName == name || (cls as IDataset).Name == name)
+                if (cls.AliasName == name || ((IDataset) cls).Name == name)
                     return cls;
             }
             return null;
@@ -156,7 +154,7 @@ namespace WLib.UserCtrls.Dev.PathControl
             if (FeatureClasses == null) return null;
             foreach (var cls in FeatureClasses)
             {
-                if (cls.AliasName.Contains(name) || (cls as IDataset).Name.Contains(name))
+                if (cls.AliasName.Contains(name) || ((IDataset) cls).Name.Contains(name))
                     return cls;
             }
             return null;
@@ -171,7 +169,7 @@ namespace WLib.UserCtrls.Dev.PathControl
             if (Tables == null) return null;
             foreach (var table in Tables)
             {
-                if ((table as IObjectClass).AliasName == name || (table as IDataset).Name == name)
+                if (((IObjectClass) table).AliasName == name || ((IDataset) table).Name == name)
                     return table;
             }
             return null;
@@ -186,8 +184,8 @@ namespace WLib.UserCtrls.Dev.PathControl
             InitializeComponent();
 
             this.SourcePathBox.AfeterSelectPath += txtASourcePath_AfeterSelectPath;
-            AfterSelectPath = new EventHandler((object sender, EventArgs e) => { });
-            WorkspaceTypeChanged = new EventHandler((object sender, EventArgs e) => { this.SourcePathBox.Text = ""; });
+            AfterSelectPath = (sender, e) => { };
+            WorkspaceTypeChanged = (sender, e) => { this.SourcePathBox.Text = ""; };
             WorkspaceTypeFilter = "shp|gdb|mdb|sde";
         }
         /// <summary>
@@ -250,8 +248,8 @@ namespace WLib.UserCtrls.Dev.PathControl
                 Workspace = GetWorkspace.GetWorkSpace(this.SourcePathBox.Path, eType);
                 if (Workspace != null)
                 {
-                    Tables = FindTable.GetTables(Workspace).ToArray();
-                    FeatureClasses = FindFeatureClass.GetFeatureClasses(Workspace).ToArray();
+                    Tables = Workspace.GetTables().ToArray();
+                    FeatureClasses = Workspace.GetFeatureClasses().ToArray();
                     OnAfterSelectPath();
                 }
             }

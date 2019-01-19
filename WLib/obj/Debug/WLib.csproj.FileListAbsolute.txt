@@ -1,7 +1,0 @@
-F:\MyCode\WLib\Realese\WLib.dll
-F:\MyCode\WLib\Realese\WLib.pdb
-F:\MyCode\WLib\WLib\obj\Debug\WLib.csproj.CoreCompileInputs.cache
-F:\MyCode\WLib\WLib\obj\Debug\WLib.csproj.CopyComplete
-F:\MyCode\WLib\WLib\obj\Debug\WLib.dll
-F:\MyCode\WLib\WLib\obj\Debug\WLib.pdb
-F:\MyCode\WLib\WLib\obj\Debug\WLib.csprojAssemblyReference.cache
