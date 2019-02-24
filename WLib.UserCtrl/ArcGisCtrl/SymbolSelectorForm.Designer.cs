@@ -50,7 +50,7 @@
             this.ptbPreview = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.contextMenuStripMoreSymbol = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cMenuStripMoreSymbol = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.axSymbologyControl1)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -83,7 +83,7 @@
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(318, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(137, 462);
             this.panel1.TabIndex = 2;
@@ -92,7 +92,7 @@
             // 
             this.btnMoreSymbols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMoreSymbols.Location = new System.Drawing.Point(52, 346);
-            this.btnMoreSymbols.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnMoreSymbols.Margin = new System.Windows.Forms.Padding(2);
             this.btnMoreSymbols.Name = "btnMoreSymbols";
             this.btnMoreSymbols.Size = new System.Drawing.Size(76, 30);
             this.btnMoreSymbols.TabIndex = 1;
@@ -103,26 +103,25 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(52, 415);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(76, 30);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "取消(&X)";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Location = new System.Drawing.Point(52, 381);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(2);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(76, 30);
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "确定(&O)";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // groupBox2
             // 
@@ -137,9 +136,9 @@
             this.groupBox2.Controls.Add(this.lblColor);
             this.groupBox2.Controls.Add(this.lblOutlineColor);
             this.groupBox2.Location = new System.Drawing.Point(12, 138);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox2.Size = new System.Drawing.Size(116, 200);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
@@ -148,7 +147,7 @@
             // btnOutlineColor
             // 
             this.btnOutlineColor.Location = new System.Drawing.Point(60, 58);
-            this.btnOutlineColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOutlineColor.Margin = new System.Windows.Forms.Padding(2);
             this.btnOutlineColor.Name = "btnOutlineColor";
             this.btnOutlineColor.Size = new System.Drawing.Size(51, 26);
             this.btnOutlineColor.TabIndex = 5;
@@ -158,7 +157,7 @@
             // btnColor
             // 
             this.btnColor.Location = new System.Drawing.Point(60, 24);
-            this.btnColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnColor.Margin = new System.Windows.Forms.Padding(2);
             this.btnColor.Name = "btnColor";
             this.btnColor.Size = new System.Drawing.Size(51, 26);
             this.btnColor.TabIndex = 5;
@@ -264,9 +263,9 @@
             // 
             this.groupBox1.Controls.Add(this.ptbPreview);
             this.groupBox1.Location = new System.Drawing.Point(12, 8);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(116, 125);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
@@ -275,7 +274,7 @@
             // ptbPreview
             // 
             this.ptbPreview.Location = new System.Drawing.Point(4, 19);
-            this.ptbPreview.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ptbPreview.Margin = new System.Windows.Forms.Padding(2);
             this.ptbPreview.Name = "ptbPreview";
             this.ptbPreview.Size = new System.Drawing.Size(104, 93);
             this.ptbPreview.TabIndex = 0;
@@ -287,18 +286,20 @@
             // 
             // contextMenuStripMoreSymbol
             // 
-            this.contextMenuStripMoreSymbol.Name = "contextMenuStripMoreSymbol";
-            this.contextMenuStripMoreSymbol.Size = new System.Drawing.Size(61, 4);
-            this.contextMenuStripMoreSymbol.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripMoreSymbol_ItemClicked);
+            this.cMenuStripMoreSymbol.Name = "contextMenuStripMoreSymbol";
+            this.cMenuStripMoreSymbol.Size = new System.Drawing.Size(61, 4);
+            this.cMenuStripMoreSymbol.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripMoreSymbol_ItemClicked);
             // 
             // SymbolSelectorForm
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(455, 462);
             this.Controls.Add(this.axSymbologyControl1);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SymbolSelectorForm";
             this.Text = "符号选择器";
             this.Load += new System.EventHandler(this.SymbolSelectorForm_Load);
@@ -337,6 +338,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOutlineColor;
         private System.Windows.Forms.Button btnColor;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripMoreSymbol;
+        private System.Windows.Forms.ContextMenuStrip cMenuStripMoreSymbol;
     }
 }

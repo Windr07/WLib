@@ -237,7 +237,7 @@ namespace WLib.ArcGis.GeoDb.Fields
 
         #region 创建字段
         /// <summary>
-        /// 创建包含ObjectID和Shape字段的字段集（ObjectID会在不同数据源中自动转换为FID或OID）
+        /// 创建包含ObjectID和Shape字段的字段集（ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID）
         /// </summary>
         /// <param name="geometryType">几何类型</param>
         /// <param name="spatialRef">坐标系（若Shape字段所在要素类在工作空间中则此值不可为null，若位于要素数据集则应设置为null</param>
@@ -251,7 +251,7 @@ namespace WLib.ArcGis.GeoDb.Fields
             return fields;
         }
         /// <summary>
-        /// 创建包含ObjectID和Shape字段的字段集（ObjectID会在不同数据源中自动转换为FID或OID），并且加入其他字段（可空）
+        /// 创建包含ObjectID和Shape字段的字段集（ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID），并且加入其他字段（可空）
         /// </summary>
         /// <param name="geometryType">几何类型</param>
         /// <param name="spatialRef">坐标系（若Shape字段所在要素类在工作空间中则此值不可为null，若位于要素数据集则应设置为null</param>
@@ -266,18 +266,20 @@ namespace WLib.ArcGis.GeoDb.Fields
         }
         /// <summary>
         /// 创建ObjectID字段
-        /// （ObjectID会在不同数据源中自动转换为FID或OID，关于OID、FID、OBJECTID参考 http://blog.csdn.net/yh0503/article/details/27862401）
+        /// （ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID，关于OID、FID、OBJECTID参考
+        ///  http://support.esrichina.com.cn/2009/1229/595.html 或
+        ///  http://blog.csdn.net/yh0503/article/details/27862401）
         /// </summary>
         /// <returns></returns>
         public static IField CreateOidField()
         {
             //创建OBJECTID字段
-            IField fieldOID = new FieldClass();
-            IFieldEdit fieldEditOID = fieldOID as IFieldEdit;
+            IField fieldOid = new FieldClass();
+            IFieldEdit fieldEditOID = (IFieldEdit)fieldOid;
             fieldEditOID.Name_2 = "OBJECTID";   //OBJECTID字段名在不同数据源会自动转换为FID或OID
             fieldEditOID.AliasName_2 = "OBJECTID";
             fieldEditOID.Type_2 = esriFieldType.esriFieldTypeOID;
-            return fieldOID;
+            return fieldOid;
         }
         /// <summary>
         /// 创建Shape字段
@@ -705,7 +707,7 @@ namespace WLib.ArcGis.GeoDb.Fields
         #endregion
 
 
-        #region 字段类型和中英文描述
+        #region 字段类型、中英文描述、.NET类型
         /// <summary>
         /// 字段类型(esriFieldType)和对应的中文文字描述的键值对
         /// </summary>
@@ -755,6 +757,41 @@ namespace WLib.ArcGis.GeoDb.Fields
         {
             return FieldTypeAndCnDesriptions.FirstOrDefault(v =>
                 v.Value.Contains(fieldTypeDescriptionCn) || fieldTypeDescriptionCn.Contains(v.Value)).Key;
+        }
+        /// <summary>
+        /// 将esriFieldType类型转成.NET的基本类型（数值类型、字符串、日期）
+        /// </summary>
+        /// <returns></returns>
+        public static Type FieldTypeToDoNetType(esriFieldType eFieldType)
+        {
+            Type type;
+            switch (eFieldType)
+            {
+                case esriFieldType.esriFieldTypeDouble:
+                    type = typeof(double);
+                    break;
+                case esriFieldType.esriFieldTypeSingle:
+                    type = typeof(float);
+                    break;
+                case esriFieldType.esriFieldTypeInteger:
+                    type = typeof(int);
+                    break;
+                case esriFieldType.esriFieldTypeSmallInteger:
+                    type = typeof(short);
+                    break;
+                case esriFieldType.esriFieldTypeOID:
+                    type = typeof(int);
+                    break;
+                case esriFieldType.esriFieldTypeDate:
+                    type = typeof(DateTime);
+                    break;
+                case esriFieldType.esriFieldTypeString:
+                    type = typeof(string);
+                    break;
+                default:
+                    throw new Exception($"无法将类型{eFieldType.GetType()}转换为.NET基本类型（数值类型、字符串、日期），请单独处理类型{eFieldType.GetType()}！");
+            }
+            return type;
         }
         #endregion
 

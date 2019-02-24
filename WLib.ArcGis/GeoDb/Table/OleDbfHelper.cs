@@ -43,13 +43,13 @@ namespace WLib.ArcGis.GeoDb.Table
             get => _filePath;
             set
             {
-                string name = System.IO.Path.GetFileNameWithoutExtension(value);
+                var name = System.IO.Path.GetFileNameWithoutExtension(value);
                 if (name != null && name.Length > 8)
                     throw new Exception("通过OleDb连接dbf时，限定dbf文件名称长度不能超过8个字符，请更改文件名称或者使用其他方式连接dbf文件");
 
                 _filePath = value;
                 _fileDirectory = System.IO.Path.GetDirectoryName(_filePath);
-                _connstr = "Provider=MICROSOFT.JET.OLEDB.4.0;Data Source=" + _fileDirectory + ";Extended Properties=dBase IV;";
+                _connstr = $"Provider=MICROSOFT.JET.OLEDB.4.0;Data Source={_fileDirectory};Extended Properties=dBase IV;";
             }
         }
         /// <summary>

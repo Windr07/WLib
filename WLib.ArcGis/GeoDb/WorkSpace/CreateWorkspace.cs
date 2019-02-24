@@ -27,7 +27,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         public static IWorkspace NewWorkspace(IWorkspaceFactory workspaceFactory, string workspacePath, string strName)
         {
             IWorkspaceName workspaceName = workspaceFactory.Create(workspacePath, strName, null, 0);
-            IName name = workspaceName as IName;
+            IName name = (IName)workspaceName;
             IWorkspace workspace = (IWorkspace)name.Open();
             Marshal.ReleaseComObject(workspaceFactory);
             return workspace;

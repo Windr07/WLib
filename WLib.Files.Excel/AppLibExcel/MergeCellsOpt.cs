@@ -1,4 +1,11 @@
-﻿namespace WLib.Files.Excel.AppLibExcel
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+namespace WLib.Files.Excel.AppLibExcel
 {
     /// <summary>
     /// 合并单元格操作

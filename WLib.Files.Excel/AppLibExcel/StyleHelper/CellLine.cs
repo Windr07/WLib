@@ -1,4 +1,11 @@
-﻿namespace WLib.Files.Excel.AppLibExcel.StyleHelper
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+namespace WLib.Files.Excel.AppLibExcel.StyleHelper
 {
     /// <summary>
     /// 单元格是否显示边线，默认不显示

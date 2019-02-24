@@ -505,9 +505,9 @@ namespace WLib.ArcGis.GeoDb.Table
 
 
         #region 数据源
-        //当表格是从地图文档中获取（(map as ITableCollection).Table[0]）
-        //且表格没有正确关联数据源时，下列三个方法会报错，暂未找到合适的接口处理此类情况，
-        //表格没有正确关联数据源时应直接移除这些表格(ITableCollection.RemoveAllTables或RemoveTable)，然后再添加
+        //当表格是从地图文档中获取（var table = (map as ITableCollection).Table[0]）
+        //且表格没有正确关联数据源时，下列三个方法获取的数据源(路径)为null，暂未找到合适的接口处理此类情况，目前解决方法是：
+        //表格没有正确关联数据源时应直接从地图中移除这些表格(ITableCollection.RemoveAllTables或RemoveTable)，然后再添加
 
         /// <summary>
         /// 获取表格所属的工作空间（IWorkspace）
@@ -534,8 +534,8 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <returns></returns>
         public static string GetSourcePath(this ITable table)
         {
-            IDataset dataset = (IDataset)table;
-            return dataset.Workspace.PathName + "\\" + dataset.Name;
+            IDataset dataset = table as IDataset;
+            return dataset?.Workspace.PathName + "\\" + dataset?.Name;
         }
         #endregion
 
@@ -548,7 +548,7 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="newAliasName">新表格别名</param>
         public static void RenameTableAliasName(this ITable table, string newAliasName)
         {
-            IClassSchemaEdit2 classSchemaEdit2 = table as IClassSchemaEdit2;
+            IClassSchemaEdit2 classSchemaEdit2 = (IClassSchemaEdit2)table;
             classSchemaEdit2.AlterAliasName(newAliasName);
         }
         /// <summary>
@@ -563,7 +563,7 @@ namespace WLib.ArcGis.GeoDb.Table
         {
             IDataset ds = table as IDataset;
             bool isRename = false;
-            string oldAliasName = (table as IObjectClass).AliasName, oldName = ds.Name;
+            string oldAliasName = ((IObjectClass)table).AliasName, oldName = ds.Name;
             try
             {
                 if (!string.IsNullOrEmpty(newAliasName))

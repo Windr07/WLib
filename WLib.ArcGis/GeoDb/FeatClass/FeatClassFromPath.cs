@@ -27,36 +27,39 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// ⑥gdb目录[\DatasetName]\FeatureClassName，返回gdb数据库中指定名称或别名的要素类；
         /// ⑦sde或oleDb或sql连接字符串，返回数据库中的第一个要素类；
         /// </summary>
-        /// <param name="path">路径或连接字符串</param>
+        /// <param name="strConnOrPath">路径或连接字符串</param>
         /// <returns></returns>
-        public static IFeatureClass FromPath(string path)
+        public static IFeatureClass FromPath(string strConnOrPath)
         {
-            if (System.IO.Directory.Exists(path))
+            if (System.IO.Directory.Exists(strConnOrPath))
             {
-                return path.EndsWith(".gdb") ? FirstFromGdb(path) : FirstFromShpDir(path);
+                return strConnOrPath.EndsWith(".gdb") ? FirstFromGdb(strConnOrPath) : FirstFromShpDir(strConnOrPath);
             }
-            else if (System.IO.File.Exists(path))
+            else if (System.IO.File.Exists(strConnOrPath))
             {
-                var extension = System.IO.Path.GetExtension(path);
+                var extension = System.IO.Path.GetExtension(strConnOrPath);
                 if (extension == ".shp")
-                    return FromShpFile(path);
+                    return FromShpFile(strConnOrPath);
                 else if (extension == ".mdb")
-                    return FirstFromMdb(path);
+                    return FirstFromMdb(strConnOrPath);
             }
             else
             {
                 string workspacePath = null;
-                if (path.Contains(".gdb"))
-                    workspacePath = path.Substring(0, path.IndexOf(".gdb", StringComparison.Ordinal));
-                else if (path.Contains(".mdb"))
-                    workspacePath = path.Substring(0, path.IndexOf(".mdb", StringComparison.Ordinal));
-                else if (GetWorkspace.IsConnectionString(path))
-                    workspacePath = path;
+                if (strConnOrPath.Contains(".gdb"))
+                    workspacePath = strConnOrPath.Substring(0, strConnOrPath.LastIndexOf(".gdb", StringComparison.Ordinal));
+                else if (strConnOrPath.Contains(".mdb"))
+                    workspacePath = strConnOrPath.Substring(0, strConnOrPath.LastIndexOf(".mdb", StringComparison.Ordinal));
+                else if (GetWorkspace.IsConnectionString(strConnOrPath))
+                    workspacePath = strConnOrPath;
 
-                if (workspacePath != null)
+                if (!string.IsNullOrWhiteSpace(workspacePath))
                 {
                     var workspace = GetWorkspace.GetWorkSpace(workspacePath);
-                    var subPath = path.Replace(workspacePath, "");
+                    if (workspace == null)
+                        throw new Exception($"无法按照指定路径或连接字符串“{workspacePath}”打开工作空间！");
+
+                    var subPath = strConnOrPath.Replace(workspacePath, "");
                     if (!subPath.Contains("\\"))
                         workspace.GetFirstFeatureClass();
                     var names = subPath.Split('\\');

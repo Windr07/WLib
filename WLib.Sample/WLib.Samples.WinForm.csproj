@@ -112,9 +112,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ClearCurrentTool.cs" />
-    <Compile Include="Model\FeatureAttributeClass.cs" />
-    <Compile Include="Model\FeatureClassInfo.cs" />
+    <Compile Include="ClearCurrentTool.cs" />
     <Compile Include="View\AddmdbForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,7 +157,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\UniqueValueClass.cs" />
     <EmbeddedResource Include="View\AddmdbForm.resx">
       <DependentUpon>AddmdbForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -254,6 +251,7 @@
     <None Include="Resources\文本.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Model\" />
     <Folder Include="Utility\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

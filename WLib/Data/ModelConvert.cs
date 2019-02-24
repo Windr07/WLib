@@ -87,7 +87,7 @@ namespace WLib.Data
         {
             return table == null
                 ? new List<T>()
-                : ConvertToObject<T>(table.CreateDataReader() as IDataReader);
+                : ConvertToObject<T>(table.CreateDataReader());
         }
         /// <summary>
         /// 将数据转换为指定类型的对象，注意当object可以为DBNull.Value或null时，T应为可空类型

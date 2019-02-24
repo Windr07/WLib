@@ -26,7 +26,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             var workspace = GetWorkspace.GetWorkSpace(strConnOrPath);
 
             //不放到DataSet的要素数据
-            var dataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureClass);
+            var dataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
             IFeatureClass featureClass;
             while ((featureClass = dataset.Next() as IFeatureClass) != null)
             {
@@ -34,7 +34,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
 
             //放到Dataset里的要素
-            var enumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureDataset);
+            var enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
             IFeatureDataset featureDataset;
             while ((featureDataset = enumDataset.Next() as IFeatureDataset) != null)//遍历数据集
             {

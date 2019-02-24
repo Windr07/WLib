@@ -53,5 +53,24 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
             return result;
         }
+
+        /// <summary>  
+        /// 获取要素数据集中所有的要素类的名称和别名的键值对
+        /// </summary>
+        /// <param name="featureDataset">要素数据集</param>
+        /// <returns>返回数据集中所有包含的要素类的名称和别名键值对</returns>  
+        public static Dictionary<string, string> GetAllFeatureClassNames(this IFeatureDataset featureDataset)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            IFeatureClassContainer featureClassContainer = (IFeatureClassContainer)featureDataset;
+            IEnumFeatureClass enumFeatureClass = featureClassContainer.Classes;
+            IFeatureClass featureClass = enumFeatureClass.Next();
+            while (featureClass != null)
+            {
+                result.Add(((IDataset)featureClass).Name, featureClass.AliasName);
+                featureClass = enumFeatureClass.Next();
+            }
+            return result;
+        }
     }
 }

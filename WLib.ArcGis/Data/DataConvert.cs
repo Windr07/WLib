@@ -29,7 +29,7 @@ namespace WLib.ArcGis.Data
         /// <param name="fieldNames">指定将ITable哪些字段填充到DataTable中，值为null时获取ITable的全部字段</param>
         /// <param name="ignoredUnExistField">指定在ITable找不到的字段是否跳过，找不到时，True为跳过，False将抛出异常</param>
         /// <returns></returns>
-        public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, List<string> fieldNames = null, bool ignoredUnExistField = true)
+        public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, IEnumerable<string> fieldNames = null, bool ignoredUnExistField = true)
         {
             var dataTable = new DataTable(tableName);
             if (fieldNames == null)
@@ -60,7 +60,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="iTable">ArcGIS ITable对象</param>
         /// <param name="tableName">DataTable表名</param>
-        /// <param name="nameToAliasNameDict">字段名及别名（作为DataTable列标题）的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
+        /// <param name="nameToAliasNameDict">字段名(作为DataTable列的columnName)及别名(作为DataTable列的Caption)的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
         /// <param name="ignoredUnExistField">指定在ITable找不到的字段是否跳过，找不到时，True为跳过，False将抛出异常</param>
         /// <returns></returns>
         public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, Dictionary<string, string> nameToAliasNameDict, bool ignoredUnExistField = true)
@@ -90,16 +90,19 @@ namespace WLib.ArcGis.Data
 
 
         #region ITable转DataTable
+
         /// <summary>
         /// 将ITable数据转成DataTable
         /// </summary>
         /// <param name="iTable"></param>
+        /// <param name="tableName"></param>
         /// <param name="whereClause">查询条件，根据此条件从ITable筛选数据到DataTable</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this ITable iTable, string whereClause = null)
+        public static DataTable CreateDataTable(this ITable iTable, string tableName = null, string whereClause = null)
         {
-            var dataTable = CreateDataTableScheme(iTable, (iTable as IDataset)?.Name);
-            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            tableName = tableName ?? (iTable as IDataset)?.Name;
+            var dataTable = CreateDataTableScheme(iTable, tableName);
+            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, true);
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
@@ -108,30 +111,36 @@ namespace WLib.ArcGis.Data
             System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
             return dataTable;
         }
+
         /// <summary>
         /// 将ITable数据转成DataTable
         /// </summary>
         /// <param name="iTable">ArcGIS ITable对象</param>
         /// <param name="fieldNames">指定DataTable包含的字段</param>
+        /// <param name="tableName"></param>
         /// <param name="whereClause">查询条件，根据此条件从ITable筛选数据到DataTable</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this ITable iTable, List<string> fieldNames, string whereClause = null)
+        public static DataTable CreateDataTable(this ITable iTable, IEnumerable<string> fieldNames, string tableName = null, string whereClause = null)
         {
+            tableName = tableName ?? (iTable as IDataset)?.Name;
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            fieldNames.ForEach(v => dict.Add(v, v));
-            return CreateDataTable(iTable, dict, whereClause);
+            fieldNames.ToList().ForEach(v => dict.Add(v, v));
+            return CreateDataTable(iTable, dict, tableName, whereClause);
         }
+
         /// <summary>
         /// 将ITable数据转成DataTable
         /// </summary>
         /// <param name="iTable">ArcGIS ITable对象</param>
-        /// <param name="nameToAliasNamesDict">指定DataTable包含的字段（名称和别名键值对）</param>
+        /// <param name="nameToAliasNamesDict">字段名(作为DataTable列的columnName)及别名(作为DataTable列的Caption)的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
+        /// <param name="tableName"></param>
         /// <param name="whereClause">查询条件，根据此条件从ITable筛选数据到DataTable</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this ITable iTable, Dictionary<string, string> nameToAliasNamesDict, string whereClause = null)
+        public static DataTable CreateDataTable(this ITable iTable, Dictionary<string, string> nameToAliasNamesDict, string tableName = null, string whereClause = null)
         {
+            tableName = tableName ?? (iTable as IDataset)?.Name;
             var dataTable = CreateDataTableScheme(iTable, (iTable as IDataset)?.Name, nameToAliasNamesDict);
-            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, true);
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
@@ -152,7 +161,7 @@ namespace WLib.ArcGis.Data
         /// <param name="fieldNames">指定字段列表</param>
         /// <param name="whereClause"></param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this IFeatureClass featureClass, List<string> fieldNames, string whereClause = null)
+        public static DataTable CreateDataTable(this IFeatureClass featureClass, IEnumerable<string> fieldNames, string whereClause = null)
         {
             ITable iTable = (ITable)featureClass;
             string geoTypeString = GetGeoTypeStr(featureClass.ShapeType);
@@ -162,10 +171,10 @@ namespace WLib.ArcGis.Data
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
-                object[] values = new object[fieldNames.Count];
-                for (int i = 0; i < fieldNames.Count; i++)
+                object[] values = new object[fieldNames.Count()];
+                for (int i = 0; i < fieldNames.Count(); i++)
                 {
-                    int idex = feature.Fields.FindField(fieldNames[i]);
+                    int idex = feature.Fields.FindField(fieldNames.ElementAt(i));
                     if (idex == -1)
                         continue;
                     IField field = feature.Fields.get_Field(idex);

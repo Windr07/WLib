@@ -17,16 +17,16 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
 {
     /// <summary>
     /// 提供根据路径或连接字符串，获取工作空间的方法
-    /// （sde的连接可参考http://blog.csdn.net/mengdong_zy/article/details/8961390）
+    /// （sde的连接可参考 http://blog.csdn.net/mengdong_zy/article/details/8961390）
+    /// （参考：http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase/IWorkspaceFactory.htm）
+    /// （参考：http://blog.csdn.net/guangliang1102/article/details/51154893）
     /// </summary>
-    /// <see cref="http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeoDatabase/IWorkspaceFactory.htm"/>
-    /// <seealso cref=" http://blog.csdn.net/guangliang1102/article/details/51154893"/>
     public class GetWorkspace
     {
         /// <summary>
-        /// 判断指定的路径是否为工作空间路径（任意目录、mdb文件、xls或xlsx文件均认为是工作空间）
+        /// 判断指定的路径是否为工作空间路径（任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间）
         /// </summary>
-        /// <param name="path">工作空间路径，任意目录、mdb文件、xls或xlsx文件均认为是工作空间</param>
+        /// <param name="path">工作空间路径，任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间</param>
         /// <returns></returns>
         public static bool IsWorkspacePath(string path)
         {
@@ -51,7 +51,6 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             var strConnectArray = str.Split('=', ';');
             return strConnectArray.Length > 0 && strConnectArray.Length % 2 == 0;
         }
-
         /// <summary>
         /// 根据路径或连接参数，判断工作空间类型，只判断shp/gdb/mdb/sde/xls(xlsx)
         /// </summary>
@@ -114,7 +113,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         public static IWorkspace GetWorkSpace(string strConnOrPath, EWorkspaceType eType = EWorkspaceType.Default)
         {
             IWorkspace workspace = null;
-            if (IsWorkspacePath(strConnOrPath))
+            if (IsWorkspacePath(strConnOrPath) && !System.IO.Path.IsPathRooted(strConnOrPath))
                 strConnOrPath = AppDomain.CurrentDomain.BaseDirectory + strConnOrPath;
 
             if (System.IO.Directory.Exists(strConnOrPath))//当参数是文件夹路径时
@@ -170,7 +169,8 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开Access数据库：" + mdbPath + "出错；" + ex.Message);
+
+                throw new Exception($"打开Access数据库：{mdbPath}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -189,7 +189,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开GDB数据库：" + gdbPath + "出错；" + ex.Message);
+                throw new Exception($"打开GDB数据库：{gdbPath}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -208,7 +208,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开Shapefile工作空间：" + shpDir + "出错；" + ex.Message);
+                throw new Exception($"打开Shapefile工作空间：{shpDir}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -230,7 +230,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开Shapefile工作空间：" + strSdeConn + "出错；" + ex.Message);
+                throw new Exception($"打开Shapefile工作空间：{strSdeConn}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -250,7 +250,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开OleDb工作空间：" + strOleDbConn + "出错；" + ex.Message);
+                throw new Exception($"打开OleDb工作空间：{strOleDbConn}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -272,7 +272,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开OleDb工作空间：" + rasterDir + "出错；" + ex.Message);
+                throw new Exception($"打开OleDb工作空间：{rasterDir}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -291,7 +291,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开Excel工作空间：" + excelPath + "出错；" + ex.Message);
+                throw new Exception($"打开Excel工作空间：{excelPath}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -310,7 +310,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开txt工作空间：" + txtDir + "出错；" + ex.Message);
+                throw new Exception($"打开txt工作空间：{txtDir}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -329,7 +329,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开CAD工作空间：" + cadDir + "出错；" + ex.Message);
+                throw new Exception($"打开CAD工作空间：{cadDir}出错；{ex.Message}");
             }
         }
         /// <summary>
@@ -349,7 +349,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("打开Sql工作空间：" + strSqlConn + "出错；" + ex.Message);
+                throw new Exception($"打开Sql工作空间：{strSqlConn}出错；{ex.Message}");
             }
         }
         #endregion

@@ -23,6 +23,18 @@ namespace WLib.ArcGis.GeoDb.FeatClass
     public static class FeatClassToPath
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strConnOrPath"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static IFeatureClass CreateToPath(string strConnOrPath, IFields fields)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
         ///  新建一个Shp文件，并返回shp文件存储的要素类（注意目录中不能存在同名文件）
         /// </summary>
         /// <param name="shpPath">新建的Shp文件路径（注意目录中不能存在同名文件）</param>
@@ -35,7 +47,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             return CreateToDb(GetDirectoryName(shpPath), GetFileNameWithoutExtension(shpPath), null, geoType, spatialRef, otherFields);
         }
         /// <summary>
-        /// 新建一个Shp文件，并返回IFeatureClass（注意目录中不能存在同名文件）
+        /// 新建一个Shp文件，并返回shp文件存储的要素类（注意目录中不能存在同名文件）
         /// </summary>
         /// <param name="shpPath">新建的Shp文件路径（注意目录中不能存在同名文件）</param>
         /// <param name="fields">字段集合（应包含OID和Shape字段）</param>
@@ -56,7 +68,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="CoordinateSystem.CreateSpatialReference(int, ESrType)"/>及该方法的重载</param>
         /// <param name="otherFields">除了OID和SHAPE字段的其他字段</param>
         /// <returns></returns>
-        public static IFeatureClass CreateToDb(string geoDbPath, string datasetName, string className, esriGeometryType geoType, ISpatialReference spatialRef, IField[] otherFields = null)
+        public static IFeatureClass CreateToDb(string geoDbPath, string datasetName, string className, esriGeometryType geoType,
+            ISpatialReference spatialRef, IField[] otherFields = null)
         {
             var fields = FieldOpt.CreateFields(geoType, spatialRef, otherFields);
             var workspace = GetWorkspace.GetWorkSpace(geoDbPath);

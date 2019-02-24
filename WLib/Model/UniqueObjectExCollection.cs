@@ -14,16 +14,16 @@ namespace WLib.Model
     /// <summary>
     /// 唯一值对象集合，提供排序方法
     /// </summary>
-    public class UniqueObjectExCollection : IEnumerable
+    public class UniqueObjectExCollection : IEnumerable<UniqueObjectEx>
     {
         /// <summary>
         /// 列表名
         /// </summary>
-        public string ListName;
+        public string ListName { get; set; }
         /// <summary>
         /// 唯一值对象集合
         /// </summary>
-        public List<UniqueObjectEx> UniqueObjectExs;
+        protected List<UniqueObjectEx> UniqueObjectExs;
 
         /// <summary>
         /// 唯一值对象列表，提供排序方法
@@ -98,6 +98,17 @@ namespace WLib.Model
         public void ClearComment()
         {
             UniqueObjectExs.ForEach(v => v.Comment = null);
+        }
+        /// <summary>
+        /// 实现IEnumerable方法，允许foreach迭代和IEnumerator泛型的扩展方法
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<UniqueObjectEx> GetEnumerator()
+        {
+            for (int i = 0; i < UniqueObjectExs.Count; i++)
+            {
+                yield return UniqueObjectExs[i];
+            }
         }
         /// <summary>
         /// 实现IEnumerable方法，允许foreach迭代

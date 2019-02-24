@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using WLib.Progress.ProEventArgs;
 
 namespace WLib.Progress
 {
@@ -182,10 +183,9 @@ namespace WLib.Progress
 
         protected virtual void OptForm_Closing(object sender, FormClosingEventArgs e)
         {
-            Form optForm = sender as Form;
-            if (RunningOpt != null && optForm != null && !optForm.IsDisposed)
+            if (RunningOpt != null && sender is Form optForm && !optForm.IsDisposed)
             {
-                if (MessageBox.Show("确定要停止并关闭" + RunningOpt.Name + "的操作吗？", "停止",
+                if (MessageBox.Show($"确定要停止并关闭{RunningOpt.Name}的操作吗？", "停止",
                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     RunningOpt.OperationStoped += (sender2, e2) =>
@@ -213,7 +213,7 @@ namespace WLib.Progress
             ChangeViews(true);
         }
 
-        protected virtual void ProgressOperation_MessageChanged(object sender, Progress.MsgChangedEventArgs e)
+        protected virtual void ProgressOperation_MessageChanged(object sender, MsgChangedEventArgs e)
         {
             OptForm.Invoke(new Action(() =>
             {
@@ -222,7 +222,7 @@ namespace WLib.Progress
             }));
         }
 
-        protected virtual void ProgressOperation_OperationError(object sender, Progress.OptErrorEventArgs e)
+        protected virtual void ProgressOperation_OperationError(object sender, OptErrorEventArgs e)
         {
             OptForm.Invoke(new Action(() =>
             {
@@ -242,7 +242,7 @@ namespace WLib.Progress
             }));
         }
 
-        protected virtual void ProgressOperation_ProgressChanged(object sender, Progress.ProgressChangedEventArgs e)
+        protected virtual void ProgressOperation_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             OptForm.Invoke(new Action(() =>
             {
@@ -287,7 +287,7 @@ namespace WLib.Progress
             }));
         }
 
-        protected virtual void ProgressGroupMessage_MessageChanged(object sender, Progress.GroupMsgChangedEventArgs e)
+        protected virtual void ProgressGroupMessage_MessageChanged(object sender, GroupMsgChangedEventArgs e)
         {
             //此处暂无处理代码，可在子类中实现处理
         }

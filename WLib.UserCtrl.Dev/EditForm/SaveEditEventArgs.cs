@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/2
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 
 namespace WLib.UserCtrls.Dev.EditForm
@@ -11,7 +18,7 @@ namespace WLib.UserCtrls.Dev.EditForm
         /// <summary>
         /// 一条记录中被编辑的字段值
         /// </summary>
-        public List<EditItem> NewEditItemList { get; set; }
+        public List<EditItem> NewEditItemList;
         /// <summary>
         /// 为YYGISLib.UserDevControls.EditForm的SaveEditEvent事件提供数据（一条记录中被编辑的字段值）
         /// </summary>
@@ -21,5 +28,4 @@ namespace WLib.UserCtrls.Dev.EditForm
             this.NewEditItemList = item;
         }
     }
-
 }

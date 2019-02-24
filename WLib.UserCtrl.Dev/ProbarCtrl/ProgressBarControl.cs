@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2018
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
 using System.Windows.Forms;
 using DevExpress.XtraEditors.Controls;
 

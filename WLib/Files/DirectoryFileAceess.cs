@@ -24,11 +24,11 @@ namespace WLib.Files
         /// <returns></returns>
         private static List<string> GetDirectories(string dirPath)
         {
-            List<string> tmpDirs = Directory.GetDirectories(dirPath).ToList();
-            List<string> allDirs = new List<string>();
+            var tmpDirs = Directory.GetDirectories(dirPath).ToList();
+            var allDirs = new List<string>();
             if (tmpDirs.Count > 0)
             {
-                foreach (string path in tmpDirs)
+                foreach (var path in tmpDirs)
                 {
                     allDirs.Add(path);
                     allDirs.AddRange(GetDirectories(path)); //递归
@@ -44,8 +44,8 @@ namespace WLib.Files
         /// <returns></returns>
         private static List<string> GetAllFilePaths(string rootPath)
         {
-            List<string> dirs = new List<string>();
-            List<string> list = new List<string>();
+            var dirs = new List<string>();
+            var list = new List<string>();
 
             dirs.Add(rootPath);
             dirs.AddRange(GetDirectories(rootPath));
@@ -65,16 +65,15 @@ namespace WLib.Files
         /// <returns></returns>
         public static List<string> GetAllFilePaths(string rootPath, string[] extensions)
         {
-            List<string> paths = GetAllFilePaths(rootPath);
-            List<string> resultPaths = new List<string>();
+            var paths = GetAllFilePaths(rootPath);
+            var resultPaths = new List<string>();
             foreach (var path in paths)
             {
-                string fileName = new FileInfo(path).Name;
-                bool isNotSpecialFile = !fileName.Substring(0, 2).Equals("~$"); //文件不应该是以"~$"开头的文件
+                var fileName = new FileInfo(path).Name;
+                var isNotSpecialFile = !fileName.Substring(0, 2).Equals("~$"); //文件不应该是以"~$"开头的文件
 
                 //若extensions为空，或者文件扩展名符合要求，返回True
-                bool isNecessaryFile = extensions == null ?
-                    true : extensions.Any(v => System.IO.Path.GetExtension(path).ToLower().Equals(v));
+                var isNecessaryFile = extensions?.Any(v => Path.GetExtension(path).ToLower().Equals(v)) ?? true;
 
                 if (isNotSpecialFile && isNecessaryFile)
                     resultPaths.Add(path);
@@ -91,20 +90,19 @@ namespace WLib.Files
         /// <returns></returns>
         public static Dictionary<string, string> GetFileNameToPathDict(string rootPath, string[] extensions, bool ignoreSameName = false)
         {
-            Dictionary<string, string> fileNameToPathDict = new Dictionary<string, string>();
-            List<string> paths = GetAllFilePaths(rootPath);
+            var fileNameToPathDict = new Dictionary<string, string>();
+            var paths = GetAllFilePaths(rootPath);
             foreach (var path in paths)
             {
-                string fileName = new FileInfo(path).Name;
-                bool isNotSpecialFile = !fileName.Substring(0, 2).Equals("~$"); //文件不应该是以"~$"开头的文件
+                var fileName = new FileInfo(path).Name;
+                var isNotSpecialFile = !fileName.Substring(0, 2).Equals("~$"); //文件不应该是以"~$"开头的文件
 
                 //若extensions为空，或者文件扩展名符合要求，返回True
-                bool isNecessaryFile = extensions == null ?
-                    true : extensions.Any(v => System.IO.Path.GetExtension(path).ToLower().Equals(v));
+                var isNecessaryFile = extensions?.Any(v => Path.GetExtension(path).ToLower().Equals(v)) ?? true;
 
                 if (isNotSpecialFile && isNecessaryFile)
                 {
-                    string preFileName = fileNameToPathDict.Keys.FirstOrDefault(v => v.Equals(fileName));
+                    var preFileName = fileNameToPathDict.Keys.FirstOrDefault(v => v.Equals(fileName));
                     if (preFileName != null)
                     {
                         if (ignoreSameName) //忽略同名文件
@@ -115,7 +113,6 @@ namespace WLib.Files
                     fileNameToPathDict.Add(fileName, path);
                 }
             }
-
             return fileNameToPathDict;
         }
 

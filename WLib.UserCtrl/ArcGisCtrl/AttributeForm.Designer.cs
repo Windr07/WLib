@@ -28,24 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AttributeForm));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.cMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.缩放至图斑GToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.查找FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.按属性查询QToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.复制值CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.复制整行RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sBtnClose = new System.Windows.Forms.Button();
             this.lblTips = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.txtSql = new System.Windows.Forms.TextBox();
+            this.btnQuery = new System.Windows.Forms.Button();
+            this.btnBuildQuery = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.cMenuStrip.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -56,7 +48,6 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ContextMenuStrip = this.cMenuStrip;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
@@ -64,52 +55,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(625, 199);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            // 
-            // cMenuStrip
-            // 
-            this.cMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.缩放至图斑GToolStripMenuItem,
-            this.查找FToolStripMenuItem,
-            this.按属性查询QToolStripMenuItem,
-            this.复制值CToolStripMenuItem,
-            this.复制整行RToolStripMenuItem});
-            this.cMenuStrip.Name = "cMenuStrip";
-            this.cMenuStrip.Size = new System.Drawing.Size(210, 114);
-            // 
-            // 缩放至图斑GToolStripMenuItem
-            // 
-            this.缩放至图斑GToolStripMenuItem.Name = "缩放至图斑GToolStripMenuItem";
-            this.缩放至图斑GToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this.缩放至图斑GToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.缩放至图斑GToolStripMenuItem.Text = "缩放至图斑(&G)";
-            // 
-            // 查找FToolStripMenuItem
-            // 
-            this.查找FToolStripMenuItem.Name = "查找FToolStripMenuItem";
-            this.查找FToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.查找FToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.查找FToolStripMenuItem.Text = "查找(&F)";
-            // 
-            // 按属性查询QToolStripMenuItem
-            // 
-            this.按属性查询QToolStripMenuItem.Name = "按属性查询QToolStripMenuItem";
-            this.按属性查询QToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.按属性查询QToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.按属性查询QToolStripMenuItem.Text = "按属性查询(&Q)";
-            // 
-            // 复制值CToolStripMenuItem
-            // 
-            this.复制值CToolStripMenuItem.Name = "复制值CToolStripMenuItem";
-            this.复制值CToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.复制值CToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.复制值CToolStripMenuItem.Text = "复制值(&C)";
-            // 
-            // 复制整行RToolStripMenuItem
-            // 
-            this.复制整行RToolStripMenuItem.Name = "复制整行RToolStripMenuItem";
-            this.复制整行RToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.复制整行RToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.复制整行RToolStripMenuItem.Text = "复制整行数据(&R)";
             // 
             // sBtnClose
             // 
@@ -131,36 +76,36 @@
             this.lblTips.TabIndex = 0;
             this.lblTips.Text = "共有0条记录";
             // 
-            // textBox1
+            // txtSql
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(133, 6);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(329, 21);
-            this.textBox1.TabIndex = 1;
+            this.txtSql.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSql.Location = new System.Drawing.Point(133, 6);
+            this.txtSql.Margin = new System.Windows.Forms.Padding(3, 6, 3, 6);
+            this.txtSql.Name = "txtSql";
+            this.txtSql.Size = new System.Drawing.Size(329, 21);
+            this.txtSql.TabIndex = 1;
             // 
-            // button1
+            // btnQuery
             // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button1.Location = new System.Drawing.Point(466, 1);
-            this.button1.Margin = new System.Windows.Forms.Padding(1);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(58, 29);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "查询(&A)";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnQuery.Location = new System.Drawing.Point(466, 1);
+            this.btnQuery.Margin = new System.Windows.Forms.Padding(1);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(58, 29);
+            this.btnQuery.TabIndex = 2;
+            this.btnQuery.Text = "查询(&A)";
+            this.btnQuery.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnBuildQuery
             // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button2.Location = new System.Drawing.Point(526, 1);
-            this.button2.Margin = new System.Windows.Forms.Padding(1);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(98, 29);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "构建查询(&Q)";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnBuildQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnBuildQuery.Location = new System.Drawing.Point(526, 1);
+            this.btnBuildQuery.Margin = new System.Windows.Forms.Padding(1);
+            this.btnBuildQuery.Name = "btnBuildQuery";
+            this.btnBuildQuery.Size = new System.Drawing.Size(98, 29);
+            this.btnBuildQuery.TabIndex = 2;
+            this.btnBuildQuery.Text = "构建查询(&Q)";
+            this.btnBuildQuery.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -169,10 +114,10 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.button2, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnBuildQuery, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblTips, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnQuery, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.txtSql, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -216,7 +161,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "属性表";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.cMenuStrip.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -232,16 +176,10 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button sBtnClose;
         private System.Windows.Forms.Label lblTips;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox txtSql;
+        private System.Windows.Forms.Button btnQuery;
+        private System.Windows.Forms.Button btnBuildQuery;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ContextMenuStrip cMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem 缩放至图斑GToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 按属性查询QToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 复制值CToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 复制整行RToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 查找FToolStripMenuItem;
     }
 }

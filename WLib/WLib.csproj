@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Realese\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,6 +53,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="oracle.dataaccess">
+      <HintPath>..\DLL\oracle.dataaccess.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,9 +72,34 @@
     <Compile Include="Data\DataTableOpt.cs" />
     <Compile Include="Data\ModelConvert.cs" />
     <Compile Include="Data\NullableConvert.cs" />
+    <Compile Include="Db\ConnStringHelper.cs" />
+    <Compile Include="Db\DbBase\BeforeExcuteEventArgs.cs" />
+    <Compile Include="Db\DbBase\EDbProviderType.cs" />
+    <Compile Include="Db\DbBase\ProviderFactory.cs" />
+    <Compile Include="Db\DbHelper.cs" />
+    <Compile Include="Db\OracleGis\SdoElemInfoFactory.cs" />
+    <Compile Include="Db\OracleGis\SdoGeomFactory.cs" />
+    <Compile Include="Db\OracleGis\SdoGeomType.cs" />
+    <Compile Include="Db\OracleGis\SdoOrdinateFactory.cs" />
+    <Compile Include="Db\OracleGis\SdoPointType.cs" />
+    <Compile Include="Db\OracleGis\SdoPointTypeFactory.cs" />
+    <Compile Include="Db\TableInfo\DictionaryTable.cs" />
+    <Compile Include="Db\TableInfo\DictionaryTableHelper.cs" />
+    <Compile Include="Db\TableInfo\FieldClass.cs" />
+    <Compile Include="Db\TableInfo\FieldDomain\EFieldDomainType.cs" />
+    <Compile Include="Db\TableInfo\FieldDomain\EFieldValueRanage.cs" />
+    <Compile Include="Db\TableInfo\FieldDomain\FieldDictDomain.cs" />
+    <Compile Include="Db\TableInfo\FieldDomain\FieldEmptyDomain.cs" />
+    <Compile Include="Db\TableInfo\FieldDomain\FieldRangeDomain.cs" />
+    <Compile Include="Db\TableInfo\FieldDomain\IFieldDomain.cs" />
+    <Compile Include="Db\TableInfo\TableStructure.cs" />
+    <Compile Include="Db\TableInfo\TableStructureHelper.cs" />
     <Compile Include="DesignPattern\SingletonProvider.cs" />
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Attributes\EnumDescriptionHelper.cs" />
+    <Compile Include="ExtException\CatchAction.cs" />
+    <Compile Include="ExtException\ICatchAction.cs" />
+    <Compile Include="ExtException\TryCatch.cs" />
     <Compile Include="ExtProgram\QQInvoke.cs" />
     <Compile Include="Files\ArcGisFiles.cs" />
     <Compile Include="Files\DirectoryFileAceess.cs" />
@@ -83,19 +112,23 @@
     <Compile Include="Office\EOfficeVersion.cs" />
     <Compile Include="Office\OfficeInfo.cs" />
     <Compile Include="Print\PrintOption.cs" />
+    <Compile Include="Progress\ProEventArgs\MsgChangedEventArgs.cs" />
+    <Compile Include="Progress\ProEventArgs\OptErrorEventArgs.cs" />
+    <Compile Include="Progress\ProEventArgs\ProgressChangedEventArgs.cs" />
     <Compile Include="Progress\ProgressOptManager.cs" />
     <Compile Include="Test\Tester.cs" />
     <Compile Include="ThreadHelper\EControlInvokeType.cs" />
     <Compile Include="Web\WebServiceAgent.cs" />
     <Compile Include="WindowsAPI\WinMsg.cs" />
     <Compile Include="WinForm\DialogOpt.cs" />
+    <Compile Include="WinForm\MenuOpt.cs" />
     <Compile Include="WinForm\WinFormOpt.cs" />
     <Compile Include="Model\UniqueObjectExCollection.cs" />
     <Compile Include="Model\UniqueObjectEx.cs" />
     <Compile Include="Progress\ProLogFileInfo.cs" />
     <Compile Include="Progress\ProLogManager.cs" />
     <Compile Include="Format\NumberConversion.cs" />
-    <Compile Include="Progress\EventArgs.cs" />
+    <Compile Include="Progress\ProEventArgs\GroupMsgChangedEventArgs.cs" />
     <Compile Include="Progress\GroupMessages.cs" />
     <Compile Include="Progress\ProgressMessages.cs" />
     <Compile Include="Progress\ProgressOperation.cs" />

@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2018
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
 
 namespace WLib.UserCtrls.Dev.ChildForm
 {
