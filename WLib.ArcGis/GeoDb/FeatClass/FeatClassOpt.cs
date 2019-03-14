@@ -45,9 +45,9 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            IFeatureCursor tarFeatureCursor = featureClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = featureClass.CreateFeatureBuffer();
-            for (int i = 0; i < insertCount; i++)
+            var tarFeatureCursor = featureClass.Insert(true);
+            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            for (var i = 0; i < insertCount; i++)
             {
                 doActionByFeatures(tarFeatureBuffer, i);
                 tarFeatureCursor.InsertFeature(tarFeatureBuffer);
@@ -66,11 +66,11 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            IFeatureCursor tarFeatureCursor = featureClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = featureClass.CreateFeatureBuffer();
-            for (int i = 0; i < insertCount; i++)
+            var tarFeatureCursor = featureClass.Insert(true);
+            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            for (var i = 0; i < insertCount; i++)
             {
-                bool isStopped = doActionByFeatures(tarFeatureBuffer, i);
+                var isStopped = doActionByFeatures(tarFeatureBuffer, i);
                 tarFeatureCursor.InsertFeature(tarFeatureBuffer);
                 if (isStopped)
                     break;
@@ -88,8 +88,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            IFeatureCursor tarFeatureCursor = featureClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            var tarFeatureCursor = featureClass.Insert(true);
+            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
 
             doActionByFeatures(tarFeatureCursor, tarFeatureBuffer);
 
@@ -106,8 +106,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            IFeatureCursor tarFeatureCursor = featureClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            var tarFeatureCursor = featureClass.Insert(true);
+            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
             doActionByFeature(tarFeatureBuffer);
 
             tarFeatureCursor.InsertFeature(tarFeatureBuffer);
@@ -124,10 +124,10 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作，整型参数是新增要素的索引</param>
         public static void InsertFeaturesEx(this IFeatureClass featureClass, int insertCount, Action<IFeatureBuffer, int> doActionByFeatures)
         {
-            IFeatureClassLoad featureClassLoad = featureClass as IFeatureClassLoad;
+            var featureClassLoad = featureClass as IFeatureClassLoad;
             if (featureClassLoad == null)
                 throw new Exception("不受支持的数据源类型！InsertFeaturesEx方法仅支持SDE或FileGDB");
-            ISchemaLock schemaLock = (ISchemaLock)featureClass;
+            var schemaLock = (ISchemaLock)featureClass;
             schemaLock.ChangeSchemaLock(esriSchemaLock.esriExclusiveSchemaLock);
             featureClassLoad.LoadOnlyMode = true;
 
@@ -143,10 +143,10 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作，整型参数是新增要素的索引</param>
         public static void InsertFeaturesEx(this IFeatureClass featureClass, Action<IFeatureCursor, IFeatureBuffer> doActionByFeatures)
         {
-            IFeatureClassLoad featureClassLoad = featureClass as IFeatureClassLoad;
+            var featureClassLoad = (IFeatureClassLoad)featureClass;
             if (featureClassLoad == null)
                 throw new Exception("不受支持的数据源类型！InsertFeaturesEx方法仅支持SDE或FileGDB");
-            ISchemaLock schemaLock = (ISchemaLock)featureClass;
+            var schemaLock = (ISchemaLock)featureClass;
             schemaLock.ChangeSchemaLock(esriSchemaLock.esriExclusiveSchemaLock);
             featureClassLoad.LoadOnlyMode = true;
 
@@ -169,8 +169,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
             //使用Update游标的方式删除数据，相对于Search方法要快，参考：http://blog.sina.com.cn/s/blog_5e4c933d010116n5.html
-            IFeatureCursor featureCursor = featureClass.Update(queryFilter, false);
-            IFeature feature = featureCursor.NextFeature();
+            var featureCursor = featureClass.Update(queryFilter, false);
+            var feature = featureCursor.NextFeature();
             while (feature != null)
             {
                 featureCursor.DeleteFeature();
@@ -190,8 +190,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
             //使用Update游标的方式删除数据，相对于Search方法要快，参考：http://blog.sina.com.cn/s/blog_5e4c933d010116n5.html
-            IFeatureCursor featureCursor = featureClass.Update(queryFilter, false);
-            IFeature feature = featureCursor.NextFeature();
+            var featureCursor = featureClass.Update(queryFilter, false);
+            var feature = featureCursor.NextFeature();
             while (feature != null)
             {
                 if (isDeleteFunc(feature))
@@ -210,7 +210,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
-            ITable table = featureClass as ITable;
+            var table = (ITable)featureClass;
             table.DeleteSearchedRows(queryFilter);
         }
         /// <summary>
@@ -220,9 +220,9 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="whereClause">查询条件，注意如果值为空则删除所有要素</param>
         public static void DeleteFeatures3(this IFeatureClass featureClass, string whereClause)
         {
-            IDataset dataset = featureClass as IDataset;
+            var dataset = (IDataset)featureClass;
             whereClause = string.IsNullOrEmpty(whereClause) ? "1=1" : whereClause;
-            string sql = $"delete from {dataset.Name} where {whereClause}";
+            var sql = $"delete from {dataset.Name} where {whereClause}";
             dataset.Workspace.ExecuteSQL(sql);
         }
         #endregion
@@ -241,7 +241,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
 
-            IFeatureCursor featureCursor = featureClass.Update(queryFilter, false);
+            var featureCursor = featureClass.Update(queryFilter, false);
             IFeature feature = null;
 
             if (nullRecordException && featureClass.FeatureCount(queryFilter) == 0)
@@ -257,9 +257,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
             catch (Exception ex)//抛出更具体的异常信息
             {
-                string msgOid = feature == null ? null : $"“OID = {feature.OID}”的";
-                string msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
-
+                var msgOid = feature == null ? null : $"“OID = {feature.OID}”的";
+                var msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
                 throw new Exception($"在{featureClass.AliasName}图层中，{msgWhereClause}更新{msgOid}记录时出错：{ex.Message}");
             }
             finally
@@ -279,15 +278,24 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
 
-            IFeatureCursor featureCursor = featureClass.Update(queryFilter, true);
+            var featureCursor = featureClass.Update(queryFilter, true);
             IFeature feature = null;
 
             if (nullRecordException && featureClass.FeatureCount(queryFilter) == 0)
                 CheckNullToThrowException(featureClass, null, whereClause);
 
-            while ((feature = featureCursor.NextFeature()) != null)
+            try
             {
-                doActionByFeatures(feature, featureCursor);
+                while ((feature = featureCursor.NextFeature()) != null)
+                {
+                    doActionByFeatures(feature, featureCursor);
+                }
+            }
+            catch (Exception ex)
+            {
+                var msgOid = feature == null ? null : $"“OID = {feature.OID}”的";
+                var msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
+                throw new Exception($"在{featureClass.AliasName}图层中，{msgWhereClause}更新{msgOid}记录时出错：{ex.Message}");
             }
             System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
         }
@@ -303,7 +311,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
 
-            IFeatureCursor featureCursor = featureClass.Update(queryFilter, false);
+            var featureCursor = featureClass.Update(queryFilter, false);
             IFeature feature = null;
 
             if (nullRecordException && featureClass.FeatureCount(queryFilter) == 0)
@@ -313,7 +321,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             {
                 while ((feature = featureCursor.NextFeature()) != null)
                 {
-                    bool isStopped = doActionByFeatures(feature);
+                    var isStopped = doActionByFeatures(feature);
                     featureCursor.UpdateFeature(feature);
                     if (isStopped)
                         break;
@@ -321,10 +329,9 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
             catch (Exception ex)//抛出更具体的异常信息
             {
-                string msgOID = feature == null ? null : $"“OID = {feature.OID}”的";
-                string msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
-
-                throw new Exception($"在{featureClass.AliasName}图层中，{msgWhereClause}更新{msgOID}记录时出错：{ex.Message}");
+                var msgOid = feature == null ? null : $"“OID = {feature.OID}”的";
+                var msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
+                throw new Exception($"在{featureClass.AliasName}图层中，{msgWhereClause}更新{msgOid}记录时出错：{ex.Message}");
             }
             finally
             {
@@ -387,8 +394,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         public static IFeature QueryFirstFeature(this IFeatureClass featureClass, string whereClause = null, string subFields = null)
         {
             if (featureClass == null) return null;
-            IFeatureCursor cursor = GetSearchCursor(featureClass, whereClause, subFields);
-            IFeature feature = cursor.NextFeature();
+            var cursor = GetSearchCursor(featureClass, whereClause, subFields);
+            var feature = cursor.NextFeature();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
             return feature;
         }
@@ -401,8 +408,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
         public static void QueryFeatures(this IFeatureClass featureClass, string whereClause, Action<IFeature> doActionByFeatures, bool nullRecordException = false)
         {
-            IFeatureCursor featureCursor = GetSearchCursor(featureClass, whereClause);
-            IFeature feature = featureCursor.NextFeature();
+            var featureCursor = GetSearchCursor(featureClass, whereClause);
+            var feature = featureCursor.NextFeature();
 
             if (nullRecordException && feature == null)//找不到记录时，抛出异常
             {
@@ -429,29 +436,29 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="sourceFeatClass">源要素类</param>
         /// <param name="targetFeatClass">目标要素类</param> 
         /// <param name="whereClause">筛选条件，从源要素类中筛选指定的要素复制到目标要素，为null或Empty时将复制全部要素</param>
-        /// <param name="aferInsertEach">每复制一条要素之后执行的操作</param>
+        /// <param name="aferEachInsert">每复制一条要素之后执行的操作</param>
         public static void CopyDataToFeatClass(this IFeatureClass sourceFeatClass, IFeatureClass targetFeatClass,
-            string whereClause = null, Action<IFeatureBuffer> aferInsertEach = null)
+            string whereClause = null, Action<IFeatureBuffer> aferEachInsert = null)
         {
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
 
-            IFeatureCursor featureCursor = sourceFeatClass.Search(queryFilter, true);
-            IFeatureCursor tarFeatureCursor = targetFeatClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
-            IFields sourceFields = sourceFeatClass.Fields;
+            var featureCursor = sourceFeatClass.Search(queryFilter, true);
+            var tarFeatureCursor = targetFeatClass.Insert(true);
+            var tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
+            var sourceFields = sourceFeatClass.Fields;
 
             //获取源要素类与目标要素类相同的字段的索引
-            Dictionary<int, int> dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
-            for (int i = 0; i < sourceFields.FieldCount; i++)
+            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
+            for (var i = 0; i < sourceFields.FieldCount; i++)
             {
-                int index1 = tarFeatureBuffer.Fields.FindField(sourceFields.get_Field(i).Name);
+                var index1 = tarFeatureBuffer.Fields.FindField(sourceFields.get_Field(i).Name);
                 if (index1 > -1 && tarFeatureBuffer.Fields.get_Field(index1).Editable)
                     dict.Add(i, index1);
             }
 
             //复制源要素类数据到目标要素类
-            IFeature feature = featureCursor.NextFeature();
+            var feature = featureCursor.NextFeature();
             while (feature != null)
             {
                 foreach (var pair in dict)
@@ -459,8 +466,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
                     tarFeatureBuffer.set_Value(pair.Value, feature.get_Value(pair.Key));
                 }
                 tarFeatureCursor.InsertFeature(tarFeatureBuffer);
-                if (aferInsertEach != null)
-                    aferInsertEach(tarFeatureBuffer);
+                aferEachInsert?.Invoke(tarFeatureBuffer);
                 feature = featureCursor.NextFeature();
             }
             tarFeatureCursor.Flush();
@@ -476,14 +482,14 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         public static void CopyDataToFeatClass(IEnumerable<IFeature> features, IFeatureClass targetFeatClass)
         {
             //获取源要素类与目标要素类相同的字段的索引
-            Dictionary<int, int> dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
+            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
 
-            IFeatureCursor tarFeatureCursor = targetFeatClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
-            IFields sourceFields = features.First().Fields;
-            for (int i = 0; i < sourceFields.FieldCount; i++)
+            var tarFeatureCursor = targetFeatClass.Insert(true);
+            var tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
+            var sourceFields = features.First().Fields;
+            for (var i = 0; i < sourceFields.FieldCount; i++)
             {
-                int index1 = tarFeatureBuffer.Fields.FindField(sourceFields.get_Field(i).Name);
+                var index1 = tarFeatureBuffer.Fields.FindField(sourceFields.get_Field(i).Name);
                 if (index1 > -1 && tarFeatureBuffer.Fields.get_Field(index1).Editable)
                     dict.Add(i, index1);
             }
@@ -507,9 +513,9 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         public static void CopyDataToFeatClass(IEnumerable<IFeature> features, IFeatureClass targetFeatClass, Action<IFeature, IFeatureBuffer> action)
         {
             //获取源要素类与目标要素类相同的字段的索引
-            IFeatureCursor tarFeatureCursor = targetFeatClass.Insert(true);
-            IFeatureBuffer tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
-            IFields sourceFields = features.First().Fields;
+            var tarFeatureCursor = targetFeatClass.Insert(true);
+            var tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
+            var sourceFields = features.First().Fields;
             foreach (var feature in features)
             {
                 action(feature, tarFeatureBuffer);
@@ -527,14 +533,14 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         public static void CopyDataToFeatClass_ProjectShape(IEnumerable<IFeature> features, IFeatureClass targetFeatClass)
         {
             //获取源要素类与目标要素类相同的字段的索引，不含Shape字段
-            Dictionary<int, int> dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
-            IFields sourceFields = features.First().Fields;
-            int tarShapeFieldIndex = sourceFields.FindField(targetFeatClass.ShapeFieldName);//目标要素类的Shape字段索引
+            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
+            var sourceFields = features.First().Fields;
+            var tarShapeFieldIndex = sourceFields.FindField(targetFeatClass.ShapeFieldName);//目标要素类的Shape字段索引
             ISpatialReferenceFactory saptialRefFact = new SpatialReferenceEnvironmentClass();
 
-            for (int i = 0; i < sourceFields.FieldCount; i++)
+            for (var i = 0; i < sourceFields.FieldCount; i++)
             {
-                int index1 = targetFeatClass.FindField(sourceFields.get_Field(i).Name);
+                var index1 = targetFeatClass.FindField(sourceFields.get_Field(i).Name);
                 if (index1 > -1 &&
                     index1 != tarShapeFieldIndex &&
                     targetFeatClass.Fields.get_Field(index1).Editable)//获取可编辑、非Shape字段
@@ -601,10 +607,10 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             if (featureClass == null) return null;
             IQueryFilter filter = new QueryFilterClass();
             filter.WhereClause = whereClause;
-            IFeatureCursor cursor = featureClass.Search(filter, false);
-            IFeature feature = cursor.NextFeature();
+            var cursor = featureClass.Search(filter, false);
+            var feature = cursor.NextFeature();
             if (feature == null) return null;
-            Boolean isFirstFeature = true;
+            var isFirstFeature = true;
             IGeometry union = null;
             while (feature != null)
             {
@@ -630,10 +636,10 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static List<IGeometry> QueryGeometries(this IFeatureClass featureClass, string whereClause = null)
         {
-            List<IGeometry> values = new List<IGeometry>();
+            var values = new List<IGeometry>();
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
-            IFeatureCursor featureCursor = featureClass.Search(queryFilter, false);
+            var featureCursor = featureClass.Search(queryFilter, false);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
@@ -653,10 +659,10 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             if (featureClass == null) return null;
             IQueryFilter filter = new QueryFilterClass();
             filter.WhereClause = whereClause;
-            IFeatureCursor cursor = featureClass.Search(filter, false);
-            IFeature feature = cursor.NextFeature();
+            var cursor = featureClass.Search(filter, false);
+            var feature = cursor.NextFeature();
             if (feature == null) return null;
-            List<IGeometry> result = new List<IGeometry>();
+            var result = new List<IGeometry>();
             while (feature != null)
             {
                 result.Add(feature.ShapeCopy);
@@ -678,7 +684,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static List<object> GetUniqueValues(this IFeatureClass featureClass, string fieldName, string whereClause = null)
         {
-            IFeatureCursor featureCursor = GetSearchCursor(featureClass, whereClause, fieldName, true);
+            var featureCursor = GetSearchCursor(featureClass, whereClause, fieldName, true);
 
             IDataStatistics dataStatistics = new DataStatisticsClass();
             dataStatistics.Field = fieldName;
@@ -713,13 +719,13 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="whereClause">查询条件</param>
         public static object QueryFirstValue(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
         {
-            int fieldIndex = featureClass.FindField(queryFiledName);
+            var fieldIndex = featureClass.FindField(queryFiledName);
             if (fieldIndex < 0)
                 throw new Exception("找不到字段：" + queryFiledName);
 
             object value = null;
-            IFeatureCursor featureCursor = GetSearchCursor(featureClass, whereClause, queryFiledName, true);
-            IFeature feature = featureCursor.NextFeature();
+            var featureCursor = GetSearchCursor(featureClass, whereClause, queryFiledName, true);
+            var feature = featureCursor.NextFeature();
             if (feature != null)
             {
                 value = feature.get_Value(fieldIndex);
@@ -736,7 +742,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns>查询结果的第一条记录的指定字段的转成字符串的值，找不到则返回null</returns>
         public static string QueryFirstStrValue(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
         {
-            object value = QueryFirstValue(featureClass, queryFiledName, whereClause);
+            var value = QueryFirstValue(featureClass, queryFiledName, whereClause);
             return (value == null || value == DBNull.Value) ? null : value.ToString().Trim();
         }
 
@@ -749,12 +755,12 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static List<object> QueryFirstFeatureValues(this IFeatureClass featureClass, string[] queryFiledNames = null, string whereClause = null)
         {
-            List<object> values = new List<object>();
+            var values = new List<object>();
             var feature = QueryFirstFeature(featureClass, whereClause);
 
             if (queryFiledNames == null)
             {
-                for (int i = 0; i < feature.Fields.FieldCount; i++)
+                for (var i = 0; i < feature.Fields.FieldCount; i++)
                 {
                     values.Add(feature.get_Value(i));
                 }
@@ -778,11 +784,11 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static List<object> QueryValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
         {
-            int fieldIndex = featureClass.FindField(queryFiledName);
+            var fieldIndex = featureClass.FindField(queryFiledName);
             if (fieldIndex < 0)
                 throw new Exception("找不到字段：" + queryFiledName);
 
-            List<object> values = new List<object>();
+            var values = new List<object>();
             var featureCursor = GetSearchCursor(featureClass, whereClause, queryFiledName, true);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
@@ -813,17 +819,17 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static Dictionary<object, object> QueryValueDict(this IFeatureClass featureClass, string keyFiledName, string valueFiledName, string whereClause = null)
         {
-            int keyFieldIndex = featureClass.FindField(keyFiledName);
+            var keyFieldIndex = featureClass.FindField(keyFiledName);
             if (keyFieldIndex < 0) throw new Exception(featureClass.AliasName + "图层找不到字段：" + keyFiledName);
-            int valueFieldIndex = featureClass.FindField(valueFiledName);
+            var valueFieldIndex = featureClass.FindField(valueFiledName);
             if (valueFieldIndex < 0) throw new Exception(featureClass.AliasName + "图层找不到字段：" + valueFiledName);
 
-            Dictionary<object, object> values = new Dictionary<object, object>();
-            IFeatureCursor featureCursor = GetSearchCursor(featureClass, whereClause, keyFiledName + "," + valueFiledName, true);
+            var values = new Dictionary<object, object>();
+            var featureCursor = GetSearchCursor(featureClass, whereClause, keyFiledName + "," + valueFiledName, true);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
-                object key = feature.get_Value(keyFieldIndex);
+                var key = feature.get_Value(keyFieldIndex);
                 if (values.ContainsKey(key))
                 {
                     if (key.ToString().Trim() == string.Empty)
@@ -846,17 +852,17 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static Dictionary<string, string> QueryValueStrDict(this IFeatureClass featureClass, string keyFiledName, string valueFiledName, string whereClause = null)
         {
-            int keyFieldIndex = featureClass.FindField(keyFiledName);
+            var keyFieldIndex = featureClass.FindField(keyFiledName);
             if (keyFieldIndex < 0) throw new Exception("找不到字段：" + keyFiledName);
-            int valueFieldIndex = featureClass.FindField(valueFiledName);
+            var valueFieldIndex = featureClass.FindField(valueFiledName);
             if (valueFieldIndex < 0) throw new Exception("找不到字段：" + valueFiledName);
 
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            IFeatureCursor featureCursor = GetSearchCursor(featureClass, whereClause, keyFiledName + "," + valueFiledName, true);
+            var values = new Dictionary<string, string>();
+            var featureCursor = GetSearchCursor(featureClass, whereClause, keyFiledName + "," + valueFiledName, true);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
-                string key = feature.get_Value(keyFieldIndex).ToString();
+                var key = feature.get_Value(keyFieldIndex).ToString();
                 if (values.ContainsKey(key))
                 {
                     if (key.Trim() == string.Empty)
@@ -869,7 +875,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
             return values;
         }
-       
+
         #endregion
 
 
@@ -881,7 +887,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static IFeatureWorkspace GetFeatureWorkspace(this IFeatureClass featureClass)
         {
-            IFeatureDataset featureDataset = featureClass.FeatureDataset;
+            var featureDataset = featureClass.FeatureDataset;
 
             if (featureDataset == null)
             {
@@ -889,13 +895,13 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
             if (featureDataset == null)
             {
-                IDataset dataset = featureClass as IDataset;
+                var dataset = featureClass as IDataset;
                 featureDataset = dataset as IFeatureDataset;
             }
             if (featureDataset == null)
             {
-                IDataset dataset2 = featureClass as IDataset;
-                IFeatureWorkspace featureWorkspace = dataset2.Workspace as IFeatureWorkspace;
+                var dataset2 = featureClass as IDataset;
+                var featureWorkspace = dataset2.Workspace as IFeatureWorkspace;
                 if (featureWorkspace != null)
                     return featureWorkspace;
             }
@@ -923,8 +929,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static string GetSourcePath(this IFeatureClass featureClass)
         {
-            string sourceName = (featureClass as IDataset).Name;
-            IFeatureDataset featureDataset = featureClass.FeatureDataset;
+            var sourceName = (featureClass as IDataset).Name;
+            var featureDataset = featureClass.FeatureDataset;
             if (featureDataset != null)
             {
                 sourceName = featureDataset.Name + "\\" + sourceName;
@@ -942,7 +948,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <param name="newAliasName">新要素类别名</param>
         public static void RenameFeatureClassAliasName(this IFeatureClass featureClass, string newAliasName)
         {
-            IClassSchemaEdit2 classSchemaEdit2 = featureClass as IClassSchemaEdit2;
+            var classSchemaEdit2 = featureClass as IClassSchemaEdit2;
             classSchemaEdit2.AlterAliasName(newAliasName);
         }
         /// <summary>
@@ -955,8 +961,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         ///<returns>修改成功返回True,否则False</returns>
         public static bool RenameFeatureClassName(this IFeatureClass featureClass, string newName, string newAliasName = null)
         {
-            IDataset dataset = featureClass as IDataset;
-            bool isRename = false;
+            var dataset = featureClass as IDataset;
+            var isRename = false;
             string oldAliasName = featureClass.AliasName, oldName = dataset.Name;
             try
             {
@@ -1037,7 +1043,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             var workspace = (featureClass as IDataset).Workspace;
             var workspaceProperties = workspace as IWorkspaceProperties;
-            IWorkspaceProperty wor = workspaceProperties.get_Property(esriWorkspacePropertyGroupType.esriWorkspacePropertyGroup,
+            var wor = workspaceProperties.get_Property(esriWorkspacePropertyGroupType.esriWorkspacePropertyGroup,
                 (int)esriWorkspacePropertyType.esriWorkspacePropCanExecuteSQL);
             if (!wor.IsSupported)
                 throw new Exception("当前数据源不支持执行Workspace.ExecuteSQL的方式处理数据");
@@ -1067,8 +1073,8 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static bool IsFeatureClassExistZ(this IFeatureClass featureClass)
         {
-            IGeoDataset geoDataSet = featureClass as IGeoDataset;
-            IZAware zAware = geoDataSet.Extent as IZAware;
+            var geoDataSet = featureClass as IGeoDataset;
+            var zAware = geoDataSet.Extent as IZAware;
             return zAware.ZAware;
         }
         /// <summary>

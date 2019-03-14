@@ -1,5 +1,4 @@
-﻿using DevExpress.XtraEditors;
-using ESRI.ArcGIS.Carto;
+﻿using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.SystemUI;
 using System;
@@ -76,7 +75,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         public void ToolOnClick(EMapTools mapTool)
         {
             var text = mapTool.GetDescription();
-            var button = this.Controls.OfType<SimpleButton>().FirstOrDefault(v => v.Text == text);
+            var button = this.Controls.OfType<Button>().FirstOrDefault(v => v.Text == text);
             navigationButton_Click(button, null);
         }
 
@@ -181,7 +180,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         //点击地图导航条的工具
         private void navigationButton_Click(object sender, EventArgs e)
         {
-            MapTools = ((SimpleButton)sender).Text.GetEnum<EMapTools>();
+            MapTools = ((Button)sender).Text.GetEnum<EMapTools>();
             this.lblMeasureTips.Visible = this.lblMeasureInfo.Visible = MapTools == EMapTools.MeasureDistance || MapTools == EMapTools.MeasureArea;
             this.lblSwipe.Visible = this.cmbLayers.Visible = MapTools == EMapTools.Swipe;
             if (MapTools == EMapTools.Swipe)

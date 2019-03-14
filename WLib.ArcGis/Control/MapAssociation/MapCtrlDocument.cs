@@ -6,7 +6,7 @@ using WLib.WinForm;
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
-    /// 地图文档与地图控件关联操作
+    /// 地图控件与地图文档关联操作
     /// （包括新建、加载、保存、另存地图文档，添加数据、清空图层等）
     /// </summary>
     public class MapCtrlDocument
@@ -20,7 +20,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// </summary>
         public AxMapControl MapControl { get; }
         /// <summary>
-        /// 地图文档与地图控件/页面布局控件关联操作
+        /// 地图控件与地图文档关联操作
         /// （包括新建、加载、保存、另存地图文档，添加数据、清空图层等）
         /// </summary>
         /// <param name="mapCtrl">地图控件</param>

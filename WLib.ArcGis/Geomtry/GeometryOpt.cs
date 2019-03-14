@@ -11,7 +11,6 @@ using System.Linq;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
-using WLib.ArcGis.GeoDb.FeatClass;
 
 namespace WLib.ArcGis.Geomtry
 {

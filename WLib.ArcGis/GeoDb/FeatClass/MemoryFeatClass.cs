@@ -5,7 +5,6 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;

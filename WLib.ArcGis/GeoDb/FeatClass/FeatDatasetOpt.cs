@@ -5,7 +5,6 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
 using ESRI.ArcGIS.Geodatabase;
 

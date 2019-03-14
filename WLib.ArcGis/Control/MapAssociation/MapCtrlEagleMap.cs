@@ -6,7 +6,7 @@ using WLib.ArcGis.Display;
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
-    /// 鹰眼图和主地图的关联操作
+    /// 主地图控件与鹰眼地图的关联操作
     /// </summary>
     public class MapCtrlEagleMap
     {

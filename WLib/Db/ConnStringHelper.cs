@@ -11,7 +11,10 @@ namespace WLib.Db
 {
     /// <summary>
     /// 提供构建简单常用的连接字符串的方法，
-    /// 连接字符串可参考 ①https://www.connectionstrings.com/ ②https://blog.csdn.net/Xiongchao99/article/details/51670139
+    /// 连接字符串可参考
+    /// ①https://www.connectionstrings.com/
+    /// ②https://blog.csdn.net/Xiongchao99/article/details/51670139
+    /// ③https://www.connectionstrings.com/net-framework-data-provider-for-ole-db/
     /// </summary>
     public class ConnStringHelper
     {

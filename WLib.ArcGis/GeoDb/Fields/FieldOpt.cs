@@ -460,7 +460,7 @@ namespace WLib.ArcGis.GeoDb.Fields
             return fieldList;
         }
         /// <summary>
-        /// 查找指定类型的字段
+        /// 查找第一个符合指定类型的字段
         /// </summary>
         /// <param name="fields"></param>
         /// <param name="fieldType"></param>

@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapViewer));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.tableListBox1 = new WLib.UserCtrls.ArcGisCtrl.TableListBox();
             this.TocControl = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.tocGroupControl = new System.Windows.Forms.Panel();
             this.btnExpand = new System.Windows.Forms.Button();
@@ -40,11 +41,10 @@
             this.EagleMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.ViewerTabControl = new System.Windows.Forms.TabControl();
             this.xtpMapView = new System.Windows.Forms.TabPage();
+            this.mapNavigationTools1 = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
             this.MainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.xtpPageLayout = new System.Windows.Forms.TabPage();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
-            this.tableListBox = new WLib.UserCtrls.ArcGisCtrl.TableListBox();
-            this.mapNavigationTools = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -90,7 +90,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.tableListBox);
+            this.splitContainer2.Panel1.Controls.Add(this.tableListBox1);
             this.splitContainer2.Panel1.Controls.Add(this.TocControl);
             this.splitContainer2.Panel1.Controls.Add(this.tocGroupControl);
             // 
@@ -100,6 +100,14 @@
             this.splitContainer2.Size = new System.Drawing.Size(292, 537);
             this.splitContainer2.SplitterDistance = 332;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // tableListBox1
+            // 
+            this.tableListBox1.AttributeForm = null;
+            this.tableListBox1.Location = new System.Drawing.Point(80, 120);
+            this.tableListBox1.Name = "tableListBox1";
+            this.tableListBox1.Size = new System.Drawing.Size(150, 150);
+            this.tableListBox1.TabIndex = 2;
             // 
             // TocControl
             // 
@@ -124,6 +132,7 @@
             // 
             // btnExpand
             // 
+            this.btnExpand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExpand.Image = ((System.Drawing.Image)(resources.GetObject("btnExpand.Image")));
             this.btnExpand.Location = new System.Drawing.Point(268, 1);
             this.btnExpand.Name = "btnExpand";
@@ -134,6 +143,7 @@
             // 
             // btnCollapsed
             // 
+            this.btnCollapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCollapsed.Image = ((System.Drawing.Image)(resources.GetObject("btnCollapsed.Image")));
             this.btnCollapsed.Location = new System.Drawing.Point(245, 1);
             this.btnCollapsed.Name = "btnCollapsed";
@@ -144,6 +154,7 @@
             // 
             // btnSwitchContent
             // 
+            this.btnSwitchContent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSwitchContent.Image = ((System.Drawing.Image)(resources.GetObject("btnSwitchContent.Image")));
             this.btnSwitchContent.Location = new System.Drawing.Point(222, 1);
             this.btnSwitchContent.Name = "btnSwitchContent";
@@ -154,6 +165,7 @@
             // 
             // btnAddData
             // 
+            this.btnAddData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddData.Image = ((System.Drawing.Image)(resources.GetObject("btnAddData.Image")));
             this.btnAddData.Location = new System.Drawing.Point(199, 1);
             this.btnAddData.Name = "btnAddData";
@@ -185,7 +197,7 @@
             // 
             // xtpMapView
             // 
-            this.xtpMapView.Controls.Add(this.mapNavigationTools);
+            this.xtpMapView.Controls.Add(this.mapNavigationTools1);
             this.xtpMapView.Controls.Add(this.MainMapControl);
             this.xtpMapView.Location = new System.Drawing.Point(4, 4);
             this.xtpMapView.Name = "xtpMapView";
@@ -194,6 +206,15 @@
             this.xtpMapView.TabIndex = 0;
             this.xtpMapView.Text = "地图";
             this.xtpMapView.UseVisualStyleBackColor = true;
+            // 
+            // mapNavigationTools1
+            // 
+            this.mapNavigationTools1.BackColor = System.Drawing.Color.Transparent;
+            this.mapNavigationTools1.Location = new System.Drawing.Point(6, 6);
+            this.mapNavigationTools1.MapControl = this.MainMapControl;
+            this.mapNavigationTools1.Name = "mapNavigationTools1";
+            this.mapNavigationTools1.Size = new System.Drawing.Size(255, 66);
+            this.mapNavigationTools1.TabIndex = 1;
             // 
             // MainMapControl
             // 
@@ -224,23 +245,6 @@
             this.PageLayoutControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("PageLayoutControl.OcxState")));
             this.PageLayoutControl.Size = new System.Drawing.Size(617, 505);
             this.PageLayoutControl.TabIndex = 0;
-            // 
-            // tableListBox
-            // 
-            this.tableListBox.AttributeForm = null;
-            this.tableListBox.Location = new System.Drawing.Point(49, 78);
-            this.tableListBox.Name = "tableListBox";
-            this.tableListBox.Size = new System.Drawing.Size(172, 184);
-            this.tableListBox.TabIndex = 1;
-            // 
-            // mapNavigationTools
-            // 
-            this.mapNavigationTools.BackColor = System.Drawing.Color.Transparent;
-            this.mapNavigationTools.Location = new System.Drawing.Point(6, 6);
-            this.mapNavigationTools.MapControl = null;
-            this.mapNavigationTools.Name = "mapNavigationTools";
-            this.mapNavigationTools.Size = new System.Drawing.Size(255, 66);
-            this.mapNavigationTools.TabIndex = 1;
             // 
             // MapViewer
             // 
@@ -285,7 +289,7 @@
         private System.Windows.Forms.Button btnSwitchContent;
         private System.Windows.Forms.Button btnExpand;
         private System.Windows.Forms.Button btnCollapsed;
-        private TableListBox tableListBox;
-        private MapNavigationTools mapNavigationTools;
+        private MapNavigationTools mapNavigationTools1;
+        private TableListBox tableListBox1;
     }
 }

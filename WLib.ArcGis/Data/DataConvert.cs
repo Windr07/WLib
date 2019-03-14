@@ -298,7 +298,7 @@ namespace WLib.ArcGis.Data
                 {
                     tempRow[i] = feature.get_Value(i).ToString();
                 }
-                tempRow[areaColumnName] = ((feature.Shape as IPolygon) as IArea).Area.ToString();//图斑面积 
+                tempRow[areaColumnName] = ((IArea)((IPolygon)feature.Shape)).Area.ToString();//图斑面积 
                 dataTable.Rows.Add(tempRow);
                 System.Runtime.InteropServices.Marshal.ReleaseComObject(feature);
             }

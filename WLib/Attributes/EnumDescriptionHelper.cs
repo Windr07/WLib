@@ -28,7 +28,7 @@ namespace WLib.Attributes
         public static string GetDescription(this Enum value, int decriptionTag = 0)
         {
             if (value == null)
-                throw new ArgumentException("枚举参数value为空，请确认参数value为枚举类型！");
+                throw new ArgumentException($"枚举参数{nameof(value)}为空，请确认参数{nameof(value)}为枚举类型！");
 
             var name = value.ToString();
             var fieldInfo = value.GetType().GetField(name);

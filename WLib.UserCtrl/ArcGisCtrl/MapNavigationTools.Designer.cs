@@ -44,7 +44,7 @@
             this.imageCollection_Nav = new System.Windows.Forms.ImageList(this.components);
             this.lblMeasureTips = new System.Windows.Forms.Label();
             this.lblMeasureInfo = new System.Windows.Forms.Label();
-            this.lblSwipe = new DevExpress.XtraEditors.LabelControl();
+            this.lblSwipe = new System.Windows.Forms.Label();
             this.cmbLayers = new System.Windows.Forms.ComboBox();
             this.btnMeasureClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -222,8 +222,7 @@
             // 
             // lblSwipe
             // 
-            this.lblSwipe.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblSwipe.Appearance.Options.UseForeColor = true;
+            this.lblSwipe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.lblSwipe.Location = new System.Drawing.Point(3, 24);
             this.lblSwipe.Name = "lblSwipe";
             this.lblSwipe.Size = new System.Drawing.Size(60, 14);
@@ -295,7 +294,7 @@
         private System.Windows.Forms.Button btnSwipe;
         private System.Windows.Forms.Label lblMeasureTips;
         private System.Windows.Forms.Label lblMeasureInfo;
-        private DevExpress.XtraEditors.LabelControl lblSwipe;
+        private System.Windows.Forms.Label lblSwipe;
         private System.Windows.Forms.ComboBox cmbLayers;
         private System.Windows.Forms.Button btnMeasureClose;
     }

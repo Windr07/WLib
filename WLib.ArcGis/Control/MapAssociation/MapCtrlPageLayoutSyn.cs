@@ -6,7 +6,7 @@ using ESRI.ArcGIS.esriSystem;
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
-    /// 页面布局空间和地图控件的同步操作
+    /// 地图控件和页面布局控件的同步操作
     /// </summary>
     public class MapCtrlPageLayoutSyn
     {
@@ -19,7 +19,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// </summary>
         public AxPageLayoutControl PageLayoutControl { get; }
         /// <summary>
-        /// 页面布局空间和地图控件的同步操作
+        /// 地图控件和页面布局控件的同步操作
         /// </summary>
         /// <param name="mapControl">地图控件</param>
         /// <param name="pageLayoutControl">页面布局控件</param>

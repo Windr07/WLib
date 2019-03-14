@@ -82,7 +82,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             get => this.SourcePathBox.Path;
             set
             {
-                var wsType = GetWorkspace.GetWorkspaceType(value);
+                var wsType = GetWorkspace.GetDefaultWorkspaceType(value);
                 WorkspaceIndex = wsType == EWorkspaceType.Default ? 0 : this.cmbADBType.Properties.Items.IndexOf(wsType.GetDescription());
                 this.SourcePathBox.Path = value;
             }
@@ -201,7 +201,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <param name="pathOrConStr"></param>
         public void LoadWorkspace(string pathOrConStr)
         {
-            var eType = GetWorkspace.GetWorkspaceType(PathOrConnStr);
+            var eType = GetWorkspace.GetDefaultWorkspaceType(PathOrConnStr);
             this.cmbADBType.SelectedItem = eType.GetDescription();
             this.PathOrConnStr = pathOrConStr;
             this.SourcePathBox.SelectPath(pathOrConStr);

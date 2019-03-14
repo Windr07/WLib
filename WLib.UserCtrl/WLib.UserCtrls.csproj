@@ -148,9 +148,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WLib.UserCtrls.Dev">
-      <HintPath>..\WLib.UserCtrl.Dev\obj\Debug\WLib.UserCtrls.Dev.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddItemCtrl\AddItemConfigForm.cs">
@@ -334,7 +331,6 @@
     <EmbeddedResource Include="PathCtrl\WorkspaceSelector.resx">
       <DependentUpon>WorkspaceSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

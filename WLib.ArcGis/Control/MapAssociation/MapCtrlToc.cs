@@ -12,7 +12,7 @@ using WLib.ArcGis.GeoDb.Fields;
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
-    /// TOC控件与地图控件的关联操作
+    /// 地图控件与TOC控件的关联操作
     /// </summary>
     public class MapCtrlToc
     {
@@ -37,11 +37,11 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// </summary>
         public readonly Dictionary<string, ToolStripMenuItem[]> Layer2FieldsMenuItems;
         /// <summary>
-        /// 
+        /// 地图控件与TOC控件的关联操作
         /// </summary>
-        /// <param name="tocCtrl"></param>
-        /// <param name="mapCtrl"></param>
-        /// <param name="goToMapView"></param>
+        /// <param name="tocCtrl">TOC控件</param>
+        /// <param name="mapCtrl">地图控件</param>
+        /// <param name="goToMapView">将当前标签页设为地图页面</param>
         public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, Action goToMapView = null)
         {
             MapCtrl = mapCtrl;

@@ -12,7 +12,6 @@ using System.Text;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
-using WLib.ArcGis.Carto;
 using WLib.ArcGis.Carto.Map;
 using WLib.ArcGis.GeoDb.Fields;
 

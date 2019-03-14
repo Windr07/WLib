@@ -207,7 +207,7 @@
     <Compile Include="Carto\LabelAnnoOpt.cs" />
     <Compile Include="Carto\Layer\LayerOpt.cs" />
     <Compile Include="Carto\Layer\LayerUid.cs" />
-    <Compile Include="Control\MapCtrlOpt.cs" />
+    <Compile Include="Control\MapCtrlLayers.cs" />
     <Compile Include="Carto\Map\MapOption.cs" />
     <Compile Include="Carto\Map\MapQuery.cs" />
     <Compile Include="Carto\DataSource\CheckMapSource.cs" />

@@ -62,21 +62,21 @@ namespace GISsys
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            DataGridViewSelectedRowCollection SelRows = this.dataGridView1.SelectedRows;
-            DataGridViewRow row;
-            MainForm form = (MainForm)Application.OpenForms[0];
-            IMap m = form.getMapControl().Map;
-            m.ClearSelection();
-            for (int i = 0; i < SelRows.Count; i++)
-            {
-                row = SelRows[i];
-                int ID = Convert.ToInt32(row.Cells["FID"].Value.ToString());
-                IFeatureLayer flyr = (IFeatureLayer)layer;
-                IFeatureClass featurecls = flyr.FeatureClass;
-                IFeature feature = featurecls.GetFeature(ID);
-                m.SelectFeature(layer, feature);  //获取属性表中选中行对应的图形要素
-            }
-            form.getMapControl().Refresh();
+            //DataGridViewSelectedRowCollection SelRows = this.dataGridView1.SelectedRows;
+            //DataGridViewRow row;
+            //MainForm form = (MainForm)Application.OpenForms[0];
+            //IMap m = form.getMapControl().Map;
+            //m.ClearSelection();
+            //for (int i = 0; i < SelRows.Count; i++)
+            //{
+            //    row = SelRows[i];
+            //    int ID = Convert.ToInt32(row.Cells["FID"].Value.ToString());
+            //    IFeatureLayer flyr = (IFeatureLayer)layer;
+            //    IFeatureClass featurecls = flyr.FeatureClass;
+            //    IFeature feature = featurecls.GetFeature(ID);
+            //    m.SelectFeature(layer, feature);  //获取属性表中选中行对应的图形要素
+            //}
+            //form.getMapControl().Refresh();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace WLib.ArcGis.GeoDb.Table
         public static ITable Create(this IFeatureWorkspace featureWorkspace, string name)
         {
             IFields fields = new FieldsClass();
-            IFieldsEdit fieldsEdit = fields as IFieldsEdit;
+            IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
             fieldsEdit.AddField(FieldOpt.CreateOidField());
             return featureWorkspace.CreateTable(name, fields, null, null, "");
         }

@@ -1,4 +1,10 @@
-﻿using DevExpress.XtraEditors;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/2/23
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
@@ -15,23 +21,23 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
     public partial class MapViewer : UserControl
     {
         /// <summary>
-        /// 地图文档与主地图控件的关联操作
-        /// </summary>
-        public readonly MapCtrlDocument DocHelper;
-        /// <summary>
-        /// TOC控件与主地图控件的关联操作
-        /// </summary>
-        public readonly MapCtrlTocEx TocHelper;
-        /// <summary>
         /// 主地图控件的右键菜单操作
         /// </summary>
         public readonly MapCtrlMenu MenuHelper;
         /// <summary>
-        /// 鹰眼图与主地图控件的关联操作
+        ///主地图控件与TOC控件的关联操作
+        /// </summary>
+        public readonly MapCtrlTocEx TocHelper;
+        /// <summary>
+        /// 主地图控件与地图文档的关联操作
+        /// </summary>
+        public readonly MapCtrlDocument DocHelper;
+        /// <summary>
+        /// 主地图控件与鹰眼地图的关联操作
         /// </summary>
         public readonly MapCtrlEagleMap EagleMapHelper;
         /// <summary>
-        /// 页面布局控件与主地图控件的关联操作
+        /// 主地图控件与页面布局控件的关联操作
         /// </summary>
         public readonly MapCtrlPageLayoutSyn PageLayoutHelper;
         /// <summary>
@@ -45,7 +51,9 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
         {
             InitializeComponent();
 
-            this.mapNavigationTools.Parent = this.MainMapControl;
+            this.mapNavigationTools1.Parent = this.MainMapControl;
+            this.mapNavigationTools1.MapControl = this.MainMapControl;
+            this.tableListBox1.Dock = DockStyle.Fill;
             DocHelper = new MapCtrlDocument(MainMapControl);
             TocHelper = new MapCtrlTocEx(TocControl, MainMapControl, GoToMapView);
             MenuHelper = new MapCtrlMenu(MainMapControl);
@@ -61,9 +69,9 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
                 }
                 else if (item is ITable table)
                 {
-                    this.tableListBox.AddTable(table);
+                    this.tableListBox1.AddTable(table);
                     GoToMapView();
-                    GoToTableListBox();
+                    GoTotableListBox();
                 }
             };
         }
@@ -90,18 +98,18 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
         public void GoToLayerToc()
         {
             TocControl.Visible = btnCollapsed.Enabled = btnExpand.Enabled = true;
-            tableListBox.Visible = false;
+            tableListBox1.Visible = false;
             TocControl.Dock = DockStyle.Fill;
             tocGroupControl.Text = @"图层控制";
         }
         /// <summary>
         /// 显示图层目录列表（ImageListBox）
         /// </summary>
-        public void GoToTableListBox()
+        public void GoTotableListBox()
         {
             TocControl.Visible = btnCollapsed.Enabled = btnExpand.Enabled = false;
-            tableListBox.Visible = true;
-            tableListBox.Dock = DockStyle.Fill;
+            tableListBox1.Visible = true;
+            tableListBox1.Dock = DockStyle.Fill;
             tocGroupControl.Text = @"表格列表";
         }
         /// <summary>
@@ -130,19 +138,14 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
             MainMapControl.MapZoomToAndSelectFirst(featureLayer, whereClause);
         }
 
-
-        private void axMapControlMainMap_OnFullExtentUpdated(object sender, IMapControlEvents2_OnFullExtentUpdatedEvent e)//主地图：刷新地图
-        {
-            MainMapControl.Refresh();
-        }
-
+      
         private void layerControlButtons_Click(object sender, EventArgs e)//图层控制栏中的按钮的事件（添加数据、切换图层/表格、折叠所有图层、展开所有图层）
         {
-            var btnName = ((SimpleButton)sender).Name;
+            var btnName = ((Button)sender).Name;
             if (btnName == this.btnSwitchContent.Name)
             {
                 if (TocControl.Visible)
-                    GoToTableListBox();
+                    GoTotableListBox();
                 else
                     GoToLayerToc();
                 tocGroupControl.Update();
@@ -151,5 +154,15 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
             else if (btnName == this.btnExpand.Name) TocHelper.ExpandLegend(true);
             else if (btnName == this.btnAddData.Name) DocHelper.AddData();
         }
+
+        private void axMapControlMainMap_OnFullExtentUpdated(object sender, IMapControlEvents2_OnFullExtentUpdatedEvent e)//主地图：刷新地图
+        {
+            MainMapControl.Refresh();
+        }
+
+        //private void MainMapControl_OnMouseDown(object sender, IMapControlEvents2_OnMouseDownEvent e)//
+        //{
+
+        //}
     }
 }

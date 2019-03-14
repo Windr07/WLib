@@ -262,8 +262,7 @@
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(254, 330);
             this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "【二次开发】综合实验\n【GISystem】by Windragon\n\n\n                         SCAU_10_GIS2_07\n    " +
-                "                             2012.12\n";
+            this.richTextBox1.Text = "";
             // 
             // button1
             // 

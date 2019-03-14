@@ -6,7 +6,7 @@ using ESRI.ArcGIS.Geometry;
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
-    /// 地图测量操作
+    /// 地图控件中的测量操作
     /// </summary>
     public class MapCtrlMeasure
     {

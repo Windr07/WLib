@@ -108,17 +108,7 @@ namespace WLib.Db
         /// <returns></returns>
         public int ExcNonQuery(string sql)
         {
-            return ExcNonQueryEx(sql);
-        }
-        /// <summary>
-        /// 连接数据源，执行SQL语句并返回状态值
-        /// </summary>
-        /// <param name="sqlFormat"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public int ExcNonQuery(string sqlFormat, params object[] args)
-        {
-            return ExcNonQueryEx(string.Format(sqlFormat, args));
+            return ExcNonQuery(sql, null);
         }
         /// <summary>
         /// 连接数据源，执行多条SQL语句并返回状态值
@@ -143,14 +133,15 @@ namespace WLib.Db
         /// <param name="sql"></param>
         /// <param name="dbParameters"></param>
         /// <returns></returns>
-        public int ExcNonQueryEx(string sql, params DbParameter[] dbParameters)
+        public int ExcNonQuery(string sql, params DbParameter[] dbParameters)
         {
             OnBeforeExcute("Excute None Query", sql);
             DbCommand dbCommand = _providerFactory.CreateCommand();
             dbCommand.Connection = Connection;
             dbCommand.CommandTimeout = CommandTimeOut;
             dbCommand.CommandText = sql;
-            dbCommand.Parameters.AddRange(dbParameters);
+            if (dbParameters != null)
+                dbCommand.Parameters.AddRange(dbParameters);
             return dbCommand.ExecuteNonQuery();
         }
 
@@ -162,7 +153,7 @@ namespace WLib.Db
         /// <returns>返回数据集</returns> 
         public DataSet GetDataset(string sql)
         {
-            return GetDatasetEx(sql);
+            return GetDataset(sql, null);
         }
         /// <summary> 
         /// 执行查询有参数SQL语句 
@@ -170,7 +161,7 @@ namespace WLib.Db
         /// <param name="sql">SQL语句</param> 
         /// <param name="dbParameters">参数集合</param> 
         /// <returns>返回数据集</returns> 
-        public DataSet GetDatasetEx(string sql, params DbParameter[] dbParameters)
+        public DataSet GetDataset(string sql, params DbParameter[] dbParameters)
         {
             OnBeforeExcute("Get Data Table", sql);
             DbDataAdapter adapter = _providerFactory.CreateDataAdapter();
@@ -178,7 +169,8 @@ namespace WLib.Db
             dbCommand.Connection = Connection;
             dbCommand.CommandTimeout = CommandTimeOut;
             dbCommand.CommandText = sql;
-            dbCommand.Parameters.AddRange(dbParameters);
+            if (dbParameters != null)
+                dbCommand.Parameters.AddRange(dbParameters);
             adapter.SelectCommand = dbCommand;
 
             DataSet dataSet = new DataSet();
@@ -194,17 +186,7 @@ namespace WLib.Db
         /// <returns></returns>
         public DataTable GetDataTable(string sql)
         {
-            return GetDatasetEx(sql).Tables[0];
-        }
-        /// <summary>
-        /// 连接数据源，执行SQL语句并返回DataTable
-        /// </summary>
-        /// <param name="sqlFormat"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public DataTable GetDataTable(string sqlFormat, params object[] args)
-        {
-            return GetDatasetEx(string.Format(sqlFormat, args)).Tables[0];
+            return GetDataset(sql).Tables[0];
         }
         /// <summary>
         /// 连接数据源，执行SQL语句并返回DataTable
@@ -212,9 +194,9 @@ namespace WLib.Db
         /// <param name="sql"></param>
         /// <param name="dbParameters"></param>
         /// <returns></returns>
-        public DataTable GetDataTableEx(string sql, params DbParameter[] dbParameters)
+        public DataTable GetDataTable(string sql, params DbParameter[] dbParameters)
         {
-            return GetDatasetEx(sql, dbParameters).Tables[0];
+            return GetDataset(sql, dbParameters).Tables[0];
         }
 
 
@@ -225,7 +207,7 @@ namespace WLib.Db
         /// <returns></returns>
         public object ExcScalar(string sql)
         {
-            return ExcScalarEx(sql);
+            return ExcScalar(sql, null);
         }
         /// <summary>
         /// 连接数据源，执行查询得到第一行第一列的值（查询结果为空时返回default(T)，一般是null或0）
@@ -234,7 +216,7 @@ namespace WLib.Db
         /// <returns></returns>
         public T ExcScalar<T>(string sql)
         {
-            var obj = ExcScalarEx(sql);
+            var obj = ExcScalar(sql);
             if (obj == null)
                 return default(T);
             try
@@ -244,29 +226,20 @@ namespace WLib.Db
             catch (Exception ex) { throw new Exception($"将ExcuteScalar方法执行SQL查询的结果“{obj}”({obj.GetType()})强制转换为类型“{typeof(T)}”的数据失败：{ex.Message}"); }
         }
         /// <summary>
-        /// 连接数据源，执行查询得到第一行第一列的值（查询结果为空时返回default(T)，一般是null或0）
-        /// </summary>
-        /// <param name="sqlFormat"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public T ExcScalar<T>(string sqlFormat, params object[] args)
-        {
-            return ExcScalar<T>(string.Format(sqlFormat, args));
-        }
-        /// <summary>
         /// 连接数据源，执行查询得到第一行第一列的值
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="dbParameters"></param>
         /// <returns></returns>
-        public object ExcScalarEx(string sql, params DbParameter[] dbParameters)
+        public object ExcScalar(string sql, params DbParameter[] dbParameters)
         {
             OnBeforeExcute("Excute Scalar", sql);
             DbCommand command = _providerFactory.CreateCommand();
             command.Connection = Connection;
             command.CommandTimeout = CommandTimeOut;
             command.CommandText = sql;
-            command.Parameters.AddRange(dbParameters);
+            if (dbParameters != null)
+                command.Parameters.AddRange(dbParameters);
             return command.ExecuteScalar();
         }
 

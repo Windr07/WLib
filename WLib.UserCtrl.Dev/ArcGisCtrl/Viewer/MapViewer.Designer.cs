@@ -287,7 +287,8 @@
             this.MainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MainMapControl.OcxState")));
             this.MainMapControl.Size = new System.Drawing.Size(631, 532);
             this.MainMapControl.TabIndex = 0;
-            this.MainMapControl.OnFullExtentUpdated += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnFullExtentUpdatedEventHandler(this.axMapControlMainMap_OnFullExtentUpdated);
+            this.MainMapControl.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.MainMapControl_OnMouseDown);
+            this.MainMapControl.OnFullExtentUpdated += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnFullExtentUpdatedEventHandler(this.MainMapControl_OnFullExtentUpdated);
             // 
             // xtpPageLayout
             // 

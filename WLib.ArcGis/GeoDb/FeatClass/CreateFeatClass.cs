@@ -24,6 +24,24 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// </summary>
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
+        /// <param name="fields">要创建的字段集（必须包含SHAPE字段）</param>
+        /// <returns></returns>
+        public static IFeatureClass Create(object obj, string name, IFields fields)
+        {
+            var shapeField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeGeometry);
+            if (shapeField == null)
+                throw new Exception($"在要创建的字段集（参数{nameof(fields)}）中找不到几何字段，创建要素类时应指定几何字段以确定几何类型和坐标系！");
+
+            var fieldType = shapeField.GeometryDef.GeometryType;//几何类型
+            var spatialRef = CoordinateSystem.GetSpatialReference(shapeField);//坐标系
+            return Create(obj, name, spatialRef, esriFeatureType.esriFTSimple, fieldType, fields, null, null, "");
+        }
+
+        /// <summary>
+        /// 创建要素类
+        /// </summary>
+        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
+        /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
         /// <param name="sptialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
         /// 可使用<see cref="CoordinateSystem.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
         /// <param name="geometryType">几何类型（点/线/面等）</param>
@@ -102,7 +120,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
             #endregion
 
-            #region pUidClsExt字段为空时
+            #region uidClsExt字段为空时
             if (uidClsExt == null)
             {
                 switch (featureType)

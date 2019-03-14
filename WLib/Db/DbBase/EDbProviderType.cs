@@ -5,6 +5,8 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System.ComponentModel;
+
 namespace WLib.Db.DbBase
 {
     /// <summary>
@@ -12,16 +14,27 @@ namespace WLib.Db.DbBase
     /// </summary>
     public enum EDbProviderType : byte
     {
+        [Description("System.Data.SqlClient")]
         SqlServer,
+        [Description("MySql.Data.MySqlClient")]
         MySql,
+        [Description("System.Data.SQLite")]
         SqLite,
+        [Description("Oracle.DataAccess.Client")]
         Oracle,
+        [Description("System.Data.ODBC")]
         Odbc,
+        [Description("System.Data.OleDb")]
         OleDb,
+        [Description("FirebirdSql.Data.Firebird")]
         Firebird,
+        [Description("Npgsql")]
         PostgreSql,
+        [Description("IBM.Data.DB2.iSeries")]
         Db2,
+        [Description("IBM.Data.Informix")]
         Informix,
+        [Description("System.Data.SqlServerCe")]
         SqlServerCe
     }
 }

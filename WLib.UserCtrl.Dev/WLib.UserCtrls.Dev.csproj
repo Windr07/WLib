@@ -317,6 +317,7 @@
       <DependentUpon>DockFormControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ChildForm\EMouseDirection.cs" />
+    <Compile Include="CtrlExtension\ChartControlEx.cs" />
     <Compile Include="EditForm\EditItem.cs" />
     <Compile Include="EditForm\ESaveState.cs" />
     <Compile Include="EditForm\RowDataEditForm.cs">

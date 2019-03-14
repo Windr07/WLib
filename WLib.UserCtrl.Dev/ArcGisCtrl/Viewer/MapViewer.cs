@@ -22,23 +22,23 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Viewer
     public partial class MapViewer : UserControl
     {
         /// <summary>
-        /// 地图文档与主地图控件的关联操作
-        /// </summary>
-        public readonly MapCtrlDocument DocHelper;
-        /// <summary>
-        /// TOC控件与主地图控件的关联操作
-        /// </summary>
-        public readonly MapCtrlTocEx TocHelper;
-        /// <summary>
         /// 主地图控件的右键菜单操作
         /// </summary>
         public readonly MapCtrlMenu MenuHelper;
         /// <summary>
-        /// 鹰眼图与主地图控件的关联操作
+        ///主地图控件与TOC控件的关联操作
+        /// </summary>
+        public readonly MapCtrlTocEx TocHelper;
+        /// <summary>
+        /// 主地图控件与地图文档的关联操作
+        /// </summary>
+        public readonly MapCtrlDocument DocHelper;
+        /// <summary>
+        /// 主地图控件与鹰眼地图的关联操作
         /// </summary>
         public readonly MapCtrlEagleMap EagleMapHelper;
         /// <summary>
-        /// 页面布局控件与主地图控件的关联操作
+        /// 主地图控件与页面布局控件的关联操作
         /// </summary>
         public readonly MapCtrlPageLayoutSyn PageLayoutHelper;
         /// <summary>
@@ -138,11 +138,6 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Viewer
         }
 
 
-        private void axMapControlMainMap_OnFullExtentUpdated(object sender, IMapControlEvents2_OnFullExtentUpdatedEvent e)//主地图：刷新地图
-        {
-            MainMapControl.Refresh();
-        }
-
         private void layerControlButtons_Click(object sender, EventArgs e)//图层控制栏中的按钮的事件（添加数据、切换图层/表格、折叠所有图层、展开所有图层）
         {
             var btnName = ((SimpleButton)sender).Name;
@@ -157,6 +152,16 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl.Viewer
             else if (btnName == this.btnCollapsed.Name) TocHelper.ExpandLegend(false);
             else if (btnName == this.btnExpand.Name) TocHelper.ExpandLegend(true);
             else if (btnName == this.btnAddData.Name) DocHelper.AddData();
+        }
+
+        private void MainMapControl_OnFullExtentUpdated(object sender, IMapControlEvents2_OnFullExtentUpdatedEvent e)//主地图：刷新地图
+        {
+            MainMapControl.Refresh();
+        }
+
+        private void MainMapControl_OnMouseDown(object sender, IMapControlEvents2_OnMouseDownEvent e)//
+        {
+
         }
     }
 }

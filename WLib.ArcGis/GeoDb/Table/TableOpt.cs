@@ -27,16 +27,16 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="doActionByRows">在保存记录前，对记录执行的操作，整型参数是新增记录的索引</param>
         public static void InsertRows(this ITable table, int insertCount, Action<IRowBuffer, int> doActionByRows)
         {
-            ICursor tarCursor = table.Insert(true);
+            ICursor cursor = table.Insert(true);
             IRowBuffer tarRowBuffer = table.CreateRowBuffer();
             for (int i = 0; i < insertCount; i++)
             {
                 doActionByRows(tarRowBuffer, i);
-                tarCursor.InsertRow(tarRowBuffer);
+                cursor.InsertRow(tarRowBuffer);
             }
-            tarCursor.Flush();
+            cursor.Flush();
             Marshal.ReleaseComObject(tarRowBuffer);
-            Marshal.ReleaseComObject(tarCursor);
+            Marshal.ReleaseComObject(cursor);
         }
         /// <summary>
         ///  在表类中创建一条新记录，新记录是空的需要对其内容执行赋值操作
@@ -45,12 +45,12 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="doActionByRow">在保存记录前，对记录执行的操作</param>
         public static void InsertOneRow(this ITable table, Action<IRowBuffer> doActionByRow)
         {
-            ICursor tarCursor = table.Insert(true);
+            ICursor cursor = table.Insert(true);
             IRowBuffer tarRowBuffer = table.CreateRowBuffer();
             doActionByRow(tarRowBuffer);
 
-            tarCursor.InsertRow(tarRowBuffer);
-            tarCursor.Flush();
+            cursor.InsertRow(tarRowBuffer);
+            cursor.Flush();
             Marshal.ReleaseComObject(tarRowBuffer);
         }
         #endregion
@@ -115,7 +115,7 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="whereClause">查询条件，注意如果值为空则删除所有记录</param>
         public static void DeleteRows3(this ITable table, string whereClause)
         {
-            IDataset dataset = table as IDataset;
+            IDataset dataset = (IDataset)table;
             whereClause = string.IsNullOrEmpty(whereClause) ? "1=1" : whereClause;
             string sql = $"delete from {dataset.Name} where {whereClause}";
             dataset.Workspace.ExecuteSQL(sql);
@@ -262,11 +262,10 @@ namespace WLib.ArcGis.GeoDb.Table
             while (row != null)
             {
                 tarRowBuffer = targetTable.CreateRowBuffer();
-                IField field = new FieldClass();
                 IFields fields = row.Fields;
                 for (int i = 0; i < fields.FieldCount; i++)
                 {
-                    field = fields.get_Field(i);
+                    var field = fields.get_Field(i);
                     int index = tarRowBuffer.Fields.FindField(field.Name);
                     if (index != -1 && tarRowBuffer.Fields.get_Field(index).Editable)
                     {

@@ -5,8 +5,8 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Common;
 
 namespace WLib.Db.DbBase
@@ -30,20 +30,15 @@ namespace WLib.Db.DbBase
         /// </summary>
         static ProviderFactory()
         {
-            ProviderFactoryDict = new Dictionary<EDbProviderType, DbProviderFactory>(20);
-            ProviderNameDict = new Dictionary<EDbProviderType, string>();
+            ProviderFactoryDict = new Dictionary<EDbProviderType, DbProviderFactory>();
 
-            ProviderNameDict.Add(EDbProviderType.SqlServer, "System.Data.SqlClient");
-            ProviderNameDict.Add(EDbProviderType.OleDb, "System.Data.OleDb");
-            ProviderNameDict.Add(EDbProviderType.Odbc, "System.Data.ODBC");
-            ProviderNameDict.Add(EDbProviderType.Oracle, "Oracle.DataAccess.Client");
-            ProviderNameDict.Add(EDbProviderType.MySql, "MySql.Data.MySqlClient");
-            ProviderNameDict.Add(EDbProviderType.SqLite, "System.Data.SQLite");
-            ProviderNameDict.Add(EDbProviderType.Firebird, "FirebirdSql.Data.Firebird");
-            ProviderNameDict.Add(EDbProviderType.PostgreSql, "Npgsql");
-            ProviderNameDict.Add(EDbProviderType.Db2, "IBM.Data.DB2.iSeries");
-            ProviderNameDict.Add(EDbProviderType.Informix, "IBM.Data.Informix");
-            ProviderNameDict.Add(EDbProviderType.SqlServerCe, "System.Data.SqlServerCe");
+            ProviderNameDict = new Dictionary<EDbProviderType, string>();
+            var enumType = typeof(EDbProviderType);
+            foreach (var enumName in System.Enum.GetNames(enumType))
+            {
+                var attributes = (DescriptionAttribute[])enumType.GetField(enumName).GetCustomAttributes(typeof(DescriptionAttribute), false);
+                ProviderNameDict.Add((EDbProviderType)System.Enum.Parse(enumType, enumName), attributes[0].Description);
+            }
         }
         /// <summary>
         /// 根据数据库类型获取所对应的数据提供程序名
@@ -62,27 +57,8 @@ namespace WLib.Db.DbBase
         internal static DbProviderFactory GetDbProviderFactory(EDbProviderType providerType)
         {
             if (!ProviderFactoryDict.ContainsKey(providerType))
-                ProviderFactoryDict.Add(providerType, ImportDbProviderFactory(providerType));
+                ProviderFactoryDict.Add(providerType, DbProviderFactories.GetFactory(ProviderNameDict[providerType]));
             return ProviderFactoryDict[providerType];
-        }
-        /// <summary>
-        /// 根据数据库类型获取所对应的数据库操作实例
-        /// </summary>
-        /// <param name="providerType"></param>
-        /// <returns></returns>
-        private static DbProviderFactory ImportDbProviderFactory(EDbProviderType providerType)
-        {
-            string providerName = ProviderNameDict[providerType];
-            DbProviderFactory factory = null;
-            try
-            {
-                factory = DbProviderFactories.GetFactory(providerName);
-            }
-            catch (ArgumentException ex)
-            {
-                factory = null;
-            }
-            return factory;
         }
     }
 }

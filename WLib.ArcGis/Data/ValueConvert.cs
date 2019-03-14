@@ -13,7 +13,7 @@ namespace WLib.ArcGis.Data
     /// <summary>
     /// 将要素或表格行的字段值，转换成指定类型数据
     /// </summary>
-    public class ValueConvert
+    public static class ValueConvert
     {
         /// <summary>
         /// 图层
@@ -44,7 +44,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static object ToNotDBNull(IFeature feature, string fieldName)
+        public static object ToNotDBNull(this IFeature feature, string fieldName)
         {
             object value = feature.get_Value(feature.Fields.FindField(fieldName));
             if (value == DBNull.Value)
@@ -55,7 +55,7 @@ namespace WLib.ArcGis.Data
         /// 若字段值为DBNull，空或仅包含空白字符，抛出异常；否则返回去除空白字符的值
         /// </summary>
         /// <returns></returns>
-        public static string ToStringNotWhiteSpace(IFeature feature, string fieldName)
+        public static string ToStringNotWhiteSpace(this IFeature feature, string fieldName)
         {
             object value = feature.get_Value(feature.Fields.FindField(fieldName));
             if (value == DBNull.Value || value.ToString().Trim() == string.Empty)
@@ -69,7 +69,7 @@ namespace WLib.ArcGis.Data
         /// <param name="fieldName"></param>
         /// <param name="replaceStr">当值为DBNull或Empty或空白字符时输出此字符串，可以为null</param>
         /// <returns></returns>
-        public static string ToStringTrim(IFeature feature, string fieldName, string replaceStr)
+        public static string ToStringTrim(this IFeature feature, string fieldName, string replaceStr)
         {
             string value = feature.get_Value(feature.Fields.FindField(fieldName)).ToString().Trim();
             if (value == string.Empty)
@@ -83,7 +83,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static double ToDouble(IFeature feature, string fieldName)
+        public static double ToDouble(this IFeature feature, string fieldName)
         {
             object value = ToNotDBNull(feature, fieldName);
             if (!double.TryParse(value.ToString().Trim(), out var result))
@@ -96,7 +96,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static float ToSingle(IFeature feature, string fieldName)
+        public static float ToSingle(this IFeature feature, string fieldName)
         {
             object value = ToNotDBNull(feature, fieldName);
             if (!float.TryParse(value.ToString().Trim(), out var result))
@@ -109,7 +109,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static decimal ToDecimal(IFeature feature, string fieldName)
+        public static decimal ToDecimal(this IFeature feature, string fieldName)
         {
             object value = ToNotDBNull(feature, fieldName);
             if (!decimal.TryParse(value.ToString().Trim(), out var result))
@@ -122,7 +122,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static int ToInt32(IFeature feature, string fieldName)
+        public static int ToInt32(this IFeature feature, string fieldName)
         {
             object value = ToNotDBNull(feature, fieldName);
             if (!int.TryParse(value.ToString().Trim(), out var result))
@@ -135,7 +135,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static long ToInt64(IFeature feature, string fieldName)
+        public static long ToInt64(this IFeature feature, string fieldName)
         {
             object value = ToNotDBNull(feature, fieldName);
             if (!long.TryParse(value.ToString().Trim(), out var result))
@@ -148,7 +148,7 @@ namespace WLib.ArcGis.Data
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static DateTime ToDateTime(IFeature feature, string fieldName)
+        public static DateTime ToDateTime(this IFeature feature, string fieldName)
         {
             string value = ToStringNotWhiteSpace(feature, fieldName);
             if (!DateTime.TryParse(value.Trim(), out var result))
@@ -165,7 +165,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static object ToNotDBNull(IRow r, string fieldName)
+        public static object ToNotDBNull(this IRow r, string fieldName)
         {
             object value = r.get_Value(r.Fields.FindField(fieldName));
             if (value == DBNull.Value)
@@ -176,7 +176,7 @@ namespace WLib.ArcGis.Data
         /// 若字段值为DBNull，空或仅包含空白字符，抛出异常；否则返回去除空白字符的值
         /// </summary>
         /// <returns></returns>
-        public static string ToStringNotWhiteSpace(IRow r, string fieldName)
+        public static string ToStringNotWhiteSpace(this IRow r, string fieldName)
         {
             object value = r.get_Value(r.Fields.FindField(fieldName));
             if (value == DBNull.Value || value.ToString().Trim() == string.Empty)
@@ -190,7 +190,7 @@ namespace WLib.ArcGis.Data
         /// <param name="fieldName"></param>
         /// <param name="replaceStr">当值为null或Empty或空白字符时输出此字符串，可以为null</param>
         /// <returns></returns>
-        public static string ToStringTrim(IRow r, string fieldName, string replaceStr)
+        public static string ToStringTrim(this IRow r, string fieldName, string replaceStr)
         {
             string value = r.get_Value(r.Fields.FindField(fieldName)).ToString().Trim();
             if (string.IsNullOrEmpty(value))
@@ -204,7 +204,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static double ToDouble(IRow r, string fieldName)
+        public static double ToDouble(this IRow r, string fieldName)
         {
             object value = ToNotDBNull(r, fieldName);
             if (!double.TryParse(value.ToString().Trim(), out var result))
@@ -217,7 +217,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static float ToSingle(IRow r, string fieldName)
+        public static float ToSingle(this IRow r, string fieldName)
         {
             object value = ToNotDBNull(r, fieldName);
             if (!float.TryParse(value.ToString().Trim(), out var result))
@@ -230,7 +230,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static decimal ToDecimal(IRow r, string fieldName)
+        public static decimal ToDecimal(this IRow r, string fieldName)
         {
             object value = ToNotDBNull(r, fieldName);
             if (!decimal.TryParse(value.ToString().Trim(), out var result))
@@ -243,7 +243,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static int ToInt32(IRow r, string fieldName)
+        public static int ToInt32(this IRow r, string fieldName)
         {
             object value = ToNotDBNull(r, fieldName);
             if (!int.TryParse(value.ToString().Trim(), out var result))
@@ -256,7 +256,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static long ToInt64(IRow r, string fieldName)
+        public static long ToInt64(this IRow r, string fieldName)
         {
             object value = ToNotDBNull(r, fieldName);
             if (!long.TryParse(value.ToString().Trim(), out var result))
@@ -269,7 +269,7 @@ namespace WLib.ArcGis.Data
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static DateTime ToDateTime(IRow r, string fieldName)
+        public static DateTime ToDateTime(this IRow r, string fieldName)
         {
             string value = ToStringNotWhiteSpace(r, fieldName);
             if (!DateTime.TryParse(value.ToString().Trim(), out var result))

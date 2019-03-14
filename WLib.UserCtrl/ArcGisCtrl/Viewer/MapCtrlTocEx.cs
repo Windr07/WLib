@@ -8,7 +8,7 @@ using WLib.ArcGis.Control.MapAssociation;
 namespace WLib.UserCtrls.ArcGisCtrl.Viewer
 {
     /// <summary>
-    /// TOC控件与地图控件的关联操作
+    /// 地图控件与TOC控件的关联操作
     /// </summary>
     public class MapCtrlTocEx : MapCtrlToc
     {

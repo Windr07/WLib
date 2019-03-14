@@ -37,7 +37,8 @@ namespace WLib.ArcGis.Display
         /// <returns>IColor</returns>
         public static IColor ToIColor(this Color color)
         {
-            return new RgbColorClass { RGB = color.B * 65536 + color.G * 256 + color.R };
+            return new RgbColorClass { RGB = color.B * 65536 + color.G * 256 + color.R, Transparency = color.A };
+            //return new RgbColorClass { RGB = ColorTranslator.ToOle(color), Transparency = color.A };
         }
     }
 }

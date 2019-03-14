@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace WLib.Files
 {
+    /// <summary>
+    /// 对文件的相关操作
+    /// </summary>
     public class FileOpt
     {
         /// <summary>
