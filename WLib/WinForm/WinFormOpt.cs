@@ -20,7 +20,7 @@ namespace WLib.WinForm
         /// </summary>
         /// <param name="parentForm"></param>
         /// <param name="subForm">子窗体</param>
-        public static Form ShowMDIForm(this Form parentForm, Form subForm)
+        public static Form ShowMdiForm(this Form parentForm, Form subForm)
         {
             var openedForm = parentForm.MdiChildren.FirstOrDefault(v => v.Name.Equals(subForm.Name) && v.Text.Equals(subForm.Text));
             if (openedForm == null)

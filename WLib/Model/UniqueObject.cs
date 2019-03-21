@@ -43,7 +43,6 @@ namespace WLib.Model
         /// </summary>
         /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
-        /// <param name="index">序号</param>
         public UniqueObject(string code, string name)
         {
             this.Code = code;
@@ -89,12 +88,11 @@ namespace WLib.Model
         /// <summary>
         /// 根据序号(UniqueObject.Index)排序
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="uniqueObject"></param>
         /// <returns></returns>
-        public int CompareTo(UniqueObject other)
+        public int CompareTo(UniqueObject uniqueObject)
         {
-            UniqueObject value = (UniqueObject)other;
-            return value.Index;
+            return uniqueObject.Index;
         }
     }
 }

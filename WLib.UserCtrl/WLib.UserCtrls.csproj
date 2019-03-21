@@ -54,9 +54,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChineseLanguage">
-      <HintPath>..\DLL\ChineseLanguage.dll</HintPath>
-    </Reference>
+    <Reference Include="DevExpress.Data.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraLayout.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraTreeList.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="ESRI.ArcGIS.ADF, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
@@ -181,7 +185,27 @@
     <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\TableAttributeQuery.cs" />
+    <Compile Include="ArcGisCtrl\AttributeQuery.cs" />
+    <Compile Include="ArcGisCtrl\FeatureLocationEventArgs.cs" />
+    <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
+      <DependentUpon>MapNavigationTools.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\TableListBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\TableListBox.Designer.cs">
+      <DependentUpon>TableListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\Viewer\MapCtrlTocEx.cs" />
+    <Compile Include="ArcGisCtrl\Viewer\MapViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\Viewer\MapViewer.Designer.cs">
+      <DependentUpon>MapViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExplorerCtrl\ExplorerTreeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -243,11 +267,11 @@
     <Compile Include="ListCtrl\ListBoxPlus.Designer.cs">
       <DependentUpon>ListBoxPlus.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\QueryForm.cs">
+    <Compile Include="ArcGisCtrl\AttributeQueryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\QueryForm.Designer.cs">
-      <DependentUpon>QueryForm.cs</DependentUpon>
+    <Compile Include="ArcGisCtrl\AttributeQueryForm.Designer.cs">
+      <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FileViewer\Picture\EPicViewerAction.cs" />
     <Compile Include="FileViewer\IFileViewer.cs" />
@@ -284,6 +308,17 @@
     <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\MapNavigationTools.resx">
+      <DependentUpon>MapNavigationTools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\TableListBox.resx">
+      <DependentUpon>TableListBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\Viewer\MapViewer.resx">
+      <DependentUpon>MapViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExplorerCtrl\ExplorerTreeView.resx">
       <DependentUpon>ExplorerTreeView.cs</DependentUpon>
     </EmbeddedResource>
@@ -315,8 +350,8 @@
     <EmbeddedResource Include="ListCtrl\ListBoxPlus.resx">
       <DependentUpon>ListBoxPlus.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\QueryForm.resx">
-      <DependentUpon>QueryForm.cs</DependentUpon>
+    <EmbeddedResource Include="ArcGisCtrl\AttributeQueryForm.resx">
+      <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileViewer\Picture\PicViewer.resx">
       <DependentUpon>PicViewer.cs</DependentUpon>

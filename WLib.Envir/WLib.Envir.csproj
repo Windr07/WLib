@@ -64,9 +64,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArcGIS\CheckArcGIS10Install.cs" />
-    <Compile Include="ArcGIS\EArcGISVersion.cs" />
-    <Compile Include="ArcGIS\ICheckArcGISInstall.cs" />
+    <Compile Include="ArcGis\ArcGisEnvironment.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis101Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis102Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis103Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis104Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis105Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis93Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGisInstall.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis100Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\EArcGisProductType.cs" />
+    <Compile Include="ArcGis\CheckVersion\EArcGisVersion.cs" />
+    <Compile Include="ArcGis\CheckVersion\ICheckArcGisInstall.cs" />
     <Compile Include="DotNet\CheckDotNet.cs" />
     <Compile Include="DotNet\DotNetFrameworkInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

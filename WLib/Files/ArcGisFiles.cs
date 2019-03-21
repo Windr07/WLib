@@ -39,6 +39,8 @@ namespace WLib.Files
                     if (System.IO.File.Exists(files[i]))
                     {
                         string type = System.IO.Path.GetExtension(files[i]);
+                        if (type == null)
+                            continue;
                         if (ShpExtensions.Contains(type.ToLower()))//检查shp文件
                             System.IO.File.Delete(files[i]);
                         else if (MapExtensions.Contains(type.ToLower()))//检查mxd文件
@@ -57,9 +59,9 @@ namespace WLib.Files
         {
             var fileDir = System.IO.Path.GetDirectoryName(filePath);
             var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-            for (int i = 0; i < ShpExtensions.Length; i++)
+            foreach (var extension in ShpExtensions)
             {
-                System.IO.File.Delete(System.IO.Path.Combine(fileDir, fileName + ShpExtensions[i]));
+                System.IO.File.Delete(System.IO.Path.Combine(fileDir, fileName + extension));
             }
         }
         /// <summary>
@@ -72,9 +74,9 @@ namespace WLib.Files
             var filePaths = new List<string>();
             var fileDir = System.IO.Path.GetDirectoryName(filePath);
             var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-            for (int i = 0; i < ShpExtensions.Length; i++)
+            foreach (var extension in ShpExtensions)
             {
-                var path = System.IO.Path.Combine(fileDir, fileName + ShpExtensions[i]);
+                var path = System.IO.Path.Combine(fileDir, fileName + extension);
                 if (System.IO.File.Exists(path))
                     filePaths.Add(path);
             }

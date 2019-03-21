@@ -62,15 +62,12 @@ namespace WLib.Office
                 _officeVersions = new List<EOfficeVersion>();
                 _officeInstallPaths = new List<string>();
 
-                string strKeyName = "Path";
                 string path = null;
-                string name = null;
-
                 try
                 {
                     //office97
-                    name = @"SOFTWARE\Microsoft\Office\8.0\Common\InstallRoot";
-                    strKeyName = "OfficeBin";
+                    var name = @"SOFTWARE\Microsoft\Office\8.0\Common\InstallRoot";
+                    var strKeyName = "OfficeBin";
                     if (GetRegValue(name, strKeyName, ref path))
                     {
                         _officeVersions.Add(EOfficeVersion.Office97);
@@ -162,25 +159,17 @@ namespace WLib.Office
             bool isSuccess = false;
             Microsoft.Win32.RegistryKey regSubKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(name, false);
 
-            if (regSubKey != null)
+            object objResult = regSubKey?.GetValue(strKeyName);
+            if (objResult != null)
             {
-                object objResult = regSubKey.GetValue(strKeyName);
-                if (objResult != null)
+                Microsoft.Win32.RegistryValueKind regValueKind = regSubKey.GetValueKind(strKeyName);
+                if (regValueKind == Microsoft.Win32.RegistryValueKind.String)
                 {
-                    Microsoft.Win32.RegistryValueKind regValueKind = regSubKey.GetValueKind(strKeyName);
-                    if (regValueKind == Microsoft.Win32.RegistryValueKind.String)
-                    {
-                        value = objResult.ToString();
-                        isSuccess = true;
-                    }
+                    value = objResult.ToString();
+                    isSuccess = true;
                 }
             }
-
-            if (regSubKey != null)
-            {
-                regSubKey.Close();
-                regSubKey = null;
-            }
+            regSubKey?.Close();
 
             return isSuccess;
         }

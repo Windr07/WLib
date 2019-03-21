@@ -27,16 +27,16 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="doActionByRows">在保存记录前，对记录执行的操作，整型参数是新增记录的索引</param>
         public static void InsertRows(this ITable table, int insertCount, Action<IRowBuffer, int> doActionByRows)
         {
-            ICursor tarCursor = table.Insert(true);
+            ICursor cursor = table.Insert(true);
             IRowBuffer tarRowBuffer = table.CreateRowBuffer();
             for (int i = 0; i < insertCount; i++)
             {
                 doActionByRows(tarRowBuffer, i);
-                tarCursor.InsertRow(tarRowBuffer);
+                cursor.InsertRow(tarRowBuffer);
             }
-            tarCursor.Flush();
+            cursor.Flush();
             Marshal.ReleaseComObject(tarRowBuffer);
-            Marshal.ReleaseComObject(tarCursor);
+            Marshal.ReleaseComObject(cursor);
         }
         /// <summary>
         ///  在表类中创建一条新记录，新记录是空的需要对其内容执行赋值操作
@@ -45,12 +45,12 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="doActionByRow">在保存记录前，对记录执行的操作</param>
         public static void InsertOneRow(this ITable table, Action<IRowBuffer> doActionByRow)
         {
-            ICursor tarCursor = table.Insert(true);
+            ICursor cursor = table.Insert(true);
             IRowBuffer tarRowBuffer = table.CreateRowBuffer();
             doActionByRow(tarRowBuffer);
 
-            tarCursor.InsertRow(tarRowBuffer);
-            tarCursor.Flush();
+            cursor.InsertRow(tarRowBuffer);
+            cursor.Flush();
             Marshal.ReleaseComObject(tarRowBuffer);
         }
         #endregion
@@ -115,7 +115,7 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="whereClause">查询条件，注意如果值为空则删除所有记录</param>
         public static void DeleteRows3(this ITable table, string whereClause)
         {
-            IDataset dataset = table as IDataset;
+            IDataset dataset = (IDataset)table;
             whereClause = string.IsNullOrEmpty(whereClause) ? "1=1" : whereClause;
             string sql = $"delete from {dataset.Name} where {whereClause}";
             dataset.Workspace.ExecuteSQL(sql);
@@ -262,11 +262,10 @@ namespace WLib.ArcGis.GeoDb.Table
             while (row != null)
             {
                 tarRowBuffer = targetTable.CreateRowBuffer();
-                IField field = new FieldClass();
                 IFields fields = row.Fields;
                 for (int i = 0; i < fields.FieldCount; i++)
                 {
-                    field = fields.get_Field(i);
+                    var field = fields.get_Field(i);
                     int index = tarRowBuffer.Fields.FindField(field.Name);
                     if (index != -1 && tarRowBuffer.Fields.get_Field(index).Editable)
                     {
@@ -505,9 +504,9 @@ namespace WLib.ArcGis.GeoDb.Table
 
 
         #region 数据源
-        //当表格是从地图文档中获取（(map as ITableCollection).Table[0]）
-        //且表格没有正确关联数据源时，下列三个方法会报错，暂未找到合适的接口处理此类情况，
-        //表格没有正确关联数据源时应直接移除这些表格(ITableCollection.RemoveAllTables或RemoveTable)，然后再添加
+        //当表格是从地图文档中获取（var table = (map as ITableCollection).Table[0]）
+        //且表格没有正确关联数据源时，下列三个方法获取的数据源(路径)为null，暂未找到合适的接口处理此类情况，目前解决方法是：
+        //表格没有正确关联数据源时应直接从地图中移除这些表格(ITableCollection.RemoveAllTables或RemoveTable)，然后再添加
 
         /// <summary>
         /// 获取表格所属的工作空间（IWorkspace）
@@ -534,8 +533,8 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <returns></returns>
         public static string GetSourcePath(this ITable table)
         {
-            IDataset dataset = (IDataset)table;
-            return dataset.Workspace.PathName + "\\" + dataset.Name;
+            IDataset dataset = table as IDataset;
+            return dataset?.Workspace.PathName + "\\" + dataset?.Name;
         }
         #endregion
 
@@ -548,7 +547,7 @@ namespace WLib.ArcGis.GeoDb.Table
         /// <param name="newAliasName">新表格别名</param>
         public static void RenameTableAliasName(this ITable table, string newAliasName)
         {
-            IClassSchemaEdit2 classSchemaEdit2 = table as IClassSchemaEdit2;
+            IClassSchemaEdit2 classSchemaEdit2 = (IClassSchemaEdit2)table;
             classSchemaEdit2.AlterAliasName(newAliasName);
         }
         /// <summary>
@@ -563,7 +562,7 @@ namespace WLib.ArcGis.GeoDb.Table
         {
             IDataset ds = table as IDataset;
             bool isRename = false;
-            string oldAliasName = (table as IObjectClass).AliasName, oldName = ds.Name;
+            string oldAliasName = ((IObjectClass)table).AliasName, oldName = ds.Name;
             try
             {
                 if (!string.IsNullOrEmpty(newAliasName))

@@ -13,7 +13,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
     /// <summary>
     /// 子类型和属性域操作
     /// </summary>
-    public class SubTypeDomian
+    public static class SubTypeDomian
     {
         /// <summary>  
         /// 创建属性域  
@@ -21,7 +21,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <param name="workspace">工作空间</param>  
         /// <param name="strDomainName">属性域名称</param>  
         /// <param name="dicDomainItems">属性域的项</param>  
-        public static void CreateDomain(IWorkspace workspace, string strDomainName, Dictionary<string, string> dicDomainItems)
+        public static void CreateDomain(this IWorkspace workspace, string strDomainName, Dictionary<string, string> dicDomainItems)
         {
             IWorkspaceDomains wsDomains = (IWorkspaceDomains)workspace;
             ICodedValueDomain codeValueDomain = new CodedValueDomainClass();
@@ -41,10 +41,10 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <summary>  
         /// 创建子类  
         /// </summary>  
-        /// <param name="featureClass">要素</param>  
+        /// <param name="featureClass">要创建子类的要素类</param>  
         /// <param name="subTypeFieldName">需创建子类的字段名</param>  
         /// <param name="dicSubtypeItems">子类项</param>  
-        public static void CreateSubtypes(IFeatureClass featureClass, string subTypeFieldName, Dictionary<int, string> dicSubtypeItems)
+        public static void CreateSubtypes(this IFeatureClass featureClass, string subTypeFieldName, Dictionary<int, string> dicSubtypeItems)
         {
             ISubtypes subtypes = featureClass as ISubtypes;
             subtypes.SubtypeFieldName = subTypeFieldName;

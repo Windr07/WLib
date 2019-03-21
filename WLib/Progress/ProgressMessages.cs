@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WLib.Progress.ProEventArgs;
 
 namespace WLib.Progress
 {
@@ -18,9 +19,9 @@ namespace WLib.Progress
     public class ProgressMessages
     {
         #region 进度信息
-        protected bool _messageWithTime;
-        protected string _progressMessage;
-        protected List<string> _messages = new List<string>();
+        private bool _messageWithTime;
+        private string _progressMessage;
+        private readonly List<string> _messages = new List<string>();
 
 
         /// <summary>

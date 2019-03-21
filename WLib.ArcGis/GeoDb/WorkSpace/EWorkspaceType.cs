@@ -91,16 +91,27 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         [Description("cad", 2)]
         [Description("esriDataSourcesFile.CadWorkspaceFactory", 1)]
         CAD = 11,
-
+        /// <summary>
+        /// 内存工作空间
+        /// </summary>
+        [Description("内存工作空间")]
+        [Description("InMemory", 2)]
+        [Description("esriDataSourcesGDB.InMemoryWorkspaceFactory", 1)]
+        InMemory = 11,
 
         //关于UID：https://blog.csdn.net/yulongguiziyao/article/details/16119633
         //关于WorkspaceFactoryProgID：http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeodatabase/IWorkspaceName_WorkspaceFactoryProgID.htm
-        //esriDataSourcesFile.ArcInfoWorkspaceFactory
-        //esriDataSourcesFile.CadWorkspaceFactory
-        //esriDataSourcesOleDB.OLEDBWorkspaceFactory
-        //esriDataSourcesFile.PCCoverageWorkspaceFactory
-        //esriDataSourcesRaster.RasterWorkspaceFactory
-        //esriDataSourcesFile.TinWorkspaceFactory
-        //esriDataSourcesFile.VpfWorkspaceFactory
+        //  esriDataSourcesGDB.AccessWorkspaceFactory  
+        //  esriDataSourcesFile.ArcInfoWorkspaceFactory  
+        //  esriDataSourcesFile.CadWorkspaceFactory  
+        //  esriDataSourcesGDB.FileGDBWorkspaceFactory  
+        //  esriDataSourcesOleDB.OLEDBWorkspaceFactory  
+        //  esriDataSourcesFile.PCCoverageWorkspaceFactory  
+        //  esriDataSourcesRaster.RasterWorkspaceFactory  
+        //  esriDataSourcesGDB.SdeWorkspaceFactory  
+        //  esriDataSourcesFile.ShapefileWorkspaceFactory  
+        //  esriDataSourcesOleDB.TextFileWorkspaceFactory  
+        //  esriDataSourcesFile.TinWorkspaceFactory 
+        //  esriDataSourcesFile.VpfWorkspaceFactory
     }
 }

@@ -66,7 +66,6 @@
             this.featCls_comboBox.Name = "featCls_comboBox";
             this.featCls_comboBox.Size = new System.Drawing.Size(223, 20);
             this.featCls_comboBox.TabIndex = 2;
-            this.featCls_comboBox.SelectedIndexChanged += new System.EventHandler(this.featCls_comboBox_SelectedIndexChanged);
             // 
             // lyr2_label
             // 
@@ -86,7 +85,6 @@
             this.featCls2_comboBox.Name = "featCls2_comboBox";
             this.featCls2_comboBox.Size = new System.Drawing.Size(223, 20);
             this.featCls2_comboBox.TabIndex = 2;
-            this.featCls2_comboBox.SelectedIndexChanged += new System.EventHandler(this.featCls2_comboBox_SelectedIndexChanged);
             // 
             // lineColor_button
             // 
@@ -95,7 +93,6 @@
             this.lineColor_button.Size = new System.Drawing.Size(55, 23);
             this.lineColor_button.TabIndex = 5;
             this.lineColor_button.UseVisualStyleBackColor = true;
-            this.lineColor_button.Click += new System.EventHandler(this.LineColor_button_Click);
             // 
             // field_comboBox
             // 
@@ -142,7 +139,6 @@
             this.OK_button.TabIndex = 7;
             this.OK_button.Text = "确定";
             this.OK_button.UseVisualStyleBackColor = true;
-            this.OK_button.Click += new System.EventHandler(this.OK_button_Click);
             // 
             // Cancel_button
             // 
@@ -152,7 +148,6 @@
             this.Cancel_button.TabIndex = 7;
             this.Cancel_button.Text = "取消";
             this.Cancel_button.UseVisualStyleBackColor = true;
-            this.Cancel_button.Click += new System.EventHandler(this.Cancel_button_Click);
             // 
             // fillColor_button
             // 
@@ -161,7 +156,6 @@
             this.fillColor_button.Size = new System.Drawing.Size(55, 23);
             this.fillColor_button.TabIndex = 5;
             this.fillColor_button.UseVisualStyleBackColor = true;
-            this.fillColor_button.Click += new System.EventHandler(this.FillColor_button_Click);
             // 
             // classUpDown
             // 

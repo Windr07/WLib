@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\耕地质量等级系统%28集成版%29\Realese\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -128,7 +128,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.GISClient, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Output, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -139,6 +139,9 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -161,6 +164,15 @@
     <Compile Include="Analysis\OnShape\TopologicalOpt.cs" />
     <Compile Include="Analysis\Topology\TopologyOpt.cs" />
     <Compile Include="Calculate\AngleOpt.cs" />
+    <Compile Include="Control\MapAssociation\EMapTools.cs" />
+    <Compile Include="Control\MapAssociation\EMeasureType.cs" />
+    <Compile Include="Control\MapAssociation\EPageTools.cs" />
+    <Compile Include="Control\MapAssociation\MapCtrlDocument.cs" />
+    <Compile Include="Control\MapAssociation\MapCtrlEagleMap.cs" />
+    <Compile Include="Control\MapAssociation\MapCtrlMeasure.cs" />
+    <Compile Include="Control\MapAssociation\MapCtrlMenu.cs" />
+    <Compile Include="Control\MapAssociation\MapCtrlPageLayoutSyn.cs" />
+    <Compile Include="Control\MapAssociation\MapCtrlToc.cs" />
     <Compile Include="GeoDb\FeatClass\ClassesToTreeNodes.cs" />
     <Compile Include="GeoDb\FeatClass\FeatClassToPath.cs" />
     <Compile Include="GeoDb\FeatClass\FeatClassFromPath.cs" />
@@ -195,13 +207,13 @@
     <Compile Include="Carto\LabelAnnoOpt.cs" />
     <Compile Include="Carto\Layer\LayerOpt.cs" />
     <Compile Include="Carto\Layer\LayerUid.cs" />
-    <Compile Include="Carto\Map\MapControlOpt.cs" />
+    <Compile Include="Control\MapCtrlLayers.cs" />
     <Compile Include="Carto\Map\MapOption.cs" />
     <Compile Include="Carto\Map\MapQuery.cs" />
     <Compile Include="Carto\DataSource\CheckMapSource.cs" />
     <Compile Include="Carto\DataSource\MapSource.cs" />
     <Compile Include="Display\RenderOpt.cs" />
-    <Compile Include="Carto\Map\ZoomTo.cs" />
+    <Compile Include="Control\ZoomTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeoDb\Raster\RasterOpt.cs" />
     <Compile Include="Server\LoadServerMap.cs" />

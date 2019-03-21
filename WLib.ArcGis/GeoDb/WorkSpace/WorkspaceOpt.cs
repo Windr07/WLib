@@ -31,7 +31,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
                 throw new Exception("工作空间不是要素类工作空间！");
 
             IFeatureWorkspaceManage featureWorkspaceMange = (IFeatureWorkspaceManage)featureWorkspace;
-            IEnumDatasetName enumDatasetName = workspace.get_DatasetNames(esriDatasetType.esriDTFeatureClass);
+            IEnumDatasetName enumDatasetName = workspace.DatasetNames[esriDatasetType.esriDTFeatureClass];
             IDatasetName datasetName;
             while ((datasetName = enumDatasetName.Next()) != null)
             {
@@ -50,7 +50,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
                 throw new Exception("工作空间不是要素类工作空间！");
 
             IFeatureWorkspaceManage featureWorkspaceMange = (IFeatureWorkspaceManage)featureWorkspace;
-            IEnumDatasetName enumDatasetName = workspace.get_DatasetNames(esriDatasetType.esriDTFeatureClass);
+            IEnumDatasetName enumDatasetName = workspace.DatasetNames[esriDatasetType.esriDTFeatureClass];
             IDatasetName datasetName;
             while ((datasetName = enumDatasetName.Next()) != null)
             {
@@ -101,7 +101,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <returns></returns>
         public static ITable GetFirstTable(this IWorkspace workspace)
         {
-            IEnumDataset enumDataset = workspace.get_Datasets(esriDatasetType.esriDTTable);
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTTable];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {
@@ -117,7 +117,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         public static List<ITable> GetTables(this IWorkspace workspace)
         {
             var tables = new List<ITable>();
-            IEnumDataset enumDataset = workspace.get_Datasets(esriDatasetType.esriDTTable);
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTTable];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {
@@ -133,7 +133,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <returns></returns>
         public static ITable GetITableByName(this IWorkspace workspace, string tableName)
         {
-            IEnumDataset enumDataset = workspace.get_Datasets(esriDatasetType.esriDTTable);
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTTable];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {
@@ -185,12 +185,12 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         public static IFeatureClass GetFirstFeatureClass(this IWorkspace workspace)
         {
             IFeatureClass featureClass;
-            var enumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureClass);
+            var enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
             while ((featureClass = enumDataset.Next() as IFeatureClass) != null)
             {
                 return featureClass;
             }
-            IEnumDataset dsEnumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureDataset);
+            IEnumDataset dsEnumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
             IDataset dataset;
             while ((dataset = dsEnumDataset.Next()) != null) //遍历要数集
             {
@@ -261,7 +261,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         private static IEnumerable GetDataset(this IWorkspace workspace)
         {
             //工作空间下的要素类
-            IEnumDataset enumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureClass);
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
             IFeatureClass featureClass = enumDataset.Next() as IFeatureClass;
             while (featureClass != null)
             {
@@ -270,7 +270,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
 
             //工作空间下的要素集
-            IEnumDataset dsEnumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureDataset);
+            IEnumDataset dsEnumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
             IDataset dataset = dsEnumDataset.Next();
             while (dataset != null)//遍历要数集
             {
@@ -298,7 +298,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <returns></returns>
         public static IFeatureDataset GetFeatureDataset(this IWorkspace workspace, string datasetName)
         {
-            IEnumDataset enumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureDataset);
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {
@@ -315,7 +315,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         public static List<IFeatureDataset> GetFeatureDatasets(this IWorkspace workspace)
         {
             List<IFeatureDataset> result = new List<IFeatureDataset>();
-            IEnumDataset enumDataset = workspace.get_Datasets(esriDatasetType.esriDTFeatureDataset);
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {

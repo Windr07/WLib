@@ -132,13 +132,10 @@ namespace WLib.Format
             for (int i = 1; i < str.Length; i++)
             {
                 if (IsChinese(str[i]) || IsChinesePunctuation(str[i]))
-                {
                     length += 2;
-                }
                 else
-                {
                     length++;
-                }
+
                 if (length > maxLength)
                 {
                     length = 0;

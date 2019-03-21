@@ -1,4 +1,11 @@
-﻿using AppLibrary.WriteExcel;
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+using AppLibrary.WriteExcel;
 
 namespace WLib.Files.Excel.AppLibExcel.StyleHelper
 {

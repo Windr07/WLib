@@ -27,7 +27,7 @@ namespace WLib.Envir.DotNet
            下载地址(64位)：http://www.ddooo.com/softdown/25627.htm 
            下载地址(32位)：http://www.bkill.com/download/21488.html 
      */
-    
+
     /// <summary>
     /// 获取已安装的.NET Framework版本信息
     /// </summary>
@@ -48,10 +48,10 @@ namespace WLib.Envir.DotNet
                 if (versionKeyName.StartsWith("v"))
                 {
                     RegistryKey versionKey = ndpKey.OpenSubKey(versionKeyName);
-                    string install = versionKey.GetValue("Install", "").ToString();
-                    string version = versionKey.GetValue("Version", "").ToString();
-                    string installPath = versionKey.GetValue("InstallPath", "").ToString();
-                    string sp = versionKey.GetValue("SP", "").ToString();
+                    var install = versionKey.GetValue("Install", "").ToString();
+                    var version = versionKey.GetValue("Version", "").ToString();
+                    var installPath = versionKey.GetValue("InstallPath", "").ToString();
+                    var sp = versionKey.GetValue("SP", "").ToString();
                     if (!string.IsNullOrEmpty(install))
                     {
                         infoList.Add(new DotNetFrameworkInfo(versionKeyName, version, installPath, sp));
@@ -80,14 +80,13 @@ namespace WLib.Envir.DotNet
         private static DotNetFrameworkInfo GetV4NetFrameworkInfo(RegistryKey versionKey)
         {
             DotNetFrameworkInfo info = null;
-            string install = versionKey.GetValue("Install", "").ToString();
+            var install = versionKey.GetValue("Install", "").ToString();
             if (!string.IsNullOrEmpty(install))
             {
-                string keyName = versionKey.Name;
-                string name =
-                    $"v{versionKey.GetValue("Version", "").ToString()} {keyName.Substring(keyName.LastIndexOf('\\') + 1)}";
-                string installPath = versionKey.GetValue("InstallPath", "").ToString();
-                string sp = versionKey.GetValue("SP", "").ToString();
+                var keyName = versionKey.Name;
+                var name = $"v{versionKey.GetValue("Version", "")} {keyName.Substring(keyName.LastIndexOf('\\') + 1)}";
+                var installPath = versionKey.GetValue("InstallPath", "").ToString();
+                var sp = versionKey.GetValue("SP", "").ToString();
                 info = new DotNetFrameworkInfo(name, name, installPath, sp);
             }
             return info;

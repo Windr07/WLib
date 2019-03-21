@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 

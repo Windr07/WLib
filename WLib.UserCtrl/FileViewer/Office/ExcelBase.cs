@@ -50,14 +50,13 @@ namespace WLib.UserCtrls.FileViewer.Office
             try
             {
                 if (_excelAppClass == null)
-                {
                     _excelAppClass = new ApplicationClass();
-                }
+
                 _excelAppClass.WorkbookBeforeClose += _excelAppClass_WorkbookBeforeClose;
+
                 if (_workBook != null)
-                {
                     _excelAppClass.Workbooks.Close();
-                }
+
                 //加载文档
                 if (_excelWnd == IntPtr.Zero)
                 {
@@ -240,7 +239,6 @@ namespace WLib.UserCtrls.FileViewer.Office
                     WinApi.SendMessage(_excelWnd, WinApi.WM_CLOSE, 0, 0);
                     _excelWnd = IntPtr.Zero;
                 }
-                ////COM.LIB.LOG.LogOperator.WriteLog(ex.ToString());
             }
 
         }
@@ -290,10 +288,7 @@ namespace WLib.UserCtrls.FileViewer.Office
         /// </summary>
         public void Save()
         {
-            //if (wkBook != null)
-            //{
-            //    wkBook.Save();
-            //}
+            _workBook?.Save();
         }
         /// <summary>
         /// 关闭打开的文件
@@ -334,7 +329,6 @@ namespace WLib.UserCtrls.FileViewer.Office
             }
             catch (System.Exception ex)
             {
-                ////COM.LIB.LOG.LogOperator.WriteLog(ex.ToString());
                 //MessageBox.Show(ex.Message);
             }
             finally

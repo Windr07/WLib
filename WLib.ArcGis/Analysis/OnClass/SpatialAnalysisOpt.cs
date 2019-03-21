@@ -21,7 +21,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <returns></returns>
         public static IFeatureClass Intersect(IFeatureClass inClass, IFeatureClass overlayClass, string outPath, string outName)
         {
-            var workspaceType = GetWorkspace.GetWorkspaceType(outPath);
+            var workspaceType = GetWorkspace.GetDefaultWorkspaceType(outPath);
             if (workspaceType == EWorkspaceType.Default)
                 throw new Exception($"工作空间路径(outPath)不存在！{outPath} 该路径必须是已存在的mdb文件路径，或shp所在文件夹路径，或gdb文件夹路径");
 

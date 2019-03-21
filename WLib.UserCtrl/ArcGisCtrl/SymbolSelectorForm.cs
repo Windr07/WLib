@@ -5,18 +5,21 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 using WLib.ArcGis.Display;
-using WLib.Envir.ArcGIS;
+using WLib.Envir.ArcGis;
 
 namespace WLib.UserCtrls.ArcGisCtrl
 {
+    /// <summary>
+    /// 符号选择器(Symbology)窗体（注意Show窗体前先调用LoadSymbolSelector方法）
+    /// </summary>
     public partial class SymbolSelectorForm : Form
     {
         /// <summary>
@@ -34,7 +37,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// <summary>
         /// 当前所选的样式
         /// </summary>
-        public ISymbol Symbol { get; protected set; }
+        public ISymbol Symbol => (ISymbol)StyleGalleryItem.Item;
         /// <summary>
         /// 添加更多符号
         /// </summary>
@@ -52,6 +55,8 @@ namespace WLib.UserCtrls.ArcGisCtrl
 
             LegendClass = legendClass;
             Layer = layer;
+            btnOK.Click += delegate { DialogResult = DialogResult.OK; Close(); };
+            btnCancel.Click += delegate { DialogResult = DialogResult.Cancel; Close(); };
         }
         /// <summary>
         /// 根据符号样式类别初始化SymbologyControl，如果图层已有符号，则把符号作为SymbologyControl的第一个符号并选中
@@ -80,20 +85,17 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 switch (eSymbologyStyleClass)
                 {
                     case esriSymbologyStyleClass.esriStyleClassMarkerSymbols:
-                        nudAngle.Visible = lblAngle.Visible = true;
-                        nudSize.Visible = lblSize.Visible = true;
+                        nudAngle.Visible = lblAngle.Visible = nudSize.Visible = lblSize.Visible = true;
                         nudWidth.Visible = lblWidth.Visible = false;
                         btnOutlineColor.Visible = lblOutlineColor.Visible = false;
                         break;
                     case esriSymbologyStyleClass.esriStyleClassLineSymbols:
-                        nudAngle.Visible = lblAngle.Visible = false;
-                        nudSize.Visible = lblSize.Visible = false;
+                        nudAngle.Visible = lblAngle.Visible = nudSize.Visible = lblSize.Visible = false;
                         nudWidth.Visible = lblWidth.Visible = true;
                         btnOutlineColor.Visible = lblOutlineColor.Visible = false;
                         break;
                     case esriSymbologyStyleClass.esriStyleClassFillSymbols:
-                        nudAngle.Visible = lblAngle.Visible = false;
-                        nudSize.Visible = lblSize.Visible = false;
+                        nudAngle.Visible = lblAngle.Visible = nudSize.Visible = lblSize.Visible = false;
                         nudWidth.Visible = lblWidth.Visible = true;
                         btnOutlineColor.Visible = lblOutlineColor.Visible = true;
                         break;
@@ -120,7 +122,8 @@ namespace WLib.UserCtrls.ArcGisCtrl
         private void SymbolSelectorForm_Load(object sender, EventArgs e)
         {
             //取得ArcGIS安装路径，载入ESRI.ServerStyle文件到SymbologyControl
-            axSymbologyControl1.LoadStyleFile(new CheckArcGIS10Install().GetDesktopPath() + "\\Styles\\ESRI.ServerStyle");
+            //var sInstall = ESRI.ArcGIS.RuntimeManager.ActiveRuntime.Path;
+            axSymbologyControl1.LoadStyleFile(ArcGisEnvironment.GetInstallPath() + "\\Styles\\ESRI.ServerStyle");
 
             //确定图层的类型(点线面)
             esriSymbologyStyleClass eType;
@@ -143,32 +146,24 @@ namespace WLib.UserCtrls.ArcGisCtrl
         {
             if (btnMoreSymbols.Tag == null)//Tag值表示是否已加载过其它符号菜单
             {
-                var dir = new CheckArcGIS10Install().GetDesktopPath() + "\\Styles";
+                var dir = ArcGisEnvironment.GetInstallPath() + "\\Styles";//var dir = ESRI.ArcGIS.RuntimeManager.ActiveRuntime.Path;
                 var filePaths = System.IO.Directory.GetFiles(dir, "*.ServerStyle");//取得菜单项数量
-
-                //循环添加其它符号菜单项到菜单
-                ToolStripMenuItem[] toolStripMenuItems = new ToolStripMenuItem[filePaths.Length + 1];
-                for (int i = 0; i < filePaths.Length; i++)
+                foreach (var filePath in filePaths)//循环添加其它符号菜单项到菜单
                 {
-                    toolStripMenuItems[i] = new ToolStripMenuItem
+                    cMenuStripMoreSymbol.Items.Add(new ToolStripMenuItem
                     {
+                        Name = filePath,
                         CheckOnClick = true,
-                        Text = System.IO.Path.GetFileNameWithoutExtension(filePaths[i])
-                    };
-                    if (toolStripMenuItems[i].Text == "ESRI")
-                        toolStripMenuItems[i].Checked = true;
-
-                    toolStripMenuItems[i].Name = filePaths[i];
+                        Text = System.IO.Path.GetFileNameWithoutExtension(filePath),
+                        Checked = Text == "ESRI"
+                    });
                 }
                 //添加“更多符号”菜单项到菜单最后一项
-                toolStripMenuItems[filePaths.Length] = new ToolStripMenuItem { Text = StrAddMoreSymbol, Name = StrAddMoreSymbol };
-
-                //添加所有的菜单项到菜单
-                contextMenuStripMoreSymbol.Items.AddRange(toolStripMenuItems);
+                cMenuStripMoreSymbol.Items.Add(new ToolStripMenuItem { Text = StrAddMoreSymbol, Name = StrAddMoreSymbol });
                 btnMoreSymbols.Tag = true;//Tag值表示是否已加载过其它符号菜单
             }
             //显示菜单
-            contextMenuStripMoreSymbol.Show(btnMoreSymbols.Location);
+            cMenuStripMoreSymbol.Show(btnMoreSymbols.Location);
         }
         /// <summary>
         /// 单击更多符号按钮的上下文菜单后，将新符号加入到符号选择控件
@@ -177,7 +172,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// <param name="e"></param>
         private void contextMenuStripMoreSymbol_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)e.ClickedItem;
+            var toolStripMenuItem = (ToolStripMenuItem)e.ClickedItem;
             if (toolStripMenuItem.Name == StrAddMoreSymbol)//如果单击的是“添加更多符号”
             {
                 if (this.openFileDialog.ShowDialog() == DialogResult.OK) //弹出打开文件对话框
@@ -191,27 +186,6 @@ namespace WLib.UserCtrls.ArcGisCtrl
                     this.axSymbologyControl1.RemoveFile(toolStripMenuItem.Name);
             }
             this.axSymbologyControl1.Refresh();
-        }
-        /// <summary>
-        /// 单击确定按钮，更新符号并关闭窗体
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            Symbol = (ISymbol)StyleGalleryItem.Item; //取得选定的符号
-            DialogResult = DialogResult.OK;//关闭窗体
-            Close();
-        }
-        /// <summary>
-        /// 单击取消按钮，关闭窗体
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
 
 
@@ -317,9 +291,8 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// <param name="e"></param>
         private void btnColor_EditValueChanged(object sender, EventArgs e)
         {
-            //设置符号颜色为用户选定的颜色
             IColor color = btnColor.BackColor.ToIColor();
-            switch (axSymbologyControl1.StyleClass)
+            switch (axSymbologyControl1.StyleClass)//设置符号颜色为用户选定的颜色
             {
                 case esriSymbologyStyleClass.esriStyleClassMarkerSymbols://点符号
                     ((IMarkerSymbol)StyleGalleryItem.Item).Color = color;

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2018
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Windows.Forms;
 
 namespace WLib.UserCtrls.Dev.InputCtrl

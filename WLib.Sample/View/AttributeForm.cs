@@ -24,26 +24,59 @@ namespace GISsys
 
         private void frmAttribute_Load(object sender, EventArgs e)
         {
-            try            {                                ITable lyrtable = (ITable)layer;//将图层转为表                DataTable table = new DataTable();//创建数据表                IField field;                //将图层字段作为数据表的列                for (int i = 0; i < lyrtable.Fields.FieldCount; i++)                {                    field = lyrtable.Fields.get_Field(i);                    table.Columns.Add(field.Name);                }                                object[] values = new object[lyrtable.Fields.FieldCount];                IQueryFilter queryFilter = new QueryFilterClass();                ICursor cursor = lyrtable.Search(queryFilter, true);                IRow row;
-                //读取每一行，获取属性值                 while ((row = cursor.NextRow()) != null)                {                    for (int j = 0; j < lyrtable.Fields.FieldCount; j++)                    {                        object ob = row.get_Value(j);                        values[j] = ob;                    }                    table.Rows.Add(values);                }                this.dataGridView1.DataSource = table;            }            catch            {                MessageBox.Show("无法显示属性表！");                this.Close();            }        }
+            try
+            {
+                
+                ITable lyrtable = (ITable)layer;//将图层转为表
+                DataTable table = new DataTable();//创建数据表
+                IField field;
+                //将图层字段作为数据表的列
+                for (int i = 0; i < lyrtable.Fields.FieldCount; i++)
+                {
+                    field = lyrtable.Fields.get_Field(i);
+                    table.Columns.Add(field.Name);
+                }
+                
+                object[] values = new object[lyrtable.Fields.FieldCount];
+                IQueryFilter queryFilter = new QueryFilterClass();
+                ICursor cursor = lyrtable.Search(queryFilter, true);
+                IRow row;
+                //读取每一行，获取属性值
+                 while ((row = cursor.NextRow()) != null)
+                {
+                    for (int j = 0; j < lyrtable.Fields.FieldCount; j++)
+                    {
+                        object ob = row.get_Value(j);
+                        values[j] = ob;
+                    }
+                    table.Rows.Add(values);
+                }
+                this.dataGridView1.DataSource = table;
+            }
+            catch
+            {
+                MessageBox.Show("无法显示属性表！");
+                this.Close();
+            }
+        }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            DataGridViewSelectedRowCollection SelRows = this.dataGridView1.SelectedRows;
-            DataGridViewRow row;
-            MainForm form = (MainForm)Application.OpenForms[0];
-            IMap m = form.getMapControl().Map;
-            m.ClearSelection();
-            for (int i = 0; i < SelRows.Count; i++)
-            {
-                row = SelRows[i];
-                int ID = Convert.ToInt32(row.Cells["FID"].Value.ToString());
-                IFeatureLayer flyr = (IFeatureLayer)layer;
-                IFeatureClass featurecls = flyr.FeatureClass;
-                IFeature feature = featurecls.GetFeature(ID);
-                m.SelectFeature(layer, feature);  //获取属性表中选中行对应的图形要素
-            }
-            form.getMapControl().Refresh();
+            //DataGridViewSelectedRowCollection SelRows = this.dataGridView1.SelectedRows;
+            //DataGridViewRow row;
+            //MainForm form = (MainForm)Application.OpenForms[0];
+            //IMap m = form.getMapControl().Map;
+            //m.ClearSelection();
+            //for (int i = 0; i < SelRows.Count; i++)
+            //{
+            //    row = SelRows[i];
+            //    int ID = Convert.ToInt32(row.Cells["FID"].Value.ToString());
+            //    IFeatureLayer flyr = (IFeatureLayer)layer;
+            //    IFeatureClass featurecls = flyr.FeatureClass;
+            //    IFeature feature = featurecls.GetFeature(ID);
+            //    m.SelectFeature(layer, feature);  //获取属性表中选中行对应的图形要素
+            //}
+            //form.getMapControl().Refresh();
         }
     }
 }

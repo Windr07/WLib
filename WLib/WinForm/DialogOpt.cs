@@ -12,8 +12,42 @@ namespace WLib.WinForm
     /// <summary>
     /// 对话框操作
     /// </summary>
-    public class DialogOpt
+    public static class DialogOpt
     {
+        /// <summary>
+        /// 弹出文件对话框，返回所选的文件路径，未选择时返回null
+        /// </summary>
+        /// <param name="dialog"></param>
+        /// <param name="filter"></param>
+        /// <param name="title"></param>
+        /// <param name="fileName"></param>
+        /// <param name="initDir"></param>
+        /// <returns></returns>
+        public static string ShowDialog(this FileDialog dialog, string filter, string title = null, string fileName = null, string initDir = null)
+        {
+            dialog.Filter = filter;
+            dialog.Title = title;
+            dialog.FileName = fileName;
+            dialog.InitialDirectory = initDir;
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
+        }
+        /// <summary>
+        /// 弹出选择目录对话框，返回所选的目录路径，未选择时返回null
+        /// </summary>
+        /// <param name="dialog"></param>
+        /// <param name="selectPath"></param>
+        /// <param name="description"></param>
+        /// <param name="showNewFolderButton"></param>
+        /// <returns></returns>
+        public static string ShowDialog(this FolderBrowserDialog dialog, string selectPath = null, string description = null, bool showNewFolderButton = true)
+        {
+            dialog.Description = description;
+            dialog.ShowNewFolderButton = showNewFolderButton;
+            dialog.SelectedPath = selectPath;
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.SelectedPath : null;
+        }
+
+
         /// <summary>
         /// 弹出保存文件对话框，返回所选的文件路径，未选择时返回null
         /// </summary>
@@ -24,16 +58,15 @@ namespace WLib.WinForm
         /// <returns></returns>
         public static string ShowSaveFileDialog(string filter, string title = null, string fileName = null, string initDir = null)
         {
-            var saveFileDlg = new SaveFileDialog
+            var dialog = new SaveFileDialog
             {
                 Filter = filter,
                 Title = title,
                 FileName = fileName,
                 InitialDirectory = initDir
             };
-            return saveFileDlg.ShowDialog() == DialogResult.OK ? saveFileDlg.FileName : null;
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
         }
-
         /// <summary>
         /// 弹出打开文件对话框，返回所选的文件路径，未选择时返回null
         /// </summary>
@@ -43,10 +76,9 @@ namespace WLib.WinForm
         /// <param name="initDir">初始目录</param>
         /// <param name="multiSelect">多选</param>
         /// <returns></returns>
-        public static string ShowOpenFileDialog(string filter, string title = null, string fileName = null,
-            string initDir = null, bool multiSelect = false)
+        public static string ShowOpenFileDialog(string filter, string title = null, string fileName = null, string initDir = null, bool multiSelect = false)
         {
-            var openFileDlg = new OpenFileDialog
+            var dialog = new OpenFileDialog
             {
                 Filter = filter,
                 Title = title,
@@ -54,9 +86,8 @@ namespace WLib.WinForm
                 InitialDirectory = initDir,
                 Multiselect = multiSelect
             };
-            return openFileDlg.ShowDialog() == DialogResult.OK ? openFileDlg.FileName : null;
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
         }
-
         /// <summary>
         /// 弹出选择目录对话框，返回所选的目录路径，未选择时返回null
         /// </summary>
@@ -66,13 +97,13 @@ namespace WLib.WinForm
         /// <returns></returns>
         public static string ShowFolderBrowserDialog(string selectPath = null, string description = null, bool showNewFolderButton = true)
         {
-            var fbDialog = new FolderBrowserDialog
+            var dialog = new FolderBrowserDialog
             {
                 Description = description,
                 ShowNewFolderButton = showNewFolderButton,
                 SelectedPath = selectPath
             };
-            return fbDialog.ShowDialog() == DialogResult.OK ? fbDialog.SelectedPath : null;
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.SelectedPath : null;
         }
     }
 }

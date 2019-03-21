@@ -51,7 +51,6 @@
             this.Name = "ChildSizableForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Load += new System.EventHandler(this.ChildForm_Load);
             this.Resize += new System.EventHandler(this.ChildForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollections)).EndInit();
             this.ResumeLayout(false);

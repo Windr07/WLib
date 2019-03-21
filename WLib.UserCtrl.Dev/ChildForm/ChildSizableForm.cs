@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2018
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using WLib.WindowsAPI;
@@ -23,23 +30,11 @@ namespace WLib.UserCtrls.Dev.ChildForm
         /// <summary>
         /// 自定义的父窗口
         /// </summary>
-        public Form FatherForm
-        {
-            get => _parentForm;
-            private set
-            {
-                _parentForm = value;
-                SetMidChildForm();
-            }
-        }
+        public Form FatherForm { get => _parentForm; private set { _parentForm = value; SetMidChildForm(); } }
         /// <summary>
         /// 只能是无边框窗体，因为边框是自定义的
         /// </summary>
-        public new FormBorderStyle FormBorderStyle
-        {
-            get => FormBorderStyle.None;
-            set => base.FormBorderStyle = FormBorderStyle.None;
-        }
+        public new FormBorderStyle FormBorderStyle { get => FormBorderStyle.None; set => base.FormBorderStyle = FormBorderStyle.None; }
 
 
         /// <summary>
@@ -55,7 +50,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
         /// </summary>
         /// <param name="parentForm"></param>
         public ChildSizableForm(Form parentForm)
-            : base()
         {
             Type formType = this.GetType();
             Type t = ListFormType.Find(p => p == formType);
@@ -83,7 +77,7 @@ namespace WLib.UserCtrls.Dev.ChildForm
             WinApi.SetParent((int)this.Handle, (int)_parentForm.Handle);
         }
 
-  
+
         private void ChildForm_Disposed(object sender, EventArgs e)
         {
             if (_formType != null)
@@ -92,7 +86,7 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 _parentForm.Focus();
             }
         }
-      
+
         private void ChildForm_FormClosed(object sender, EventArgs e)
         {
             if (_formType != null)
@@ -100,10 +94,6 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 ListFormType.Remove(_formType);
                 _parentForm.Focus();
             }
-        }
-
-        private void ChildForm_Load(object sender, EventArgs e)
-        {
         }
 
         private void ChildForm_Resize(object sender, EventArgs e)

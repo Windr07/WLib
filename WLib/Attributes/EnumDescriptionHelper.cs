@@ -28,7 +28,7 @@ namespace WLib.Attributes
         public static string GetDescription(this Enum value, int decriptionTag = 0)
         {
             if (value == null)
-                throw new ArgumentException("枚举参数value为空，请确认参数value为枚举类型！");
+                throw new ArgumentException($"枚举参数{nameof(value)}为空，请确认参数{nameof(value)}为枚举类型！");
 
             var name = value.ToString();
             var fieldInfo = value.GetType().GetField(name);
@@ -82,7 +82,7 @@ namespace WLib.Attributes
         /// </summary>
         /// <param name="decriptionTag">对枚举的描述的分类标签</param>
         /// <returns></returns>
-        public static Dictionary<string, string> GetNameAndDescriptionDict<T>(int decriptionTag) where T : struct
+        public static Dictionary<string, string> GetNameAndDescriptionDict<T>(int decriptionTag = 0) where T : struct
         {
             var enumType = typeof(T);
             if (!enumType.IsEnum) throw new Exception($"类型{enumType.Name}不是枚举类型！");
@@ -104,6 +104,22 @@ namespace WLib.Attributes
                 }
             }
             return result;
+        }
+        /// <summary>
+        /// 获得枚举的所有枚举值对应常量和第一个描述的键值对，T必须是枚举类型
+        /// </summary>
+        /// <param name="descriptionTag">对枚举的描述的分类标签</param>
+        /// <returns></returns>
+        public static Dictionary<int, string> GetConstAndDescriptionDict<T>(int descriptionTag = 0) where T : struct
+        {
+            var constValues = GetEnumConst<T>();
+            var descptValues = GetDescriptions<T>(descriptionTag);
+            var dict = new Dictionary<int, string>();
+            for (int i = 0; i < constValues.Length; i++)
+            {
+                dict.Add(constValues[i], descptValues[i]);
+            }
+            return dict;
         }
         /// <summary>
         /// 获取枚举值对应的EnumDescriptionAttribute特性
@@ -155,6 +171,14 @@ namespace WLib.Attributes
 
 
         #region 获取枚举的常量值
+        /// <summary>
+        /// 获取枚举值的全部常量值，T必须是枚举类型
+        /// </summary>
+        /// <returns></returns>
+        public static int[] GetEnumConst<T>() where T : struct
+        {
+            return Enum.GetValues(typeof(T)).Cast<int>().ToArray();
+        }
         /// <summary>
         /// 获取枚举中大于指定值的常量值，T必须是枚举类型
         /// </summary>

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2018
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -61,7 +68,7 @@ namespace WLib.UserCtrls.Dev.ChildForm
             var allPanels = dockManager1.Panels.Cast<DockPanel>();
             var existPanel = allPanels.FirstOrDefault(v => (v.Tag != null) && v.Tag.Equals(form.Name + form.Text));//通过Tag属性区分面板(窗体)
 
-            DockPanel dockPanel = null;
+            DockPanel dockPanel;
             if (existPanel == null)//不存在拥有指定窗体的DockPanel，则创建之
             {
                 int panelCnt = dockManager1.Panels.Count;
@@ -97,22 +104,18 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 OnResize(dockPanelWnd, form.Handle);
 
                 //窗体自适应停靠面板大小
-                dockPanel.ControlContainer.SizeChanged += delegate
-                {
-                    OnResize(dockPanelWnd, form.Handle);
-                };
+                dockPanel.ControlContainer.SizeChanged += (sender, e) => OnResize(dockPanelWnd, form.Handle);
 
                 //关闭面板时关闭窗体
-                dockPanel.ClosingPanel += delegate
+                dockPanel.ClosingPanel += (sender, e) =>
                 {
                     if (!form.IsDisposed && IsCloseDockPanel)
                         form.Close();
                 };
-                dockPanel.ClosingPanel +=
-                    dockFormPanel_ClosingPanel;
+                dockPanel.ClosingPanel += dockFormPanel_ClosingPanel;
 
                 //关闭窗体时关闭面板
-                form.FormClosed += delegate
+                form.FormClosed += (sender, e) =>
                 {
                     FloatLocation = dockPanel.FloatLocation;
                     dockManager1.RemovePanel(dockPanel);
@@ -137,7 +140,7 @@ namespace WLib.UserCtrls.Dev.ChildForm
             //查找已是否存在包含指定窗体的DockPanel
             var allPanels = dockManager1.Panels.Cast<DockPanel>();
             var existPanel = allPanels.FirstOrDefault(v => (v.Tag != null) && v.Tag.Equals(form.Name + form.Text));
-            DockPanel dockPanel = null;
+            DockPanel dockPanel;
             if (existPanel == null)
             {
                 dockPanel = dockManager1.AddPanel(FloatLocation);
@@ -151,25 +154,18 @@ namespace WLib.UserCtrls.Dev.ChildForm
                 OnResize(dockPanelWnd, form.Handle);
 
                 //窗体自适应停靠面板大小
-                dockPanel.ControlContainer.SizeChanged += delegate
-                {
-                    OnResize(dockPanelWnd, form.Handle);
-                };
+                dockPanel.ControlContainer.SizeChanged += (sender, e) => OnResize(dockPanelWnd, form.Handle);
 
                 //关闭面板时关闭窗体
-                dockPanel.ClosingPanel += delegate
+                dockPanel.ClosingPanel += (sender, e) =>
                 {
                     if (!form.IsDisposed && IsCloseDockPanel)
                         form.Close();
                 };
-                dockPanel.ClosingPanel +=
-                    dockFormPanel_ClosingPanel;
+                dockPanel.ClosingPanel += dockFormPanel_ClosingPanel;
 
                 //关闭窗体时关闭面板
-                form.FormClosed += delegate
-                {
-                    dockManager1.RemovePanel(dockPanel);
-                };
+                form.FormClosed += (sender, e) => dockManager1.RemovePanel(dockPanel);
             }
             else
             {
