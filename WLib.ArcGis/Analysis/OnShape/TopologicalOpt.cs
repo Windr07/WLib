@@ -65,7 +65,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="geometry">作为筛选条件的图形</param>
         /// <param name="maxInsectArea">相交面积最大的要素的面积</param>
         /// <returns></returns>
-        public static IFeature GetMaxIntersectFeature(IEnumerable<IFeature> features, IGeometry geometry, out double maxInsectArea)
+        public static IFeature GetMaxIntersectFeature(this IEnumerable<IFeature> features, IGeometry geometry, out double maxInsectArea)
         {
             if (!(geometry is ITopologicalOperator logicalOpt))
                 throw new Exception("参数geometry（作为筛选条件的图形）不能为空！");
@@ -94,7 +94,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="geometry">作为筛选条件的图形</param>
         /// <param name="maxInsectArea">相交面积最大的图形的面积</param>
         /// <returns></returns>
-        public static IGeometry GetMaxIntersectGeometry(IEnumerable<IGeometry> geometries, IGeometry geometry, out double maxInsectArea)
+        public static IGeometry GetMaxIntersectGeometry(this IEnumerable<IGeometry> geometries, IGeometry geometry, out double maxInsectArea)
         {
             if (!(geometry is ITopologicalOperator logicalOpt))
                 throw new Exception("参数geometry（作为筛选条件的图形）不能为空！");
@@ -122,7 +122,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// </summary>
         /// <param name="geometries"></param>
         /// <returns></returns>
-        public static IGeometry UnionGeometry(IEnumerable<IGeometry> geometries)
+        public static IGeometry UnionGeometry(this IEnumerable<IGeometry> geometries)
         {
             IGeometry unionGeometry = null;
             foreach (IGeometry geometry in geometries)
@@ -137,7 +137,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="featureClass">从中查询图形的要素类</param>
         /// <param name="whereCluase">查询条件</param>
         /// <returns></returns>
-        public static IGeometry UnionGeometryEx(IFeatureClass featureClass, string whereCluase = null)
+        public static IGeometry UnionGeometryEx(this IFeatureClass featureClass, string whereCluase = null)
         {
             IGeometry geometryBag = new GeometryBagClass();
             geometryBag.SpatialReference = ((IGeoDataset)featureClass).SpatialReference;
@@ -155,7 +155,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// </summary>
         /// <param name="geometries">需要合并的几何图形（注意这些图形必须是相同的几何类型）</param>
         /// <returns></returns>
-        public static IGeometry UnionGeometryEx(IEnumerable<IGeometry> geometries)
+        public static IGeometry UnionGeometryEx(this IEnumerable<IGeometry> geometries)
         {
             IGeometry geometryBag = new GeometryBagClass();
             geometryBag.SpatialReference = geometries.First().SpatialReference;
@@ -174,7 +174,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="geometryBag"></param>
         /// <param name="geometryType">几何类型</param>
         /// <returns></returns>
-        private static IGeometry UnionGeometryEx(IGeometry geometryBag, esriGeometryType geometryType)
+        private static IGeometry UnionGeometryEx(this IGeometry geometryBag, esriGeometryType geometryType)
         {
             ITopologicalOperator unionedPolygon;
             switch (geometryType)

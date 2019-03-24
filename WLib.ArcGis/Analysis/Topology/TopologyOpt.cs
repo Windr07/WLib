@@ -32,7 +32,7 @@ namespace WLib.ArcGis.Analysis.Topology
     /// <summary>
     /// 提供判断、获取、创建、删除拓扑（拓扑图层/拓扑规则/拓扑错误图形）的方法
     /// </summary>
-    public class TopologyOpt
+    public static class TopologyOpt
     {
         /// <summary>
         /// 判断要素数据集中是否存在指定拓扑
@@ -40,16 +40,16 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="featureDataset">要素数据集</param>
         /// <param name="topoName">拓扑名称</param>
         /// <returns></returns>
-        public static bool IsExisitTopolgy(IFeatureDataset featureDataset, string topoName)
+        public static bool IsExisitTopolgy(this IFeatureDataset featureDataset, string topoName)
         {
-            return (featureDataset.Workspace as IWorkspace2).get_NameExists(esriDatasetType.esriDTTopology, topoName);
+            return ((IWorkspace2)featureDataset.Workspace).get_NameExists(esriDatasetType.esriDTTopology, topoName);
         }
-      /// <summary>
+        /// <summary>
         /// 从地图中获取拓扑图层
         /// </summary>
         /// <param name="map"></param>
         /// <returns></returns>
-        public static List<ITopologyLayer> GetTopologyLayers(IMap map)
+        public static List<ITopologyLayer> GetTopologyLayers(this IMap map)
         {
             List<ITopologyLayer> result = new List<ITopologyLayer>();
             for (int i = 0; i < map.LayerCount; i++)
@@ -64,7 +64,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="eCnTopoRuleType">中文版的拓扑规则类型枚举，各枚举项的整型值与esriTopologyRuleType一致</param>
         /// <returns></returns>
-        public static esriTopologyRuleType ConvertTopologyRuleType(ECnTopoRuleType eCnTopoRuleType)
+        public static esriTopologyRuleType ConvertTopologyRuleType(this ECnTopoRuleType eCnTopoRuleType)
         {
             return (esriTopologyRuleType)(int)eCnTopoRuleType;
         }
@@ -76,7 +76,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="featureDataset"></param>
         /// <returns></returns>
-        public static List<string> GetAllTopoNames(IFeatureDataset featureDataset)
+        public static List<string> GetAllTopoNames(this IFeatureDataset featureDataset)
         {
             List<string> result = new List<string>();
             IFeatureDatasetName2 featureDatasetName = featureDataset.FullName as IFeatureDatasetName2;
@@ -93,7 +93,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="workspace"></param>
         /// <returns></returns>
-        public static List<string> GetAllTopoNames(IWorkspace workspace)
+        public static List<string> GetAllTopoNames(this IWorkspace workspace)
         {
             var result = new List<string>();
             var featureDatasets = workspace.GetFeatureDatasets();
@@ -108,7 +108,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="topology"></param>
         /// <returns></returns>
-        public static string GetTopologyName(ITopology topology)
+        public static string GetTopologyName(this ITopology topology)
         {
             return (topology as IDataset)?.Name;
         }
@@ -123,7 +123,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="topoDatasetName">包含拓扑的要素数据集名称</param>
         /// <param name="topoName">拓扑名称</param>
         /// <returns></returns>
-        public static ITopology GetTopologyByName(IFeatureWorkspace featureWorkspace, string topoDatasetName, string topoName)
+        public static ITopology GetTopologyByName(this IFeatureWorkspace featureWorkspace, string topoDatasetName, string topoName)
         {
             IFeatureDataset featureDataset = featureWorkspace.OpenFeatureDataset(topoDatasetName);
             ITopologyContainer topologyContainer = (ITopologyContainer)featureDataset;
@@ -135,7 +135,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="featureWorkspace">要素工作空间</param>
         /// <param name="topoName">拓扑名称</param>
         /// <returns></returns>
-        public static ITopology GetTopologyByName(IFeatureWorkspace featureWorkspace, string topoName)
+        public static ITopology GetTopologyByName(this IFeatureWorkspace featureWorkspace, string topoName)
         {
             ITopology topology = null;
             var featureDatasets = (featureWorkspace as IWorkspace).GetFeatureDatasets();
@@ -153,7 +153,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="topoFeatureDataset">包含拓扑的要素数据集名称</param>
         /// <param name="topoName">拓扑名称</param>
         /// <returns></returns>
-        public static ITopology GetTopologyByName(IFeatureDataset topoFeatureDataset, string topoName)
+        public static ITopology GetTopologyByName(this IFeatureDataset topoFeatureDataset, string topoName)
         {
             ITopologyContainer topologyContainer = (ITopologyContainer)topoFeatureDataset;
             return topologyContainer.get_TopologyByName(topoName);
@@ -164,7 +164,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="map"></param>
         /// <param name="topoName"></param>
         /// <returns></returns>
-        public static ITopology GetTopologyByName(IMap map, string topoName)
+        public static ITopology GetTopologyByName(this IMap map, string topoName)
         {
             for (int i = 0; i < map.LayerCount; i++)
             {
@@ -179,7 +179,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="topoFeatureDataset"></param>
         /// <returns></returns>
-        public static ITopology GetFirstTopology(IFeatureDataset topoFeatureDataset)
+        public static ITopology GetFirstTopology(this IFeatureDataset topoFeatureDataset)
         {
             ITopologyContainer topologyContainer = (ITopologyContainer)topoFeatureDataset;
             return topologyContainer.get_Topology(0);
@@ -189,7 +189,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="map"></param>
         /// <returns></returns>
-        public static ITopology GetFirstTopology(IMap map)
+        public static ITopology GetFirstTopology(this IMap map)
         {
             for (int i = 0; i < map.LayerCount; i++)
             {
@@ -203,7 +203,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="featureDataset">要素数据集</param>
         /// <returns></returns>
-        public static List<ITopology> GetAllTopology(IFeatureDataset featureDataset)
+        public static List<ITopology> GetAllTopology(this IFeatureDataset featureDataset)
         {
             List<ITopology> result = new List<ITopology>();
             ITopologyContainer topologyContainer = (ITopologyContainer)featureDataset;
@@ -218,7 +218,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="workspace">工作空间</param>
         /// <returns></returns>
-        public static List<ITopology> GetAllTopology(IWorkspace workspace)
+        public static List<ITopology> GetAllTopology(this IWorkspace workspace)
         {
             List<ITopology> result = new List<ITopology>();
             var featureDatasetList = workspace.GetFeatureDatasets();
@@ -239,7 +239,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="featureDataset"></param>
         /// <param name="topoName">要生成拓扑的名称</param>  
         /// <param name="tolerance">拓扑容差，可选，默认0.001</param>  
-        public static ITopology CreatTopology(IFeatureDataset featureDataset, string topoName, double tolerance = 0.001)
+        public static ITopology CreatTopology(this IFeatureDataset featureDataset, string topoName, double tolerance = 0.001)
         {
             if (IsExisitTopolgy(featureDataset, topoName))
                 throw new Exception($"已存在名为“{topoName}”的拓扑，无法添加！");
@@ -261,7 +261,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="topoFeatureDataset">拓扑所在的要素数据集</param>
         /// <param name="topoName">要删除的拓扑的名称</param>
-        public static void DeleteTopolgy(IFeatureDataset topoFeatureDataset, string topoName)
+        public static void DeleteTopolgy(this IFeatureDataset topoFeatureDataset, string topoName)
         {
             var topology = GetTopologyByName(topoFeatureDataset, topoName);
             DeleteTopology(topology);
@@ -270,7 +270,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// 删除指定拓扑
         /// </summary>
         /// <param name="topology">要删除的拓扑</param>
-        public static void DeleteTopology(ITopology topology)
+        public static void DeleteTopology(this ITopology topology)
         {
             IDataset dataset = (IDataset)topology;
             dataset.Delete();
@@ -286,7 +286,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="featureClassA">第一个要素类</param>
         /// <param name="featureClassB">第二个要素类</param>
         /// <returns></returns>
-        public static ITopologyRule CreateTopologyRule(esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
+        public static ITopologyRule CreateTopologyRule(this esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
         {
             ITopologyRule topologyRule = new TopologyRuleClass();
             topologyRule.TopologyRuleType = ruleType;
@@ -307,7 +307,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="ruleType">要添加的双要素规则</param>  
         /// <param name="featureClassA">第一个要素类</param>  
         /// <param name="featureClassB">第二个要素类</param>  
-        public static void AddRuleToTopology(ITopology topology, esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
+        public static void AddRuleToTopology(this ITopology topology, esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
         {
             if (topology == null)
                 throw new Exception("请先构建拓扑");
@@ -320,7 +320,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="topology"></param>
         /// <param name="topologyRule"></param>
-        public static void AddRuleToTopology(ITopology topology, ITopologyRule topologyRule)
+        public static void AddRuleToTopology(this ITopology topology, ITopologyRule topologyRule)
         {
             ITopologyRuleContainer topologyRuleContainer = (ITopologyRuleContainer)topology;//构建容器  
             try
@@ -346,7 +346,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="topology"></param>
         /// <returns></returns>
-        public static List<ITopologyRule> GetTopologyRules(ITopology topology)
+        public static List<ITopologyRule> GetTopologyRules(this ITopology topology)
         {
             List<ITopologyRule> result = new List<ITopologyRule>();
             ITopologyRuleContainer topologyRuleContainer = (ITopologyRuleContainer)topology;
@@ -366,7 +366,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="topology"></param>
         /// <param name="topoRuleName">拓扑规则名称或esriTopologyRuleType.ToString()的结果（eg:）</param>
         /// <returns></returns>
-        public static ITopologyRule GetTopoRuleTypeByName(ITopology topology, string topoRuleName)
+        public static ITopologyRule GetTopoRuleTypeByName(this ITopology topology, string topoRuleName)
         {
             ITopologyRuleContainer topologyRuleContainer = (ITopologyRuleContainer)topology;
             IEnumRule enumRule = topologyRuleContainer.Rules;
@@ -391,7 +391,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="topologyRule">拓扑规则</param>
         /// <param name="topology">拓扑</param>
         /// <returns></returns>
-        public static IEnumTopologyErrorFeature GetEnumTopoErrorFeature(ITopologyRule topologyRule, ITopology topology)
+        public static IEnumTopologyErrorFeature GetEnumTopoErrorFeature(this ITopologyRule topologyRule, ITopology topology)
         {
             IEnvelope envelope = (topology as IGeoDataset).Extent;
             IErrorFeatureContainer errorContainer = topology as IErrorFeatureContainer;
@@ -407,7 +407,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="topologyRule">拓扑规则</param>
         /// <param name="topology">拓扑</param>
         /// <returns></returns>
-        public static List<ITopologyErrorFeature> GetTopoErrorFeatures(ITopologyRule topologyRule, ITopology topology)
+        public static List<ITopologyErrorFeature> GetTopoErrorFeatures(this ITopologyRule topologyRule, ITopology topology)
         {
             List<ITopologyErrorFeature> result = new List<ITopologyErrorFeature>();
 
@@ -424,7 +424,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// </summary>
         /// <param name="topoErrorFeatures">拓扑错误要素</param>
         /// <param name="resultFeatureClass">保存拓扑错误要素的要素类，注意其坐标系和类型(点/线/面)必须与拓扑错误要素相同</param>
-        public static void TopoErrorInsertToFeatureClass(List<ITopologyErrorFeature> topoErrorFeatures, IFeatureClass resultFeatureClass)
+        public static void TopoErrorInsertToFeatureClass(this IEnumerable<ITopologyErrorFeature> topoErrorFeatures, IFeatureClass resultFeatureClass)
         {
             int typeIndex = resultFeatureClass.AddField("TRuleType", "拓扑规则", esriFieldType.esriFieldTypeInteger);
             int orClassIdIndex = resultFeatureClass.AddField("OriClsID", "源要素类ID", esriFieldType.esriFieldTypeInteger);
@@ -462,7 +462,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="topologyRule">拓扑规则</param>
         /// <param name="topology">拓扑</param>
         /// <param name="resultObject">指定的要素数据集(IFeatureDataset)或工作空间(IWorkspace)，用于创建新要素类，保存拓扑错误图形</param>
-        public static IFeatureClass TopoErrorToNewFeatureClass(ITopologyRule topologyRule, ITopology topology, object resultObject, string resultClassName = null)
+        public static IFeatureClass TopoErrorToNewFeatureClass(this ITopologyRule topologyRule, ITopology topology, object resultObject, string resultClassName = null)
         {
             //获得指定拓扑规则类型的拓扑错误要素
             var errorFeatures = GetTopoErrorFeatures(topologyRule, topology);
@@ -493,7 +493,7 @@ namespace WLib.ArcGis.Analysis.Topology
         /// <param name="envelope"></param>
         /// <param name="shpFeatureClass"></param>
         /// <returns></returns>
-        public static IFeatureClass TopoErrorToNewFeatureClass(IWorkspace workespace, string topoDatasetName,
+        public static IFeatureClass TopoErrorToNewFeatureClass(this IWorkspace workespace, string topoDatasetName,
             string topoName, IEnvelope envelope, IFeatureClass shpFeatureClass)
         {
             //获得拓扑

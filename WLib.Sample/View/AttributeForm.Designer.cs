@@ -1,4 +1,4 @@
-﻿namespace GISsys
+﻿namespace WLib.Samples.WinForm.View
 {
     partial class frmAttribute
     {

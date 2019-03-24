@@ -12,7 +12,7 @@ namespace WLib.Format
     /// <summary>
     /// 提供将阿拉伯数字转换为中文表示的方法
     /// </summary>
-    public static class NumberConversion
+    public static class CnNumberConversion
     {
         /// <summary>
         /// "〇一二三四五六七八九"

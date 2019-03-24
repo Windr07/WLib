@@ -33,7 +33,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
                 throw new Exception($"在要创建的字段集（参数{nameof(fields)}）中找不到几何字段，创建要素类时应指定几何字段以确定几何类型和坐标系！");
 
             var fieldType = shapeField.GeometryDef.GeometryType;//几何类型
-            var spatialRef = CoordinateSystem.GetSpatialReference(shapeField);//坐标系
+            var spatialRef = shapeField.GetSpatialReference();//坐标系
             return Create(obj, name, spatialRef, esriFeatureType.esriFTSimple, fieldType, fields, null, null, "");
         }
 
@@ -188,7 +188,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         /// <returns></returns>
         public static IFeatureClass Create(IFeatureClass sourceClass, object resultObject, string name, esriGeometryType geoType, string aliasName = null)
         {
-            var spatialRef = CoordinateSystem.GetSpatialReference(sourceClass);
+            var spatialRef = sourceClass.GetSpatialReference();
             var feilds = sourceClass.CloneFeatureClassFieldsSimple();
 
             var featureClass = Create(resultObject, name, spatialRef, geoType, feilds);

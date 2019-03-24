@@ -8,8 +8,8 @@
     <ProjectGuid>{D53D57B8-2EFC-4B8E-BA32-3302EF5F9836}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GISsys</RootNamespace>
-    <AssemblyName>GISsys</AssemblyName>
+    <RootNamespace>WLib.Samples.WinForm</RootNamespace>
+    <AssemblyName>WLib.Samples.WinForm</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -113,7 +113,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClearCurrentTool.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,7 +197,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -261,7 +259,6 @@
     <None Include="Resources\文本.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="Utility\" />
   </ItemGroup>
   <ItemGroup>

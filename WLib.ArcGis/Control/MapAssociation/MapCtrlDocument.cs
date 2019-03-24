@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using WLib.WinForm;
@@ -28,23 +30,57 @@ namespace WLib.ArcGis.Control.MapAssociation
         {
             MapControl = mapCtrl;
         }
+        /// <summary>
+        /// 析构函数，关闭地图文档
+        /// </summary>
+        ~MapCtrlDocument()
+        {
+            MapDoc?.Close();
+        }
 
 
         /// <summary>
-        /// 新建地图文档
+        /// 打开空白地图文档
         /// </summary>
-        /// <param name="fileName">地图文档路径</param>
-        /// <param name="mapName">地图名称</param>
-        /// <param name="loadMapAfterBuilt">是否将地图文档加载到地图控件</param>
         /// <returns></returns>
-        public IMapDocument NewMap(string fileName, string mapName = "图层", bool loadMapAfterBuilt = true)
+        public void NewEmptyDoc()
         {
-            IMapDocument mapDoc = new MapDocumentClass();
-            mapDoc.New(fileName);
-            mapDoc.Map[0].Name = mapName;
-            if (loadMapAfterBuilt)
-                MapControl.LoadMxFile(fileName);
-            return mapDoc;
+            if (MapDoc != null)
+                Save();
+
+            MapControl.ClearLayers();
+            MapDoc = null;
+        }
+        /// <summary>
+        /// 打开地图文档并加载地图到地图控件中（若当前地图文档非空则先保存地图文档）
+        /// </summary>
+        /// <returns></returns>
+        public IMapDocument OpenDoc()
+        {
+            var filePath = DialogOpt.ShowOpenFileDialog(@"*.mxd|*.mxd");
+            if (filePath != null)
+            {
+                if (MapDoc != null)
+                    Save();
+
+                MapDoc = new MapDocumentClass();
+                MapDoc.Open(filePath);
+                MapControl.Map = MapDoc.ActiveView.FocusMap;
+                MapControl.ActiveView.Refresh();
+            }
+            return MapDoc;
+        }
+        /// <summary>
+        /// 打开地图文档并加载地图到地图控件中
+        /// </summary>
+        /// <returns></returns>
+        public IMapDocument OpenDoc(string filePath)
+        {
+            MapDoc = new MapDocumentClass();
+            MapDoc.Open(filePath);
+            MapControl.Map = MapDoc.ActiveView.FocusMap;
+            MapControl.ActiveView.Refresh();
+            return MapDoc;
         }
         /// <summary>
         /// 添加数据
@@ -56,66 +92,34 @@ namespace WLib.ArcGis.Control.MapAssociation
             addDataCmd.OnClick();
         }
         /// <summary>
-        /// 保存地图
+        /// 保存地图文档（地图文档从未保存时，则先弹出对话框选择保存地址）
         /// </summary>
         public void Save()
         {
             if (MapDoc == null)
-            {
-                MapDoc = new MapDocumentClass();
-                var filePath = DialogOpt.ShowSaveFileDialog(@"地图文档(*.mxd)|*.mxd", @"保存地图文档", @"地图文档");
-                if (filePath != null)
-                    SaveAs(filePath);
-            }
+                SaveAs();
             else
             {
                 MapDoc.ReplaceContents(MapControl.Map as IMxdContents);
                 MapDoc.Save();
-                MapDoc.Close();
             }
         }
         /// <summary>
-        /// 另存为新地图文档
+        /// 另存为新地图文档（弹出对话框选择保存地址）
         /// </summary>
-        /// <param name="fileName"></param>
-        public void SaveAs(string fileName)
+        public void SaveAs()
         {
-            if (File.Exists(fileName))
-                File.Delete(fileName);
-            if (MapDoc == null)
+            var filePath = DialogOpt.ShowSaveFileDialog(@"地图文档(*.mxd)|*.mxd", @"保存地图文档", @"地图文档");
+            if (filePath != null)
+            {
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+
                 MapDoc = new MapDocumentClass();
-            MapDoc.New(fileName);
-            MapDoc.ReplaceContents(MapControl.Map as IMxdContents);
-            MapDoc.Save();
-            MapDoc.Close();
-        }
-      
-        /// <summary>
-        /// 清空图层并保存
-        /// </summary>
-        public void ClearLayers()
-        {
-            IMapDocument mapDoc = new MapDocumentClass();
-            var docFilePath = MapControl.DocumentFilename;
-            mapDoc.Open(docFilePath, "");
-            mapDoc.Map[0].ClearLayers();
-            mapDoc.Save();
-            mapDoc.Close();
-            MapControl.LoadMxFile(docFilePath);
-        }
-        /// <summary>
-        /// 加载地图
-        /// </summary>
-        /// <param name="mxdFilePath"></param>
-        public void LoadFile(string mxdFilePath)
-        {
-            if (MapDoc != null && File.Exists(MapDoc.DocumentFilename))
-                MapDoc.Close();
-
-            MapDoc = new MapDocumentClass();
-            MapDoc.Open(mxdFilePath);
-
-            MapControl.LoadMxFile(mxdFilePath);
+                MapDoc.New(filePath);
+                MapDoc.ReplaceContents(MapControl.Map as IMxdContents);
+                MapDoc.Save();
+            }
         }
     }
 }

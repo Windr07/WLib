@@ -13,6 +13,8 @@ namespace WLib.ArcGis.Analysis.OnClass
 {
     /// <summary>
     /// 提供提高空间查询效率的方法
+    /// （参考：http://resources.arcgis.com/en/help/arcobjects-net/componenthelp/index.html#//002500000831000000）
+    /// （参考：http://blog.csdn.net/hellolib/article/details/70227756）
     /// </summary>
     public class SpatialEfficiency
     {
@@ -21,8 +23,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// 对要素类创建空间缓存
         /// </summary>
         /// <param name="featureClass"></param>
-        /// <seealso cref="http://resources.arcgis.com/en/help/arcobjects-net/componenthelp/index.html#//002500000831000000"/>
-        /// <seealso cref="http://blog.csdn.net/hellolib/article/details/70227756"/>
+     
         /// <returns></returns>
         public static ISpatialCacheManager CreateCache(IFeatureClass featureClass)
         {
@@ -40,7 +41,6 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="action"></param>
-        /// <seealso cref="http://blog.csdn.net/hellolib/article/details/70227756"/>
         public static void CreateCache(IFeatureClass featureClass, Action action)
         {
             var spatialCacheManager = CreateCache(featureClass);

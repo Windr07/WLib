@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Display;
-using ESRI.ArcGIS.Controls;
 
-namespace GISsys
+namespace WLib.Samples.WinForm.View
 {
     public partial class frmQueryFeat : Form
     {

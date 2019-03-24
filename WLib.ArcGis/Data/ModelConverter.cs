@@ -19,7 +19,7 @@ namespace WLib.ArcGis.Data
     /// <summary>
     /// 表格或图层数据转换成指定类型的对象
     /// </summary>
-    public class ModelConverter
+    public static class ModelConverter
     {
         /// <summary>
         /// 将IRow的数据转化为 T 类型的对象
@@ -27,7 +27,7 @@ namespace WLib.ArcGis.Data
         /// <typeparam name="T">类型</typeparam>
         /// <param name="row"></param>
         /// <returns></returns>
-        public static T ConvertToObject<T>(IRow row) where T : class
+        public static T ConvertToObject<T>(this IRow row) where T : class
         {
             Type type = typeof(T);
             PropertyInfo[] properties = type.GetProperties();
@@ -56,7 +56,7 @@ namespace WLib.ArcGis.Data
         /// <typeparam name="T">类型</typeparam>
         /// <param name="feature"></param>
         /// <returns></returns>
-        public static T ConvertToObject<T>(IFeature feature) where T : class
+        public static T ConvertToObject<T>(this IFeature feature) where T : class
         {
             Type type = typeof(T);
             PropertyInfo[] properties = type.GetProperties();
@@ -85,28 +85,25 @@ namespace WLib.ArcGis.Data
         /// <param name="table">从中获取数据的表格</param>
         /// <param name="whereClause">筛选条件</param>
         /// <returns>指定类型的对象集合</returns>
-        public static List<T> ConvertToObject<T>(ITable table, string whereClause = null) where T : class
+        public static List<T> ConvertToObject<T>(this ITable table, string whereClause = null) where T : class
         {
             List<T> list = new List<T>();
-            T obj = default(T);
             Type t = typeof(T);
-            Assembly ass = t.Assembly;
+            Assembly assembly = t.Assembly;
 
             Dictionary<string, PropertyInfo> propertys = GetFields<T>(table);
-            PropertyInfo p = null;
-            if (table != null)
+            if (table == null) return list;
+
+            var rows = table.QueryRows(whereClause);
+            foreach (IRow row in rows)
             {
-                var rows = table.QueryRows(whereClause);
-                foreach (IRow row in rows)
+                var obj = assembly.CreateInstance(t.FullName) as T;
+                foreach (string key in propertys.Keys)
                 {
-                    obj = ass.CreateInstance(t.FullName) as T;
-                    foreach (string key in propertys.Keys)
-                    {
-                        p = propertys[key];
-                        p.SetValue(obj, ChangeType(row.get_Value(row.Fields.FindField(key)), p.PropertyType), null);
-                    }
-                    list.Add(obj);
+                    var propertyInfo = propertys[key];
+                    propertyInfo.SetValue(obj, ChangeType(row.get_Value(row.Fields.FindField(key)), propertys[key].PropertyType), null);
                 }
+                list.Add(obj);
             }
             return list;
         }
@@ -117,28 +114,25 @@ namespace WLib.ArcGis.Data
         /// <param name="featureClass">从中获取数据的图层</param>
         /// <param name="whereClause">筛选条件</param>
         /// <returns>指定类型的对象集合</returns>
-        public static List<T> ConvertToObject<T>(IFeatureClass featureClass, string whereClause = null) where T : class
+        public static List<T> ConvertToObject<T>(this IFeatureClass featureClass, string whereClause = null) where T : class
         {
             List<T> list = new List<T>();
-            T obj = default(T);
             Type t = typeof(T);
-            Assembly ass = t.Assembly;
+            Assembly assembly = t.Assembly;
 
             Dictionary<string, PropertyInfo> propertys = GetFields<T>(featureClass as ITable);
-            PropertyInfo p = null;
-            if (featureClass != null)
+            if (featureClass == null) return list;
+
+            var features = featureClass.QueryFeatures(whereClause);
+            foreach (IFeature feature in features)
             {
-                var features = featureClass.QueryFeatures(whereClause);
-                foreach (IFeature feature in features)
+                var obj = assembly.CreateInstance(t.FullName) as T;
+                foreach (string key in propertys.Keys)
                 {
-                    obj = ass.CreateInstance(t.FullName) as T;
-                    foreach (string key in propertys.Keys)
-                    {
-                        p = propertys[key];
-                        p.SetValue(obj, ChangeType(feature.get_Value(feature.Fields.FindField(key)), p.PropertyType), null);
-                    }
-                    list.Add(obj);
+                    var peropertyInfo = propertys[key];
+                    peropertyInfo.SetValue(obj, ChangeType(feature.get_Value(feature.Fields.FindField(key)), peropertyInfo.PropertyType), null);
                 }
+                list.Add(obj);
             }
             return list;
         }
@@ -149,7 +143,7 @@ namespace WLib.ArcGis.Data
         /// <param name="table">从中获取数据的表格</param>
         /// <param name="whereClause">筛选条件</param>
         /// <returns></returns>
-        public static T ConvertFirstRecordToObject<T>(ITable table, string whereClause = null) where T : class
+        public static T ConvertFirstRecordToObject<T>(this ITable table, string whereClause = null) where T : class
         {
             var row = table.QueryFirstRow(whereClause);
             return ConvertToObject<T>(row);
@@ -161,7 +155,7 @@ namespace WLib.ArcGis.Data
         /// <param name="featureClass">从中获取数据的图层</param>
         /// <param name="whereClause">筛选条件</param>
         /// <returns></returns>
-        public static T ConvertFirstRecordToObject<T>(IFeatureClass featureClass, string whereClause = null) where T : class
+        public static T ConvertFirstRecordToObject<T>(this IFeatureClass featureClass, string whereClause = null) where T : class
         {
             var feature = featureClass.QueryFirstFeature(whereClause);
             return ConvertToObject<T>(feature);
@@ -199,19 +193,15 @@ namespace WLib.ArcGis.Data
             int columnCount = fields.FieldCount;
             Type t = typeof(T);
 
-            PropertyInfo[] properties = t.GetProperties();
-            if (properties != null)
+            List<string> readerFields = new List<string>();
+            for (int i = 0; i < columnCount; i++)
             {
-                List<string> readerFields = new List<string>();
-                for (int i = 0; i < columnCount; i++)
-                {
-                    readerFields.Add(fields.get_Field(i).Name);
-                }
-                var props = properties.Where(v => v.CanWrite && readerFields.Contains(v.Name));
-                foreach (PropertyInfo p in props)
-                {
-                    result.Add(p.Name, p);
-                }
+                readerFields.Add(fields.get_Field(i).Name);
+            }
+            var properties = t.GetProperties().Where(v => v.CanWrite && readerFields.Contains(v.Name));
+            foreach (PropertyInfo propertyInfo in properties)
+            {
+                result.Add(propertyInfo.Name, propertyInfo);
             }
             return result;
         }

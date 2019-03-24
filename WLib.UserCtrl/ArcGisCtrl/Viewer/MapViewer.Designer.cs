@@ -41,7 +41,7 @@
             this.EagleMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.ViewerTabControl = new System.Windows.Forms.TabControl();
             this.xtpMapView = new System.Windows.Forms.TabPage();
-            this.mapNavigationTools1 = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
+            this.MapNavigationTools = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
             this.MainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.xtpPageLayout = new System.Windows.Forms.TabPage();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
@@ -197,7 +197,7 @@
             // 
             // xtpMapView
             // 
-            this.xtpMapView.Controls.Add(this.mapNavigationTools1);
+            this.xtpMapView.Controls.Add(this.MapNavigationTools);
             this.xtpMapView.Controls.Add(this.MainMapControl);
             this.xtpMapView.Location = new System.Drawing.Point(4, 4);
             this.xtpMapView.Name = "xtpMapView";
@@ -207,14 +207,14 @@
             this.xtpMapView.Text = "地图";
             this.xtpMapView.UseVisualStyleBackColor = true;
             // 
-            // mapNavigationTools1
+            // MapNavigationTools
             // 
-            this.mapNavigationTools1.BackColor = System.Drawing.Color.Transparent;
-            this.mapNavigationTools1.Location = new System.Drawing.Point(6, 6);
-            this.mapNavigationTools1.MapControl = this.MainMapControl;
-            this.mapNavigationTools1.Name = "mapNavigationTools1";
-            this.mapNavigationTools1.Size = new System.Drawing.Size(255, 66);
-            this.mapNavigationTools1.TabIndex = 1;
+            this.MapNavigationTools.BackColor = System.Drawing.Color.Transparent;
+            this.MapNavigationTools.Location = new System.Drawing.Point(6, 6);
+            this.MapNavigationTools.MapControl = this.MainMapControl;
+            this.MapNavigationTools.Name = "MapNavigationTools";
+            this.MapNavigationTools.Size = new System.Drawing.Size(255, 66);
+            this.MapNavigationTools.TabIndex = 1;
             // 
             // MainMapControl
             // 
@@ -289,7 +289,7 @@
         private System.Windows.Forms.Button btnSwitchContent;
         private System.Windows.Forms.Button btnExpand;
         private System.Windows.Forms.Button btnCollapsed;
-        private MapNavigationTools mapNavigationTools1;
         private TableListBox tableListBox1;
+        public MapNavigationTools MapNavigationTools;
     }
 }

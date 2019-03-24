@@ -45,16 +45,16 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            var tarFeatureCursor = featureClass.Insert(true);
-            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            var featureCursor = featureClass.Insert(true);
+            var featureBuffer = featureClass.CreateFeatureBuffer();
             for (var i = 0; i < insertCount; i++)
             {
-                doActionByFeatures(tarFeatureBuffer, i);
-                tarFeatureCursor.InsertFeature(tarFeatureBuffer);
+                doActionByFeatures(featureBuffer, i);
+                featureCursor.InsertFeature(featureBuffer);
             }
-            tarFeatureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
+            featureCursor.Flush();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，遍历新要素并在委托中对其内容执行赋值操作，最后保存全部新要素并释放资源
@@ -66,18 +66,18 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            var tarFeatureCursor = featureClass.Insert(true);
-            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            var featureCursor = featureClass.Insert(true);
+            var featureBuffer = featureClass.CreateFeatureBuffer();
             for (var i = 0; i < insertCount; i++)
             {
-                var isStopped = doActionByFeatures(tarFeatureBuffer, i);
-                tarFeatureCursor.InsertFeature(tarFeatureBuffer);
+                var isStopped = doActionByFeatures(featureBuffer, i);
+                featureCursor.InsertFeature(featureBuffer);
                 if (isStopped)
                     break;
             }
-            tarFeatureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
+            featureCursor.Flush();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，将游标提供给委托以在委托中指定具体操作，最后保存全部新要素并释放资源
@@ -88,14 +88,14 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            var tarFeatureCursor = featureClass.Insert(true);
-            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
+            var featureCursor = featureClass.Insert(true);
+            var featureBuffer = featureClass.CreateFeatureBuffer();
 
-            doActionByFeatures(tarFeatureCursor, tarFeatureBuffer);
+            doActionByFeatures(featureCursor, featureBuffer);
 
-            tarFeatureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
+            featureCursor.Flush();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         ///  在要素类中创建一条新要素，在委托中对其内容执行赋值操作，最后保存新要素并释放资源
@@ -106,14 +106,14 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         {
             //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
             //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            var tarFeatureCursor = featureClass.Insert(true);
-            var tarFeatureBuffer = featureClass.CreateFeatureBuffer();
-            doActionByFeature(tarFeatureBuffer);
+            var featureCursor = featureClass.Insert(true);
+            var featureBuffer = featureClass.CreateFeatureBuffer();
+            doActionByFeature(featureBuffer);
 
-            tarFeatureCursor.InsertFeature(tarFeatureBuffer);
-            tarFeatureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
+            featureCursor.InsertFeature(featureBuffer);
+            featureCursor.Flush();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
         }
 
         /// <summary>
@@ -555,7 +555,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
                 }
                 //投影变换，赋值Shape字段
                 var shape = sourceFeature.ShapeCopy;
-                var spatialReference = CoordinateSystem.GetSpatialReference(targetFeatClass);
+                var spatialReference = targetFeatClass.GetSpatialReference();
                 shape.Project(spatialReference);
                 tarFeatureBuffer.Shape = shape;
             });

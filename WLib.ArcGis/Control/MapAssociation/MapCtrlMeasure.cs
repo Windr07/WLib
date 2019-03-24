@@ -10,6 +10,7 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// </summary>
     public class MapCtrlMeasure
     {
+        #region 私有变量
         /// <summary>
         /// 点集合
         /// </summary>
@@ -26,22 +27,10 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// 测量类型：0-空操作；1-测距离； 2-测面积； 3-测角度
         /// </summary>
         private EMeasureType _eMeasureType;
+        #endregion
 
 
-        /// <summary>
-        /// 地图测量操作
-        /// </summary>
-        public MapCtrlMeasure(AxMapControl mapCtrl)
-        {
-            MapCtrl = mapCtrl;
-            _pointCollection = null;
-            _newPolygonFeedback = null;
-            _newLineFeedback = null;
-            _eMeasureType = EMeasureType.None;
-            AreaPointCount = 0;
-            IsSurveying = false;
-        }
-
+        #region 公共只读属性
         /// <summary>
         /// Map对象
         /// </summary>
@@ -73,7 +62,23 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <summary>
         /// 面积计算记录勾画的多边形拐点的个数
         /// </summary>
-        public int AreaPointCount;
+        public int AreaPointCount { get; private set; }
+        #endregion
+
+
+        /// <summary>
+        /// 地图测量操作
+        /// </summary>
+        public MapCtrlMeasure(AxMapControl mapCtrl)
+        {
+            MapCtrl = mapCtrl;
+            _pointCollection = null;
+            _newPolygonFeedback = null;
+            _newLineFeedback = null;
+            _eMeasureType = EMeasureType.None;
+            AreaPointCount = 0;
+            IsSurveying = false;
+        }
 
 
         /// <summary>

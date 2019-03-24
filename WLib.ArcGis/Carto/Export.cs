@@ -17,7 +17,7 @@ namespace WLib.ArcGis.Carto
     /// <summary>
     /// 导出地图
     /// </summary>
-    public class Export
+    public static class Export
     {
         /// <summary>
         /// 输出图片
@@ -26,7 +26,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="filePath">图片输出的完整路径，路径扩展名应为jpg,tiff,bmp,emf,png,gif,pdf,eps,ai,svg之一</param>
         /// <param name="resolution">图片分辨率（每英寸点数）</param>
         /// <returns></returns>
-        public static bool ExportMapExtent(IActiveView activeView, string filePath, double resolution = 300)
+        public static bool ExportMapExtent(this IActiveView activeView, string filePath, double resolution = 300)
         {
             IExport export = CreateExport(filePath, resolution);
             tagRECT exportRECT = activeView.ExportFrame;
@@ -67,7 +67,7 @@ namespace WLib.ArcGis.Carto
         /// <param name="pageLayout">页面布局对象</param>
         /// <param name="outPath">图片输出的完整路径，路径扩展名应为jpg,tiff,bmp,emf,png,gif,pdf,eps,ai,svg之一</param>
         /// <param name="resolution">图片分辨率（每英寸点数）</param>
-        public static void ExportMapExtent(IPageLayout pageLayout, string outPath, double resolution = 300)
+        public static void ExportMapExtent(this IPageLayout pageLayout, string outPath, double resolution = 300)
         {
             try
             {

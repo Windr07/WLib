@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Geometry;
-using ESRI.ArcGIS.DataSourcesGDB; 
 
-namespace GISsys
+namespace WLib.Samples.WinForm.View
 {
     public partial class frmAddmdb : Form
     {

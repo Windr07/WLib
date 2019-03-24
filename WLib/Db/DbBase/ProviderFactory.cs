@@ -17,7 +17,7 @@ namespace WLib.Db.DbBase
     internal class ProviderFactory
     {
         /// <summary>
-        /// 数据库类型及对应数据提供程序名
+        /// 数据库类型(key)及对应数据提供程序名(value)
         /// </summary>
         private static readonly Dictionary<EDbProviderType, string> ProviderNameDict;
         /// <summary>
@@ -34,7 +34,7 @@ namespace WLib.Db.DbBase
 
             ProviderNameDict = new Dictionary<EDbProviderType, string>();
             var enumType = typeof(EDbProviderType);
-            foreach (var enumName in System.Enum.GetNames(enumType))
+            foreach (var enumName in System.Enum.GetNames(enumType))//获取EDbProviderType枚举的Description特性，即数据提供程序名
             {
                 var attributes = (DescriptionAttribute[])enumType.GetField(enumName).GetCustomAttributes(typeof(DescriptionAttribute), false);
                 ProviderNameDict.Add((EDbProviderType)System.Enum.Parse(enumType, enumName), attributes[0].Description);

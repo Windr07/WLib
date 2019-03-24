@@ -127,7 +127,7 @@
     <Compile Include="Model\UniqueObjectEx.cs" />
     <Compile Include="Progress\ProLogFileInfo.cs" />
     <Compile Include="Progress\ProLogManager.cs" />
-    <Compile Include="Format\NumberConversion.cs" />
+    <Compile Include="Format\CnNumberConversion.cs" />
     <Compile Include="Progress\ProEventArgs\GroupMsgChangedEventArgs.cs" />
     <Compile Include="Progress\GroupMessages.cs" />
     <Compile Include="Progress\ProgressMessages.cs" />

@@ -51,8 +51,8 @@ namespace WLib.UserCtrls.ArcGisCtrl.Viewer
         {
             InitializeComponent();
 
-            this.mapNavigationTools1.Parent = this.MainMapControl;
-            this.mapNavigationTools1.MapControl = this.MainMapControl;
+            this.MapNavigationTools.Parent = this.MainMapControl;
+            this.MapNavigationTools.MapControl = this.MainMapControl;
             this.tableListBox1.Dock = DockStyle.Fill;
             DocHelper = new MapCtrlDocument(MainMapControl);
             TocHelper = new MapCtrlTocEx(TocControl, MainMapControl, GoToMapView);

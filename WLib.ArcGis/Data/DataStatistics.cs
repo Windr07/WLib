@@ -13,7 +13,7 @@ namespace WLib.ArcGis.Data
     /// <summary>
     /// 提供图层或表的数据统计方法
     /// </summary>
-    public class DataStatistics
+    public static class DataStatistics
     {
         /// <summary>
         /// 筛选记录并统计
@@ -22,7 +22,7 @@ namespace WLib.ArcGis.Data
         /// <param name="statisticField">需要统计字段</param>
         /// <param name="whereClause">统计条件</param>
         /// <returns></returns>
-        public static IStatisticsResults Statistics(IFeatureClass featureClass, string statisticField, string whereClause)
+        public static IStatisticsResults Statistics(this IFeatureClass featureClass, string statisticField, string whereClause)
         {
             QueryFilter queryFilter = new QueryFilter();
             queryFilter.WhereClause = whereClause;
@@ -43,7 +43,7 @@ namespace WLib.ArcGis.Data
         /// <param name="statisticField">需要统计字段</param>
         /// <param name="whereClause">统计条件</param>
         /// <returns></returns>
-        public static IStatisticsResults Statistics(ITable table, string statisticField, string whereClause)
+        public static IStatisticsResults Statistics(this ITable table, string statisticField, string whereClause)
         {
             QueryFilter queryFilter = new QueryFilter();
             queryFilter.WhereClause = whereClause;
@@ -65,7 +65,7 @@ namespace WLib.ArcGis.Data
         /// <param name="statisticField">需要统计字段</param>
         /// <param name="whereClause">统计条件</param>
         /// <returns></returns>
-        public static double StatisticsSum(IFeatureClass featureClass, string statisticField, string whereClause)
+        public static double StatisticsSum(this IFeatureClass featureClass, string statisticField, string whereClause)
         {
             return Statistics(featureClass, statisticField, whereClause).Sum;
         }
