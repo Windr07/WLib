@@ -208,20 +208,20 @@ namespace WLib.ArcGis.Control
         private static IElement CreateHightLightElement(IGeometry geometry)
         {
             IElement element = null;
-            IColor redcolor = RenderOpt.GetIColor(255, 0, 0, 50);
-            IColor bluecolor = RenderOpt.GetIColor(0, 0, 255);
+            IColor redcolor = ColorCreate.GetIColor(255, 0, 0, 50);
+            IColor bluecolor = ColorCreate.GetIColor(0, 0, 255);
             switch (geometry.GeometryType)
             {
                 case esriGeometryType.esriGeometryLine:
                 case esriGeometryType.esriGeometryPolyline:
                     element = new LineElementClass();
                     element.Geometry = geometry;
-                    ((ILineElement)element).Symbol = RenderOpt.GetSimpleLineSymbol(redcolor);
+                    ((ILineElement)element).Symbol = SymbolCreate.GetSimpleLineSymbol(redcolor);
                     break;
                 case esriGeometryType.esriGeometryPolygon:
                     element = new PolygonElementClass();
                     element.Geometry = geometry;
-                    ((PolygonElementClass)element).Symbol = RenderOpt.GetSimpleFillSymbol(redcolor, bluecolor);
+                    ((PolygonElementClass)element).Symbol = SymbolCreate.GetSimpleFillSymbol(redcolor, bluecolor);
                     break;
                 case esriGeometryType.esriGeometryPoint:
                     element = new MarkerElementClass();
@@ -289,14 +289,14 @@ namespace WLib.ArcGis.Control
             switch (geometry.GeometryType)
             {
                 case esriGeometryType.esriGeometryPoint:
-                    symbol = RenderOpt.GetSimpleMarkerSymbol("ff0000");
+                    symbol = SymbolCreate.GetSimpleMarkerSymbol("ff0000");
                     break;
                 case esriGeometryType.esriGeometryLine:
                 case esriGeometryType.esriGeometryPolyline:
-                    symbol = RenderOpt.GetSimpleLineSymbol("ff0000");
+                    symbol = SymbolCreate.GetSimpleLineSymbol("ff0000");
                     break;
                 case esriGeometryType.esriGeometryPolygon:
-                    symbol = RenderOpt.GetSimpleFillSymbol("99ccff", "ff0000");
+                    symbol = SymbolCreate.GetSimpleFillSymbol("99ccff", "ff0000");
                     break;
             }
             if (symbol == null) return;

@@ -5,17 +5,17 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Linq;
-using System.Data;
-using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
+using System;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDb.Fields;
-using WLib.ArcGis.Geomtry;
+using WLib.ArcGis.Geometry;
 using WLib.Data;
-using WLib.UserCtrls.ArcGisCtrl;
 using static WLib.WinForm.MenuOpt;
 
 namespace WLib.UserCtrls.Dev.ArcGisCtrl
@@ -24,12 +24,12 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
     /// 图层属性表窗口
     /// （实例化窗口后，通过调用LoadAttribute方法载入属性表）
     /// </summary>
-    public partial class AttributeForm : DevExpress.XtraEditors.XtraForm
+    public partial class AttributeForm : DevExpress.XtraEditors.XtraForm, IAttributeCtrl
     {
         /// <summary>
         /// 按属性查询窗体
         /// </summary>
-        protected AttributeQueryForm AttQueryForm { get; set; }
+        public IAttributeQueryCtrl AtrributeQueryCtrl { get; set; }
         /// <summary>
         /// 要获取属性表的图层
         /// </summary>
@@ -61,6 +61,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             InitializeComponent();
 
             btnClose.Click += (s, e) => Close();
+            AtrributeQueryCtrl = new AttributeQueryForm();
             var contextMenuStrip = new ContextMenuStrip();
             contextMenuStrip.Items.AddRange(new[]
             {
@@ -107,8 +108,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <param name="whereClause">筛选条件，表示从图层加载的数据范围</param>
         /// <param name="fieldNames">加载和显示的字段</param>
         /// <param name="featureLocation">定位到要素图斑的事件</param>
-        public DataTable LoadAttribute(IFeatureLayer featureLayer, string whereClause = null,
-            string[] fieldNames = null, EventHandler<FeatureLocationEventArgs> featureLocation = null)
+        public DataTable LoadAttribute(IFeatureLayer featureLayer, string whereClause = null, string[] fieldNames = null, EventHandler<FeatureLocationEventArgs> featureLocation = null)
         {
             if (featureLayer?.FeatureClass == null)
                 throw new Exception("图层不是要素图层或其数据源为空！");
@@ -153,13 +153,18 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                 FeatureLocation?.Invoke(this, new FeatureLocationEventArgs(FeatLayer, $"{Table.OIDFieldName} = {value}"));
         }
 
+        private void AtrributeQueryCtrl_Query(object sender, EventArgs e)
+        {
+            WhereClause = AtrributeQueryCtrl.WhereClause;
+        }
+
         private void 按属性查询QToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Table == null) return;
-
-            if (AttQueryForm == null || AttQueryForm.IsDisposed)
-                AttQueryForm = new AttributeQueryForm(Table, false, null, (sender2, e2) => WhereClause = AttQueryForm.WhereClause);
-            AttQueryForm.Show(this);
+            AtrributeQueryCtrl.LoadQueryInfo(Table);
+            AtrributeQueryCtrl.Query -= AtrributeQueryCtrl_Query;
+            AtrributeQueryCtrl.Query += AtrributeQueryCtrl_Query;
+            AtrributeQueryCtrl.Show(this);
         }
 
         private void 复制整行RToolStripMenuItem_Click(object sender, EventArgs e)

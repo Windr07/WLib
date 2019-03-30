@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,6 +14,7 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.Carto;
 using WLib.ArcGis.Carto.Layer;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.GeoDb.Fields;
 
 namespace WLib.ArcGis.Control.MapAssociation
@@ -14,44 +22,54 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// <summary>
     /// 地图控件与TOC控件的关联操作
     /// </summary>
-    public class MapCtrlToc
+    public class MapCtrlToc: IMapCtrlAssociation
     {
         /// <summary>
         /// TOC控件
         /// </summary>
-        public readonly AxTOCControl TocCtrl;
+        public AxTOCControl TocControl { get; }
         /// <summary>
         /// 地图控件
         /// </summary>
-        public readonly AxMapControl MapCtrl;
+        public AxMapControl MapControl { get; }
         /// <summary>
         /// 将当前标签页设为地图页面
         /// </summary>
         public readonly Action GoToMapView;
         /// <summary>
+        /// 图层和对应的字段菜单列表
+        /// </summary>
+        public readonly Dictionary<string, ToolStripMenuItem[]> Layer2FieldsMenuItems;
+        /// <summary>
         /// 在TOC控件选择的图层
         /// </summary>
         public ILayer SelectedLayer;
         /// <summary>
-        /// 图层和对应的字段菜单列表
+        /// 属性表窗口
         /// </summary>
-        public readonly Dictionary<string, ToolStripMenuItem[]> Layer2FieldsMenuItems;
+        public IAttributeCtrl AttributeCtrl;
+
         /// <summary>
         /// 地图控件与TOC控件的关联操作
         /// </summary>
         /// <param name="tocCtrl">TOC控件</param>
         /// <param name="mapCtrl">地图控件</param>
+        /// <param name="attributeCtrl">显示属性表的控件/窗体</param>
         /// <param name="goToMapView">将当前标签页设为地图页面</param>
-        public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, Action goToMapView = null)
+        public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, IAttributeCtrl attributeCtrl, Action goToMapView = null)
         {
-            MapCtrl = mapCtrl;
-            TocCtrl = tocCtrl;
-            TocCtrl.OnMouseDown += tocCtrl_OnMouseDown;
+            MapControl = mapCtrl;
+            TocControl = tocCtrl;
+            TocControl.SetBuddyControl(MapControl);
+            TocControl.OnMouseDown += tocCtrl_OnMouseDown;
             GoToMapView = goToMapView;
+            AttributeCtrl = attributeCtrl;
+            AttributeCtrl.FormClosing += (sender, e) => { e.Cancel = true; AttributeCtrl.Visible = false; };
 
             Layer2FieldsMenuItems = new Dictionary<string, ToolStripMenuItem[]>();
             InintMenuStrip();
         }
+
 
         /// <summary>
         /// 展开/收缩图层的图例
@@ -59,7 +77,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <param name="isExpand"></param>
         public void ExpandLegend(bool isExpand)
         {
-            IEnumLayer layers = MapCtrl.Map.Layers[LayerUid.IFeatureLayer, true];
+            IEnumLayer layers = MapControl.Map.Layers[LayerUid.IFeatureLayer, true];
             layers.Reset();
             ILayer layer;
             while ((layer = layers.Next()) != null)
@@ -70,7 +88,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                     legendInfo.LegendGroup[i].Visible = true;
                 }
             }
-            TocCtrl.Update();
+            TocControl.Update();
         }
         /// <summary>
         /// 显示指定图层指定字段的标注
@@ -127,7 +145,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                             }
                             else
                                 geoFeatureLayer.DisplayAnnotation = false;
-                            MapCtrl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+                            MapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
                         }
                     };
                     menuItems.Add(item);
@@ -139,25 +157,36 @@ namespace WLib.ArcGis.Control.MapAssociation
             ShowLabelMenuItem.DropDownItems.AddRange(Layer2FieldsMenuItems[setFieldLabelLayer.Name]);
         }
 
+
         /// <summary>
         /// TOCC左键设置图例，右键弹出菜单
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void tocCtrl_OnMouseDown(object sender, ITOCControlEvents_OnMouseDownEvent e)
+        private void tocCtrl_OnMouseDown(object sender, ITOCControlEvents_OnMouseDownEvent e)
         {
             var item = esriTOCControlItem.esriTOCControlItemNone;
             IBasicMap basicMap = null;
             object unk = null, data = null;
-            TocCtrl.HitTest(e.x, e.y, ref item, ref basicMap, ref SelectedLayer, ref unk, ref data);
+            TocControl.HitTest(e.x, e.y, ref item, ref basicMap, ref SelectedLayer, ref unk, ref data);
             if (e.button == 2)
             {
                 if (item == esriTOCControlItem.esriTOCControlItemLayer)
                 {
-                    ToccMenuStrip.Show(TocCtrl, new System.Drawing.Point(e.x, e.y));
+                    ToccMenuStrip.Show(TocControl, new System.Drawing.Point(e.x, e.y));
                     ShowFieldLabelMenuItems(SelectedLayer);
                 }
             }
+        }
+        /// <summary>
+        /// 定位查询获得的第一个图斑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _attributeForm_FeatureLocation(object sender, FeatureLocationEventArgs e)
+        {
+            GoToMapView?.Invoke();
+            MapControl.MapZoomToAndSelectFirst(e.LocationLayer, e.WhereClause);
         }
 
 
@@ -217,15 +246,38 @@ namespace WLib.ArcGis.Control.MapAssociation
             if (SelectedLayer != null)
             {
                 var envelope = SelectedLayer.AreaOfInterest;
-                MapCtrl.Extent = envelope;
+                MapControl.Extent = envelope;
             }
         }
-        protected virtual void 打开属性表ToolStripMenuItem_Click(object sender, EventArgs e)
+        protected void 打开属性表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (SelectedLayer is ITable table)
+            {
+                AttributeCtrl.Show(MapControl);
+                AttributeCtrl.Activate();//之前已打开，则给予焦点，置顶。
+                AttributeCtrl.FeatureLocation -= _attributeForm_FeatureLocation;
+                AttributeCtrl.FeatureLocation += _attributeForm_FeatureLocation;
+                AttributeCtrl.LoadAttribute((IFeatureLayer)SelectedLayer, ((IFeatureLayerDefinition)SelectedLayer).DefinitionExpression);
+            }
         }
-        protected virtual void 定义查询IToolStripMenuItem_Click(object sender, EventArgs e)
+        protected void 定义查询IToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!(SelectedLayer is IFeatureLayer featureLayer)) return;
+
+            AttributeCtrl.AtrributeQueryCtrl.LoadQueryInfo(featureLayer.FeatureClass as ITable);
+            AttributeCtrl.AtrributeQueryCtrl.Query += _queryForm_Query;
+            AttributeCtrl.AtrributeQueryCtrl.Show(MapControl);
         }
+
+        private void _queryForm_Query(object sender, EventArgs e)
+        {
+            if (SelectedLayer is IFeatureLayer featureLayer && featureLayer is IFeatureLayerDefinition featureLyrDef)
+            {
+                featureLyrDef.DefinitionExpression = AttributeCtrl.AtrributeQueryCtrl.WhereClause;
+                RemoveDefinitionMenuItem.Visible = true;
+            }
+        }
+
         protected virtual void 移除定义查询CToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (SelectedLayer is IFeatureLayer featureLayer)
@@ -239,7 +291,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         }
         protected virtual void 移除DToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MapCtrl.Map.DeleteLayer(SelectedLayer);
+            MapControl.Map.DeleteLayer(SelectedLayer);
         }
         #endregion
     }

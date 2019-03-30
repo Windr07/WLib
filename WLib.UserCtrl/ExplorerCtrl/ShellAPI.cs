@@ -1,8 +1,14 @@
+/*---------------------------------------------------------------- 
+// auth£º Source by WilsonProgramming
+// date£º None
+// desc£º None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-//À´Ô´(Source by)£º WilsonProgramming
 namespace WLib.UserCtrls.ExplorerCtrl
 {
     public class ShellAPI

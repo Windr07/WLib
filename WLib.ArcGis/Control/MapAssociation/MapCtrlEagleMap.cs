@@ -1,4 +1,11 @@
-﻿using ESRI.ArcGIS.Carto;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Display;
@@ -8,12 +15,12 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// <summary>
     /// 主地图控件与鹰眼地图的关联操作
     /// </summary>
-    public class MapCtrlEagleMap
+    public class MapCtrlEagleMap: IMapCtrlAssociation
     {
         /// <summary>
         /// 主地图控件
         /// </summary>
-        public AxMapControl MainMapControl { get; }
+        public AxMapControl MapControl { get; }
         /// <summary>
         /// 鹰眼图控件
         /// </summary>
@@ -25,9 +32,9 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <param name="eagleMapControl"></param>
         public MapCtrlEagleMap(AxMapControl mainMapControl, AxMapControl eagleMapControl)
         {
-            MainMapControl = mainMapControl;
-            MainMapControl.OnMapReplaced += MainMapControl_OnMapReplaced;
-            MainMapControl.OnExtentUpdated += MainMapControl_OnExtentUpdated;
+            MapControl = mainMapControl;
+            MapControl.OnMapReplaced += MainMapControl_OnMapReplaced;
+            MapControl.OnExtentUpdated += MainMapControl_OnExtentUpdated;
 
             EagleMapControl = eagleMapControl;
             EagleMapControl.OnMouseDown += EagleMapControl_OnMouseDown;
@@ -42,9 +49,9 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void UpDateEagleMap()
         {
             EagleMapControl.Map = new Map();
-            for (int i = 0; i < MainMapControl.LayerCount; i++)//添加主地图控件中的所有图层到鹰眼控件中
+            for (int i = 0; i < MapControl.LayerCount; i++)//添加主地图控件中的所有图层到鹰眼控件中
             {
-                EagleMapControl.AddLayer(MainMapControl.get_Layer(MainMapControl.LayerCount - (i + 1)));
+                EagleMapControl.AddLayer(MapControl.get_Layer(MapControl.LayerCount - (i + 1)));
             }
         }
 
@@ -63,7 +70,7 @@ namespace WLib.ArcGis.Control.MapAssociation
 
             //设置鹰眼中的红线框
             var fillShapeElement = (IFillShapeElement)element;
-            fillShapeElement.Symbol = RenderOpt.GetSimpleFillSymbol("ff000000", "ff0000", 1.6);
+            fillShapeElement.Symbol = SymbolCreate.GetSimpleFillSymbol("ff000000", "ff0000", 1.6);
             graphicsContainer.AddElement((IElement)fillShapeElement, 0);
 
             //刷新 
@@ -85,15 +92,15 @@ namespace WLib.ArcGis.Control.MapAssociation
             {
                 IPoint point = new Point();
                 point.PutCoords(e.mapX, e.mapY);
-                IEnvelope envelope = MainMapControl.Extent;
+                IEnvelope envelope = MapControl.Extent;
                 envelope.CenterAt(point);
-                MainMapControl.Extent = envelope;
-                MainMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+                MapControl.Extent = envelope;
+                MapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
             }
             else if (e.button == 2)//按下鼠标右键绘制矩形框
             {
                 IEnvelope envelope = EagleMapControl.TrackRectangle();
-                IEnvelope extent = MainMapControl.ActiveView.Extent;
+                IEnvelope extent = MapControl.ActiveView.Extent;
 
                 //计算新显示框范围
                 double newWidth;
@@ -119,8 +126,8 @@ namespace WLib.ArcGis.Control.MapAssociation
                 double yma = midY + newHeight / 2;
                 envelope.PutCoords(xmi, ymi, xma, yma);
 
-                MainMapControl.Extent = envelope;
-                MainMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+                MapControl.Extent = envelope;
+                MapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
             }
         }
 
@@ -136,9 +143,9 @@ namespace WLib.ArcGis.Control.MapAssociation
             EagleMapControl.MousePointer = esriControlsMousePointer.esriPointerSizeAll;
             IPoint point = new PointClass();
             point.PutCoords(e.mapX, e.mapY);
-            MainMapControl.CenterAt(point);
+            MapControl.CenterAt(point);
             EagleMapControl.CenterAt(point);
-            MainMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+            MapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
             EagleMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
         }
     }

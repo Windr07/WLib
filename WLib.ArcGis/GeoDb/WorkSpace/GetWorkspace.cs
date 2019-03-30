@@ -25,7 +25,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
     /// （参考：http://blog.csdn.net/guangliang1102/article/details/51154893）
     /// （连接字符串：https://www.connectionstrings.com）
     /// </summary>
-    public class GetWorkspace
+    public static class GetWorkspace
     {
         /// <summary>
         /// 判断指定的路径是否为工作空间路径（任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间）
@@ -91,21 +91,6 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
             }
             return propertySet;
         }
-        /// <summary>
-        /// 已在YYGISLib.ArcGisHelper.WorkSpace.GetWorkSpace实现的工作空间
-        /// </summary>
-        public static EWorkspaceType[] AllAchieveType => new[]
-        {
-            EWorkspaceType.ShapeFile,
-            EWorkspaceType.FileGDB,
-            EWorkspaceType.Access,
-            EWorkspaceType.Sde,
-            EWorkspaceType.Excel,
-            EWorkspaceType.TextFile,
-            EWorkspaceType.OleDb,
-            EWorkspaceType.Raster,
-            EWorkspaceType.Sql
-        };
 
 
         /// <summary>
@@ -157,7 +142,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
                     else if (extension == ".xls" || extension == ".xlsx")
                         eType = EWorkspaceType.Excel;
 
-                    workspace = GetExcelWorkspace(connStrOrPath);
+                    workspace = GetWorkspaceFromFile(connStrOrPath, eType);
                 }
             }
             return workspace;
@@ -226,8 +211,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <returns></returns>
         public static string ShpConnectionString(string path)
         {
-            path = System.IO.Path.GetDirectoryName(path);
-            return ($"Provider=ESRI.GeoDB.OLEDB.1;Data Source={path};Extended Properties=WorkspaceType=esriDataSourcesFile.ShapefileWorkspaceFactory.1;Geometry=WKB|OBJECT");
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Data Source={System.IO.Path.GetDirectoryName(path)};Extended Properties=WorkspaceType=esriDataSourcesFile.ShapefileWorkspaceFactory.1;Geometry=WKB|OBJECT";
         }
         /// <summary>
         /// 构造连接SDE地理数据库的连接字符串
@@ -239,212 +223,7 @@ namespace WLib.ArcGis.GeoDb.WorkSpace
         /// <returns></returns>
         public static string SdeConnectionString(string serverName, string dataSource, string userName, string password)
         {
-            return ($"Provider=ESRI.GeoDB.OLEDB.1;Location={serverName};Data Source={dataSource};User Id={userName};Password={password};Extended Properties=WorkspaceType=esriDataSourcesGDB.SDEWorkspaceFactory.1;Geometry=WKB|OBJECT;Instance=5151;Version=SDE.DEFAULT");
-        }
-        #endregion
-
-
-        #region 获取各类工作空间
-        /// <summary>
-        /// 获取Access数据库的工作空间
-        /// </summary>
-        /// <param name="mdbPath">Access数据库路径</param>
-        /// <returns></returns>
-        private static IWorkspace GetAccessWorkspace(string mdbPath)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new AccessWorkspaceFactoryClass();
-                IWorkspace workSpace = workspaceFactory.OpenFromFile(mdbPath, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开Access数据库：{mdbPath}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取gdb数据库的工作空间
-        /// </summary>
-        /// <param name="gdbPath">gdb文件夹路径</param>
-        /// <returns></returns>
-        private static IWorkspace GetGdbWorkspace(string gdbPath)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new FileGDBWorkspaceFactoryClass();
-                IWorkspace workSpace = workspaceFactory.OpenFromFile(gdbPath, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开GDB数据库：{gdbPath}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取shp文件夹的工作空间
-        /// </summary>
-        /// <param name="shpDir">shp文件所在的文件夹路径</param>
-        /// <returns></returns>
-        private static IWorkspace GetShpWorkspace(string shpDir)
-        {
-            try
-            {
-                IWorkspaceFactory workfactory = new ShapefileWorkspaceFactoryClass();
-                IWorkspace workspace = workfactory.OpenFromFile(shpDir, 0);
-                Marshal.ReleaseComObject(workfactory);
-                return workspace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开Shapefile工作空间：{shpDir}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取SDE数据库的工作空间
-        /// </summary>
-        /// <param name="strSdeConn">sde连接字符串（eg:SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT）</param>
-        /// <remarks>
-        /// 参考：http://blog.csdn.net/mengdong_zy/article/details/8961390
-        ///       http://www.cnblogs.com/feilong3540717/archive/2011/07/20/2111882.html
-        /// </remarks>
-        /// <returns></returns>
-        private static IWorkspace GetSdeWorkspace(string strSdeConn)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new SdeWorkspaceFactoryClass();
-                var propertySet = ConnectStringToPropetySet(strSdeConn);
-                IWorkspace sdeWorkSpace = workspaceFactory.Open(propertySet, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return sdeWorkSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开Shapefile工作空间：{strSdeConn}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        ///  获取OleDb数据的工作空间（包括连接Excel、Access、Oracle、SQLServer等）
-        /// </summary>
-        /// <param name="strOleDbConn">连接字符串（eg:Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;）</param>
-        /// <returns></returns>
-        private static IWorkspace GetOleDbWorkspace(string strOleDbConn)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new OLEDBWorkspaceFactoryClass();
-                var propertySet = ConnectStringToPropetySet(strOleDbConn);
-                IWorkspace workSpace = workspaceFactory.Open(propertySet, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开OleDb工作空间：{strOleDbConn}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取栅格数据目录的工作空间（包括GRID、TIFF、ERDAS IMAGE等文件所在的目录）
-        /// </summary>
-        /// <param name="rasterDir">栅格数据文件所在的目录</param>
-        /// <returns></returns>
-        private static IWorkspace GetRasterWorkspace(string rasterDir)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new RasterWorkspaceFactoryClass();
-                IWorkspace rasterWorkspace = workspaceFactory.OpenFromFile(rasterDir, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return rasterWorkspace;
-
-                //若格式为ESRI GRID，那么该方法的参数为栅格要素集的名称；
-                //若格式为TIFF格式，则要加上.tif扩展名：OpenRasterDataset("hillshade.tif")
-                //IRasterDataset rasterDataset = rasterWorkspace.OpenRasterDataset("ca_hillshade");  
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开OleDb工作空间：{rasterDir}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取Excel工作空间
-        /// </summary>
-        /// <param name="excelPath">Excel文件路径</param>
-        /// <returns></returns>
-        private static IWorkspace GetExcelWorkspace(string excelPath)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new ExcelWorkspaceFactoryClass();
-                IWorkspace workSpace = workspaceFactory.OpenFromFile(excelPath, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开Excel工作空间：{excelPath}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取txt工作空间
-        /// </summary>
-        /// <param name="txtDir">txt文件所在的目录</param>
-        /// <returns></returns>
-        private static IWorkspace GetTextWorkspace(string txtDir)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new TextFileWorkspaceFactoryClass();
-                IWorkspace workSpace = workspaceFactory.OpenFromFile(txtDir, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开txt工作空间：{txtDir}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取cad工作空间
-        /// </summary>
-        /// <param name="cadDir">cad文件所在的目录</param>
-        /// <returns></returns>
-        private static IWorkspace GetCadWorkspace(string cadDir)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new CadWorkspaceFactoryClass();
-                IWorkspace workSpace = workspaceFactory.OpenFromFile(cadDir, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开CAD工作空间：{cadDir}出错；{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 获取Sql工作空间
-        /// </summary>
-        /// <param name="strSqlConn">直连SQL Server的连接字符串（eg:server=localhost;uid=sa;pwd=sa;database=myDatabase）</param>
-        /// <returns></returns>
-        private static IWorkspace GetSqlWorkspace(string strSqlConn)
-        {
-            try
-            {
-                IWorkspaceFactory workspaceFactory = new SqlWorkspaceFactory();
-                var propertySet = ConnectStringToPropetySet(strSqlConn);
-                IWorkspace workSpace = workspaceFactory.Open(propertySet, 0);
-                Marshal.ReleaseComObject(workspaceFactory);
-                return workSpace;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"打开Sql工作空间：{strSqlConn}出错；{ex.Message}");
-            }
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Location={serverName};Data Source={dataSource};User Id={userName};Password={password};Extended Properties=WorkspaceType=esriDataSourcesGDB.SDEWorkspaceFactory.1;Geometry=WKB|OBJECT;Instance=5151;Version=SDE.DEFAULT";
         }
         #endregion
     }

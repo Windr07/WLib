@@ -22,12 +22,8 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
     /// <summary>
     /// 地图导航条
     /// </summary>
-    public partial class MapNavigationTools : UserControl
+    public partial class MapNavigationTools : UserControl, IMapNavigationTools
     {
-        /// <summary>
-        /// 用于卷帘工具
-        /// </summary>
-        private ILayerEffectProperties _effectLayer;
         /// <summary>
         /// 自定义测量工具对象
         /// </summary>
@@ -37,9 +33,13 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// </summary>
         private AxMapControl _mapCtrl;
         /// <summary>
+        /// 用于卷帘工具
+        /// </summary>
+        private ILayerEffectProperties _effectLayer;
+        /// <summary>
         /// 当前使用的地图导航工具
         /// </summary>
-        public EMapTools MapTools { get; private set; }
+        public EMapTools CurrentTool { get; private set; }
         /// <summary>
         /// 地图导航工具条所绑定的地图控件
         /// </summary>
@@ -53,7 +53,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                 _mapCtrl.OnMouseMove += mapControl_OnMouseMove;
                 _effectLayer = new CommandsEnvironmentClass();
                 _measureTool = new MapCtrlMeasure(MapControl);
-                MapTools = EMapTools.None;
+                CurrentTool = EMapTools.None;
             }
         }
 
@@ -69,9 +69,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// 地图导航条
         /// </summary>
         /// <param name="mapCtrl">地图导航工具条所绑定的地图控件</param>
-        /// <param name="measureResultPanel">显示测量结果的面板</param>
-        /// <param name="measureResultLabel">显示测量结果的标签</param>
-        public MapNavigationTools(AxMapControl mapCtrl)
+        public MapNavigationTools(AxMapControl mapCtrl = null)
         {
             InitializeComponent();
             this.MapControl = mapCtrl;
@@ -100,7 +98,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                 return;
             }
 
-            switch (MapTools)
+            switch (CurrentTool)
             {
                 case EMapTools.MeasureDistance: //测距离
                     MapControl.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针:十字状
@@ -117,7 +115,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                     {
                         if (_measureTool.IsSurveying)
                         {
-                            object lineSymbolObj = RenderOpt.GetSimpleLineSymbol("ff0000");
+                            object lineSymbolObj = SymbolCreate.GetSimpleLineSymbol("ff0000");
                             MapControl.DrawShape(_measureTool.SurveyEnd(MapControl.ToMapPoint(e.x, e.y)), ref lineSymbolObj);
                             lblMeasureInfo.Text = $@"总长度：{_measureTool.TotalLength:F2}米{Environment.NewLine}{Environment.NewLine}";
                             lblMeasureInfo.Text += $@"当前长度: {_measureTool.CurrentLength:F2}米";
@@ -140,7 +138,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                     {
                         if (_measureTool.IsSurveying && _measureTool.AreaPointCount > 1)
                         {
-                            object fillSymbolObj = RenderOpt.GetSimpleFillSymbol("99ccff", "ff0000");
+                            object fillSymbolObj = SymbolCreate.GetSimpleFillSymbol("99ccff", "ff0000");
                             MapControl.DrawShape(_measureTool.SurveyEnd(MapControl.ToMapPoint(e.x, e.y)), ref fillSymbolObj);
                             lblMeasureInfo.Text = $@"面积：{_measureTool.Area:#########.##}平方米";
                             lblMeasureInfo.Refresh();
@@ -154,25 +152,20 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         //鼠标移动测距离/面积
         private void mapControl_OnMouseMove(object sender, IMapControlEvents2_OnMouseMoveEvent e)
         {
-            switch (MapTools)
+            if (!_measureTool.IsSurveying) return;
+
+            if (CurrentTool == EMapTools.MeasureDistance)//测距离
             {
-                case EMapTools.MeasureDistance://测距离
-                    if (_measureTool.IsSurveying)
-                    {
-                        _measureTool.MoveTo(MapControl.ToMapPoint(e.x, e.y));
-                        lblMeasureInfo.Text = $@"总长度：{_measureTool.TotalLength:#########.##}米{Environment.NewLine}{Environment.NewLine}";
-                        lblMeasureInfo.Text += $@"当前长度:{_measureTool.CurrentLength:#########.##}米";
-                        lblMeasureInfo.Refresh();
-                    }
-                    break;
-                case EMapTools.MeasureArea://测面积
-                    if (_measureTool.IsSurveying)
-                    {
-                        _measureTool.MoveTo(MapControl.ToMapPoint(e.x, e.y));
-                        lblMeasureInfo.Text = $@"面积：{_measureTool.Area:#########.##}平方米";
-                        lblMeasureInfo.Refresh();
-                    }
-                    break;
+                _measureTool.MoveTo(MapControl.ToMapPoint(e.x, e.y));
+                lblMeasureInfo.Text = $@"总长度：{_measureTool.TotalLength:#########.##}米{Environment.NewLine}{Environment.NewLine}";
+                lblMeasureInfo.Text += $@"当前长度:{_measureTool.CurrentLength:#########.##}米";
+                lblMeasureInfo.Refresh();
+            }
+            else if (CurrentTool == EMapTools.MeasureArea) //测距离
+            {
+                _measureTool.MoveTo(MapControl.ToMapPoint(e.x, e.y));
+                lblMeasureInfo.Text = $@"面积：{_measureTool.Area:#########.##}平方米";
+                lblMeasureInfo.Refresh();
             }
         }
 
@@ -188,17 +181,17 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         //点击地图导航条的工具
         private void navigationButton_Click(object sender, EventArgs e)
         {
-            MapTools = ((SimpleButton)sender).Text.GetEnum<EMapTools>();
-            this.lblMeasureTips.Visible = this.lblMeasureInfo.Visible = MapTools == EMapTools.MeasureDistance || MapTools == EMapTools.MeasureArea;
-            this.lblSwipe.Visible = this.cmbLayers.Visible = MapTools == EMapTools.Swipe;
-            if (MapTools == EMapTools.Swipe)
+            CurrentTool = ((SimpleButton)sender).Text.GetEnum<EMapTools>();
+            this.lblMeasureTips.Visible = this.lblMeasureInfo.Visible = CurrentTool == EMapTools.MeasureDistance || CurrentTool == EMapTools.MeasureArea;
+            this.lblSwipe.Visible = this.cmbLayers.Visible = CurrentTool == EMapTools.Swipe;
+            if (CurrentTool == EMapTools.Swipe)
             {
                 this.cmbLayers.Properties.Items.Clear();
                 this.cmbLayers.Properties.Items.AddRange(this.MapControl.GetLayerNames());
             }
 
             ICommand command = null;
-            switch (MapTools)
+            switch (CurrentTool)
             {
                 case EMapTools.FullExtent: command = new ControlsMapFullExtentCommand(); break;
                 case EMapTools.ZoomIn: command = new ControlsMapZoomInTool(); break;

@@ -17,19 +17,19 @@ namespace WLib.Model
         /// <summary>
         /// 序号（序号应≥0）
         /// </summary>
-        public int Index = -1;
+        public int Index { get; set; } = -1;
         /// <summary>
         /// 唯一值，通常为ID、编码、代码或图幅号等
         /// </summary>
-        public string Code;
+        public string Code { get; set; }
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
         /// <summary>
         /// 备注信息
         /// </summary>
-        public string Comment;
+        public string Comment { get; set; }
 
         /// <summary>
         /// 放入列表中的唯一值对象

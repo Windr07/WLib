@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapNavigationTools));
             this.btnFullExtent = new System.Windows.Forms.Button();
+            this.imageCollection_Nav = new System.Windows.Forms.ImageList(this.components);
             this.btnZoomIn = new System.Windows.Forms.Button();
             this.btnPan = new System.Windows.Forms.Button();
             this.btnZoomOut = new System.Windows.Forms.Button();
@@ -41,134 +42,26 @@
             this.btnSelection = new System.Windows.Forms.Button();
             this.btnIdentify = new System.Windows.Forms.Button();
             this.btnSwipe = new System.Windows.Forms.Button();
-            this.imageCollection_Nav = new System.Windows.Forms.ImageList(this.components);
             this.lblMeasureTips = new System.Windows.Forms.Label();
             this.lblMeasureInfo = new System.Windows.Forms.Label();
             this.lblSwipe = new System.Windows.Forms.Label();
             this.cmbLayers = new System.Windows.Forms.ComboBox();
             this.btnMeasureClose = new System.Windows.Forms.Button();
+            this.ToolPanel = new System.Windows.Forms.Panel();
+            this.ToolPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnFullExtent
             // 
             this.btnFullExtent.ImageIndex = 13;
             this.btnFullExtent.ImageList = this.imageCollection_Nav;
-            this.btnFullExtent.Location = new System.Drawing.Point(0, 0);
+            this.btnFullExtent.Location = new System.Drawing.Point(-1, 0);
             this.btnFullExtent.Name = "btnFullExtent";
             this.btnFullExtent.Size = new System.Drawing.Size(24, 24);
             this.btnFullExtent.TabIndex = 0;
+            this.btnFullExtent.Tag = "";
             this.btnFullExtent.UseVisualStyleBackColor = true;
             this.btnFullExtent.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnZoomIn
-            // 
-            this.btnZoomIn.ImageIndex = 15;
-            this.btnZoomIn.ImageList = this.imageCollection_Nav;
-            this.btnZoomIn.Location = new System.Drawing.Point(23, 0);
-            this.btnZoomIn.Name = "btnZoomIn";
-            this.btnZoomIn.Size = new System.Drawing.Size(24, 24);
-            this.btnZoomIn.TabIndex = 1;
-            this.btnZoomIn.UseVisualStyleBackColor = true;
-            this.btnZoomIn.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnPan
-            // 
-            this.btnPan.ImageIndex = 9;
-            this.btnPan.ImageList = this.imageCollection_Nav;
-            this.btnPan.Location = new System.Drawing.Point(69, 0);
-            this.btnPan.Name = "btnPan";
-            this.btnPan.Size = new System.Drawing.Size(24, 24);
-            this.btnPan.TabIndex = 3;
-            this.btnPan.UseVisualStyleBackColor = true;
-            this.btnPan.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnZoomOut
-            // 
-            this.btnZoomOut.ImageIndex = 17;
-            this.btnZoomOut.ImageList = this.imageCollection_Nav;
-            this.btnZoomOut.Location = new System.Drawing.Point(46, 0);
-            this.btnZoomOut.Name = "btnZoomOut";
-            this.btnZoomOut.Size = new System.Drawing.Size(24, 24);
-            this.btnZoomOut.TabIndex = 2;
-            this.btnZoomOut.UseVisualStyleBackColor = true;
-            this.btnZoomOut.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnAreaMeasure
-            // 
-            this.btnAreaMeasure.ImageIndex = 2;
-            this.btnAreaMeasure.ImageList = this.imageCollection_Nav;
-            this.btnAreaMeasure.Location = new System.Drawing.Point(161, 0);
-            this.btnAreaMeasure.Name = "btnAreaMeasure";
-            this.btnAreaMeasure.Size = new System.Drawing.Size(24, 24);
-            this.btnAreaMeasure.TabIndex = 7;
-            this.btnAreaMeasure.UseVisualStyleBackColor = true;
-            this.btnAreaMeasure.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnLenMeasure
-            // 
-            this.btnLenMeasure.ImageIndex = 8;
-            this.btnLenMeasure.ImageList = this.imageCollection_Nav;
-            this.btnLenMeasure.Location = new System.Drawing.Point(138, 0);
-            this.btnLenMeasure.Name = "btnLenMeasure";
-            this.btnLenMeasure.Size = new System.Drawing.Size(24, 24);
-            this.btnLenMeasure.TabIndex = 6;
-            this.btnLenMeasure.UseVisualStyleBackColor = true;
-            this.btnLenMeasure.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnNextView
-            // 
-            this.btnNextView.ImageIndex = 11;
-            this.btnNextView.ImageList = this.imageCollection_Nav;
-            this.btnNextView.Location = new System.Drawing.Point(115, 0);
-            this.btnNextView.Name = "btnNextView";
-            this.btnNextView.Size = new System.Drawing.Size(24, 24);
-            this.btnNextView.TabIndex = 5;
-            this.btnNextView.UseVisualStyleBackColor = true;
-            this.btnNextView.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnPreView
-            // 
-            this.btnPreView.ImageIndex = 6;
-            this.btnPreView.ImageList = this.imageCollection_Nav;
-            this.btnPreView.Location = new System.Drawing.Point(92, 0);
-            this.btnPreView.Name = "btnPreView";
-            this.btnPreView.Size = new System.Drawing.Size(24, 24);
-            this.btnPreView.TabIndex = 4;
-            this.btnPreView.UseVisualStyleBackColor = true;
-            this.btnPreView.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnSelection
-            // 
-            this.btnSelection.ImageIndex = 19;
-            this.btnSelection.ImageList = this.imageCollection_Nav;
-            this.btnSelection.Location = new System.Drawing.Point(230, 0);
-            this.btnSelection.Name = "btnSelection";
-            this.btnSelection.Size = new System.Drawing.Size(24, 24);
-            this.btnSelection.TabIndex = 10;
-            this.btnSelection.UseVisualStyleBackColor = true;
-            this.btnSelection.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnIdentify
-            // 
-            this.btnIdentify.ImageIndex = 4;
-            this.btnIdentify.ImageList = this.imageCollection_Nav;
-            this.btnIdentify.Location = new System.Drawing.Point(207, 0);
-            this.btnIdentify.Name = "btnIdentify";
-            this.btnIdentify.Size = new System.Drawing.Size(24, 24);
-            this.btnIdentify.TabIndex = 9;
-            this.btnIdentify.UseVisualStyleBackColor = true;
-            this.btnIdentify.Click += new System.EventHandler(this.navigationButton_Click);
-            // 
-            // btnSwipe
-            // 
-            this.btnSwipe.ImageIndex = 0;
-            this.btnSwipe.ImageList = this.imageCollection_Nav;
-            this.btnSwipe.Location = new System.Drawing.Point(184, 0);
-            this.btnSwipe.Name = "btnSwipe";
-            this.btnSwipe.Size = new System.Drawing.Size(24, 24);
-            this.btnSwipe.TabIndex = 8;
-            this.btnSwipe.UseVisualStyleBackColor = true;
-            this.btnSwipe.Click += new System.EventHandler(this.navigationButton_Click);
             // 
             // imageCollection_Nav
             // 
@@ -197,11 +90,121 @@
             this.imageCollection_Nav.Images.SetKeyName(20, "SelectionSelectTool16.png");
             this.imageCollection_Nav.Images.SetKeyName(21, "table2.png");
             // 
+            // btnZoomIn
+            // 
+            this.btnZoomIn.ImageIndex = 15;
+            this.btnZoomIn.ImageList = this.imageCollection_Nav;
+            this.btnZoomIn.Location = new System.Drawing.Point(22, 0);
+            this.btnZoomIn.Name = "btnZoomIn";
+            this.btnZoomIn.Size = new System.Drawing.Size(24, 24);
+            this.btnZoomIn.TabIndex = 1;
+            this.btnZoomIn.UseVisualStyleBackColor = true;
+            this.btnZoomIn.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnPan
+            // 
+            this.btnPan.ImageIndex = 9;
+            this.btnPan.ImageList = this.imageCollection_Nav;
+            this.btnPan.Location = new System.Drawing.Point(68, 0);
+            this.btnPan.Name = "btnPan";
+            this.btnPan.Size = new System.Drawing.Size(24, 24);
+            this.btnPan.TabIndex = 3;
+            this.btnPan.UseVisualStyleBackColor = true;
+            this.btnPan.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnZoomOut
+            // 
+            this.btnZoomOut.ImageIndex = 17;
+            this.btnZoomOut.ImageList = this.imageCollection_Nav;
+            this.btnZoomOut.Location = new System.Drawing.Point(45, 0);
+            this.btnZoomOut.Name = "btnZoomOut";
+            this.btnZoomOut.Size = new System.Drawing.Size(24, 24);
+            this.btnZoomOut.TabIndex = 2;
+            this.btnZoomOut.UseVisualStyleBackColor = true;
+            this.btnZoomOut.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnAreaMeasure
+            // 
+            this.btnAreaMeasure.ImageIndex = 2;
+            this.btnAreaMeasure.ImageList = this.imageCollection_Nav;
+            this.btnAreaMeasure.Location = new System.Drawing.Point(160, 0);
+            this.btnAreaMeasure.Name = "btnAreaMeasure";
+            this.btnAreaMeasure.Size = new System.Drawing.Size(24, 24);
+            this.btnAreaMeasure.TabIndex = 7;
+            this.btnAreaMeasure.UseVisualStyleBackColor = true;
+            this.btnAreaMeasure.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnLenMeasure
+            // 
+            this.btnLenMeasure.ImageIndex = 8;
+            this.btnLenMeasure.ImageList = this.imageCollection_Nav;
+            this.btnLenMeasure.Location = new System.Drawing.Point(137, 0);
+            this.btnLenMeasure.Name = "btnLenMeasure";
+            this.btnLenMeasure.Size = new System.Drawing.Size(24, 24);
+            this.btnLenMeasure.TabIndex = 6;
+            this.btnLenMeasure.UseVisualStyleBackColor = true;
+            this.btnLenMeasure.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnNextView
+            // 
+            this.btnNextView.ImageIndex = 11;
+            this.btnNextView.ImageList = this.imageCollection_Nav;
+            this.btnNextView.Location = new System.Drawing.Point(114, 0);
+            this.btnNextView.Name = "btnNextView";
+            this.btnNextView.Size = new System.Drawing.Size(24, 24);
+            this.btnNextView.TabIndex = 5;
+            this.btnNextView.UseVisualStyleBackColor = true;
+            this.btnNextView.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnPreView
+            // 
+            this.btnPreView.ImageIndex = 6;
+            this.btnPreView.ImageList = this.imageCollection_Nav;
+            this.btnPreView.Location = new System.Drawing.Point(91, 0);
+            this.btnPreView.Name = "btnPreView";
+            this.btnPreView.Size = new System.Drawing.Size(24, 24);
+            this.btnPreView.TabIndex = 4;
+            this.btnPreView.UseVisualStyleBackColor = true;
+            this.btnPreView.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnSelection
+            // 
+            this.btnSelection.ImageIndex = 19;
+            this.btnSelection.ImageList = this.imageCollection_Nav;
+            this.btnSelection.Location = new System.Drawing.Point(229, 0);
+            this.btnSelection.Name = "btnSelection";
+            this.btnSelection.Size = new System.Drawing.Size(24, 24);
+            this.btnSelection.TabIndex = 10;
+            this.btnSelection.UseVisualStyleBackColor = true;
+            this.btnSelection.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnIdentify
+            // 
+            this.btnIdentify.ImageIndex = 4;
+            this.btnIdentify.ImageList = this.imageCollection_Nav;
+            this.btnIdentify.Location = new System.Drawing.Point(206, 0);
+            this.btnIdentify.Name = "btnIdentify";
+            this.btnIdentify.Size = new System.Drawing.Size(24, 24);
+            this.btnIdentify.TabIndex = 9;
+            this.btnIdentify.UseVisualStyleBackColor = true;
+            this.btnIdentify.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
+            // btnSwipe
+            // 
+            this.btnSwipe.ImageIndex = 0;
+            this.btnSwipe.ImageList = this.imageCollection_Nav;
+            this.btnSwipe.Location = new System.Drawing.Point(183, 0);
+            this.btnSwipe.Name = "btnSwipe";
+            this.btnSwipe.Size = new System.Drawing.Size(24, 24);
+            this.btnSwipe.TabIndex = 8;
+            this.btnSwipe.UseVisualStyleBackColor = true;
+            this.btnSwipe.Click += new System.EventHandler(this.navigationButton_Click);
+            // 
             // lblMeasureTips
             // 
             this.lblMeasureTips.AutoSize = true;
             this.lblMeasureTips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblMeasureTips.Location = new System.Drawing.Point(3, 26);
+            this.lblMeasureTips.Location = new System.Drawing.Point(3, 27);
             this.lblMeasureTips.Name = "lblMeasureTips";
             this.lblMeasureTips.Size = new System.Drawing.Size(221, 12);
             this.lblMeasureTips.TabIndex = 11;
@@ -213,7 +216,7 @@
             this.lblMeasureInfo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lblMeasureInfo.ForeColor = System.Drawing.Color.Fuchsia;
             this.lblMeasureInfo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblMeasureInfo.Location = new System.Drawing.Point(6, 41);
+            this.lblMeasureInfo.Location = new System.Drawing.Point(6, 42);
             this.lblMeasureInfo.Name = "lblMeasureInfo";
             this.lblMeasureInfo.Size = new System.Drawing.Size(65, 12);
             this.lblMeasureInfo.TabIndex = 12;
@@ -223,19 +226,22 @@
             // lblSwipe
             // 
             this.lblSwipe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lblSwipe.Location = new System.Drawing.Point(3, 24);
+            this.lblSwipe.Location = new System.Drawing.Point(3, 25);
             this.lblSwipe.Name = "lblSwipe";
             this.lblSwipe.Size = new System.Drawing.Size(60, 14);
             this.lblSwipe.TabIndex = 13;
-            this.lblSwipe.Text = "卷帘图层：";
+            this.lblSwipe.Text = "卷帘图层";
             this.lblSwipe.Visible = false;
             // 
             // cmbLayers
             // 
+            this.cmbLayers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbLayers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLayers.FormattingEnabled = true;
-            this.cmbLayers.Location = new System.Drawing.Point(53, 24);
+            this.cmbLayers.Location = new System.Drawing.Point(69, 25);
             this.cmbLayers.Name = "cmbLayers";
-            this.cmbLayers.Size = new System.Drawing.Size(200, 20);
+            this.cmbLayers.Size = new System.Drawing.Size(182, 20);
             this.cmbLayers.TabIndex = 14;
             this.cmbLayers.SelectedIndexChanged += new System.EventHandler(this.cmbLayers_SelectedIndexChanged);
             // 
@@ -243,36 +249,46 @@
             // 
             this.btnMeasureClose.ImageIndex = 3;
             this.btnMeasureClose.ImageList = this.imageCollection_Nav;
-            this.btnMeasureClose.Location = new System.Drawing.Point(223, 24);
+            this.btnMeasureClose.Location = new System.Drawing.Point(223, 25);
             this.btnMeasureClose.Name = "btnMeasureClose";
             this.btnMeasureClose.Size = new System.Drawing.Size(16, 16);
             this.btnMeasureClose.TabIndex = 15;
             this.btnMeasureClose.UseVisualStyleBackColor = true;
+            this.btnMeasureClose.Visible = false;
             this.btnMeasureClose.Click += new System.EventHandler(this.btnMeasureClose_Click);
+            // 
+            // ToolPanel
+            // 
+            this.ToolPanel.Controls.Add(this.btnFullExtent);
+            this.ToolPanel.Controls.Add(this.btnZoomIn);
+            this.ToolPanel.Controls.Add(this.btnZoomOut);
+            this.ToolPanel.Controls.Add(this.btnPan);
+            this.ToolPanel.Controls.Add(this.btnSelection);
+            this.ToolPanel.Controls.Add(this.btnPreView);
+            this.ToolPanel.Controls.Add(this.btnIdentify);
+            this.ToolPanel.Controls.Add(this.btnNextView);
+            this.ToolPanel.Controls.Add(this.btnSwipe);
+            this.ToolPanel.Controls.Add(this.btnLenMeasure);
+            this.ToolPanel.Controls.Add(this.btnAreaMeasure);
+            this.ToolPanel.Location = new System.Drawing.Point(0, -1);
+            this.ToolPanel.Name = "ToolPanel";
+            this.ToolPanel.Size = new System.Drawing.Size(253, 24);
+            this.ToolPanel.TabIndex = 16;
             // 
             // MapNavigationTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.ToolPanel);
             this.Controls.Add(this.btnMeasureClose);
             this.Controls.Add(this.lblMeasureInfo);
             this.Controls.Add(this.lblMeasureTips);
-            this.Controls.Add(this.btnSelection);
-            this.Controls.Add(this.btnIdentify);
-            this.Controls.Add(this.btnSwipe);
-            this.Controls.Add(this.btnAreaMeasure);
-            this.Controls.Add(this.btnLenMeasure);
-            this.Controls.Add(this.btnNextView);
-            this.Controls.Add(this.btnPreView);
-            this.Controls.Add(this.btnPan);
-            this.Controls.Add(this.btnZoomOut);
-            this.Controls.Add(this.btnZoomIn);
-            this.Controls.Add(this.btnFullExtent);
             this.Controls.Add(this.lblSwipe);
             this.Controls.Add(this.cmbLayers);
             this.Name = "MapNavigationTools";
-            this.Size = new System.Drawing.Size(255, 66);
+            this.Size = new System.Drawing.Size(252, 56);
+            this.ToolPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,5 +313,6 @@
         private System.Windows.Forms.Label lblSwipe;
         private System.Windows.Forms.ComboBox cmbLayers;
         private System.Windows.Forms.Button btnMeasureClose;
+        private System.Windows.Forms.Panel ToolPanel;
     }
 }

@@ -14,16 +14,12 @@ namespace WLib.Model
     /// <summary>
     /// 唯一值对象集合，提供排序方法
     /// </summary>
-    public class UniqueObjectExCollection : IEnumerable<UniqueObjectEx>
+    public class UniqueObjectExCollection : List<UniqueObjectEx>
     {
         /// <summary>
         /// 列表名
         /// </summary>
         public string ListName { get; set; }
-        /// <summary>
-        /// 唯一值对象集合
-        /// </summary>
-        protected List<UniqueObjectEx> UniqueObjectExs;
 
         /// <summary>
         /// 唯一值对象列表，提供排序方法
@@ -32,15 +28,6 @@ namespace WLib.Model
         public UniqueObjectExCollection(string listName)
         {
             this.ListName = listName;
-            UniqueObjectExs = new List<UniqueObjectEx>();
-        }
-        /// <summary>
-        /// 添加一个唯一值对象
-        /// </summary>
-        /// <param name="item"></param>
-        public void Add(UniqueObjectEx item)
-        {
-            UniqueObjectExs.Add(item);
         }
         /// <summary>
         /// 添加一个包含编码、名称的唯一值对象
@@ -49,7 +36,7 @@ namespace WLib.Model
         /// <param name="name">名称</param>
         public void Add(string code, string name)
         {
-            UniqueObjectExs.Add(new UniqueObjectEx(code, name));
+            this.Add(new UniqueObjectEx(code, name));
         }
         /// <summary>
         /// 添加一个包含编码、名称、序号的唯一值对象
@@ -59,7 +46,7 @@ namespace WLib.Model
         /// <param name="index">序号</param>
         public void Add(string code, string name, int index)
         {
-            UniqueObjectExs.Add(new UniqueObjectEx(code, name, index));
+            this.Add(new UniqueObjectEx(code, name, index));
         }
         /// <summary>
         /// 添加一个包含编码、名称、序号、所在分组的唯一值对象
@@ -70,7 +57,7 @@ namespace WLib.Model
         /// <param name="classify">所在分组</param>
         public void Add(string code, string name, int index, string classify)
         {
-            UniqueObjectExs.Add(new UniqueObjectEx(code, name, index, null, classify));
+            this.Add(new UniqueObjectEx(code, name, index, null, classify));
         }
         /// <summary>
         /// 添加一个包含编码、名称、序号、所在分组、备注信息的唯一值对象
@@ -82,52 +69,21 @@ namespace WLib.Model
         /// <param name="comment">备注信息</param>
         public void Add(string code, string name, int index, string classify, string comment)
         {
-            UniqueObjectExs.Add(new UniqueObjectEx(code, name, index, comment, classify));
-        }
-        /// <summary>
-        /// 添加多个唯一值对象
-        /// </summary>
-        /// <param name="items"></param>
-        public void AddRange(IEnumerable<UniqueObjectEx> items)
-        {
-            UniqueObjectExs.AddRange(items);
+            this.Add(new UniqueObjectEx(code, name, index, comment, classify));
         }
         /// <summary>
         /// 清空备注
         /// </summary>
         public void ClearComment()
         {
-            UniqueObjectExs.ForEach(v => v.Comment = null);
+            this.ForEach(v => v.Comment = null);
         }
-        /// <summary>
-        /// 实现IEnumerable方法，允许foreach迭代和IEnumerator泛型的扩展方法
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<UniqueObjectEx> GetEnumerator()
-        {
-            for (int i = 0; i < UniqueObjectExs.Count; i++)
-            {
-                yield return UniqueObjectExs[i];
-            }
-        }
-        /// <summary>
-        /// 实现IEnumerable方法，允许foreach迭代
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            for (int i = 0; i < UniqueObjectExs.Count; i++)
-            {
-                yield return UniqueObjectExs[i];
-            }
-        }
-
         /// <summary>
         /// 根据名称排序
         /// </summary>
         public void SortByName()
         {
-            UniqueObjectExs.Sort((x, y) =>
+            this.Sort((x, y) =>
             {
                 if (x.Name == y.Name)
                     return 0;
@@ -142,7 +98,7 @@ namespace WLib.Model
         /// </summary>
         public void SortByCode()
         {
-            UniqueObjectExs.Sort((x, y) =>
+            this.Sort((x, y) =>
             {
                 if (x.Code == y.Code)
                     return 0;
@@ -157,7 +113,7 @@ namespace WLib.Model
         /// </summary>
         public void SortByClassifyName()
         {
-            UniqueObjectExs.Sort((x, y) =>
+            this.Sort((x, y) =>
             {
                 if (x.Classify == y.Classify && x.Name == y.Name)
                     return 0;
@@ -175,7 +131,7 @@ namespace WLib.Model
         /// <returns></returns>
         public UniqueObjectEx[] GetClassify(string classify)
         {
-            return UniqueObjectExs.Where(v => v.Classify == classify).ToArray();
+            return this.Where(v => v.Classify == classify).ToArray();
         }
 
         /// <summary>
@@ -183,9 +139,9 @@ namespace WLib.Model
         /// </summary>
         public void ResetIndex()
         {
-            for (int i = 0; i < UniqueObjectExs.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                UniqueObjectExs[i].Index = i + 1;
+                this[i].Index = i + 1;
             }
         }
     }

@@ -21,8 +21,7 @@ namespace WLib.Envir.ArcGis
         /// <summary>
         /// 检查、获取ArcGIS及其子程序安装路径
         /// </summary>
-        public static ICheckArcGisInstall CheckArcGisInstall =>
-            _checkArcGisInstall ?? (_checkArcGisInstall = GetCheckArcGisInstall(EArcGisProductType.Any));
+        public static ICheckArcGisInstall CheckArcGisInstall => _checkArcGisInstall ?? (_checkArcGisInstall = GetCheckArcGisInstall(EArcGisProductType.Any));
         /// <summary>
         /// 当前安装的ArcGIS版本
         /// </summary>
@@ -36,7 +35,7 @@ namespace WLib.Envir.ArcGis
         /// <returns></returns>
         public static string GetInstallPath(EArcGisProductType eType = EArcGisProductType.Desktop)
         {
-            return CheckArcGisInstall.GetInstallPath(eType);
+            return CheckArcGisInstall?.GetInstallPath(eType);
         }
         /// <summary>
         /// 获取ICheckArcGisInstall对象，可通过ICheckArcGisInstall.Version获得当前系统安装的ArcGIS版本

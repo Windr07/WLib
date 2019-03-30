@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
@@ -8,8 +15,9 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// <summary>
     /// 地图控件中的测量操作
     /// </summary>
-    public class MapCtrlMeasure
+    public class MapCtrlMeasure: IMapCtrlAssociation
     {
+        #region 私有变量
         /// <summary>
         /// 点集合
         /// </summary>
@@ -26,26 +34,14 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// 测量类型：0-空操作；1-测距离； 2-测面积； 3-测角度
         /// </summary>
         private EMeasureType _eMeasureType;
+        #endregion
 
 
-        /// <summary>
-        /// 地图测量操作
-        /// </summary>
-        public MapCtrlMeasure(AxMapControl mapCtrl)
-        {
-            MapCtrl = mapCtrl;
-            _pointCollection = null;
-            _newPolygonFeedback = null;
-            _newLineFeedback = null;
-            _eMeasureType = EMeasureType.None;
-            AreaPointCount = 0;
-            IsSurveying = false;
-        }
-
+        #region 公共只读属性
         /// <summary>
         /// Map对象
         /// </summary>
-        public AxMapControl MapCtrl { get; }
+        public AxMapControl MapControl { get; }
         /// <summary>
         /// 判断是否正在测量
         /// </summary>
@@ -73,7 +69,23 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <summary>
         /// 面积计算记录勾画的多边形拐点的个数
         /// </summary>
-        public int AreaPointCount;
+        public int AreaPointCount { get; private set; }
+        #endregion
+
+
+        /// <summary>
+        /// 地图测量操作
+        /// </summary>
+        public MapCtrlMeasure(AxMapControl mapCtrl)
+        {
+            MapControl = mapCtrl;
+            _pointCollection = null;
+            _newPolygonFeedback = null;
+            _newLineFeedback = null;
+            _eMeasureType = EMeasureType.None;
+            AreaPointCount = 0;
+            IsSurveying = false;
+        }
 
 
         /// <summary>
@@ -83,7 +95,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void AngleStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Angle;
-            _newLineFeedback = new NewLineFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
+            _newLineFeedback = new NewLineFeedbackClass { Display = MapControl.ActiveView.ScreenDisplay };
             _newLineFeedback.Start(point);
 
             _pointCollection = new PolylineClass();
@@ -98,7 +110,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void LengthStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Distance;
-            _newLineFeedback = new NewLineFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
+            _newLineFeedback = new NewLineFeedbackClass { Display = MapControl.ActiveView.ScreenDisplay };
             _newLineFeedback.Start(point);
 
             _pointCollection = new PolylineClass();
@@ -113,7 +125,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void AreaStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Area;
-            _newPolygonFeedback = new NewPolygonFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
+            _newPolygonFeedback = new NewPolygonFeedbackClass { Display = MapControl.ActiveView.ScreenDisplay };
             _newPolygonFeedback.Start(point);
 
             _pointCollection = new PolygonClass();

@@ -1,4 +1,11 @@
-﻿using ESRI.ArcGIS.Carto;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.esriSystem;
@@ -8,7 +15,7 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// <summary>
     /// 地图控件和页面布局控件的同步操作
     /// </summary>
-    public class MapCtrlPageLayoutSyn
+    public class MapCtrlPageLayoutSyn : IMapCtrlAssociation
     {
         /// <summary>
         /// 地图控件

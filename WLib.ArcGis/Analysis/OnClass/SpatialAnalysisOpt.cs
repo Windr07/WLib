@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2017
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.GeoDb.WorkSpace;

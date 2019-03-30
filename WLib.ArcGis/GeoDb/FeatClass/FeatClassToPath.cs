@@ -13,7 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WLib.ArcGis.GeoDb.Fields;
 using WLib.ArcGis.GeoDb.WorkSpace;
-using WLib.ArcGis.Geomtry;
+using WLib.ArcGis.Geometry;
 using static System.IO.Path;
 
 namespace WLib.ArcGis.GeoDb.FeatClass
@@ -57,7 +57,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             {
                 var dbPath = fullPath.Substring(0, fullPath.IndexOf(".mdb", StringComparison.OrdinalIgnoreCase));
                 if (!File.Exists(dbPath))
-                    CreateWorkspace.NewWorkspace(EWorkspaceType.Access, GetDirectoryName(dbPath), GetFileNameWithoutExtension(dbPath));
+                    WorkspaceCreate.NewWorkspace(EWorkspaceType.Access, GetDirectoryName(dbPath), GetFileNameWithoutExtension(dbPath));
 
                 var names = fullPath.Replace(dbPath, "").Split(new[] { DirectorySeparatorChar, AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
                 if (names.Length == 1) return CreateToDb(dbPath, null, names[0], fields);
@@ -70,7 +70,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
                 {
                     var dirInfo = new DirectoryInfo(dbPath);
                     if (dirInfo.Parent == null) throw new Exception($"路径“{dbPath}”不是有效的文件地理数据库路径！");
-                    CreateWorkspace.NewWorkspace(EWorkspaceType.FileGDB, dirInfo.Parent.FullName, dirInfo.Name);
+                    WorkspaceCreate.NewWorkspace(EWorkspaceType.FileGDB, dirInfo.Parent.FullName, dirInfo.Name);
                 }
                 var names = fullPath.Replace(dbPath, "").Split(new[] { DirectorySeparatorChar, AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
                 if (names.Length == 1) return CreateToDb(dbPath, null, names[0], fields);
@@ -128,7 +128,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
             }
             else
             {
-                featureClass = CreateFeatClass.Create(workspace, className, spatialRef, geoType, fields);
+                featureClass = FeatClassCreate.Create(workspace, className, spatialRef, geoType, fields);
             }
             Marshal.ReleaseComObject(workspace);
             return featureClass;
@@ -144,7 +144,7 @@ namespace WLib.ArcGis.GeoDb.FeatClass
         public static IFeatureClass CreateToDb(string geoDbPath, string datasetName, string className, IFields fields)
         {
             var workspace = GetWorkspace.GetWorkSpace(geoDbPath);
-            var spatialRef = CoordinateSystem.GetSpatialReference(fields);
+            var spatialRef = fields.GetSpatialReference();
             IFeatureClass featureClass;
             if (!string.IsNullOrEmpty(datasetName))
             {

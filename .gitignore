@@ -6,3 +6,11 @@ obj/
 **/obj
 **/bin/
 **/obj/
+<<<<<<< HEAD
+=======
+.vs
+.vs/
+.vs/WLib/v15/.suo
+.vs/WLib/v15/Server/sqlite3/storage.ide-shm
+.vs/WLib/v15/Server/sqlite3/storage.ide-wal
+>>>>>>> develop

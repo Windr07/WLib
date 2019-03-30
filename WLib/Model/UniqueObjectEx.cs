@@ -15,11 +15,11 @@ namespace WLib.Model
         /// <summary>
         /// 所在分类
         /// </summary>
-        public string Classify;
+        public string Classify { get; set; }
         /// <summary>
         /// 与对象关联的用户定义数据
         /// </summary>
-        public object Tag;
+        public object Tag { get; set; }
 
         /// <summary>
         /// 放入列表中的唯一值对象

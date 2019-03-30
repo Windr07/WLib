@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Unknown
+// date： None
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
 using System.IO;
 using System.Windows.Forms;
 

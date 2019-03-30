@@ -107,7 +107,7 @@
     <Compile Include="Files\FileOpt.cs" />
     <Compile Include="Format\DateTimeFormat.cs" />
     <Compile Include="Format\StringUtility.cs" />
-    <Compile Include="Calculate\Angle.cs" />
+    <Compile Include="Calculate\AngleCalculate.cs" />
     <Compile Include="Model\UniqueObject.cs" />
     <Compile Include="Office\EOfficeVersion.cs" />
     <Compile Include="Office\OfficeInfo.cs" />
@@ -127,7 +127,7 @@
     <Compile Include="Model\UniqueObjectEx.cs" />
     <Compile Include="Progress\ProLogFileInfo.cs" />
     <Compile Include="Progress\ProLogManager.cs" />
-    <Compile Include="Format\NumberConversion.cs" />
+    <Compile Include="Format\CnNumberConversion.cs" />
     <Compile Include="Progress\ProEventArgs\GroupMsgChangedEventArgs.cs" />
     <Compile Include="Progress\GroupMessages.cs" />
     <Compile Include="Progress\ProgressMessages.cs" />

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.txtSearchFields = new System.Windows.Forms.TextBox();
@@ -58,7 +59,7 @@
             this.txtWhereClause = new System.Windows.Forms.TextBox();
             this.sBtnApply = new System.Windows.Forms.Button();
             this.sBtnClose = new System.Windows.Forms.Button();
-            this.cMenuStripFields = new System.Windows.Forms.ContextMenuStrip();
+            this.cMenuStripFields = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.获取唯一值CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.等于EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清空DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -495,7 +496,7 @@
             this.cmbTables.TabIndex = 0;
             this.cmbTables.SelectedIndexChanged += new System.EventHandler(this.cmbTables_SelectedIndexChanged);
             // 
-            // QueryForm
+            // AttributeQueryForm
             // 
             this.AcceptButton = this.sBtnApply;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -511,7 +512,7 @@
             this.Controls.Add(this.panel2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "QueryForm";
+            this.Name = "AttributeQueryForm";
             this.Text = "按属性查询";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
