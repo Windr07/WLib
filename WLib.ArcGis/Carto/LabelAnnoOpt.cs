@@ -13,6 +13,7 @@ using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using stdole;
+using WLib.ArcGis.Carto.Element;
 using WLib.ArcGis.Carto.Map;
 using WLib.ArcGis.Display;
 
@@ -313,7 +314,7 @@ namespace WLib.ArcGis.Carto
 
             //标注符号
             ITextSymbol textSymbol = new TextSymbolClass();
-            textSymbol.Color = RenderOpt.GetIColor(0, 0, 0);
+            textSymbol.Color = ColorCreate.GetIColor(0, 0, 0);
             textSymbol.Font = fontDisp;
             textSymbol.Size = size;
             labelEngine.Symbol = textSymbol;

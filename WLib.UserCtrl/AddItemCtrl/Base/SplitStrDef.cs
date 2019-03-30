@@ -15,11 +15,11 @@ namespace WLib.UserCtrls.AddItemCtrl.Base
         /// <summary>
         /// 分隔符实际的值（eg:"\t"）
         /// </summary>
-        public string Value;
+        public string Value { get; set; }
         /// <summary>
         /// 分隔符的文字表述（eg:"[制表符]"）
         /// </summary>
-        public string Description;
+        public string Description { get; set; }
 
         /// <summary>
         /// 分隔符定义
@@ -60,19 +60,6 @@ namespace WLib.UserCtrls.AddItemCtrl.Base
             new SplitStrDef(STR_COMMA_CN, STR_COMMA_CN),
             new SplitStrDef(STR_SEMICOLON_EN, STR_SEMICOLON_EN),
             new SplitStrDef(STR_SEMICOLON_CN, STR_SEMICOLON_CN),
-        };
-
-        /// <summary>
-        /// 常用的分隔符数组（换行、空白、制表、中文逗号、英文逗号、中文分号、英文分号）
-        /// </summary>
-        public static string[] SourceSplitsStr = {
-            STR_NEWLINE_VAL,
-            STR_WHITESPACE_VAL,
-            STR_TAB_VAL,
-            STR_COMMA_EN,
-            STR_COMMA_CN,
-            STR_SEMICOLON_EN,
-            STR_SEMICOLON_CN,
         };
 
         #region 字符串常量

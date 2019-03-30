@@ -10,6 +10,9 @@ using ESRI.ArcGIS.Display;
 
 namespace WLib.ArcGis.Display
 {
+    /// <summary>
+    /// ArcGIS Engine中的颜色接口与.NET中的颜色结构互转
+    /// </summary>
     public static class ColorConvert
     {
         /// <summary> 

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.IO;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
@@ -11,7 +18,7 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// 地图控件与地图文档关联操作
     /// （包括新建、加载、保存、另存地图文档，添加数据、清空图层等）
     /// </summary>
-    public class MapCtrlDocument
+    public class MapCtrlDocument: IMapCtrlAssociation
     {
         /// <summary>
         /// 地图文档
@@ -83,7 +90,7 @@ namespace WLib.ArcGis.Control.MapAssociation
             return MapDoc;
         }
         /// <summary>
-        /// 添加数据
+        /// 添加数据（调用AE添加数据命令）
         /// </summary>
         public void AddData()
         {

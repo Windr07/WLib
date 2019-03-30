@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
@@ -8,7 +15,7 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// <summary>
     /// 地图控件中的测量操作
     /// </summary>
-    public class MapCtrlMeasure
+    public class MapCtrlMeasure: IMapCtrlAssociation
     {
         #region 私有变量
         /// <summary>
@@ -34,7 +41,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <summary>
         /// Map对象
         /// </summary>
-        public AxMapControl MapCtrl { get; }
+        public AxMapControl MapControl { get; }
         /// <summary>
         /// 判断是否正在测量
         /// </summary>
@@ -71,7 +78,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// </summary>
         public MapCtrlMeasure(AxMapControl mapCtrl)
         {
-            MapCtrl = mapCtrl;
+            MapControl = mapCtrl;
             _pointCollection = null;
             _newPolygonFeedback = null;
             _newLineFeedback = null;
@@ -88,7 +95,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void AngleStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Angle;
-            _newLineFeedback = new NewLineFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
+            _newLineFeedback = new NewLineFeedbackClass { Display = MapControl.ActiveView.ScreenDisplay };
             _newLineFeedback.Start(point);
 
             _pointCollection = new PolylineClass();
@@ -103,7 +110,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void LengthStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Distance;
-            _newLineFeedback = new NewLineFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
+            _newLineFeedback = new NewLineFeedbackClass { Display = MapControl.ActiveView.ScreenDisplay };
             _newLineFeedback.Start(point);
 
             _pointCollection = new PolylineClass();
@@ -118,7 +125,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         public void AreaStart(IPoint point)
         {
             _eMeasureType = EMeasureType.Area;
-            _newPolygonFeedback = new NewPolygonFeedbackClass { Display = MapCtrl.ActiveView.ScreenDisplay };
+            _newPolygonFeedback = new NewPolygonFeedbackClass { Display = MapControl.ActiveView.ScreenDisplay };
             _newPolygonFeedback.Start(point);
 
             _pointCollection = new PolygonClass();

@@ -88,7 +88,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         [Obsolete("该方法暂未测试通过")]
         public IGeoProcessorResult PolygonToPolyline(string inFeatureClassPath, string outputPath)
         {
-            PolygonToLine polygonToLine = new PolygonToLine
+            var polygonToLine = new PolygonToLine
             {
                 in_features = inFeatureClassPath,
                 out_feature_class = outputPath,
@@ -111,7 +111,7 @@ namespace WLib.ArcGis.Analysis.OnClass
             var featureDataset = inFeatureclass.FeatureDataset;//要素数据集  
             var featuredatasetPath = featureDataset.Workspace.PathName + "\\" + featureDataset.Name + "\\";//要素数据集路径  
 
-            PolygonToLine polygonToLine = new PolygonToLine
+            var polygonToLine = new PolygonToLine
             {
                 in_features = featuredatasetPath + inFeatureclass.AliasName,
                 neighbor_option = saveNeighborInfo.ToString().ToLower(),
@@ -128,8 +128,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         [Obsolete("该方法暂未测试通过")]
         public void FeatureToPolyline(string inFeatureClassPath, string outputPath)
         {
-            FeatureToLine featureToLine = new FeatureToLine(inFeatureClassPath, outputPath);
-            Geoprocessor.Execute(featureToLine, null);
+            Geoprocessor.Execute(new FeatureToLine(inFeatureClassPath, outputPath), null);
         }
         #endregion
 
@@ -143,7 +142,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <returns></returns>
         public IGeoProcessorResult Clip(string inFeatureClassPath, string clipFeatureClassPath, string outFeatureClassPath)
         {
-            ESRI.ArcGIS.AnalysisTools.Clip clip = new ESRI.ArcGIS.AnalysisTools.Clip
+            var clip = new ESRI.ArcGIS.AnalysisTools.Clip
             {
                 in_features = inFeatureClassPath,
                 clip_features = clipFeatureClassPath,
@@ -160,7 +159,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <returns></returns>
         public IGeoProcessorResult Intersect(string inFeatureClassPaths, string outFeatureClassPath, string joinAttributes = "ALL")
         {
-            ESRI.ArcGIS.AnalysisTools.Intersect intersect = new ESRI.ArcGIS.AnalysisTools.Intersect
+            var intersect = new ESRI.ArcGIS.AnalysisTools.Intersect
             {
                 in_features = inFeatureClassPaths,
                 out_feature_class = outFeatureClassPath,
@@ -177,7 +176,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <returns></returns>
         public ITopology CreateTopology(IFeatureDataset topoFeatureDataset, string topoName, double tolerance = 0.001)
         {
-            CreateTopology createTopo = new CreateTopology
+            var createTopo = new CreateTopology
             {
                 in_dataset = topoFeatureDataset,
                 out_name = topoName,
@@ -197,7 +196,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <param name="outDir">输出要素类的目录</param>
         public void FeautureClassToFeatureClass(IFeatureClass inFeatureClass, string whereClause, string outFeatureClassName, string outDir)
         {
-            FeatureClassToFeatureClass featClstToFeatCls = new FeatureClassToFeatureClass
+            var featClstToFeatCls = new FeatureClassToFeatureClass
             {
                 in_features = inFeatureClass,
                 out_feature_class = outFeatureClassName,

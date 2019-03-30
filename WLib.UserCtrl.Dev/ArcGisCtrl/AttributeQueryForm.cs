@@ -5,21 +5,21 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.GeoDb.Fields;
-using WLib.UserCtrls.ArcGisCtrl;
 
 namespace WLib.UserCtrls.Dev.ArcGisCtrl
 {
     /// <summary>
     /// 按属性查询的窗体
     /// </summary>
-    public partial class AttributeQueryForm : DevExpress.XtraEditors.XtraForm
+    public partial class AttributeQueryForm : DevExpress.XtraEditors.XtraForm, IAttributeQueryCtrl
     {
         /// <summary>
         /// 查询事件
@@ -30,47 +30,14 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// </summary>
         public string WhereClause { get => txtWhereClause.Text.Trim(); set => txtWhereClause.Text = value; }
 
-        
+
         /// <summary>
         /// 按属性查询的窗体
         /// </summary>
-        ///  <param name="searchTable">要查询的表格</param>
-        /// <param name="isQueryAaliasName">确定查询的是字段别名还是字段名</param>
-        /// <param name="queryFieldNames">显示在属性查询窗口的，要查询的字段</param>
-        /// <param name="queryHandler">查询事件处理</param>
-        public AttributeQueryForm(ITable searchTable, bool isQueryAaliasName = false, string[] queryFieldNames = null, EventHandler queryHandler = null)
-        {
-            InitForm(queryHandler);
-            cmbTables.Properties.Items.Add(new AttributeQuery(searchTable, isQueryAaliasName, queryFieldNames));
-        }
-        /// <summary>
-        /// 按属性查询的窗体
-        /// </summary>
-        ///  <param name="searchTables">要查询的表格</param>
-        /// <param name="queryHandler">查询事件处理</param>
-        public AttributeQueryForm(IEnumerable<ITable> searchTables, EventHandler queryHandler = null)
-        {
-            InitForm(queryHandler);
-            cmbTables.Properties.Items.AddRange(searchTables.Select(v => new AttributeQuery(v, false, null)).ToArray());
-        }
-        /// <summary>
-        /// 按属性查询的窗体
-        /// </summary>
-        ///  <param name="tableAttributeQueries">要查询的表格</param>
-        /// <param name="queryHandler">查询事件处理</param>
-        public AttributeQueryForm(IEnumerable<AttributeQuery> tableAttributeQueries, EventHandler queryHandler = null)
-        {
-            InitForm(queryHandler);
-            cmbTables.Properties.Items.AddRange(tableAttributeQueries.ToArray());
-        }
-        /// <summary>
-        /// 初始化窗体
-        /// </summary>
-        public void InitForm(EventHandler queryHandler)
+        public AttributeQueryForm()
         {
             InitializeComponent();
 
-            Query += queryHandler;
             const string findFieldTips = @"按名称/别名查找字段";
             const string findValueTips = @"查找字段值";
             txtSearchFields.Text = findFieldTips;
@@ -80,6 +47,39 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             清空DToolStripMenuItem.Click += delegate { txtWhereClause.Text = string.Empty; };
             sBtnClear.Click += delegate { txtWhereClause.Text = string.Empty; };
             sBtnClose.Click += delegate { Close(); };
+        }
+        /// <summary>
+        /// 按属性查询的窗体
+        /// </summary>
+        ///  <param name="searchTable">要查询的表格</param>
+        /// <param name="isQueryAaliasName">确定查询的是字段别名还是字段名</param>
+        /// <param name="queryFieldNames">显示在属性查询窗口的，要查询的字段</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public void LoadQueryInfo(ITable searchTable, bool isQueryAaliasName = false, string[] queryFieldNames = null)
+        {
+            cmbTables.Properties.Items.Clear();
+            cmbTables.Properties.Items.Add(new AttributeQuery(searchTable, isQueryAaliasName, queryFieldNames));
+        }
+
+        /// <summary>
+        /// 按属性查询的窗体
+        /// </summary>
+        ///  <param name="searchTables">要查询的表格</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public void LoadQueryInfo(IEnumerable<ITable> searchTables)
+        {
+            cmbTables.Properties.Items.Clear();
+            cmbTables.Properties.Items.AddRange(searchTables.Select(v => new AttributeQuery(v, false, null)).ToArray());
+        }
+        /// <summary>
+        /// 按属性查询的窗体
+        /// </summary>
+        ///  <param name="tableAttributeQueries">要查询的表格</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public void LoadQueryInfo(IEnumerable<AttributeQuery> tableAttributeQueries)
+        {
+            cmbTables.Properties.Items.Clear();
+            cmbTables.Properties.Items.AddRange(tableAttributeQueries.ToArray());
         }
 
 

@@ -91,12 +91,12 @@ namespace WLib.ArcGis.Carto.Map
         /// 根据不同类型的图层的<see cref="LayerUid"/>来获取图层列表
         /// </summary>
         /// <param name="map"></param>
-        /// <param name="uidType">图层UID，参考<see cref="LayerUid"/></param>
+        /// <param name="uid">图层UID，参考<see cref="LayerUid"/></param>
         /// <returns></returns>
-        public static List<ILayer> GetLayersByUid(this IMap map, UID uidType)
+        public static List<ILayer> GetLayersByUid(this IMap map, UID uid)
         {
             List<ILayer> layers = new List<ILayer>();
-            IEnumLayer enumLayer = map.get_Layers(uidType, true);
+            IEnumLayer enumLayer = map.get_Layers(uid, true);
             enumLayer.Reset();
             ILayer player = enumLayer.Next();
             while (player != null)
@@ -289,7 +289,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="mapDoc"></param>
         /// <param name="mapName">地图名称</param>
         /// <returns></returns>
-        public static IMap GetMapFromMapDocument(IMapDocument mapDoc, string mapName)
+        public static IMap GetMapFromMapDocument(this IMapDocument mapDoc, string mapName)
         {
             IMap map = null;
             for (int i = 0; i < mapDoc.MapCount; i++)
@@ -308,7 +308,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="maps"></param>
         /// <param name="mapName">地图名称</param>
         /// <returns></returns>
-        public static IMap GetMapFromMaps(IMaps maps, string mapName)
+        public static IMap GetMapFromMaps(this IMaps maps, string mapName)
         {
             IMap map = null;
             for (int i = 0; i < maps.Count; i++)
@@ -326,7 +326,7 @@ namespace WLib.ArcGis.Carto.Map
         /// </summary>
         /// <param name="mapDoc"></param>
         /// <returns></returns>
-        public static List<IMap> GetMapsFromMapDocument(IMapDocument mapDoc)
+        public static List<IMap> GetMapsFromMapDocument(this IMapDocument mapDoc)
         {
             List<IMap> maps = new List<IMap>();
             for (int i = 0; i < mapDoc.MapCount; i++)
@@ -355,7 +355,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="tableCollection">表集合（map as ITableCollection）</param>
         /// <param name="name">表名</param>
         /// <returns></returns>
-        public static ITable GetTable(ITableCollection tableCollection, string name)
+        public static ITable GetTable(this ITableCollection tableCollection, string name)
         {
             ITable table = null;
             for (int i = 0; i < tableCollection.TableCount; i++)
@@ -383,7 +383,7 @@ namespace WLib.ArcGis.Carto.Map
         /// </summary>
         /// <param name="tableCollection">表集合（map as ITableCollection）</param>
         /// <returns></returns>
-        public static ITable[] GetTables(ITableCollection tableCollection)
+        public static ITable[] GetTables(this ITableCollection tableCollection)
         {
             List<ITable> tableList = new List<ITable>();
             for (int i = 0; i < tableCollection.TableCount; i++)
@@ -419,16 +419,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <returns></returns>
         public static string GetFileCategory(this IMap map, string layerName)
         {
-            UID uid = new UIDClass();
-            uid.Value = "{40A9E885-5533-11d0-98BE-00805F7CED21}";//FeatureLayer
-            //{6CA416B1-E160-11D2-9F4E-00C04F6BC78E} IDataLayer （包括所有类型的图层）
-            //{40A9E885-5533-11d0-98BE-00805F7CED21} IFeatureLayer
-            //{D02371C7-35F7-11D2-B1F2-00C04F8EDEFF} IRasterLayer
-            //{E156D7E5-22AF-11D3-9F99-00C04F6BC78E} IGeoFeatureLayer
-            //{34B2EF81-F4AC-11D1-A245-080009B6F22B} IGraphicsLayer
-            //{5CEAE408-4C0A-437F-9DB3-054D83919850} IFDOGraphicsLayer
-            //{0C22A4C7-DAFD-11D2-9F46-00C04F6BC78E} ICoverageAnnotationLayer
-            //{EDAD6644-1810-11D1-86AE-0000F8751720} IGroupLayer 
+            UID uid = LayerUid.IFeatureLayer;
             IEnumLayer layers = map.get_Layers(uid, true);
             layers.Reset();
             ILayer layer;

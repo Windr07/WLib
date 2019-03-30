@@ -51,6 +51,11 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.cMenuStripMoreSymbol = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.panelColor = new System.Windows.Forms.Panel();
+            this.panelOutlineColor = new System.Windows.Forms.Panel();
+            this.panelSize = new System.Windows.Forms.Panel();
+            this.panelWidth = new System.Windows.Forms.Panel();
+            this.panelAngle = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.axSymbologyControl1)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -59,6 +64,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSize)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbPreview)).BeginInit();
+            this.panelColor.SuspendLayout();
+            this.panelOutlineColor.SuspendLayout();
+            this.panelSize.SuspendLayout();
+            this.panelWidth.SuspendLayout();
+            this.panelAngle.SuspendLayout();
             this.SuspendLayout();
             // 
             // axSymbologyControl1
@@ -98,7 +108,6 @@
             this.btnMoreSymbols.TabIndex = 1;
             this.btnMoreSymbols.Text = "更多符号";
             this.btnMoreSymbols.UseVisualStyleBackColor = true;
-            this.btnMoreSymbols.Click += new System.EventHandler(this.btnMoreSymbols_Click);
             // 
             // btnCancel
             // 
@@ -125,16 +134,11 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btnOutlineColor);
-            this.groupBox2.Controls.Add(this.btnColor);
-            this.groupBox2.Controls.Add(this.nudAngle);
-            this.groupBox2.Controls.Add(this.nudWidth);
-            this.groupBox2.Controls.Add(this.nudSize);
-            this.groupBox2.Controls.Add(this.lblAngle);
-            this.groupBox2.Controls.Add(this.lblWidth);
-            this.groupBox2.Controls.Add(this.lblSize);
-            this.groupBox2.Controls.Add(this.lblColor);
-            this.groupBox2.Controls.Add(this.lblOutlineColor);
+            this.groupBox2.Controls.Add(this.panelAngle);
+            this.groupBox2.Controls.Add(this.panelOutlineColor);
+            this.groupBox2.Controls.Add(this.panelWidth);
+            this.groupBox2.Controls.Add(this.panelSize);
+            this.groupBox2.Controls.Add(this.panelColor);
             this.groupBox2.Location = new System.Drawing.Point(12, 138);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
@@ -146,20 +150,20 @@
             // 
             // btnOutlineColor
             // 
-            this.btnOutlineColor.Location = new System.Drawing.Point(60, 58);
+            this.btnOutlineColor.Location = new System.Drawing.Point(59, 1);
             this.btnOutlineColor.Margin = new System.Windows.Forms.Padding(2);
             this.btnOutlineColor.Name = "btnOutlineColor";
-            this.btnOutlineColor.Size = new System.Drawing.Size(51, 26);
+            this.btnOutlineColor.Size = new System.Drawing.Size(53, 26);
             this.btnOutlineColor.TabIndex = 5;
             this.btnOutlineColor.UseVisualStyleBackColor = true;
             this.btnOutlineColor.Click += new System.EventHandler(this.btnOutlineColor_Click);
             // 
             // btnColor
             // 
-            this.btnColor.Location = new System.Drawing.Point(60, 24);
+            this.btnColor.Location = new System.Drawing.Point(59, 1);
             this.btnColor.Margin = new System.Windows.Forms.Padding(2);
             this.btnColor.Name = "btnColor";
-            this.btnColor.Size = new System.Drawing.Size(51, 26);
+            this.btnColor.Size = new System.Drawing.Size(53, 26);
             this.btnColor.TabIndex = 5;
             this.btnColor.UseVisualStyleBackColor = true;
             this.btnColor.Click += new System.EventHandler(this.btnColor_Click);
@@ -172,7 +176,7 @@
             0,
             0,
             65536});
-            this.nudAngle.Location = new System.Drawing.Point(45, 166);
+            this.nudAngle.Location = new System.Drawing.Point(44, 3);
             this.nudAngle.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.nudAngle.Name = "nudAngle";
             this.nudAngle.Size = new System.Drawing.Size(67, 21);
@@ -187,7 +191,7 @@
             0,
             0,
             65536});
-            this.nudWidth.Location = new System.Drawing.Point(45, 136);
+            this.nudWidth.Location = new System.Drawing.Point(44, 3);
             this.nudWidth.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.nudWidth.Name = "nudWidth";
             this.nudWidth.Size = new System.Drawing.Size(67, 21);
@@ -202,7 +206,7 @@
             0,
             0,
             65536});
-            this.nudSize.Location = new System.Drawing.Point(45, 107);
+            this.nudSize.Location = new System.Drawing.Point(44, 3);
             this.nudSize.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.nudSize.Name = "nudSize";
             this.nudSize.Size = new System.Drawing.Size(67, 21);
@@ -212,7 +216,7 @@
             // lblAngle
             // 
             this.lblAngle.AutoSize = true;
-            this.lblAngle.Location = new System.Drawing.Point(5, 168);
+            this.lblAngle.Location = new System.Drawing.Point(2, 8);
             this.lblAngle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAngle.Name = "lblAngle";
             this.lblAngle.Size = new System.Drawing.Size(29, 12);
@@ -222,7 +226,7 @@
             // lblWidth
             // 
             this.lblWidth.AutoSize = true;
-            this.lblWidth.Location = new System.Drawing.Point(6, 138);
+            this.lblWidth.Location = new System.Drawing.Point(2, 8);
             this.lblWidth.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblWidth.Name = "lblWidth";
             this.lblWidth.Size = new System.Drawing.Size(29, 12);
@@ -232,7 +236,7 @@
             // lblSize
             // 
             this.lblSize.AutoSize = true;
-            this.lblSize.Location = new System.Drawing.Point(6, 109);
+            this.lblSize.Location = new System.Drawing.Point(2, 8);
             this.lblSize.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSize.Name = "lblSize";
             this.lblSize.Size = new System.Drawing.Size(29, 12);
@@ -242,7 +246,7 @@
             // lblColor
             // 
             this.lblColor.AutoSize = true;
-            this.lblColor.Location = new System.Drawing.Point(5, 30);
+            this.lblColor.Location = new System.Drawing.Point(4, 7);
             this.lblColor.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblColor.Name = "lblColor";
             this.lblColor.Size = new System.Drawing.Size(29, 12);
@@ -252,7 +256,7 @@
             // lblOutlineColor
             // 
             this.lblOutlineColor.AutoSize = true;
-            this.lblOutlineColor.Location = new System.Drawing.Point(4, 66);
+            this.lblOutlineColor.Location = new System.Drawing.Point(2, 8);
             this.lblOutlineColor.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblOutlineColor.Name = "lblOutlineColor";
             this.lblOutlineColor.Size = new System.Drawing.Size(53, 12);
@@ -284,11 +288,55 @@
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
-            // contextMenuStripMoreSymbol
+            // cMenuStripMoreSymbol
             // 
             this.cMenuStripMoreSymbol.Name = "contextMenuStripMoreSymbol";
             this.cMenuStripMoreSymbol.Size = new System.Drawing.Size(61, 4);
-            this.cMenuStripMoreSymbol.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripMoreSymbol_ItemClicked);
+            // 
+            // panelColor
+            // 
+            this.panelColor.Controls.Add(this.btnColor);
+            this.panelColor.Controls.Add(this.lblColor);
+            this.panelColor.Location = new System.Drawing.Point(1, 25);
+            this.panelColor.Name = "panelColor";
+            this.panelColor.Size = new System.Drawing.Size(113, 28);
+            this.panelColor.TabIndex = 3;
+            // 
+            // panelOutlineColor
+            // 
+            this.panelOutlineColor.Controls.Add(this.lblOutlineColor);
+            this.panelOutlineColor.Controls.Add(this.btnOutlineColor);
+            this.panelOutlineColor.Location = new System.Drawing.Point(1, 58);
+            this.panelOutlineColor.Name = "panelOutlineColor";
+            this.panelOutlineColor.Size = new System.Drawing.Size(113, 28);
+            this.panelOutlineColor.TabIndex = 6;
+            // 
+            // panelSize
+            // 
+            this.panelSize.Controls.Add(this.lblSize);
+            this.panelSize.Controls.Add(this.nudSize);
+            this.panelSize.Location = new System.Drawing.Point(1, 99);
+            this.panelSize.Name = "panelSize";
+            this.panelSize.Size = new System.Drawing.Size(113, 28);
+            this.panelSize.TabIndex = 7;
+            // 
+            // panelWidth
+            // 
+            this.panelWidth.Controls.Add(this.lblWidth);
+            this.panelWidth.Controls.Add(this.nudWidth);
+            this.panelWidth.Location = new System.Drawing.Point(1, 131);
+            this.panelWidth.Name = "panelWidth";
+            this.panelWidth.Size = new System.Drawing.Size(113, 28);
+            this.panelWidth.TabIndex = 7;
+            // 
+            // panelAngle
+            // 
+            this.panelAngle.Controls.Add(this.lblAngle);
+            this.panelAngle.Controls.Add(this.nudAngle);
+            this.panelAngle.Location = new System.Drawing.Point(1, 163);
+            this.panelAngle.Name = "panelAngle";
+            this.panelAngle.Size = new System.Drawing.Size(113, 28);
+            this.panelAngle.TabIndex = 7;
             // 
             // SymbolSelectorForm
             // 
@@ -302,16 +350,24 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SymbolSelectorForm";
             this.Text = "符号选择器";
-            this.Load += new System.EventHandler(this.SymbolSelectorForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axSymbologyControl1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAngle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSize)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbPreview)).EndInit();
+            this.panelColor.ResumeLayout(false);
+            this.panelColor.PerformLayout();
+            this.panelOutlineColor.ResumeLayout(false);
+            this.panelOutlineColor.PerformLayout();
+            this.panelSize.ResumeLayout(false);
+            this.panelSize.PerformLayout();
+            this.panelWidth.ResumeLayout(false);
+            this.panelWidth.PerformLayout();
+            this.panelAngle.ResumeLayout(false);
+            this.panelAngle.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -339,5 +395,10 @@
         private System.Windows.Forms.Button btnOutlineColor;
         private System.Windows.Forms.Button btnColor;
         private System.Windows.Forms.ContextMenuStrip cMenuStripMoreSymbol;
+        private System.Windows.Forms.Panel panelAngle;
+        private System.Windows.Forms.Panel panelOutlineColor;
+        private System.Windows.Forms.Panel panelWidth;
+        private System.Windows.Forms.Panel panelSize;
+        private System.Windows.Forms.Panel panelColor;
     }
 }

@@ -272,17 +272,22 @@
     <Compile Include="AddItemCtrl\ConcatItemForm.Designer.cs">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ArcGisCtrl\ImageListBoxControlEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\ImageListBoxControlEx.Designer.cs">
+      <DependentUpon>ImageListBoxControlEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\Viewer\MapCtrlTocEx.cs" />
-    <Compile Include="ArcGisCtrl\Viewer\MapViewer.cs">
+    <Compile Include="ArcGisCtrl\MapViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\Viewer\MapViewer.Designer.cs">
+    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
       <DependentUpon>MapViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\PageNavigationTools.cs">
@@ -290,12 +295,6 @@
     </Compile>
     <Compile Include="ArcGisCtrl\PageNavigationTools.Designer.cs">
       <DependentUpon>PageNavigationTools.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\TableListBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\TableListBox.Designer.cs">
-      <DependentUpon>TableListBox.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\AttributeForm.cs">
       <SubType>Form</SubType>
@@ -404,16 +403,12 @@
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\Viewer\MapViewer.resx">
+    <EmbeddedResource Include="ArcGisCtrl\MapViewer.resx">
       <DependentUpon>MapViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\PageNavigationTools.resx">
       <DependentUpon>PageNavigationTools.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\TableListBox.resx">
-      <DependentUpon>TableListBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">

@@ -12,7 +12,7 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDb.Fields;
-using WLib.ArcGis.Geomtry;
+using WLib.ArcGis.Geometry;
 
 namespace WLib.ArcGis.GeoDb.FeatClass
 {

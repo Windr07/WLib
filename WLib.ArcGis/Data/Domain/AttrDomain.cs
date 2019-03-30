@@ -27,7 +27,7 @@ namespace WLib.ArcGis.Data.Domain
         /// <summary>
         /// 属性域的编码值
         /// </summary>
-        public Dictionary<string, string> CodeValues { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> CodeValues { get; set; }
         /// <summary>
         /// 属性域（ArcGIS数据库中的属性域）
         /// </summary>
@@ -35,6 +35,7 @@ namespace WLib.ArcGis.Data.Domain
         {
             Name = domainName;
             Description = domainDescription;
+            CodeValues = new Dictionary<string, string>();
         }
 
 

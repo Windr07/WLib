@@ -1,7 +1,15 @@
-﻿using ESRI.ArcGIS.Carto;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.SystemUI;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control;
@@ -14,7 +22,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
     /// <summary>
     /// 地图导航条
     /// </summary>
-    public partial class MapNavigationTools : UserControl
+    public partial class MapNavigationTools : UserControl, IMapNavigationTools
     {
         /// <summary>
         /// 自定义测量工具对象
@@ -25,13 +33,27 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// </summary>
         private AxMapControl _mapCtrl;
         /// <summary>
+        /// 当前使用的地图导航工具
+        /// </summary>
+        private EMapTools _currentTool;
+        /// <summary>
         /// 用于卷帘工具
         /// </summary>
         private ILayerEffectProperties _effectLayer;
+
         /// <summary>
         /// 当前使用的地图导航工具
         /// </summary>
-        public EMapTools MapTools { get; private set; }
+        public EMapTools CurrentTool
+        {
+            get => _currentTool;
+            set
+            {
+                var text = value.GetDescription();
+                var button = this.ToolPanel.Controls.OfType<Button>().FirstOrDefault(v => ((EMapTools)v.Tag).GetDescription() == text);
+                navigationButton_Click(button, null);
+            }
+        }
         /// <summary>
         /// 地图导航工具条所绑定的地图控件
         /// </summary>
@@ -45,7 +67,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 _mapCtrl.OnMouseMove += mapControl_OnMouseMove;
                 _effectLayer = new CommandsEnvironmentClass();
                 _measureTool = new MapCtrlMeasure(MapControl);
-                MapTools = EMapTools.None;
+                CurrentTool = EMapTools.None;
             }
         }
 
@@ -55,25 +77,33 @@ namespace WLib.UserCtrls.ArcGisCtrl
         public MapNavigationTools()
         {
             InitializeComponent();
+            InitTools();
         }
         /// <summary>
         /// 地图导航条
         /// </summary>
         /// <param name="mapCtrl">地图导航工具条所绑定的地图控件</param>
-        public MapNavigationTools(AxMapControl mapCtrl = null)
+        public MapNavigationTools(AxMapControl mapCtrl)
         {
             InitializeComponent();
+            InitTools();
             this.MapControl = mapCtrl;
         }
-        /// <summary>
-        /// 启用或触发工具栏（地图导航条）上的工具
-        /// </summary>
-        /// <param name="mapTool"></param>
-        public void ToolOnClick(EMapTools mapTool)
+
+        private void InitTools()
         {
-            var text = mapTool.GetDescription();
-            var button = this.Controls.OfType<Button>().FirstOrDefault(v => v.Text == text);
-            navigationButton_Click(button, null);
+            this.Height = 24;
+            this.btnFullExtent.Tag = EMapTools.FullExtent;
+            this.btnZoomIn.Tag = EMapTools.ZoomIn;
+            this.btnZoomOut.Tag = EMapTools.ZoomOut;
+            this.btnPan.Tag = EMapTools.Pan;
+            this.btnPreView.Tag = EMapTools.PreView;
+            this.btnNextView.Tag = EMapTools.NextView;
+            this.btnLenMeasure.Tag = EMapTools.MeasureDistance;
+            this.btnAreaMeasure.Tag = EMapTools.MeasureArea;
+            this.btnSwipe.Tag = EMapTools.Swipe;
+            this.btnIdentify.Tag = EMapTools.Identify;
+            this.btnSelection.Tag = EMapTools.Selection;
         }
 
 
@@ -89,7 +119,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 return;
             }
 
-            if (MapTools == EMapTools.MeasureDistance)//测距离
+            if (CurrentTool == EMapTools.MeasureDistance)//测距离
             {
                 MapControl.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针:十字状
                 lblMeasureTips.Visible = true;
@@ -105,7 +135,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 {
                     if (_measureTool.IsSurveying)
                     {
-                        object lineSymbolObj = RenderOpt.GetSimpleLineSymbol("ff0000");
+                        object lineSymbolObj = SymbolCreate.GetSimpleLineSymbol("ff0000");
                         MapControl.DrawShape(_measureTool.SurveyEnd(MapControl.ToMapPoint(e.x, e.y)), ref lineSymbolObj);
                         lblMeasureInfo.Text = $@"总长度：{_measureTool.TotalLength:F2}米{Environment.NewLine}{Environment.NewLine}";
                         lblMeasureInfo.Text += $@"当前长度: {_measureTool.CurrentLength:F2}米";
@@ -114,7 +144,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
                     }
                 }
             }
-            else if (MapTools == EMapTools.MeasureArea)//测面积
+            else if (CurrentTool == EMapTools.MeasureArea)//测面积
             {
                 MapControl.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针:十字状
                 lblMeasureTips.Visible = true;
@@ -129,7 +159,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 {
                     if (_measureTool.IsSurveying && _measureTool.AreaPointCount > 1)
                     {
-                        object fillSymbolObj = RenderOpt.GetSimpleFillSymbol("99ccff", "ff0000");
+                        object fillSymbolObj = SymbolCreate.GetSimpleFillSymbol("99ccff", "ff0000");
                         MapControl.DrawShape(_measureTool.SurveyEnd(MapControl.ToMapPoint(e.x, e.y)), ref fillSymbolObj);
                         lblMeasureInfo.Text = $@"面积：{_measureTool.Area:#########.##}平方米";
                         lblMeasureInfo.Refresh();
@@ -144,13 +174,13 @@ namespace WLib.UserCtrls.ArcGisCtrl
         {
             if (!_measureTool.IsSurveying) return;
 
-            if (MapTools == EMapTools.MeasureDistance)//测距离
+            if (CurrentTool == EMapTools.MeasureDistance)//测距离
             {
                 _measureTool.MoveTo(MapControl.ToMapPoint(e.x, e.y));
                 lblMeasureInfo.Text = $@"总长度：{_measureTool.TotalLength:#########.##}米{Environment.NewLine}{Environment.NewLine}当前长度:{_measureTool.CurrentLength:#########.##}米";
                 lblMeasureInfo.Refresh();
             }
-            else if (MapTools == EMapTools.MeasureArea) //测面积
+            else if (CurrentTool == EMapTools.MeasureArea) //测面积
             {
                 _measureTool.MoveTo(MapControl.ToMapPoint(e.x, e.y));
                 lblMeasureInfo.Text = $@"面积：{_measureTool.Area:#########.##}平方米";
@@ -161,7 +191,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         //清空、关闭测量结果
         private void btnMeasureClose_Click(object sender, EventArgs e)
         {
-            ToolOnClick(EMapTools.Pan);
+            CurrentTool = EMapTools.None;
             lblMeasureInfo.Visible = false;
             lblMeasureTips.Text = "";
             MapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
@@ -170,17 +200,21 @@ namespace WLib.UserCtrls.ArcGisCtrl
         //点击地图导航条的工具
         private void navigationButton_Click(object sender, EventArgs e)
         {
-            MapTools = ((Button)sender).Text.GetEnum<EMapTools>();
-            this.lblMeasureTips.Visible = this.lblMeasureInfo.Visible = MapTools == EMapTools.MeasureDistance || MapTools == EMapTools.MeasureArea;
-            this.lblSwipe.Visible = this.cmbLayers.Visible = MapTools == EMapTools.Swipe;
-            if (MapTools == EMapTools.Swipe)
+            _currentTool = (EMapTools?)((Button)sender)?.Tag ?? EMapTools.None;
+
+            bool measure = _currentTool == EMapTools.MeasureDistance || _currentTool == EMapTools.MeasureArea;
+            this.lblMeasureTips.Visible = this.lblMeasureInfo.Visible = measure;
+            this.Height = measure ? 56 : 24;
+            this.lblSwipe.Visible = this.cmbLayers.Visible = _currentTool == EMapTools.Swipe;
+            if (_currentTool == EMapTools.Swipe)
             {
+                this.Height = 46;
                 this.cmbLayers.Items.Clear();
                 this.cmbLayers.Items.AddRange(this.MapControl.GetLayerNames().ToArray());
             }
 
             ICommand command = null;
-            switch (MapTools)
+            switch (_currentTool)
             {
                 case EMapTools.FullExtent: command = new ControlsMapFullExtentCommand(); break;
                 case EMapTools.ZoomIn: command = new ControlsMapZoomInTool(); break;
@@ -190,7 +224,6 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 case EMapTools.Identify: command = new ControlsMapIdentifyTool(); break;
                 case EMapTools.Selection: command = new ControlsSelectFeaturesToolClass(); break;
                 case EMapTools.Swipe: command = new ControlsMapSwipeToolClass(); break;
-                default: MapControl.CurrentTool = null; break;
             }
             if (command != null)
             {

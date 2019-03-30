@@ -1,9 +1,14 @@
+/*---------------------------------------------------------------- 
+// auth£º Source by WilsonProgramming
+// date£º 2019/3
+// desc£º None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
 using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 
-//À´Ô´(Source by): WilsonProgramming
-//Modify: Windragon
 namespace WLib.UserCtrls.ExplorerCtrl  
 {
     /// <summary>

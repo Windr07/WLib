@@ -1,7 +1,13 @@
+/*---------------------------------------------------------------- 
+// auth£º Source by WilsonProgramming
+// date£º None
+// desc£º None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
 using System;
 using System.Runtime.InteropServices;
 
-//À´Ô´(Source by)£º WilsonProgramming
 namespace WLib.UserCtrls.ExplorerCtrl
 {
     class SystemImageList

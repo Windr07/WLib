@@ -1,4 +1,11 @@
-﻿using WLib.Attributes;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using WLib.Attributes;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {

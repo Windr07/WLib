@@ -68,7 +68,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         public static IFeature GetMaxIntersectFeature(this IEnumerable<IFeature> features, IGeometry geometry, out double maxInsectArea)
         {
             if (!(geometry is ITopologicalOperator logicalOpt))
-                throw new Exception("参数geometry（作为筛选条件的图形）不能为空！");
+                throw new Exception($"参数{nameof(geometry)}（作为筛选条件的图形）不能为空！");
 
             IFeature maxInsectFeature = null; //相交面积最大的辅助地块
             maxInsectArea = 0.0;
@@ -97,7 +97,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         public static IGeometry GetMaxIntersectGeometry(this IEnumerable<IGeometry> geometries, IGeometry geometry, out double maxInsectArea)
         {
             if (!(geometry is ITopologicalOperator logicalOpt))
-                throw new Exception("参数geometry（作为筛选条件的图形）不能为空！");
+                throw new Exception($"参数{nameof(geometry)}作为筛选条件的图形）不能为空！");
 
             IGeometry maxInsectGeometry = null; //相交面积最大的辅助地块
             maxInsectArea = 0.0;
@@ -189,7 +189,7 @@ namespace WLib.ArcGis.Analysis.OnShape
                     unionedPolygon = new PolygonClass();
                     break;
                 default:
-                    throw new NotImplementedException("几何类型(geometryType)应是点(point)、线(polyline)、多边形(polygon)之一，其他类型暂未实现！");
+                    throw new NotImplementedException($"几何类型({nameof(geometryType)})应是点(point)、线(polyline)、多边形(polygon)之一，其他类型暂未实现！");
             }
 
             unionedPolygon.ConstructUnion(geometryBag as IEnumGeometry);

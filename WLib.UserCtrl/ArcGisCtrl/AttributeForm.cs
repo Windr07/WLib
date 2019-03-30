@@ -5,15 +5,16 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDb.Fields;
-using WLib.ArcGis.Geomtry;
+using WLib.ArcGis.Geometry;
 using WLib.Data;
 using static WLib.WinForm.MenuOpt;
 
@@ -22,12 +23,12 @@ namespace WLib.UserCtrls.ArcGisCtrl
     /// <summary>
     /// 图层属性表窗口
     /// </summary>
-    public partial class AttributeForm : Form
+    public partial class AttributeForm : Form, IAttributeCtrl
     {
         /// <summary>
         /// 按属性查询窗体
         /// </summary>
-        protected AttributeQueryForm AttQueryForm { get; set; }
+        public IAttributeQueryCtrl AtrributeQueryCtrl { get; set; }
         /// <summary>
         /// 要获取属性表的图层
         /// </summary>
@@ -55,11 +56,12 @@ namespace WLib.UserCtrls.ArcGisCtrl
         {
             InitializeComponent();
 
+            AtrributeQueryCtrl = new AttributeQueryForm();
             var contextMenuStrip = new ContextMenuStrip();
             contextMenuStrip.Items.AddRange(new[]
             {
                 NewMenuItem("缩放至图斑(&G)", Keys.G, (s,e) => dataGridView1_SelectionChanged(null, null)),
-                NewMenuItem("按属性查询(&Q)", Keys.Q, 按属性查询QToolStripMenuItem_Click),
+                NewMenuItem("按属性查询(&Q)", Keys.Q, 按属性查询QToolStripMenuItem_Click,AtrributeQueryCtrl == null),
                 NewMenuItem("复制值(&C)", Keys.C, (s,e) => Clipboard.SetDataObject(dataGridView1.SelectedCells[0].Value)),
                 NewMenuItem("复制整行(&R)", Keys.R,  复制整行RToolStripMenuItem_Click),
             });
@@ -100,8 +102,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// <param name="whereClause">筛选条件，表示从图层加载的数据范围</param>
         /// <param name="fieldNames">加载和显示的字段</param>
         /// <param name="featureLocation">定位到要素图斑的事件</param>
-        public DataTable LoadAttribute(IFeatureLayer featureLayer, string whereClause = null,
-            string[] fieldNames = null, EventHandler<FeatureLocationEventArgs> featureLocation = null)
+        public DataTable LoadAttribute(IFeatureLayer featureLayer, string whereClause = null, string[] fieldNames = null, EventHandler<FeatureLocationEventArgs> featureLocation = null)
         {
             if (featureLayer?.FeatureClass == null)
                 throw new Exception("图层不是要素图层或其数据源为空！");
@@ -133,6 +134,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
             dataGridView1.DataSource = null;
         }
 
+
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count <= 0) return;
@@ -144,14 +146,18 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 FeatureLocation?.Invoke(this, new FeatureLocationEventArgs(FeatLayer, $"{Table.OIDFieldName} = {value}"));
         }
 
+        private void AtrributeQueryCtrl_Query(object sender, EventArgs e)
+        {
+            WhereClause = AtrributeQueryCtrl.WhereClause;
+        }
 
         private void 按属性查询QToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Table == null) return;
-
-            if (AttQueryForm == null || AttQueryForm.IsDisposed)
-                AttQueryForm = new AttributeQueryForm(Table, false, null, (sender2, e2) => WhereClause = AttQueryForm.WhereClause);
-            AttQueryForm.Show(this);
+            AtrributeQueryCtrl.LoadQueryInfo(Table);
+            AtrributeQueryCtrl.Query -= AtrributeQueryCtrl_Query;
+            AtrributeQueryCtrl.Query += AtrributeQueryCtrl_Query;
+            AtrributeQueryCtrl.Show(this);
         }
 
         private void 复制整行RToolStripMenuItem_Click(object sender, EventArgs e)
@@ -160,6 +166,5 @@ namespace WLib.UserCtrls.ArcGisCtrl
             if (rows.Count > 0)
                 Clipboard.SetDataObject(rows[0].Cells.Cast<DataGridViewCell>().Select(v => v.Value.ToString()).Aggregate((a, b) => a + "\t" + b));
         }
-
     }
 }

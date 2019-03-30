@@ -27,11 +27,10 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <returns></returns>
         public static ISpatialCacheManager CreateCache(IFeatureClass featureClass)
         {
-            //填充Spatial Cache
-            ISpatialCacheManager spatialCacheManager = (ISpatialCacheManager)((IDataset)featureClass).Workspace;
+            ISpatialCacheManager spatialCacheManager = (ISpatialCacheManager)((IDataset)featureClass).Workspace;//填充Spatial Cache
             IEnvelope cacheExtent = ((IGeoDataset)featureClass).Extent;
-            //检测是否存在缓存
-            if (!spatialCacheManager.CacheIsFull)
+            
+            if (!spatialCacheManager.CacheIsFull)//检测是否存在缓存
                 spatialCacheManager.FillCache(cacheExtent);  //不存在，则创建缓存
 
             return spatialCacheManager;

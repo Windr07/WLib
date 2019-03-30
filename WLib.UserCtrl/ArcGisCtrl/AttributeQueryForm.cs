@@ -5,12 +5,13 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.GeoDb.Fields;
 
 namespace WLib.UserCtrls.ArcGisCtrl
@@ -18,7 +19,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
     /// <summary>
     /// 属性查询窗口
     /// </summary>
-    public partial class AttributeQueryForm : Form
+    public partial class AttributeQueryForm : Form, IAttributeQueryCtrl
     {
         /// <summary>
         /// 查询事件
@@ -33,43 +34,10 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// <summary>
         /// 按属性查询的窗体
         /// </summary>
-        ///  <param name="searchTable">要查询的表格</param>
-        /// <param name="isQueryAaliasName">确定查询的是字段别名还是字段名</param>
-        /// <param name="queryFieldNames">显示在属性查询窗口的，要查询的字段</param>
-        /// <param name="queryHandler">查询事件处理</param>
-        public AttributeQueryForm(ITable searchTable, bool isQueryAaliasName = false, string[] queryFieldNames = null, EventHandler queryHandler = null)
-        {
-            InitForm(queryHandler);
-            cmbTables.Items.Add(new AttributeQuery(searchTable, isQueryAaliasName, queryFieldNames));
-        }
-        /// <summary>
-        /// 按属性查询的窗体
-        /// </summary>
-        ///  <param name="searchTables">要查询的表格</param>
-        /// <param name="queryHandler">查询事件处理</param>
-        public AttributeQueryForm(IEnumerable<ITable> searchTables, EventHandler queryHandler = null)
-        {
-            InitForm(queryHandler);
-            cmbTables.Items.AddRange(searchTables.Select(v => new AttributeQuery(v, false, null)).ToArray());
-        }
-        /// <summary>
-        /// 按属性查询的窗体
-        /// </summary>
-        ///  <param name="tableAttributeQueries">要查询的表格</param>
-        /// <param name="queryHandler">查询事件处理</param>
-        public AttributeQueryForm(IEnumerable<AttributeQuery> tableAttributeQueries, EventHandler queryHandler = null)
-        {
-            InitForm(queryHandler);
-            cmbTables.Items.AddRange(tableAttributeQueries.ToArray());
-        }
-        /// <summary>
-        /// 初始化窗体
-        /// </summary>
-        public void InitForm(EventHandler queryHandler)
+        public AttributeQueryForm()
         {
             InitializeComponent();
 
-            Query += queryHandler;
             const string findFieldTips = @"按名称/别名查找字段";
             const string findValueTips = @"查找字段值";
             txtSearchFields.Text = findFieldTips;
@@ -80,13 +48,45 @@ namespace WLib.UserCtrls.ArcGisCtrl
             sBtnClear.Click += delegate { txtWhereClause.Text = string.Empty; };
             sBtnClose.Click += delegate { Close(); };
         }
+        /// <summary>
+        /// 加载查询信息
+        /// </summary>
+        ///  <param name="searchTable">要查询的表格</param>
+        /// <param name="isQueryAaliasName">确定查询的是字段别名还是字段名</param>
+        /// <param name="queryFieldNames">显示在属性查询窗口的，要查询的字段</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public void LoadQueryInfo(ITable searchTable, bool isQueryAaliasName = false, string[] queryFieldNames = null)
+        {
+            cmbTables.Items.Clear();
+            cmbTables.Items.Add(new AttributeQuery(searchTable, isQueryAaliasName, queryFieldNames));
+        }
+        /// <summary>
+        /// 加载查询信息
+        /// </summary>
+        ///  <param name="searchTables">要查询的表格</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public void LoadQueryInfo(IEnumerable<ITable> searchTables)
+        {
+            cmbTables.Items.Clear();
+            cmbTables.Items.AddRange(searchTables.Select(v => new AttributeQuery(v, false, null)).ToArray());
+        }
+        /// <summary>
+        /// 加载查询信息
+        /// </summary>
+        ///  <param name="tableAttributeQueries">要查询的表格</param>
+        /// <param name="queryHandler">查询事件处理</param>
+        public void LoadQueryInfo(IEnumerable<AttributeQuery> tableAttributeQueries)
+        {
+            cmbTables.Items.Clear();
+            cmbTables.Items.AddRange(tableAttributeQueries.ToArray());
+        }
 
 
         private void cmbTables_SelectedIndexChanged(object sender, EventArgs e)//选择表格
         {
             var attrQuery = (AttributeQuery)cmbTables.SelectedItem;
             listBoxFields.Items.AddRange(attrQuery.FieldItems);
-            Text = $"按属性查询 - {attrQuery.TableName}";
+            Text = $@"按属性查询 - {attrQuery.TableName}";
 
             var source = new AutoCompleteStringCollection();
             source.AddRange(panel1.Controls.Cast<Control>().Select(v => v.Tag.ToString()).ToArray());
@@ -104,11 +104,13 @@ namespace WLib.UserCtrls.ArcGisCtrl
 
         private void txtSearchFields_EditValueChanged(object sender, EventArgs e)//查找字段
         {
+            if (cmbTables.SelectedItem == null) return;
             listBoxFields.SelectedItem = ((AttributeQuery)cmbTables.SelectedItem).QueryField(txtSearchFields.Text);
         }
 
         private void txtSearchValues_EditValueChanged(object sender, EventArgs e)//查找唯一值
         {
+            if (listBoxValues.Items.Count <= 0) return;
             listBoxValues.SelectedItem = listBoxValues.Items.Cast<string>().FirstOrDefault(v => v.StartsWith(txtSearchValues.Text));
         }
 

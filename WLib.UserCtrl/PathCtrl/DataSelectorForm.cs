@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
 
 namespace WLib.UserCtrls.PathCtrl
 {
@@ -20,11 +21,24 @@ namespace WLib.UserCtrls.PathCtrl
         /// <summary>
         /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素类等）
         /// </summary>
-        public EObjectFilter Filter { get; set; } = EObjectFilter.All;
+        private EObjectFilter _filter;
+        /// <summary>
+        /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素类等）
+        /// </summary>
+        public EObjectFilter Filter
+        {
+            get => _filter;
+            set
+            {
+                _filter = value;
+                cbTables.Visible = _filter == EObjectFilter.All || _filter == EObjectFilter.Tables;
+                cbLayers.Visible = cbPoint.Visible = cbLine.Visible = cbPolygon.Visible = _filter == EObjectFilter.All || _filter == EObjectFilter.FeatureClasses;
+            }
+        }
         /// <summary>
         /// 是否允许多选
         /// </summary>
-        public bool MutiSelect { get => listViewLayers.MultiSelect; set => cbAll.Enabled = cbAll.Visible = listViewLayers.MultiSelect = value; }
+        public bool MultiSelect { get => listViewLayers.MultiSelect; set => cbAll.Enabled = cbAll.Visible = listViewLayers.MultiSelect = value; }
         /// <summary>
         /// 所选的工作空间
         /// </summary>
@@ -75,7 +89,17 @@ namespace WLib.UserCtrls.PathCtrl
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// 从工作空间中选取图层或表格的窗体
+        /// </summary>
+        /// <param name="filter">表示从工作空间中筛选获得哪些类型的数据（表格、要素类等）</param>
+        /// <param name="multiSelect">是否允许多选图层或表格</param>
+        public DataSelectorForm(EObjectFilter filter, bool multiSelect)
+        {
+            InitializeComponent();
+            this.Filter = filter;
+            this.MultiSelect = multiSelect;
+        }
 
 
         private void workspaceSelector1_WorkspaceTypeChanged(object sender, EventArgs e)//改变工作空间类型时，清空图层/表格列表
@@ -110,7 +134,7 @@ namespace WLib.UserCtrls.PathCtrl
 
         private void listViewLayers_ItemCheck(object sender, ItemCheckEventArgs e)//单选
         {
-            if (!MutiSelect && listViewLayers.SelectedItems.Count > 0)
+            if (!MultiSelect && listViewLayers.SelectedItems.Count > 0)
             {
                 for (int i = 0; i < listViewLayers.Items.Count; i++)
                 {
@@ -120,20 +144,11 @@ namespace WLib.UserCtrls.PathCtrl
             }
         }
 
-        private void cbAll_cckedChanged(object sender, EventArgs e)//全选
-        {
-            bool isCheck = cbAll.Checked;
-            for (int i = 0; i < listViewLayers.Items.Count; i++)
-            {
-                listViewLayers.Items[i].Selected = isCheck;
-            }
-        }
-
         private void btnOK_Click(object sender, EventArgs e)//确定
         {
             if (SelectedObjectName == null)
             {
-                MessageBox.Show("请至少选择一个图层！", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(@"请至少选择一个图层！", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             DialogResult = DialogResult.OK;
@@ -144,6 +159,41 @@ namespace WLib.UserCtrls.PathCtrl
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+
+        #region CheckBox事件处理
+        private void cbAll_cckedChanged(object sender, EventArgs e)//全选
+        {
+            for (int i = 0; i < listViewLayers.Items.Count; i++)
+            {
+                listViewLayers.Items[i].Selected = cbAll.Checked;
+            }
+        }
+
+        #endregion
+
+        private void cbShowItems_CheckedChanged(object sender, EventArgs e)
+        {
+            listViewLayers.Items.Clear();
+            var classNames = workspaceSelector1.FeatureClassNames;
+            var tableNames = workspaceSelector1.TableNames;
+
+            if (cbTables.Checked && tableNames != null)
+                foreach (var name in classNames) { listViewLayers.Items.Add(new ListViewItem(name, 0)); }
+
+            if (cbLayers.Checked && classNames != null)
+            {
+                var shapeTypeGroups = workspaceSelector1.FeatureClasses.GroupBy(v => v.ShapeType);
+                foreach (var group in shapeTypeGroups)
+                {
+                    if (group.Key == esriGeometryType.esriGeometryPoint && !cbPoint.Checked) continue;
+                    if (group.Key == esriGeometryType.esriGeometryPolyline && !cbLine.Checked) continue;
+                    if (group.Key == esriGeometryType.esriGeometryPolygon && !cbPolygon.Checked) continue;
+
+                    foreach (var cls in group) { listViewLayers.Items.Add(new ListViewItem(((IDataset)cls).Name, 0)); }
+                }
+            }
         }
     }
 }

@@ -295,7 +295,6 @@
             this.Name = "SymbolSelectorForm";
             this.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Text = "符号选择器";
-            this.Load += new System.EventHandler(this.SymbolSelectorForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axSymbologyControl1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbPreview.Properties)).EndInit();

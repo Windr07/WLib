@@ -1,7 +1,13 @@
+/*---------------------------------------------------------------- 
+// auth£º Source by WilsonProgramming
+// date£º None
+// desc£º None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
 using System.Collections;
 using System.Windows.Forms;
 
-//À´Ô´(Source by)£º WilsonProgramming
 namespace WLib.UserCtrls.ExplorerCtrl 
 {
     public class ExplorerTreeViewWnd : TreeView

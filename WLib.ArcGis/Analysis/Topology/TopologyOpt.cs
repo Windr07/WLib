@@ -228,7 +228,6 @@ namespace WLib.ArcGis.Analysis.Topology
             }
             return result;
         }
-
         #endregion
 
 
@@ -477,7 +476,7 @@ namespace WLib.ArcGis.Analysis.Topology
                 resultClassName = topologyRule.TopologyRuleType.ToString();
 
             IFeature tmpFeature = errorFeatures[0] as IFeature;
-            var resultFeatureClass = CreateFeatClass.Create(resultObject, resultClassName,
+            var resultFeatureClass = FeatClassCreate.Create(resultObject, resultClassName,
                 tmpFeature.Shape.SpatialReference, geoType, new FieldsClass());
 
             //将拓扑错误要素存入要素类中

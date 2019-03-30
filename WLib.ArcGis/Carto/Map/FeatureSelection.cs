@@ -13,6 +13,9 @@ using ESRI.ArcGIS.Geometry;
 
 namespace WLib.ArcGis.Carto.Map
 {
+    /// <summary>
+    /// 获取地图中选中的要素的操作
+    /// </summary>
     public static class FeatureSelection
     {
         /// <summary>

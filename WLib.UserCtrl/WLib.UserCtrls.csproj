@@ -185,25 +185,23 @@
     <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeQuery.cs" />
-    <Compile Include="ArcGisCtrl\FeatureLocationEventArgs.cs" />
     <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="ArcGisCtrl\SymbolSelector.cs" />
     <Compile Include="ArcGisCtrl\TableListBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ArcGisCtrl\TableListBox.Designer.cs">
       <DependentUpon>TableListBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\Viewer\MapCtrlTocEx.cs" />
-    <Compile Include="ArcGisCtrl\Viewer\MapViewer.cs">
+    <Compile Include="ArcGisCtrl\MapViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\Viewer\MapViewer.Designer.cs">
+    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
       <DependentUpon>MapViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="ExplorerCtrl\ExplorerTreeView.cs">
@@ -218,6 +216,13 @@
     <Compile Include="ExplorerCtrl\ShellAPI.cs" />
     <Compile Include="ExplorerCtrl\ShellItem.cs" />
     <Compile Include="ExplorerCtrl\SystemImageList.cs" />
+    <Compile Include="ListCtrl\IListControl.cs" />
+    <Compile Include="ListCtrl\ImageListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ListCtrl\ImageListBox.Designer.cs">
+      <DependentUpon>ImageListBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="PathCtrl\EObjectFilter.cs" />
     <Compile Include="PathCtrl\ESelectPathType.cs" />
     <Compile Include="PathCtrl\EShowButtonOption.cs" />
@@ -315,7 +320,7 @@
       <DependentUpon>TableListBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\Viewer\MapViewer.resx">
+    <EmbeddedResource Include="ArcGisCtrl\MapViewer.resx">
       <DependentUpon>MapViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -390,7 +395,9 @@
       <Name>WLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\table.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
