@@ -38,6 +38,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
                 if (!(value is Control))
                     throw new Exception($"参数{nameof(ListCtrl)}必须为控件对象，即继承{typeof(Control)}类型的实例！");
                 _listCtrl = value;
+                _listCtrl.Dock = DockStyle.Fill;
             }
         }
         /// <summary>

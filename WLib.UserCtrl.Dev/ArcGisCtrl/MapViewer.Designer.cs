@@ -30,18 +30,18 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapViewer));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem2 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.ToolTipItem toolTipItem2 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem3 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.ToolTipItem toolTipItem3 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem4 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.ToolTipItem toolTipItem4 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem5 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.ToolTipItem toolTipItem5 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem6 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.ToolTipItem toolTipItem6 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem7 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.ToolTipItem toolTipItem7 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.ToolTipItem toolTipItem8 = new DevExpress.Utils.ToolTipItem();
             this.TableListBox = new WLib.UserCtrls.ArcGisCtrl.TableListBox();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
@@ -58,16 +58,10 @@
             this.MapNavigationTools = new WLib.UserCtrls.Dev.ArcGisCtrl.MapNavigationTools();
             this.MainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.xtpPageLayout = new DevExpress.XtraTab.XtraTabPage();
-            this.grpPageNav = new DevExpress.XtraEditors.GroupControl();
-            this.panPageLayout = new DevExpress.XtraEditors.SimpleButton();
             this.imageCollection_Nav = new DevExpress.Utils.ImageCollection(this.components);
-            this.zoomOutPageLayout = new DevExpress.XtraEditors.SimpleButton();
-            this.nextViewPageLayout = new DevExpress.XtraEditors.SimpleButton();
-            this.preViewPageLayout = new DevExpress.XtraEditors.SimpleButton();
-            this.zoomInPageLayout = new DevExpress.XtraEditors.SimpleButton();
-            this.fullExtentPageLayout = new DevExpress.XtraEditors.SimpleButton();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
+            this.pageNavigationTools1 = new WLib.UserCtrls.Dev.ArcGisCtrl.PageNavigationTools();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2)).BeginInit();
@@ -83,8 +77,6 @@
             this.xtpMapView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainMapControl)).BeginInit();
             this.xtpPageLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grpPageNav)).BeginInit();
-            this.grpPageNav.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection_Nav)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PageLayoutControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
@@ -152,12 +144,12 @@
             this.btnExpand.Location = new System.Drawing.Point(269, 3);
             this.btnExpand.Name = "btnExpand";
             this.btnExpand.Size = new System.Drawing.Size(17, 16);
-            toolTipTitleItem1.Text = "展开所有图层";
-            toolTipItem1.LeftIndent = 6;
-            toolTipItem1.Text = "展开所有图层，显示图层项的具体内容。";
-            superToolTip1.Items.Add(toolTipTitleItem1);
-            superToolTip1.Items.Add(toolTipItem1);
-            this.btnExpand.SuperTip = superToolTip1;
+            toolTipTitleItem5.Text = "展开所有图层";
+            toolTipItem5.LeftIndent = 6;
+            toolTipItem5.Text = "展开所有图层，显示图层项的具体内容。";
+            superToolTip5.Items.Add(toolTipTitleItem5);
+            superToolTip5.Items.Add(toolTipItem5);
+            this.btnExpand.SuperTip = superToolTip5;
             this.btnExpand.TabIndex = 2;
             this.btnExpand.Text = "展开所有图层";
             this.btnExpand.Click += new System.EventHandler(this.layerControlButtons_Click);
@@ -171,12 +163,12 @@
             this.btnAddData.Location = new System.Drawing.Point(201, 3);
             this.btnAddData.Name = "btnAddData";
             this.btnAddData.Size = new System.Drawing.Size(17, 16);
-            toolTipTitleItem2.Text = "添加数据";
-            toolTipItem2.LeftIndent = 6;
-            toolTipItem2.Text = "添加图层数据";
-            superToolTip2.Items.Add(toolTipTitleItem2);
-            superToolTip2.Items.Add(toolTipItem2);
-            this.btnAddData.SuperTip = superToolTip2;
+            toolTipTitleItem6.Text = "添加数据";
+            toolTipItem6.LeftIndent = 6;
+            toolTipItem6.Text = "添加图层数据";
+            superToolTip6.Items.Add(toolTipTitleItem6);
+            superToolTip6.Items.Add(toolTipItem6);
+            this.btnAddData.SuperTip = superToolTip6;
             this.btnAddData.TabIndex = 1;
             this.btnAddData.Text = "添加数据";
             this.btnAddData.ToolTip = "添加数据";
@@ -191,12 +183,12 @@
             this.btnSwitchContent.Location = new System.Drawing.Point(224, 3);
             this.btnSwitchContent.Name = "btnSwitchContent";
             this.btnSwitchContent.Size = new System.Drawing.Size(17, 16);
-            toolTipTitleItem3.Text = "切换图层/表格";
-            toolTipItem3.LeftIndent = 6;
-            toolTipItem3.Text = "切换显示图层列表和表格列表。";
-            superToolTip3.Items.Add(toolTipTitleItem3);
-            superToolTip3.Items.Add(toolTipItem3);
-            this.btnSwitchContent.SuperTip = superToolTip3;
+            toolTipTitleItem7.Text = "切换图层/表格";
+            toolTipItem7.LeftIndent = 6;
+            toolTipItem7.Text = "切换显示图层列表和表格列表。";
+            superToolTip7.Items.Add(toolTipTitleItem7);
+            superToolTip7.Items.Add(toolTipItem7);
+            this.btnSwitchContent.SuperTip = superToolTip7;
             this.btnSwitchContent.TabIndex = 1;
             this.btnSwitchContent.Text = "切换图层/表格";
             this.btnSwitchContent.ToolTip = "切换图层/表格";
@@ -211,12 +203,12 @@
             this.btnCollapsed.Location = new System.Drawing.Point(247, 3);
             this.btnCollapsed.Name = "btnCollapsed";
             this.btnCollapsed.Size = new System.Drawing.Size(17, 16);
-            toolTipTitleItem4.Text = "折叠所有图层";
-            toolTipItem4.LeftIndent = 6;
-            toolTipItem4.Text = "折叠所有图层，收起图层列表。";
-            superToolTip4.Items.Add(toolTipTitleItem4);
-            superToolTip4.Items.Add(toolTipItem4);
-            this.btnCollapsed.SuperTip = superToolTip4;
+            toolTipTitleItem8.Text = "折叠所有图层";
+            toolTipItem8.LeftIndent = 6;
+            toolTipItem8.Text = "折叠所有图层，收起图层列表。";
+            superToolTip8.Items.Add(toolTipTitleItem8);
+            superToolTip8.Items.Add(toolTipItem8);
+            this.btnCollapsed.SuperTip = superToolTip8;
             this.btnCollapsed.TabIndex = 1;
             this.btnCollapsed.Text = "折叠所有图层";
             this.btnCollapsed.Click += new System.EventHandler(this.layerControlButtons_Click);
@@ -276,7 +268,7 @@
             this.MapNavigationTools.Location = new System.Drawing.Point(2, 2);
             this.MapNavigationTools.MapControl = this.MainMapControl;
             this.MapNavigationTools.Name = "MapNavigationTools";
-            this.MapNavigationTools.Size = new System.Drawing.Size(270, 92);
+            this.MapNavigationTools.Size = new System.Drawing.Size(268, 86);
             this.MapNavigationTools.TabIndex = 1;
             // 
             // MainMapControl
@@ -287,42 +279,14 @@
             this.MainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MainMapControl.OcxState")));
             this.MainMapControl.Size = new System.Drawing.Size(631, 532);
             this.MainMapControl.TabIndex = 0;
-            this.MainMapControl.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.MainMapControl_OnMouseDown);
-            this.MainMapControl.OnFullExtentUpdated += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnFullExtentUpdatedEventHandler(this.MainMapControl_OnFullExtentUpdated);
             // 
             // xtpPageLayout
             // 
-            this.xtpPageLayout.Controls.Add(this.grpPageNav);
+            this.xtpPageLayout.Controls.Add(this.pageNavigationTools1);
             this.xtpPageLayout.Controls.Add(this.PageLayoutControl);
             this.xtpPageLayout.Name = "xtpPageLayout";
             this.xtpPageLayout.Size = new System.Drawing.Size(631, 532);
             this.xtpPageLayout.Text = "页面";
-            // 
-            // grpPageNav
-            // 
-            this.grpPageNav.Controls.Add(this.panPageLayout);
-            this.grpPageNav.Controls.Add(this.zoomOutPageLayout);
-            this.grpPageNav.Controls.Add(this.nextViewPageLayout);
-            this.grpPageNav.Controls.Add(this.preViewPageLayout);
-            this.grpPageNav.Controls.Add(this.zoomInPageLayout);
-            this.grpPageNav.Controls.Add(this.fullExtentPageLayout);
-            this.grpPageNav.Location = new System.Drawing.Point(1, 1);
-            this.grpPageNav.Name = "grpPageNav";
-            this.grpPageNav.Size = new System.Drawing.Size(150, 50);
-            this.grpPageNav.TabIndex = 8;
-            this.grpPageNav.Text = "地图导航条";
-            // 
-            // panPageLayout
-            // 
-            this.panPageLayout.ImageIndex = 6;
-            this.panPageLayout.ImageList = this.imageCollection_Nav;
-            this.panPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.panPageLayout.Location = new System.Drawing.Point(74, 23);
-            this.panPageLayout.Margin = new System.Windows.Forms.Padding(0);
-            this.panPageLayout.Name = "panPageLayout";
-            this.panPageLayout.Size = new System.Drawing.Size(24, 24);
-            this.panPageLayout.TabIndex = 0;
-            this.panPageLayout.ToolTip = "平移";
             // 
             // imageCollection_Nav
             // 
@@ -350,66 +314,6 @@
             this.imageCollection_Nav.Images.SetKeyName(20, "SelectionSelectPolygonTool16.png");
             this.imageCollection_Nav.Images.SetKeyName(21, "SelectionSelectTool16.png");
             // 
-            // zoomOutPageLayout
-            // 
-            this.zoomOutPageLayout.ImageIndex = 14;
-            this.zoomOutPageLayout.ImageList = this.imageCollection_Nav;
-            this.zoomOutPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.zoomOutPageLayout.Location = new System.Drawing.Point(50, 23);
-            this.zoomOutPageLayout.Margin = new System.Windows.Forms.Padding(0);
-            this.zoomOutPageLayout.Name = "zoomOutPageLayout";
-            this.zoomOutPageLayout.Size = new System.Drawing.Size(24, 24);
-            this.zoomOutPageLayout.TabIndex = 0;
-            this.zoomOutPageLayout.ToolTip = "缩小";
-            // 
-            // nextViewPageLayout
-            // 
-            this.nextViewPageLayout.ImageIndex = 8;
-            this.nextViewPageLayout.ImageList = this.imageCollection_Nav;
-            this.nextViewPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.nextViewPageLayout.Location = new System.Drawing.Point(122, 23);
-            this.nextViewPageLayout.Margin = new System.Windows.Forms.Padding(0);
-            this.nextViewPageLayout.Name = "nextViewPageLayout";
-            this.nextViewPageLayout.Size = new System.Drawing.Size(24, 24);
-            this.nextViewPageLayout.TabIndex = 0;
-            this.nextViewPageLayout.ToolTip = "后一视图";
-            // 
-            // preViewPageLayout
-            // 
-            this.preViewPageLayout.ImageIndex = 3;
-            this.preViewPageLayout.ImageList = this.imageCollection_Nav;
-            this.preViewPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.preViewPageLayout.Location = new System.Drawing.Point(98, 23);
-            this.preViewPageLayout.Margin = new System.Windows.Forms.Padding(0);
-            this.preViewPageLayout.Name = "preViewPageLayout";
-            this.preViewPageLayout.Size = new System.Drawing.Size(24, 24);
-            this.preViewPageLayout.TabIndex = 0;
-            this.preViewPageLayout.ToolTip = "前一视图";
-            // 
-            // zoomInPageLayout
-            // 
-            this.zoomInPageLayout.ImageIndex = 12;
-            this.zoomInPageLayout.ImageList = this.imageCollection_Nav;
-            this.zoomInPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.zoomInPageLayout.Location = new System.Drawing.Point(26, 23);
-            this.zoomInPageLayout.Margin = new System.Windows.Forms.Padding(0);
-            this.zoomInPageLayout.Name = "zoomInPageLayout";
-            this.zoomInPageLayout.Size = new System.Drawing.Size(24, 24);
-            this.zoomInPageLayout.TabIndex = 0;
-            this.zoomInPageLayout.ToolTip = "放大";
-            // 
-            // fullExtentPageLayout
-            // 
-            this.fullExtentPageLayout.ImageIndex = 10;
-            this.fullExtentPageLayout.ImageList = this.imageCollection_Nav;
-            this.fullExtentPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.fullExtentPageLayout.Location = new System.Drawing.Point(2, 23);
-            this.fullExtentPageLayout.Margin = new System.Windows.Forms.Padding(0);
-            this.fullExtentPageLayout.Name = "fullExtentPageLayout";
-            this.fullExtentPageLayout.Size = new System.Drawing.Size(24, 24);
-            this.fullExtentPageLayout.TabIndex = 0;
-            this.fullExtentPageLayout.ToolTip = "全屏";
-            // 
             // PageLayoutControl
             // 
             this.PageLayoutControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -427,6 +331,14 @@
             this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
             this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
             this.axLicenseControl1.TabIndex = 12;
+            // 
+            // pageNavigationTools1
+            // 
+            this.pageNavigationTools1.Location = new System.Drawing.Point(2, 3);
+            this.pageNavigationTools1.Name = "pageNavigationTools1";
+            this.pageNavigationTools1.PageLayoutControl = null;
+            this.pageNavigationTools1.Size = new System.Drawing.Size(147, 49);
+            this.pageNavigationTools1.TabIndex = 10;
             // 
             // MapViewer
             // 
@@ -450,8 +362,6 @@
             this.xtpMapView.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MainMapControl)).EndInit();
             this.xtpPageLayout.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.grpPageNav)).EndInit();
-            this.grpPageNav.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection_Nav)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PageLayoutControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
@@ -469,13 +379,6 @@
         private DevExpress.XtraEditors.GroupControl groupControlEagleMap;
         public ESRI.ArcGIS.Controls.AxMapControl EagleMapControl;
         private DevExpress.XtraTab.XtraTabPage xtpPageLayout;
-        private DevExpress.XtraEditors.GroupControl grpPageNav;
-        private DevExpress.XtraEditors.SimpleButton panPageLayout;
-        private DevExpress.XtraEditors.SimpleButton zoomOutPageLayout;
-        private DevExpress.XtraEditors.SimpleButton nextViewPageLayout;
-        private DevExpress.XtraEditors.SimpleButton preViewPageLayout;
-        private DevExpress.XtraEditors.SimpleButton zoomInPageLayout;
-        private DevExpress.XtraEditors.SimpleButton fullExtentPageLayout;
         private DevExpress.Utils.ImageCollection imageCollection_Nav;
         private ESRI.ArcGIS.Controls.AxPageLayoutControl PageLayoutControl;
         private ESRI.ArcGIS.Controls.AxLicenseControl axLicenseControl1;
@@ -487,5 +390,6 @@
         public WLib.UserCtrls.ArcGisCtrl.TableListBox TableListBox;
         public ESRI.ArcGIS.Controls.AxMapControl MainMapControl;
         public ESRI.ArcGIS.Controls.AxTOCControl TocControl;
+        private PageNavigationTools pageNavigationTools1;
     }
 }

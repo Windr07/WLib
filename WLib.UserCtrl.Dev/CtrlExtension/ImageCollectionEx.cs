@@ -12,7 +12,7 @@ using DevExpress.Utils;
 namespace WLib.UserCtrls.Dev.CtrlExtension
 {
     /// <summary>
-    /// DevExpress.Utils.ImageCollection控件的扩展功能
+    /// <see cref="DevExpress.Utils.ImageCollection"/>控件的扩展功能
     /// </summary>
     public static class ImageCollectionEx
     {

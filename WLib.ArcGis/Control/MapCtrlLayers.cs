@@ -10,8 +10,8 @@ using System.Linq;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.ArcGis.GeoDb.FeatClass;
-using WLib.ArcGis.GeoDb.WorkSpace;
+using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.Control
 {

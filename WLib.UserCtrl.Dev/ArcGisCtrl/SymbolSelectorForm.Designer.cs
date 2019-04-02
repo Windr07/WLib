@@ -233,7 +233,6 @@
             this.btnMoreSymbols.Size = new System.Drawing.Size(88, 29);
             this.btnMoreSymbols.TabIndex = 3;
             this.btnMoreSymbols.Text = "更多符号";
-            this.btnMoreSymbols.Click += new System.EventHandler(this.btnMoreSymbols_Click);
             // 
             // btnOK
             // 
@@ -260,7 +259,6 @@
             // 
             this.cMenuStripMoreSymbol.Name = "contextMenuStripMoreSymbol";
             this.cMenuStripMoreSymbol.Size = new System.Drawing.Size(181, 26);
-            this.cMenuStripMoreSymbol.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripMoreSymbol_ItemClicked);
             // 
             // openFileDialog
             // 

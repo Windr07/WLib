@@ -16,12 +16,12 @@ namespace WLib.ArcGis.Control.AttributeCtrl
     /// <summary>
     /// 显示属性表的控件
     /// </summary>
-    public interface IAttributeCtrl
+    public interface IAttributeCtrl : IDisposable
     {
         /// <summary>
         /// 属性查询控件
         /// </summary>
-        IAttributeQueryCtrl AtrributeQueryCtrl { get; }
+        IAttributeQueryCtrl AtrributeQueryCtrl { get; set; }
         /// <summary>
         /// 要获取属性表的图层
         /// </summary>
@@ -67,6 +67,10 @@ namespace WLib.ArcGis.Control.AttributeCtrl
 
 
         #region 控件本身的属性和方法
+        /// <summary>
+        /// 
+        /// </summary>
+        bool IsDisposed { get; }
         /// <summary>
         /// 
         /// </summary>

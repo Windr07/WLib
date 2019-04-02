@@ -11,8 +11,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.ArcGis.GeoDb.FeatClass;
-using WLib.ArcGis.GeoDb.Table;
+using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.GeoDatabase.Table;
 
 namespace WLib.ArcGis.Data
 {

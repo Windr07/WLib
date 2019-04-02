@@ -11,7 +11,7 @@ using System.Linq;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.Carto.Map;
-using WLib.ArcGis.GeoDb.WorkSpace;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.Carto.DataSource
 {

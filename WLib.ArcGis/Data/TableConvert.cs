@@ -11,7 +11,7 @@ using System.Data;
 using System.Linq;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 
 namespace WLib.ArcGis.Data
 {

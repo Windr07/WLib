@@ -191,6 +191,7 @@
     <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="ArcGisCtrl\MapViewerManager.cs" />
     <Compile Include="ArcGisCtrl\SymbolSelector.cs" />
     <Compile Include="ArcGisCtrl\TableListBox.cs">
       <SubType>UserControl</SubType>

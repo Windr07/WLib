@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
+using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.Carto.Element;
+using WLib.ArcGis.Control;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Control.MapAssociation;
+using WLib.UserCtrls.ArcGisCtrl;
 
 namespace WLib.Samples.WinForm
 {
@@ -24,7 +29,7 @@ namespace WLib.Samples.WinForm
         private void FileToolStripMenuItem_Click(object sender, EventArgs e)//文件菜单
         {
             var menuName = (sender as ToolStripMenuItem)?.Name;
-            var docHelper = this.mapViewer1.DocHelper;
+            var docHelper = this.mapViewer1.Manger.DocHelper;
 
             if (menuName == this.新建ToolStripMenuItem.Name) docHelper.NewEmptyDoc();
             else if (menuName == this.打开ToolStripMenuItem.Name) docHelper.OpenDoc();
@@ -39,7 +44,7 @@ namespace WLib.Samples.WinForm
         {
             var menuName = (sender as ToolStripMenuItem)?.Name;
             var mapTools = this.mapViewer1.MapNavigationTools;
-            this.mapViewer1.DrawElementHelper.DrawElementType = EDrawElementType.None;
+            this.mapViewer1.Manger.DrawElementHelper.DrawElementType = EDrawElementType.None;
 
             if (menuName == this.放大ToolStripMenuItem.Name) mapTools.CurrentTool = EMapTools.ZoomIn;
             else if (menuName == this.缩小ToolStripMenuItem.Name) mapTools.CurrentTool = EMapTools.ZoomOut;
@@ -53,7 +58,7 @@ namespace WLib.Samples.WinForm
         private void DrawToolStripMenuItem_Click(object sender, EventArgs e)//绘制菜单
         {
             var menuName = (sender as ToolStripMenuItem)?.Name;
-            var drawHelper = this.mapViewer1.DrawElementHelper;
+            var drawHelper = this.mapViewer1.Manger.DrawElementHelper;
             this.mapViewer1.MapNavigationTools.CurrentTool = EMapTools.None;
 
             if (menuName == this.点ToolStripMenuItem.Name) drawHelper.DrawElementType = EDrawElementType.Point;
@@ -62,6 +67,22 @@ namespace WLib.Samples.WinForm
             else if (menuName == this.圆ToolStripMenuItem.Name) drawHelper.DrawElementType = EDrawElementType.Circle;
             else if (menuName == this.矩形ToolStripMenuItem.Name) drawHelper.DrawElementType = EDrawElementType.Rectangle;
             else if (menuName == this.文本ToolStripMenuItem.Name) drawHelper.DrawElementType = EDrawElementType.Text;
+        }
+
+        private void 查询图形ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.mapViewer1.MainMapControl.LayerCount == 0) return;
+            var form = new AttributeQueryForm();
+            form.LoadQueryInfo(this.mapViewer1.MainMapControl.GetLayers().Select(v => v as ITable));
+            form.Show(this);
+        }
+
+        private void 查询属性ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.mapViewer1.MainMapControl.LayerCount == 0) return;
+            var form = new AttributeForm();
+            form.LoadAttribute(this.mapViewer1.MainMapControl.GetLayers().First() as ITable);
+            form.Show(this);
         }
     }
 }

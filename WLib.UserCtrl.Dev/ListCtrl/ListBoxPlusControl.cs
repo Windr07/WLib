@@ -25,7 +25,7 @@ namespace WLib.UserCtrls.Dev.ListCtrl
     {
         private bool _viewOnly = false;
         private string _searchDescription = "请输入要查找的项";
-        private InputDevForm _searchForm;
+        private InputForm _searchForm;
         private int _responseCount = 30;
         private List<int> _coloredItemIndexs = new List<int>();
 
@@ -225,7 +225,7 @@ namespace WLib.UserCtrls.Dev.ListCtrl
 
         private void picSearch_Click(object sender, EventArgs e)
         {
-            _searchForm = new InputDevForm("查找" + ListTitle, "查找", SearchDescription);
+            _searchForm = new InputForm("查找" + ListTitle, "查找", SearchDescription);
             if (_searchForm.ShowDialog() == DialogResult.OK)
             {
                 string keyWord = _searchForm.KeyWord;

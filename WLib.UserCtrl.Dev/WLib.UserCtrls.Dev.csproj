@@ -327,11 +327,11 @@
     </Compile>
     <Compile Include="EditForm\SaveEditEventArgs.cs" />
     <Compile Include="CtrlExtension\ImageCollectionEx.cs" />
-    <Compile Include="InputCtrl\InputDevForm.cs">
+    <Compile Include="InputCtrl\InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InputCtrl\InputDevForm.Designer.cs">
-      <DependentUpon>InputDevForm.cs</DependentUpon>
+    <Compile Include="InputCtrl\InputForm.Designer.cs">
+      <DependentUpon>InputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ListCtrl\ListBoxPlusControl.cs">
       <SubType>UserControl</SubType>
@@ -423,8 +423,8 @@
     <EmbeddedResource Include="EditForm\RowDataEditForm.resx">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputCtrl\InputDevForm.resx">
-      <DependentUpon>InputDevForm.cs</DependentUpon>
+    <EmbeddedResource Include="InputCtrl\InputForm.resx">
+      <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListCtrl\ListBoxPlusControl.resx">
       <DependentUpon>ListBoxPlusControl.cs</DependentUpon>

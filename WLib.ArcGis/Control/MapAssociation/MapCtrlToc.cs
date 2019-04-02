@@ -5,25 +5,26 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Controls;
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Controls;
-using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.Carto;
 using WLib.ArcGis.Carto.Layer;
 using WLib.ArcGis.Control.AttributeCtrl;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
     /// 地图控件与TOC控件的关联操作
     /// </summary>
-    public class MapCtrlToc: IMapCtrlAssociation
+    public class MapCtrlToc : IMapCtrlAssociation
     {
+        private Type _attributeCtrlType;
         /// <summary>
         /// TOC控件
         /// </summary>
@@ -35,7 +36,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <summary>
         /// 将当前标签页设为地图页面
         /// </summary>
-        public readonly Action GoToMapView;
+        public readonly Action<EViewActionType[]> SwitchView;
         /// <summary>
         /// 图层和对应的字段菜单列表
         /// </summary>
@@ -56,15 +57,15 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <param name="mapCtrl">地图控件</param>
         /// <param name="attributeCtrl">显示属性表的控件/窗体</param>
         /// <param name="goToMapView">将当前标签页设为地图页面</param>
-        public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, IAttributeCtrl attributeCtrl, Action goToMapView = null)
+        public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, IAttributeCtrl attributeCtrl, Action<EViewActionType[]> switchView = null)
         {
             MapControl = mapCtrl;
             TocControl = tocCtrl;
             TocControl.SetBuddyControl(MapControl);
             TocControl.OnMouseDown += tocCtrl_OnMouseDown;
-            GoToMapView = goToMapView;
+            SwitchView = switchView;
             AttributeCtrl = attributeCtrl;
-            AttributeCtrl.FormClosing += (sender, e) => { e.Cancel = true; AttributeCtrl.Visible = false; };
+            _attributeCtrlType = AttributeCtrl.GetType();
 
             Layer2FieldsMenuItems = new Dictionary<string, ToolStripMenuItem[]>();
             InintMenuStrip();
@@ -129,7 +130,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                     var item = new ToolStripMenuItem(namePair.Value) { Tag = namePair.Key };
                     item.Click += (sender2, e2) =>
                     {
-                        GoToMapView?.Invoke();
+                        SwitchView?.Invoke(new[] { EViewActionType.MainMap });
                         item.Checked = !item.Checked;
                         if (setFieldLabelLayer is IGeoFeatureLayer geoFeatureLayer)
                         {
@@ -185,7 +186,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <param name="e"></param>
         private void _attributeForm_FeatureLocation(object sender, FeatureLocationEventArgs e)
         {
-            GoToMapView?.Invoke();
+            SwitchView?.Invoke(new[] { EViewActionType.MainMap });
             MapControl.MapZoomToAndSelectFirst(e.LocationLayer, e.WhereClause);
         }
 
@@ -242,7 +243,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         }
         protected virtual void 缩放到图层toolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GoToMapView?.Invoke();
+            SwitchView?.Invoke(new[] { EViewActionType.MainMap });
             if (SelectedLayer != null)
             {
                 var envelope = SelectedLayer.AreaOfInterest;
@@ -253,10 +254,12 @@ namespace WLib.ArcGis.Control.MapAssociation
         {
             if (SelectedLayer is ITable table)
             {
-                AttributeCtrl.Show(MapControl);
-                AttributeCtrl.Activate();//之前已打开，则给予焦点，置顶。
+                if (AttributeCtrl == null || AttributeCtrl.IsDisposed)
+                    AttributeCtrl = (IAttributeCtrl)Activator.CreateInstance(_attributeCtrlType);
                 AttributeCtrl.FeatureLocation -= _attributeForm_FeatureLocation;
                 AttributeCtrl.FeatureLocation += _attributeForm_FeatureLocation;
+                AttributeCtrl.Show(MapControl);
+                AttributeCtrl.Activate();//之前已打开，则给予焦点，置顶。
                 AttributeCtrl.LoadAttribute((IFeatureLayer)SelectedLayer, ((IFeatureLayerDefinition)SelectedLayer).DefinitionExpression);
             }
         }
@@ -264,8 +267,9 @@ namespace WLib.ArcGis.Control.MapAssociation
         {
             if (!(SelectedLayer is IFeatureLayer featureLayer)) return;
 
-            AttributeCtrl.AtrributeQueryCtrl.LoadQueryInfo(featureLayer.FeatureClass as ITable);
+            AttributeCtrl.AtrributeQueryCtrl.Query -= _queryForm_Query;
             AttributeCtrl.AtrributeQueryCtrl.Query += _queryForm_Query;
+            AttributeCtrl.AtrributeQueryCtrl.LoadQueryInfo(featureLayer.FeatureClass as ITable);
             AttributeCtrl.AtrributeQueryCtrl.Show(MapControl);
         }
 

@@ -56,7 +56,7 @@ namespace WLib.ArcGis.Control.MapAssociation
             DrawElementType = EDrawElementType.None;
             MapControl.OnMouseDown += MapControl_OnMouseDown;
             FillSymbol = new SimpleFillSymbolClass(); //RenderOpt.GetSimpleFillSymbol("ff000000", "ff0000ff");
-             LineSymbol = new SimpleLineSymbolClass();//RenderOpt.GetSimpleLineSymbol("ff000000");
+            LineSymbol = new SimpleLineSymbolClass();//RenderOpt.GetSimpleLineSymbol("ff000000");
             MarkerSymbol = new SimpleMarkerSymbolClass();//RenderOpt.GetSimpleMarkerSymbol("ff0000ff");
             TextSymbol = new TextSymbolClass();
         }

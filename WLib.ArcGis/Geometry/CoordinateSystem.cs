@@ -13,7 +13,7 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Carto.Map;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 
 // ReSharper disable PossibleMultipleEnumeration
 

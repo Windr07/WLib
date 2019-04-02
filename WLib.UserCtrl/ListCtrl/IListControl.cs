@@ -24,20 +24,20 @@ namespace WLib.UserCtrls.ListCtrl
         /// </summary>
         DockStyle Dock { get; set; }
         /// <summary>
-        /// 
+        /// 选定的项的集合
         /// </summary>
         IList SelectedItems { get; }
         /// <summary>
-        /// 
+        /// 列表控件项的集合
         /// </summary>
         IList Items { get; }
         /// <summary>
-        /// 
+        /// 向列表控件添加多个项
         /// </summary>
         /// <param name="items"></param>
         void AddItems(IEnumerable<object> items);
         /// <summary>
-        /// 
+        /// 选定项发生改变的事件
         /// </summary>
         event EventHandler SelectedIndexChanged;
     }

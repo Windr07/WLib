@@ -13,7 +13,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Data;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 using WLib.ArcGis.Geometry;
 using WLib.Data;
 using static WLib.WinForm.MenuOpt;

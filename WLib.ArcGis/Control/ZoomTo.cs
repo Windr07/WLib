@@ -15,7 +15,7 @@ using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Analysis.OnShape;
 using WLib.ArcGis.Display;
-using WLib.ArcGis.GeoDb.FeatClass;
+using WLib.ArcGis.GeoDatabase.FeatClass;
 
 namespace WLib.ArcGis.Control
 {

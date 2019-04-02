@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.ArcGis.GeoDb.WorkSpace;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Attributes;
 
 namespace WLib.UserCtrls.PathCtrl

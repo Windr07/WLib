@@ -8,6 +8,9 @@ using DevExpress.XtraCharts;
 
 namespace WLib.UserCtrls.Dev.CtrlExtension
 {
+    /// <summary>
+    /// <see cref="DevExpress.XtraCharts.ChartControl"/>控件的扩展功能
+    /// </summary>
     public static class ChartControlEx
     {
         /// <summary>

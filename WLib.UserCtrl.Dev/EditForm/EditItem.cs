@@ -7,7 +7,7 @@
 
 using System;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 
 namespace WLib.UserCtrls.Dev.EditForm
 {
@@ -16,8 +16,7 @@ namespace WLib.UserCtrls.Dev.EditForm
     /// </summary>
     public class EditItem
     {
-        private readonly bool _nullable;
-        private Type _fieldType = null;
+        private Type _fieldType;
         /// <summary>
         /// 字段名
         /// </summary>

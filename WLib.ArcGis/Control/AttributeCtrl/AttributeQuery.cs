@@ -7,8 +7,8 @@
 
 using System.Linq;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.ArcGis.GeoDb.Fields;
-using WLib.ArcGis.GeoDb.Table;
+using WLib.ArcGis.GeoDatabase.Fields;
+using WLib.ArcGis.GeoDatabase.Table;
 
 namespace WLib.ArcGis.Control.AttributeCtrl
 {

@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control.AttributeCtrl;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 
 namespace WLib.UserCtrls.ArcGisCtrl
 {

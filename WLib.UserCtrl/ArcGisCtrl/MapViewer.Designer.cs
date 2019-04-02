@@ -45,6 +45,7 @@
             this.MapNavigationTools = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
             this.xtpPageLayout = new System.Windows.Forms.TabPage();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
+            this.lblTocTips = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -77,7 +78,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.ViewerTabControl);
             this.splitContainer1.Size = new System.Drawing.Size(927, 537);
-            this.splitContainer1.SplitterDistance = 292;
+            this.splitContainer1.SplitterDistance = 255;
             this.splitContainer1.TabIndex = 0;
             // 
             // splitContainer2
@@ -97,8 +98,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.EagleMapControl);
-            this.splitContainer2.Size = new System.Drawing.Size(292, 537);
-            this.splitContainer2.SplitterDistance = 332;
+            this.splitContainer2.Size = new System.Drawing.Size(255, 537);
+            this.splitContainer2.SplitterDistance = 335;
             this.splitContainer2.TabIndex = 0;
             // 
             // TableListBox
@@ -116,11 +117,12 @@
             this.TocControl.Location = new System.Drawing.Point(0, 24);
             this.TocControl.Name = "TocControl";
             this.TocControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("TocControl.OcxState")));
-            this.TocControl.Size = new System.Drawing.Size(292, 308);
+            this.TocControl.Size = new System.Drawing.Size(255, 311);
             this.TocControl.TabIndex = 0;
             // 
             // tocGroupControl
             // 
+            this.tocGroupControl.Controls.Add(this.lblTocTips);
             this.tocGroupControl.Controls.Add(this.btnExpand);
             this.tocGroupControl.Controls.Add(this.btnCollapsed);
             this.tocGroupControl.Controls.Add(this.btnSwitchContent);
@@ -128,14 +130,14 @@
             this.tocGroupControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.tocGroupControl.Location = new System.Drawing.Point(0, 0);
             this.tocGroupControl.Name = "tocGroupControl";
-            this.tocGroupControl.Size = new System.Drawing.Size(292, 24);
+            this.tocGroupControl.Size = new System.Drawing.Size(255, 24);
             this.tocGroupControl.TabIndex = 1;
             // 
             // btnExpand
             // 
             this.btnExpand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExpand.Image = ((System.Drawing.Image)(resources.GetObject("btnExpand.Image")));
-            this.btnExpand.Location = new System.Drawing.Point(268, 1);
+            this.btnExpand.Location = new System.Drawing.Point(231, 1);
             this.btnExpand.Name = "btnExpand";
             this.btnExpand.Size = new System.Drawing.Size(22, 22);
             this.btnExpand.TabIndex = 0;
@@ -146,7 +148,7 @@
             // 
             this.btnCollapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCollapsed.Image = ((System.Drawing.Image)(resources.GetObject("btnCollapsed.Image")));
-            this.btnCollapsed.Location = new System.Drawing.Point(245, 1);
+            this.btnCollapsed.Location = new System.Drawing.Point(208, 1);
             this.btnCollapsed.Name = "btnCollapsed";
             this.btnCollapsed.Size = new System.Drawing.Size(22, 22);
             this.btnCollapsed.TabIndex = 0;
@@ -157,7 +159,7 @@
             // 
             this.btnSwitchContent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSwitchContent.Image = ((System.Drawing.Image)(resources.GetObject("btnSwitchContent.Image")));
-            this.btnSwitchContent.Location = new System.Drawing.Point(222, 1);
+            this.btnSwitchContent.Location = new System.Drawing.Point(185, 1);
             this.btnSwitchContent.Name = "btnSwitchContent";
             this.btnSwitchContent.Size = new System.Drawing.Size(22, 22);
             this.btnSwitchContent.TabIndex = 0;
@@ -168,7 +170,7 @@
             // 
             this.btnAddData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddData.Image = ((System.Drawing.Image)(resources.GetObject("btnAddData.Image")));
-            this.btnAddData.Location = new System.Drawing.Point(199, 1);
+            this.btnAddData.Location = new System.Drawing.Point(162, 1);
             this.btnAddData.Name = "btnAddData";
             this.btnAddData.Size = new System.Drawing.Size(22, 22);
             this.btnAddData.TabIndex = 0;
@@ -181,7 +183,7 @@
             this.EagleMapControl.Location = new System.Drawing.Point(0, 0);
             this.EagleMapControl.Name = "EagleMapControl";
             this.EagleMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("EagleMapControl.OcxState")));
-            this.EagleMapControl.Size = new System.Drawing.Size(292, 201);
+            this.EagleMapControl.Size = new System.Drawing.Size(255, 198);
             this.EagleMapControl.TabIndex = 0;
             // 
             // ViewerTabControl
@@ -193,7 +195,7 @@
             this.ViewerTabControl.Location = new System.Drawing.Point(0, 0);
             this.ViewerTabControl.Name = "ViewerTabControl";
             this.ViewerTabControl.SelectedIndex = 0;
-            this.ViewerTabControl.Size = new System.Drawing.Size(631, 537);
+            this.ViewerTabControl.Size = new System.Drawing.Size(668, 537);
             this.ViewerTabControl.TabIndex = 0;
             // 
             // xtpMapView
@@ -204,7 +206,7 @@
             this.xtpMapView.Location = new System.Drawing.Point(4, 4);
             this.xtpMapView.Name = "xtpMapView";
             this.xtpMapView.Padding = new System.Windows.Forms.Padding(3);
-            this.xtpMapView.Size = new System.Drawing.Size(623, 511);
+            this.xtpMapView.Size = new System.Drawing.Size(660, 511);
             this.xtpMapView.TabIndex = 0;
             this.xtpMapView.Text = "地图";
             // 
@@ -214,9 +216,8 @@
             this.MainMapControl.Location = new System.Drawing.Point(3, 3);
             this.MainMapControl.Name = "MainMapControl";
             this.MainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MainMapControl.OcxState")));
-            this.MainMapControl.Size = new System.Drawing.Size(617, 505);
+            this.MainMapControl.Size = new System.Drawing.Size(654, 505);
             this.MainMapControl.TabIndex = 0;
-            this.MainMapControl.OnFullExtentUpdated += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnFullExtentUpdatedEventHandler(this.axMapControlMainMap_OnFullExtentUpdated);
             // 
             // MapNavigationTools
             // 
@@ -234,7 +235,7 @@
             this.xtpPageLayout.Location = new System.Drawing.Point(4, 4);
             this.xtpPageLayout.Name = "xtpPageLayout";
             this.xtpPageLayout.Padding = new System.Windows.Forms.Padding(3);
-            this.xtpPageLayout.Size = new System.Drawing.Size(623, 511);
+            this.xtpPageLayout.Size = new System.Drawing.Size(660, 511);
             this.xtpPageLayout.TabIndex = 1;
             this.xtpPageLayout.Text = "页面";
             this.xtpPageLayout.UseVisualStyleBackColor = true;
@@ -245,8 +246,17 @@
             this.PageLayoutControl.Location = new System.Drawing.Point(3, 3);
             this.PageLayoutControl.Name = "PageLayoutControl";
             this.PageLayoutControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("PageLayoutControl.OcxState")));
-            this.PageLayoutControl.Size = new System.Drawing.Size(617, 505);
+            this.PageLayoutControl.Size = new System.Drawing.Size(654, 505);
             this.PageLayoutControl.TabIndex = 0;
+            // 
+            // lblTocTips
+            // 
+            this.lblTocTips.AutoSize = true;
+            this.lblTocTips.Location = new System.Drawing.Point(4, 7);
+            this.lblTocTips.Name = "lblTocTips";
+            this.lblTocTips.Size = new System.Drawing.Size(53, 12);
+            this.lblTocTips.TabIndex = 1;
+            this.lblTocTips.Text = "图层列表";
             // 
             // MapViewer
             // 
@@ -265,6 +275,7 @@
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TocControl)).EndInit();
             this.tocGroupControl.ResumeLayout(false);
+            this.tocGroupControl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EagleMapControl)).EndInit();
             this.ViewerTabControl.ResumeLayout(false);
             this.xtpMapView.ResumeLayout(false);
@@ -293,5 +304,6 @@
         public ESRI.ArcGIS.Controls.AxMapControl EagleMapControl;
         public ESRI.ArcGIS.Controls.AxMapControl MainMapControl;
         public TableListBox TableListBox;
+        private System.Windows.Forms.Label lblTocTips;
     }
 }

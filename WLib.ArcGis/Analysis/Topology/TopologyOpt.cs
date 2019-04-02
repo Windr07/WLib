@@ -11,9 +11,9 @@ using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
-using WLib.ArcGis.GeoDb.FeatClass;
-using WLib.ArcGis.GeoDb.Fields;
-using WLib.ArcGis.GeoDb.WorkSpace;
+using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.GeoDatabase.Fields;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.Analysis.Topology
 {

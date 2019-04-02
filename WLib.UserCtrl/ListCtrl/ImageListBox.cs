@@ -75,10 +75,8 @@ namespace WLib.UserCtrls.ListCtrl
         }
 
 
-        #region 实现IListControl成员
         public new IList SelectedItems => base.SelectedItems;
         public new IList Items => base.Items;
         public void AddItems(IEnumerable<object> items) => base.Items.AddRange(items.ToArray());
-        #endregion
     }
 }

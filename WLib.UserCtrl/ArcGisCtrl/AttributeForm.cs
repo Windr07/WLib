@@ -13,7 +13,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Data;
-using WLib.ArcGis.GeoDb.Fields;
+using WLib.ArcGis.GeoDatabase.Fields;
 using WLib.ArcGis.Geometry;
 using WLib.Data;
 using static WLib.WinForm.MenuOpt;
@@ -55,7 +55,6 @@ namespace WLib.UserCtrls.ArcGisCtrl
         public AttributeForm()
         {
             InitializeComponent();
-
             AtrributeQueryCtrl = new AttributeQueryForm();
             var contextMenuStrip = new ContextMenuStrip();
             contextMenuStrip.Items.AddRange(new[]
@@ -139,7 +138,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         {
             if (dataGridView1.SelectedRows.Count <= 0) return;
 
-            object value = dataGridView1.SelectedRows[0].Cells[Table.OIDFieldName];
+            object value = dataGridView1.SelectedRows[0].Cells[Table.OIDFieldName].Value;
             if (value == null || value == DBNull.Value) return;
 
             if (FeatLayer != null)
