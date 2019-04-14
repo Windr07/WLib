@@ -5,6 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Geometry;
 using WLib.Attributes;
 
 namespace WLib.ArcGis.Carto.Element
@@ -35,9 +36,9 @@ namespace WLib.ArcGis.Carto.Element
         [Description("线")]
         Polyline,
         /// <summary>
-        /// 面
+        /// 多边形
         /// </summary>
-        [Description("面")]
+        [Description("多边形")]
         Polygon,
         /// <summary>
         /// 圆

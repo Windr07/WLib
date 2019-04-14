@@ -95,7 +95,7 @@ namespace WLib.ArcGis.Geometry
         /// <returns></returns>
         public static List<IPoint> GetPointList(this IPointCollection pointCollection)
         {
-            List<IPoint> points = new List<IPoint>();
+            var points = new List<IPoint>();
             for (int i = 0; i < pointCollection.PointCount; i++)
             {
                 points.Add(pointCollection.get_Point(i));
@@ -119,7 +119,7 @@ namespace WLib.ArcGis.Geometry
         public static IPoint[] GetPointArray(this IPointCollection pointCollection)
         {
             int cnt = pointCollection.PointCount;
-            IPoint[] points = new IPoint[cnt];
+            var points = new IPoint[cnt];
             for (int i = 0; i < cnt; i++)
             {
                 points[i] = pointCollection.get_Point(i);
@@ -297,15 +297,15 @@ namespace WLib.ArcGis.Geometry
         /// <returns></returns>
         public static IPolyline CreatePolyline(IPoint[] pts)
         {
-            List<ISegment> segmentList = new List<ISegment>();//存放单条线的每一段(Line对象)
+            var segments = new List<ISegment>();//存放单条线的每一段(Line对象)
             for (int i = 0; i < pts.Length - 1; i++)
             {
                 Line line = new LineClass();
                 line.PutCoords(pts[i], pts[i + 1]);
-                segmentList.Add((ISegment)line);
+                segments.Add((ISegment)line);
             }
 
-            ISegment[] segmentArray = segmentList.ToArray();//存放单条线的每一段(Line对象)
+            ISegment[] segmentArray = segments.ToArray();//存放单条线的每一段(Line对象)
 
             ISegmentCollection segmentCollection = new PolylineClass();
             IGeometryBridge geometryBridge = new GeometryEnvironmentClass();

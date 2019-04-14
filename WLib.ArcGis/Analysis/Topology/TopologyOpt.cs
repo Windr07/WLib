@@ -79,7 +79,7 @@ namespace WLib.ArcGis.Analysis.Topology
         public static List<string> GetAllTopoNames(this IFeatureDataset featureDataset)
         {
             List<string> result = new List<string>();
-            IFeatureDatasetName2 featureDatasetName = featureDataset.FullName as IFeatureDatasetName2;
+            IFeatureDatasetName2 featureDatasetName = (IFeatureDatasetName2)featureDataset.FullName;
             IEnumDatasetName enumDsName = featureDatasetName.TopologyNames;
             IDatasetName dsName;
             while ((dsName = enumDsName.Next()) != null)

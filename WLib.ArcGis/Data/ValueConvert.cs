@@ -76,7 +76,6 @@ namespace WLib.ArcGis.Data
                 value = replaceStr;
             return value;
         }
-
         /// <summary>
         /// 指定字段值转为double，转换失败则抛出具体提示信息的异常
         /// </summary>
@@ -197,7 +196,6 @@ namespace WLib.ArcGis.Data
                 value = replaceStr;
             return value;
         }
-
         /// <summary>
         /// 指定字段值转为double，转换失败则抛出具体提示信息的异常
         /// </summary>

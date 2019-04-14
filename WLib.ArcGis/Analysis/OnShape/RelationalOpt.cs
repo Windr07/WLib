@@ -10,7 +10,7 @@ using ESRI.ArcGIS.Geometry;
 namespace WLib.ArcGis.Analysis.OnShape
 {
     /// <summary>
-    /// 图形之间的空间关系
+    /// 提供判断图形之间的空间关系的方法
     /// </summary>
     public class RelationalOpt
     {

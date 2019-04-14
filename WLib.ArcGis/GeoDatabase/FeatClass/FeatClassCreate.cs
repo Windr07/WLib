@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using System;
+using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
@@ -17,7 +18,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
     /// <summary>
     /// 提供创建要素类的方法
     /// </summary>
-    public class FeatClassCreate
+    public static class FeatClassCreate
     {
         /// <summary>
         /// 创建要素类
@@ -42,7 +43,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
         /// <param name="sptialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
-        /// 可使用<see cref="CoordinateSystem.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
+        /// 可使用<see cref="SpatialRefOpt.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
         /// <param name="geometryType">几何类型（点/线/面等）</param>
         /// <param name="fields">要创建的字段集（若值为null或不包含OID和SHAPE字段，则该方法内会创建和加入OID和SHAPE字段）</param>
         /// <returns></returns>
@@ -56,7 +57,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名.shp）</param>
         /// <param name="spatialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
-        /// 可使用<see cref="CoordinateSystem.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
+        /// 可使用<see cref="SpatialRefOpt.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
         /// <param name="featureType">要素类型</param>
         /// <param name="geometryType">几何类型</param>
         /// <param name="fields">要创建的字段集（可设置为null，如果为null或不包含OID和SHAPE字段，则该方法内会创建和加入OID和SHAPE字段）</param>
@@ -165,36 +166,20 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
 
         /// <summary>
-        /// 复制源要素类的表结构，创建一个空的要素类
+        /// 创建要素类，该要素类仅存储在内存中
         /// </summary>
-        /// <param name="sourceClass">源要素类</param>
-        /// <param name="resultObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param>
-        /// <param name="name">新要素类名称</param>
-        /// <param name="aliasName">新要素类别名，值为null则别名与名字相同</param>
+        /// <param name="className">要素类名称</param>
+        /// <param name="fields">字段集</param>
+        /// <param name="strWorkspaceName">内存工作空间的名称</param>
         /// <returns></returns>
-        public static IFeatureClass Create(IFeatureClass sourceClass, object resultObject, string name, string aliasName = null)
+        public static IFeatureClass CreateInMemory(string className, IFields fields, string strWorkspaceName = "InMemoryWorkspace")
         {
-            return Create(sourceClass, resultObject, name, sourceClass.ShapeType, aliasName);
-        }
-        /// <summary>
-        /// 复制源要素类的表结构，创建一个空的要素类
-        /// </summary>
-        /// <param name="sourceClass">源要素类</param>
-        /// <param name="resultObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param>
-        /// <param name="name">新要素类名称</param>
-        /// <param name="geoType">要素类的几何类型</param>
-        /// <param name="aliasName">新要素类别名，值为null则别名与名字相同</param>
-        /// <returns></returns>
-        public static IFeatureClass Create(IFeatureClass sourceClass, object resultObject, string name, esriGeometryType geoType, string aliasName = null)
-        {
-            var spatialRef = sourceClass.GetSpatialReference();
-            var feilds = sourceClass.CloneFeatureClassFieldsSimple();
-
-            var featureClass = Create(resultObject, name, spatialRef, geoType, feilds);
-
-            if (!string.IsNullOrEmpty(aliasName))
-                featureClass.RenameFeatureClassAliasName(aliasName);
-            return featureClass;
+            IWorkspaceFactory inMemoryWorkspaceFactory = new InMemoryWorkspaceFactoryClass();
+            IWorkspaceName workspaceName = inMemoryWorkspaceFactory.Create("", strWorkspaceName, null, 0);
+            IName wsName = (IName)workspaceName;
+            IWorkspace workspace = (IWorkspace)wsName.Open();
+            IFeatureWorkspace featureWorkspace = (IFeatureWorkspace)workspace;
+            return featureWorkspace.CreateFeatureClass(className, fields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
         }
     }
 }

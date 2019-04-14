@@ -14,6 +14,9 @@ using stdole;
 
 namespace WLib.ArcGis.Display
 {
+    /// <summary>
+    /// 提供创建符号(Symbol)的方法
+    /// </summary>
     public static class SymbolCreate
     {
         /// <summary>

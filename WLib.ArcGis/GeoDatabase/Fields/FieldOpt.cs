@@ -240,7 +240,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// 创建包含ObjectID和Shape字段的字段集（ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID）
         /// </summary>
         /// <param name="geometryType">几何类型</param>
-        /// <param name="spatialRef">坐标系（若Shape字段所在要素类在工作空间中则此值不可为null，若位于要素数据集则应设置为null</param>
+        /// <param name="spatialRef">坐标系（若Shape字段所在要素类位于工作空间中，则此值不可为null，若位于要素数据集则应设置为null</param>
         /// <returns></returns>
         public static IFields CreateBaseFields(esriGeometryType geometryType, ISpatialReference spatialRef)
         {
@@ -493,8 +493,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <returns></returns>
         public static string[] GetSystemFieldNames(this ITable table)
         {
-            var featureClass = table as IFeatureClass;
-            if (featureClass != null)
+            if (table is IFeatureClass featureClass)
                 return new[] { featureClass.OIDFieldName, featureClass.ShapeFieldName, SHAPE_LENGTH, SHAPE_AREA };
             else
                 return new[] { table.OIDFieldName };

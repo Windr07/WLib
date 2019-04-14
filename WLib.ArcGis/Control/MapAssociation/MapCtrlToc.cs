@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Carto;
+using WLib.ArcGis.Carto.LabelAnno;
 using WLib.ArcGis.Carto.Layer;
 using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.GeoDatabase.Fields;

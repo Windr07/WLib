@@ -65,6 +65,8 @@ namespace WLib.Samples.WinForm
             this.查询属性ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapViewer1 = new WLib.UserCtrls.ArcGisCtrl.MapViewer();
+            this.导出数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.导入数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -344,6 +346,9 @@ namespace WLib.Samples.WinForm
             // 
             // 数据DToolStripMenuItem
             // 
+            this.数据DToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.导出数据ToolStripMenuItem,
+            this.导入数据ToolStripMenuItem});
             this.数据DToolStripMenuItem.Name = "数据DToolStripMenuItem";
             this.数据DToolStripMenuItem.Size = new System.Drawing.Size(61, 21);
             this.数据DToolStripMenuItem.Text = "数据(&D)";
@@ -355,6 +360,20 @@ namespace WLib.Samples.WinForm
             this.mapViewer1.Name = "mapViewer1";
             this.mapViewer1.Size = new System.Drawing.Size(856, 434);
             this.mapViewer1.TabIndex = 2;
+            // 
+            // 导出数据ToolStripMenuItem
+            // 
+            this.导出数据ToolStripMenuItem.Name = "导出数据ToolStripMenuItem";
+            this.导出数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.导出数据ToolStripMenuItem.Text = "导出数据";
+            this.导出数据ToolStripMenuItem.Click += new System.EventHandler(this.导出数据ToolStripMenuItem_Click);
+            // 
+            // 导入数据ToolStripMenuItem
+            // 
+            this.导入数据ToolStripMenuItem.Name = "导入数据ToolStripMenuItem";
+            this.导入数据ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.导入数据ToolStripMenuItem.Text = "导入数据";
+            this.导入数据ToolStripMenuItem.Click += new System.EventHandler(this.导入数据ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -409,5 +428,7 @@ namespace WLib.Samples.WinForm
         private MapViewer mapViewer1;
         private System.Windows.Forms.ToolStripMenuItem 数据DToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 添加数据2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导出数据ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导入数据ToolStripMenuItem;
     }
 }

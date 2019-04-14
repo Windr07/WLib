@@ -9,6 +9,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.IO;
 
 namespace WLib.ArcGis.GeoDatabase.Table
 {
@@ -43,12 +44,12 @@ namespace WLib.ArcGis.GeoDatabase.Table
             get => _filePath;
             set
             {
-                var name = System.IO.Path.GetFileNameWithoutExtension(value);
+                var name = Path.GetFileNameWithoutExtension(value);
                 if (name != null && name.Length > 8)
                     throw new Exception("通过OleDb连接dbf时，限定dbf文件名称长度不能超过8个字符，请更改文件名称或者使用其他方式连接dbf文件");
 
                 _filePath = value;
-                _fileDirectory = System.IO.Path.GetDirectoryName(_filePath);
+                _fileDirectory = Path.GetDirectoryName(_filePath);
                 _connstr = $"Provider=MICROSOFT.JET.OLEDB.4.0;Data Source={_fileDirectory};Extended Properties=dBase IV;";
             }
         }
@@ -86,7 +87,6 @@ namespace WLib.ArcGis.GeoDatabase.Table
                 conn.Open();
                 DataSet ds = new DataSet();
                 OleDbDataAdapter odat = new OleDbDataAdapter(sql, conn);
-                //odat.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                 odat.Fill(ds);
                 return ds;
             }
@@ -103,7 +103,6 @@ namespace WLib.ArcGis.GeoDatabase.Table
                 conn.Open();
                 DataSet ds = new DataSet();
                 OleDbDataAdapter odat = new OleDbDataAdapter(sql, conn);
-                //odat.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                 odat.Fill(ds);
                 return ds.Tables[0];
             }
@@ -129,11 +128,14 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public DbDataReader GetDataReader(string sql)
         {
-            OleDbConnection conn = new OleDbConnection(_connstr);
-            OleDbCommand cmd = conn.CreateCommand();
-            cmd.CommandText = sql;
-            OleDbDataReader odr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            return odr;
+            using (OleDbConnection conn = new OleDbConnection(_connstr))
+            {
+                conn.Open();
+                OleDbCommand cmd = conn.CreateCommand();
+                cmd.CommandText = sql;
+                OleDbDataReader odr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                return odr;
+            }
         }
         /// <summary>
         /// 使用指定的架构名称字符串和指定的限制值字符串数组，返回此Connection 的数据源的架构信息。

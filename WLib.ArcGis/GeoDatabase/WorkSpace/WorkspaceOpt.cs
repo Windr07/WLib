@@ -24,18 +24,19 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// 删除一个或多个要素类
         /// </summary>
         /// <param name="workspace">工作空间</param>
-        /// <param name="featueClassNames">要删除的要素类的名称</param>
+        /// <param name="featueClassNames">要删除的要素类的名称，名称不区分大小写</param>
         public static void DeleteFeatureClasses(this IWorkspace workspace, params string[] featueClassNames)
         {
             if (!(workspace is IFeatureWorkspace featureWorkspace))
                 throw new Exception("工作空间不是要素类工作空间！");
 
+            featueClassNames = featueClassNames.Select(v => v.ToLower()).ToArray();
             IFeatureWorkspaceManage featureWorkspaceMange = (IFeatureWorkspaceManage)featureWorkspace;
             IEnumDatasetName enumDatasetName = workspace.DatasetNames[esriDatasetType.esriDTFeatureClass];
             IDatasetName datasetName;
             while ((datasetName = enumDatasetName.Next()) != null)
             {
-                if (featueClassNames.Contains(datasetName.Name))
+                if (featueClassNames.Contains(datasetName.Name.ToLower()))
                     featureWorkspaceMange.DeleteByName(datasetName);//删除指定要素类
             }
         }
@@ -43,18 +44,19 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// 删除名称包含指定关键字的要素类
         /// </summary>
         /// <param name="workspace">工作空间</param>
-        /// <param name="keyWord">关键字</param>
+        /// <param name="keyWord">关键字，不区分大小写</param>
         public static void DeleteFeatureClassesByKeyWord(this IWorkspace workspace, string keyWord)
         {
             if (!(workspace is IFeatureWorkspace featureWorkspace))
                 throw new Exception("工作空间不是要素类工作空间！");
 
+            keyWord = keyWord.ToLower();
             IFeatureWorkspaceManage featureWorkspaceMange = (IFeatureWorkspaceManage)featureWorkspace;
             IEnumDatasetName enumDatasetName = workspace.DatasetNames[esriDatasetType.esriDTFeatureClass];
             IDatasetName datasetName;
             while ((datasetName = enumDatasetName.Next()) != null)
             {
-                if (datasetName.Name.Contains(keyWord))
+                if (datasetName.Name.ToLower().Contains(keyWord))
                     featureWorkspaceMange.DeleteByName(datasetName);//删除指定要素类
             }
         }
@@ -87,9 +89,10 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             if (string.IsNullOrEmpty(tableName))
                 throw new Exception("参数表格名称(featureClassName)不能为空！");
 
+            tableName = tableName.ToLower();
             foreach (var table in GetTables(workspace))
             {
-                if ((table as IObjectClass)?.AliasName == tableName || (table as IDataset)?.Name == tableName)
+                if ((table as IObjectClass)?.AliasName.ToLower() == tableName || (table as IDataset)?.Name.ToLower() == tableName)
                     return true;
             }
             return false;
@@ -133,11 +136,12 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// <returns></returns>
         public static ITable GetITableByName(this IWorkspace workspace, string tableName)
         {
+            tableName = tableName.ToLower();
             IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTTable];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {
-                if (dataset.Name == tableName || (dataset as ITable as IObjectClass)?.AliasName == tableName)
+                if (dataset.Name.ToLower() == tableName || (dataset as ITable as IObjectClass)?.AliasName.ToLower() == tableName)
                     return dataset as ITable;
             }
             return null;
@@ -170,9 +174,10 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             if (string.IsNullOrEmpty(featureClassName))
                 throw new Exception("参数要素类名称(featureClassName)不能为空！");
 
+            featureClassName = featureClassName.ToLower();
             foreach (IFeatureClass featureClass in GetDataset(workspace))
             {
-                if (featureClass.AliasName == featureClassName || (featureClass as IDataset)?.Name == featureClassName)
+                if (featureClass.AliasName.ToLower() == featureClassName || (featureClass as IDataset)?.Name == featureClassName.ToLower())
                     return true;
             }
             return false;
@@ -211,9 +216,10 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 throw new Exception("查找的数据集名称为空。");
 
             //遍历FeatureClass
+            featureClassName = featureClassName.ToLower();
             foreach (IFeatureClass featureClass in GetDataset(workspace))
             {
-                if (featureClass.AliasName == featureClassName || (featureClass as IDataset)?.Name == featureClassName)
+                if (featureClass.AliasName.ToLower() == featureClassName || (featureClass as IDataset)?.Name.ToLower() == featureClassName)
                     return featureClass;
             }
             if (unFindException)
@@ -236,10 +242,11 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 throw new Exception("查找的数据集名称为空。");
 
             //遍历FeatureClass
+            featureClassNames = featureClassNames.Select(v => v.ToLower()).ToArray();
             foreach (IFeatureClass featureClass in GetDataset(workspace))
             {
-                if (featureClassNames.Contains(featureClass.AliasName) ||
-                    featureClassNames.Contains((featureClass as IDataset)?.Name))
+                if (featureClassNames.Contains(featureClass.AliasName.ToLower()) ||
+                    featureClassNames.Contains((featureClass as IDataset)?.Name.ToLower()))
                     featureClassList.Add(featureClass);
             }
             return featureClassList;
@@ -298,11 +305,12 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// <returns></returns>
         public static IFeatureDataset GetFeatureDataset(this IWorkspace workspace, string datasetName)
         {
+            datasetName = datasetName.ToLower();
             IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
             IDataset dataset;
             while ((dataset = enumDataset.Next()) != null)
             {
-                if (dataset.Name == datasetName)
+                if (dataset.Name.ToLower() == datasetName)
                     return (IFeatureDataset)dataset;
             }
             return null;

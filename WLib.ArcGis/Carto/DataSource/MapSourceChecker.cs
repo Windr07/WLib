@@ -23,11 +23,11 @@ namespace WLib.ArcGis.Carto.DataSource
         /// <summary>
         /// 出图模板Mxd文档路径
         /// </summary>
-        private string _mapDocPath;                 
+        private string _mapDocPath;
         /// <summary>
         /// 检查信息
         /// </summary>
-        private readonly List<string> _messages;    
+        private readonly List<string> _messages;
         /// <summary>
         /// 地图数据框中，图层及其数据源信息
         /// </summary>
@@ -180,8 +180,7 @@ namespace WLib.ArcGis.Carto.DataSource
                             _messages.Add($"✘数据框[{map.Name}]的图层[{layer.Name}]没有正确关联数据源，或者该图层不是预期的要素图层！");
                             checkLayerExists = false;
                         }
-                        IDatasetName datasetName = (dataLayer.DataSourceName as IDatasetName);
-                        if (datasetName != null)
+                        if (dataLayer.DataSourceName is IDatasetName datasetName)
                         {
                             string pathName = datasetName.WorkspaceName.PathName;
                             if (pathName == null)
@@ -267,7 +266,7 @@ namespace WLib.ArcGis.Carto.DataSource
             for (int i = 0; i < _mapLyrSources.Length; i++)
             {
                 var workspace = GetWorkspace.GetWorkSpace(_mapLyrSources[i].SourcePath);
-                IMap map = MapQuery.GetMapFromMapDocument(mapDoc, _mapLyrSources[i].MapFrameName);
+                IMap map = mapDoc.GetMapFromMapDocument(_mapLyrSources[i].MapFrameName);
                 if (map == null)
                 {
                     _messages.Add($"✘找不到[{_mapLyrSources[i].MapFrameName}]地图数据框，请确定出图模板是否正确！");
@@ -322,16 +321,15 @@ namespace WLib.ArcGis.Carto.DataSource
             for (int i = 0; i < _mapTblSources.Length; i++)
             {
                 IWorkspace workspace = GetWorkspace.GetWorkSpace(_mapTblSources[i].SourcePath);
-                IMap map = MapQuery.GetMapFromMapDocument(mapDoc, _mapTblSources[i].MapFrameName);
+                IMap map = mapDoc.GetMapFromMapDocument(_mapTblSources[i].MapFrameName);
                 if (map == null)
                 {
                     _messages.Add($"✘找不到[{_mapTblSources[i].MapFrameName}]地图数据框，请确定出图模板是否正确！");
                     allSuccess = false;
                 }
 
-                ITableCollection tableCollection = map as ITableCollection;
-                int cnt = tableCollection.TableCount;
-                tableCollection.RemoveAllTables(); 
+                ITableCollection tableCollection = (ITableCollection)map;
+                tableCollection.RemoveAllTables();
                 foreach (var keyValue in _mapTblSources[i].ViewNames2SourceNames)
                 {
                     ITable table = workspace.GetITableByName(keyValue.Value);
@@ -354,8 +352,7 @@ namespace WLib.ArcGis.Carto.DataSource
         private bool CheckDataSourceCorrect(ILayer layer, string workspacePathName)
         {
             IDataLayer dataLayer = layer as IDataLayer;
-            IDatasetName datasetName = (dataLayer.DataSourceName as IDatasetName);
-            if (datasetName != null)
+            if (dataLayer.DataSourceName is IDatasetName datasetName)
             {
                 string pathName = datasetName.WorkspaceName.PathName;
                 if (pathName != null && pathName == workspacePathName)

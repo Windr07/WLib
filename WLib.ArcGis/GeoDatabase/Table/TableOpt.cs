@@ -27,9 +27,9 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="doActionByRows">在保存记录前，对记录执行的操作，整型参数是新增记录的索引</param>
         public static void InsertRows(this ITable table, int insertCount, Action<IRowBuffer, int> doActionByRows)
         {
-            ICursor cursor = table.Insert(true);
-            IRowBuffer tarRowBuffer = table.CreateRowBuffer();
-            for (int i = 0; i < insertCount; i++)
+            var cursor = table.Insert(true);
+            var tarRowBuffer = table.CreateRowBuffer();
+            for (var i = 0; i < insertCount; i++)
             {
                 doActionByRows(tarRowBuffer, i);
                 cursor.InsertRow(tarRowBuffer);
@@ -45,8 +45,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="doActionByRow">在保存记录前，对记录执行的操作</param>
         public static void InsertOneRow(this ITable table, Action<IRowBuffer> doActionByRow)
         {
-            ICursor cursor = table.Insert(true);
-            IRowBuffer tarRowBuffer = table.CreateRowBuffer();
+            var cursor = table.Insert(true);
+            var tarRowBuffer = table.CreateRowBuffer();
             doActionByRow(tarRowBuffer);
 
             cursor.InsertRow(tarRowBuffer);
@@ -66,8 +66,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         {
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
-            ICursor cursor = table.Update(queryFilter, false);
-            IRow row = cursor.NextRow();
+            var cursor = table.Update(queryFilter, false);
+            var row = cursor.NextRow();
             while (row != null)
             {
                 cursor.DeleteRow();
@@ -86,8 +86,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         {
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
-            ICursor cursor = table.Update(queryFilter, false);
-            IRow row = cursor.NextRow();
+            var cursor = table.Update(queryFilter, false);
+            var row = cursor.NextRow();
             while (row != null)
             {
                 if (isDeleteFunc(row))
@@ -115,9 +115,9 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="whereClause">查询条件，注意如果值为空则删除所有记录</param>
         public static void DeleteRows3(this ITable table, string whereClause)
         {
-            IDataset dataset = (IDataset)table;
+            var dataset = (IDataset)table;
             whereClause = string.IsNullOrEmpty(whereClause) ? "1=1" : whereClause;
-            string sql = $"delete from {dataset.Name} where {whereClause}";
+            var sql = $"delete from {dataset.Name} where {whereClause}";
             dataset.Workspace.ExecuteSQL(sql);
         }
         #endregion
@@ -133,9 +133,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
         public static void UpdateRows(this ITable table, string whereClause, Action<IRow> doActionByRows, bool nullRecordException = false)
         {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            queryFilter.WhereClause = whereClause;
-            ICursor cursor = table.Update(queryFilter, false);
+            IQueryFilter queryFilter = new QueryFilterClass { WhereClause = whereClause };
+            var cursor = table.Update(queryFilter, false);
             IRow row = null;
 
             if (nullRecordException && table.RowCount(queryFilter) == 0)
@@ -151,8 +150,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
             }
             catch (Exception ex)//抛出更具体的异常信息
             {
-                string msgOID = row == null ? null : $"“OID = {row.OID}”的";
-                string msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
+                var msgOID = row == null ? null : $"“OID = {row.OID}”的";
+                var msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
 
                 throw new Exception($"在{(table as IDataset)?.Name}表格中，{msgWhereClause}更新{msgOID}记录时出错：{ex.Message}");
             }
@@ -184,13 +183,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static List<IRow> QueryRows(this ITable table, string whereClause = null, bool nullRecordException = false)
         {
-            List<IRow> rows = new List<IRow>();
-            int isfffef = table.Fields.FindField("FBFBM");
-            for (int j = 0; j < table.Fields.FieldCount; j++)
-            {
-                Console.WriteLine(table.Fields.Field[j].Name);
-            }
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            var rows = new List<IRow>();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
@@ -213,8 +207,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         public static IRow QueryFirstRow(this ITable table, string whereClause = null, bool nullRecordException = false)
         {
             if (table == null) return null;
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
-            IRow row = cursor.NextRow();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            var row = cursor.NextRow();
             Marshal.ReleaseComObject(cursor);
 
             if (nullRecordException)
@@ -235,7 +229,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
             if (nullRecordException && table.RowCount(queryFilter) == 0)
                 CheckNullToThrowException(table, null, whereClause);
 
-            ICursor cursor = table.Search(queryFilter, false);
+            var cursor = table.Search(queryFilter, false);
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
@@ -255,18 +249,18 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="aferInsertEach">每复制一条要素之后执行的操作</param>
         public static void CopyDataToTable(this ITable sourceTable, ITable targetTable, Action<IRowBuffer> aferInsertEach = null)
         {
-            ICursor cursor = sourceTable.Search(null, true);
-            IRow row = cursor.NextRow();
-            ICursor tarRowCursor = targetTable.Insert(true);
+            var cursor = sourceTable.Search(null, true);
+            var row = cursor.NextRow();
+            var tarRowCursor = targetTable.Insert(true);
             IRowBuffer tarRowBuffer;
             while (row != null)
             {
                 tarRowBuffer = targetTable.CreateRowBuffer();
-                IFields fields = row.Fields;
-                for (int i = 0; i < fields.FieldCount; i++)
+                var fields = row.Fields;
+                for (var i = 0; i < fields.FieldCount; i++)
                 {
                     var field = fields.get_Field(i);
-                    int index = tarRowBuffer.Fields.FindField(field.Name);
+                    var index = tarRowBuffer.Fields.FindField(field.Name);
                     if (index != -1 && tarRowBuffer.Fields.get_Field(index).Editable)
                     {
                         tarRowBuffer.set_Value(index, row.get_Value(i));
@@ -293,7 +287,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static List<object> GetUniqueValues(this ITable table, string fieldName, string whereClause = null)
         {
-            ICursor cursor = table.GetSearchCursor(whereClause, fieldName, true);
+            var cursor = table.GetSearchCursor(whereClause, fieldName, true);
 
             IDataStatistics dataStatistics = new DataStatisticsClass();
             dataStatistics.Field = fieldName;
@@ -329,13 +323,13 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns>查询结果的第一条记录的指定字段值，找不到则返回null</returns>
         public static object QueryFirstValue(this ITable table, string queryFiledName, string whereClause = null)
         {
-            int fieldIndex = table.FindField(queryFiledName);
+            var fieldIndex = table.FindField(queryFiledName);
             if (fieldIndex < 0)
                 throw new Exception("找不到字段：" + queryFiledName);
 
             object value = null;
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);
-            IRow row = cursor.NextRow();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);
+            var row = cursor.NextRow();
             if (row != null)
                 value = row.get_Value(fieldIndex);
 
@@ -351,7 +345,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns>查询结果的第一条记录的指定字段的转成字符串的值，找不到则返回null</returns>
         public static string QueryFirstStringValue(this ITable table, string queryFiledName, string whereClause = null)
         {
-            object value = QueryFirstValue(table, queryFiledName, whereClause);
+            var value = QueryFirstValue(table, queryFiledName, whereClause);
             return (value == null || value == DBNull.Value) ? null : value.ToString().Trim();
         }
         /// <summary>
@@ -363,12 +357,12 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static List<object> QueryFirstRowValues(this ITable table, string[] queryFiledNames = null, string whereClause = null)
         {
-            List<object> values = new List<object>();
+            var values = new List<object>();
             var row = QueryFirstRow(table, whereClause);
 
             if (queryFiledNames == null)
             {
-                for (int i = 0; i < row.Fields.FieldCount; i++)
+                for (var i = 0; i < row.Fields.FieldCount; i++)
                 {
                     values.Add(row.get_Value(i));
                 }
@@ -392,12 +386,12 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static List<object> QueryValues(this ITable table, string queryFiledName, string whereClause = null)
         {
-            int fieldIndex = table.FindField(queryFiledName);
+            var fieldIndex = table.FindField(queryFiledName);
             if (fieldIndex < 0)
                 throw new Exception("找不到字段：" + queryFiledName);
 
-            List<object> values = new List<object>();
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
+            var values = new List<object>();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
@@ -416,17 +410,17 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static Dictionary<object, object> QueryValueDict(this ITable table, string keyFiledName, string valueFiledName, string whereClause = null)
         {
-            int keyFieldIndex = table.FindField(keyFiledName);
+            var keyFieldIndex = table.FindField(keyFiledName);
             if (keyFieldIndex < 0) throw new Exception((table as IDataset)?.Name + "表找不到字段：" + keyFiledName);
-            int valueFieldIndex = table.FindField(valueFiledName);
+            var valueFieldIndex = table.FindField(valueFiledName);
             if (valueFieldIndex < 0) throw new Exception((table as IDataset)?.Name + "表找不到字段：" + valueFiledName);
 
-            Dictionary<object, object> values = new Dictionary<object, object>();
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
+            var values = new Dictionary<object, object>();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
-                object key = row.get_Value(keyFieldIndex);
+                var key = row.get_Value(keyFieldIndex);
                 if (values.ContainsKey(key))
                 {
                     if (key.ToString().Trim() == string.Empty)
@@ -449,17 +443,17 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static Dictionary<string, string> QueryValueStringDict(this ITable table, string keyFiledName, string valueFiledName, string whereClause = null)
         {
-            int keyFieldIndex = table.FindField(keyFiledName);
+            var keyFieldIndex = table.FindField(keyFiledName);
             if (keyFieldIndex < 0) throw new Exception("找不到字段：" + keyFiledName);
-            int valueFieldIndex = table.FindField(valueFiledName);
+            var valueFieldIndex = table.FindField(valueFiledName);
             if (valueFieldIndex < 0) throw new Exception("找不到字段：" + valueFiledName);
 
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
+            var values = new Dictionary<string, string>();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
-                string key = row.get_Value(keyFieldIndex).ToString();
+                var key = row.get_Value(keyFieldIndex).ToString();
                 if (values.ContainsKey(key))
                 {
                     if (key.Trim() == string.Empty)
@@ -482,17 +476,17 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static Dictionary<string, string> QueryValueStringDict2(this ITable table, string keyFiledName, string valueFiledName, string whereClause = null)
         {
-            int keyFieldIndex = table.FindField(keyFiledName);
+            var keyFieldIndex = table.FindField(keyFiledName);
             if (keyFieldIndex < 0) throw new Exception("找不到字段：" + keyFiledName);
-            int valueFieldIndex = table.FindField(valueFiledName);
+            var valueFieldIndex = table.FindField(valueFiledName);
             if (valueFieldIndex < 0) throw new Exception("找不到字段：" + valueFiledName);
 
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            ICursor cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
+            var values = new Dictionary<string, string>();
+            var cursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, true);//Search方法Recycling参数此处可以为true
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
-                string key = row.get_Value(keyFieldIndex).ToString().Trim();
+                var key = row.get_Value(keyFieldIndex).ToString().Trim();
                 if (values.ContainsKey(key) || key == string.Empty)
                     continue;
                 values.Add(key, row.get_Value(valueFieldIndex).ToString());
@@ -533,7 +527,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <returns></returns>
         public static string GetSourcePath(this ITable table)
         {
-            IDataset dataset = table as IDataset;
+            var dataset = table as IDataset;
             return dataset?.Workspace.PathName + "\\" + dataset?.Name;
         }
         #endregion
@@ -547,7 +541,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="newAliasName">新表格别名</param>
         public static void RenameTableAliasName(this ITable table, string newAliasName)
         {
-            IClassSchemaEdit2 classSchemaEdit2 = (IClassSchemaEdit2)table;
+            var classSchemaEdit2 = (IClassSchemaEdit2)table;
             classSchemaEdit2.AlterAliasName(newAliasName);
         }
         /// <summary>
@@ -560,8 +554,8 @@ namespace WLib.ArcGis.GeoDatabase.Table
         ///<returns>修改成功返回True,否则False</returns>
         public static bool RenameTableName(this ITable table, string newName, string newAliasName = null)
         {
-            IDataset ds = table as IDataset;
-            bool isRename = false;
+            var ds = table as IDataset;
+            var isRename = false;
             string oldAliasName = ((IObjectClass)table).AliasName, oldName = ds.Name;
             try
             {

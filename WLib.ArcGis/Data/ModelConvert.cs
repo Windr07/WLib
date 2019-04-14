@@ -18,6 +18,7 @@ namespace WLib.ArcGis.Data
 {
     /// <summary>
     /// 表格或图层数据转换成指定类型的对象
+    /// （类型包含的字段必须定义为包含get、set访问器的属性）
     /// </summary>
     public static class ModelConvert
     {
@@ -35,15 +36,14 @@ namespace WLib.ArcGis.Data
             T model = Activator.CreateInstance<T>();
 
             var fields = row.Fields;
-            for (int i = 0; i < properties.Length; i++)
+            foreach (var property in properties)
             {
                 for (int j = 0; j < fields.FieldCount; j++)
                 {
-                    //判断属性的名称和字段的名称是否相同
-                    if (properties[i].Name == fields.get_Field(j).Name)
+                    if (property.Name == fields.get_Field(j).Name)//判断属性的名称和字段的名称是否相同
                     {
                         object value = row.get_Value(j);
-                        properties[i].SetValue(model, ChangeType(value, properties[i].PropertyType), null); //将字段的值赋值给User中的属性
+                        property.SetValue(model, ChangeType(value, property.PropertyType), null); //将字段的值赋值给User中的属性
                     }
                 }
             }
@@ -64,15 +64,14 @@ namespace WLib.ArcGis.Data
             T model = Activator.CreateInstance<T>();
 
             var fields = feature.Fields;
-            for (int i = 0; i < properties.Length; i++)
+            foreach (var property in properties)
             {
                 for (int j = 0; j < fields.FieldCount; j++)
                 {
-                    //判断属性的名称和字段的名称是否相同
-                    if (properties[i].Name == fields.get_Field(j).Name)
+                    if (property.Name == fields.get_Field(j).Name)//判断属性的名称和字段的名称是否相同
                     {
                         object value = feature.get_Value(j);
-                        properties[i].SetValue(model, ChangeType(value, properties[i].PropertyType), null);//将字段的值赋值给User中的属性
+                        property.SetValue(model, ChangeType(value, property.PropertyType), null);//将字段的值赋值给User中的属性
                     }
                 }
             }
@@ -173,7 +172,7 @@ namespace WLib.ArcGis.Data
             {
                 return Convert.ChangeType(Convert.IsDBNull(value) ? null : value, type);
             }
-            if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 NullableConverter convertor = new NullableConverter(type);
                 return Convert.IsDBNull(value) ? null : convertor.ConvertFrom(value);

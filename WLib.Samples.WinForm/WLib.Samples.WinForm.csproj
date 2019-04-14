@@ -98,7 +98,6 @@
     <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -113,16 +112,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SubForm\ExportDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\ExportDataForm.Designer.cs">
+      <DependentUpon>ExportDataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SubForm\ExportMapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\ExportMapForm.Designer.cs">
+      <DependentUpon>ExportMapForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SubForm\OleDbTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\OleDbTestForm.Designer.cs">
+      <DependentUpon>OleDbTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubForm\TownInfo.cs" />
+    <Compile Include="SubForm\VillageInfo.cs" />
+    <EmbeddedResource Include="SubForm\ExportDataForm.resx">
+      <DependentUpon>ExportDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\ExportMapForm.resx">
+      <DependentUpon>ExportMapForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\OleDbTestForm.resx">
+      <DependentUpon>OleDbTestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -137,6 +165,15 @@
     <None Include="Data\SampleData.mxd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\XX县XX村委会耕地分等样点分布图（村级）.mxd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\XX县XX乡耕地分等样点分布图（镇级）.mxd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\XX县耕地分等样点分布图（县级）.mxd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -146,57 +183,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\ClearCurrentTool.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Identify.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\按线选择.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\保存.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\编辑.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\编辑折点.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\放大.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\矩形选择.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\另存为.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\全图.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\属性.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\缩小.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\颜色.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\画点.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\画多边形.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\画线.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\文本.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

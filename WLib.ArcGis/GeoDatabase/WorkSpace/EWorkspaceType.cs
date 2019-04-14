@@ -40,14 +40,14 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// </summary>
         [Description("Access数据库")]
         [Description("mdb", 2)]
-        [Description("esriDataSourcesFile.ShapefileWorkspaceFactory", 1)]
+        [Description("esriDataSourcesGDB.AccessWorkspaceFactory", 1)]
         Access = 3,
         /// <summary>
         /// SDE数据库
         /// </summary>
         [Description("SDE数据库")]
         [Description("sde", 2)]
-        [Description("esriDataSourcesGDB.AccessWorkspaceFactory", 1)]
+        [Description("esriDataSourcesGDB.SdeWorkspaceFactory", 1)]
         Sde = 4,
         /// <summary>
         /// Excel文件

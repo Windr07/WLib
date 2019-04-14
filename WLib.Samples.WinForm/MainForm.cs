@@ -1,11 +1,15 @@
-﻿using System;
+﻿using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.esriSystem;
+using System;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.Carto.Element;
 using WLib.ArcGis.Control;
-using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Control.MapAssociation;
+using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
+using WLib.Db;
+using WLib.Db.DbBase;
 using WLib.UserCtrls.ArcGisCtrl;
 
 namespace WLib.Samples.WinForm
@@ -83,6 +87,35 @@ namespace WLib.Samples.WinForm
             var form = new AttributeForm();
             form.LoadAttribute(this.mapViewer1.MainMapControl.GetLayers().First() as ITable);
             form.Show(this);
+        }
+
+        private void 导出数据ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 导入数据ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Test()
+        {
+            FeatClassFromPath.FromPath(@"").QueryFeatures(@"XZQDM = '12345'", feature => { });
+
+            var workspace = GetWorkspace.GetWorkSpace(@"");
+            FeatClassFromPath.FromPath(@"").CopyStruct(workspace, "NewClass", "新要素类");
+
+            var connString = ConnStringHelper.Dbf_OleDb4(@"");
+            new DbHelper(connString, EDbProviderType.OleDb).ExcNonQuery(@"");
+
+            var connString2 = ConnStringHelper.Access_OleDb4(@"");
+        }
+
+        private void Test2()
+        {
+            IWorkspace w;
+            
         }
     }
 }

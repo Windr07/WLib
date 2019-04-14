@@ -12,7 +12,7 @@ using ESRI.ArcGIS.Geodatabase;
 
 namespace WLib.ArcGis.Carto.Element
 {
-    /** 元素分类
+    /** 元素分类（以下只是元素分类，而不表示接口的继承关系）
      *  (1)图形元素GraphicElement（点、线、面、文本等元素）
      *  (2)框架元素FrameElement（大部分框架元素实现类也继承图形元素接口IGraphicElement）
      *      ①地图数据框  ②指北针、比例尺、图例等
@@ -39,7 +39,15 @@ namespace WLib.ArcGis.Carto.Element
      *      Text3DElement							用于显示3D文本图形元素
      * (2)FrameElement
      *      MapFrame                                用于显示地图的图形元素
-     *      MapSurroundFrame                        用于显示地图要素的图形元素
+     *      MapSurroundFrame                        用于显示地图要素的图形元素（管理MapSurround，与MapSurround一一对应）
+     *          MapSurround                         地图环绕（指北针、比例尺、图例等）
+     *              Legend                          图例
+     *              NorthArrow                      指北针
+     *              MapInset                        插图（缩略图）
+     *              ScaleBar                        比例尺
+     *              ScaleText                       比例尺文本
+     *              OverView
+     *                  MapTitle                    地图标题
      *      OleFrame(esriArcMapUI)		            OLE框架元素
      *      TableFrame(esriEditorExt)	            显示表格的图形元素
      *      GroupElement				            组图形元素，包含一组图形元素
@@ -55,7 +63,7 @@ namespace WLib.ArcGis.Carto.Element
      */
 
     /// <summary>
-    /// 获取元素的操作
+    /// 提供从图形容器或组元素获取元素的方法
     /// </summary>
     public static class ElementQuery
     {
@@ -161,17 +169,17 @@ namespace WLib.ArcGis.Carto.Element
         /// <returns></returns>
         public static List<IElement> GetElements(this IGraphicsContainer graphicsContainer)
         {
-            List<IElement> elementList = new List<IElement>();
+            List<IElement> elements = new List<IElement>();
             graphicsContainer.Reset();
             IElement element;
             while ((element = graphicsContainer.Next()) != null)
             {
                 if ((element as IGroupElement) != null)
-                    elementList.AddRange(GetElements(element as IGroupElement));
+                    elements.AddRange(GetElements(element as IGroupElement));
                 else
-                    elementList.Add(element);
+                    elements.Add(element);
             }
-            return elementList;
+            return elements;
         }
         /// <summary>
         /// 查找符合指定名称的所有元素
@@ -181,18 +189,42 @@ namespace WLib.ArcGis.Carto.Element
         /// <returns></returns>
         public static List<IElement> GetElementsByName(this IGraphicsContainer graphicsContainer, string elementName)
         {
-            List<IElement> elementList = new List<IElement>();
+            List<IElement> elements = new List<IElement>();
             graphicsContainer.Reset();
             IElement element;
             while ((element = graphicsContainer.Next()) != null)
             {
                 if ((element as IGroupElement) != null)
-                    elementList.AddRange(GetElementsByName(element as IGroupElement, elementName));
+                    elements.AddRange(GetElementsByName(element as IGroupElement, elementName));
 
                 else if ((element as IElementProperties)?.Name == elementName)
-                    elementList.Add(element);
+                    elements.Add(element);
             }
-            return elementList;
+            return elements;
+        }
+        /// <summary>
+        /// 查找包含指定关键字（部分元素名或元素文本）的所有元素
+        /// </summary>
+        /// <param name="graphicsContainer">图形容器</param>
+        /// <param name="keyword">元素关键字，即部分元素名或元素文本</param>
+        /// <returns></returns>
+        public static List<IElement> GetElementsByKeyword(this IGraphicsContainer graphicsContainer, string keyword)
+        {
+            var elements = new List<IElement>();
+            graphicsContainer.Reset();
+            IElement element;
+            while ((element = graphicsContainer.Next()) != null)
+            {
+                if (element is IGroupElement groupElement)
+                    elements.AddRange(GetElementsByKeyword(groupElement, keyword));
+
+                else if (element is IElementProperties elementProperties && elementProperties.Name.Contains(keyword))
+                    elements.Add(element);
+
+                else if (element is ITextElement textElement && textElement.Text.Contains(keyword))
+                    elements.Add(element);
+            }
+            return elements;
         }
         /// <summary>
         /// 查找符合指定名称的所有元素
@@ -212,6 +244,30 @@ namespace WLib.ArcGis.Carto.Element
 
                 else if ((tmpEle as IElementProperties)?.Name == elementName)
                     elements.Add(tmpEle);
+            }
+            return elements;
+        }
+        /// <summary>
+        /// 查找包含指定关键字（部分元素名或元素文本）的所有元素
+        /// </summary>
+        /// <param name="groupElement">组合元素</param>
+        /// <param name="keyword">元素关键字，即部分元素名或元素文本</param>
+        /// <returns></returns>
+        public static List<IElement> GetElementsByKeyword(this IGroupElement groupElement, string keyword)
+        {
+            var elements = new List<IElement>();
+            IEnumElement enumElement = groupElement.Elements;
+            IElement element;
+            while ((element = enumElement.Next()) != null)
+            {
+                if (element is IGroupElement tmpGroupElement)
+                    elements.AddRange(GetElementsByKeyword(tmpGroupElement, keyword));
+
+                else if (element is IElementProperties elementProperties && elementProperties.Name.Contains(keyword))
+                    elements.Add(element);
+
+                else if (element is ITextElement textElement && textElement.Text.Contains(keyword))
+                    elements.Add(element);
             }
             return elements;
         }

@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
@@ -53,8 +54,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 featureCursor.InsertFeature(featureBuffer);
             }
             featureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureBuffer);
+            Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，遍历新要素并在委托中对其内容执行赋值操作，最后保存全部新要素并释放资源
@@ -76,8 +77,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                     break;
             }
             featureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureBuffer);
+            Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，将游标提供给委托以在委托中指定具体操作，最后保存全部新要素并释放资源
@@ -94,8 +95,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             doActionByFeatures(featureCursor, featureBuffer);
 
             featureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureBuffer);
+            Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         ///  在要素类中创建一条新要素，在委托中对其内容执行赋值操作，最后保存新要素并释放资源
@@ -112,8 +113,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
             featureCursor.InsertFeature(featureBuffer);
             featureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureBuffer);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureBuffer);
+            Marshal.ReleaseComObject(featureCursor);
         }
 
         /// <summary>
@@ -176,8 +177,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 featureCursor.DeleteFeature();
                 feature = featureCursor.NextFeature();
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(queryFilter);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(queryFilter);
+            Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         /// 根据查询条件查询要素，按判断条件执行删除操作（使用Update游标方式删除，此方法执行速度较Search方法快）
@@ -198,8 +199,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                     featureCursor.DeleteFeature();
                 feature = featureCursor.NextFeature();
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(queryFilter);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(queryFilter);
+            Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>  
         /// 删除所有符合查询条件的要素（使用ITable.DeleteSearchedRows，此方法执行速度较Update游标更快）
@@ -263,7 +264,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+                Marshal.ReleaseComObject(featureCursor);
             }
         }
         /// <summary>
@@ -297,7 +298,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 var msgWhereClause = string.IsNullOrEmpty(whereClause) ? null : $"根据条件“{whereClause}”";
                 throw new Exception($"在{featureClass.AliasName}图层中，{msgWhereClause}更新{msgOid}记录时出错：{ex.Message}");
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
         /// 根据查询条件查询要素，对查询获取的要素执行更新操作
@@ -335,7 +336,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             }
             finally
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+                Marshal.ReleaseComObject(featureCursor);
             }
         }
         #endregion
@@ -370,7 +371,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             {
                 features.Add(feature);
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
             return features;
         }
         /// <summary>
@@ -396,7 +397,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             if (featureClass == null) return null;
             var cursor = GetSearchCursor(featureClass, whereClause, subFields);
             var feature = cursor.NextFeature();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
+            Marshal.ReleaseComObject(cursor);
             return feature;
         }
         /// <summary>
@@ -424,162 +425,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 doActionByFeatures(feature);
                 feature = featureCursor.NextFeature();
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
-        }
-        #endregion
-
-
-        #region 复制要素
-        /// <summary>
-        /// 从源要素类中获取数据添加到目标要素类中（复制同名字段的值）
-        /// </summary>
-        /// <param name="sourceFeatClass">源要素类</param>
-        /// <param name="targetFeatClass">目标要素类</param> 
-        /// <param name="whereClause">筛选条件，从源要素类中筛选指定的要素复制到目标要素，为null或Empty时将复制全部要素</param>
-        /// <param name="aferEachInsert">每复制一条要素之后执行的操作</param>
-        public static void CopyDataToFeatClass(this IFeatureClass sourceFeatClass, IFeatureClass targetFeatClass,
-            string whereClause = null, Action<IFeatureBuffer> aferEachInsert = null)
-        {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            queryFilter.WhereClause = whereClause;
-
-            var featureCursor = sourceFeatClass.Search(queryFilter, true);
-            var tarFeatureCursor = targetFeatClass.Insert(true);
-            var tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
-            var sourceFields = sourceFeatClass.Fields;
-
-            //获取源要素类与目标要素类相同的字段的索引
-            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
-            for (var i = 0; i < sourceFields.FieldCount; i++)
-            {
-                var index1 = tarFeatureBuffer.Fields.FindField(sourceFields.get_Field(i).Name);
-                if (index1 > -1 && tarFeatureBuffer.Fields.get_Field(index1).Editable)
-                    dict.Add(i, index1);
-            }
-
-            //复制源要素类数据到目标要素类
-            var feature = featureCursor.NextFeature();
-            while (feature != null)
-            {
-                foreach (var pair in dict)
-                {
-                    tarFeatureBuffer.set_Value(pair.Value, feature.get_Value(pair.Key));
-                }
-                tarFeatureCursor.InsertFeature(tarFeatureBuffer);
-                aferEachInsert?.Invoke(tarFeatureBuffer);
-                feature = featureCursor.NextFeature();
-            }
-            tarFeatureCursor.Flush();
-
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
-        }
-        /// <summary>
-        /// 从指定要素中获取数据添加到目标要素类中（复制同名字段的值）
-        /// </summary>
-        /// <param name="features"></param>
-        /// <param name="targetFeatClass"></param>
-        public static void CopyDataToFeatClass(IEnumerable<IFeature> features, IFeatureClass targetFeatClass)
-        {
-            //获取源要素类与目标要素类相同的字段的索引
-            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
-
-            var tarFeatureCursor = targetFeatClass.Insert(true);
-            var tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
-            var sourceFields = features.First().Fields;
-            for (var i = 0; i < sourceFields.FieldCount; i++)
-            {
-                var index1 = tarFeatureBuffer.Fields.FindField(sourceFields.get_Field(i).Name);
-                if (index1 > -1 && tarFeatureBuffer.Fields.get_Field(index1).Editable)
-                    dict.Add(i, index1);
-            }
-            foreach (var feature in features)
-            {
-                foreach (var pair in dict)
-                {
-                    tarFeatureBuffer.set_Value(pair.Value, feature.get_Value(pair.Key));
-                }
-                tarFeatureCursor.InsertFeature(tarFeatureBuffer);
-            }
-            tarFeatureCursor.Flush();
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
-        }
-        /// <summary>
-        /// 从指定要素中获取数据插入到目标要素类中（具体赋值操作应在action委托中指定）
-        /// </summary>
-        /// <param name="features"></param>
-        /// <param name="targetFeatClass"></param>
-        /// <param name="action">对每一个插入的要素执行的操作（一般是赋值操作），IFeature是源要素，IFeatureBuffer是新要素</param>
-        public static void CopyDataToFeatClass(IEnumerable<IFeature> features, IFeatureClass targetFeatClass, Action<IFeature, IFeatureBuffer> action)
-        {
-            //获取源要素类与目标要素类相同的字段的索引
-            var tarFeatureCursor = targetFeatClass.Insert(true);
-            var tarFeatureBuffer = targetFeatClass.CreateFeatureBuffer();
-            var sourceFields = features.First().Fields;
-            foreach (var feature in features)
-            {
-                action(feature, tarFeatureBuffer);
-                tarFeatureCursor.InsertFeature(tarFeatureBuffer);
-            }
-            tarFeatureCursor.Flush();
-
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(tarFeatureCursor);
-        }
-        /// <summary>
-        /// 从指定要素中获取数据插入到目标要素类中，并将图形坐标系转为与目标要素类一致
-        /// </summary>
-        /// <param name="features"></param>
-        /// <param name="targetFeatClass"></param>
-        public static void CopyDataToFeatClass_ProjectShape(IEnumerable<IFeature> features, IFeatureClass targetFeatClass)
-        {
-            //获取源要素类与目标要素类相同的字段的索引，不含Shape字段
-            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
-            var sourceFields = features.First().Fields;
-            var tarShapeFieldIndex = sourceFields.FindField(targetFeatClass.ShapeFieldName);//目标要素类的Shape字段索引
-            ISpatialReferenceFactory saptialRefFact = new SpatialReferenceEnvironmentClass();
-
-            for (var i = 0; i < sourceFields.FieldCount; i++)
-            {
-                var index1 = targetFeatClass.FindField(sourceFields.get_Field(i).Name);
-                if (index1 > -1 &&
-                    index1 != tarShapeFieldIndex &&
-                    targetFeatClass.Fields.get_Field(index1).Editable)//获取可编辑、非Shape字段
-                    dict.Add(i, index1);
-            }
-            CopyDataToFeatClass(features, targetFeatClass, (sourceFeature, tarFeatureBuffer) =>
-            {
-                //赋值非Shape字段
-                foreach (var pair in dict)
-                {
-                    tarFeatureBuffer.set_Value(pair.Value, sourceFeature.get_Value(pair.Key));
-                }
-                //投影变换，赋值Shape字段
-                var shape = sourceFeature.ShapeCopy;
-                var spatialReference = targetFeatClass.GetSpatialReference();
-                shape.Project(spatialReference);
-                tarFeatureBuffer.Shape = shape;
-            });
-        }
-        /// <summary>
-        /// 复制要素，生成为新的shp文件（注意目录中不能存在同名文件）
-        /// </summary>
-        /// <param name="features">需要复制的要素集合，不能有null</param>
-        /// <param name="shpPath">新建的Shp文件路径（注意目录中不能存在同名文件）</param>
-        /// <returns>新的要素类(shp)</returns>
-        public static IFeatureClass CopyDataToNewShapefile(IEnumerable<IFeature> features, string shpPath)
-        {
-            var feature = features.FirstOrDefault();
-            if (feature == null)
-                throw new Exception("复制要素至新的shp文件时，至少要有一个要素！");
-
-            var geoType = feature.Shape.GeometryType;
-            var spatialReference = feature.Shape.SpatialReference;
-            var fields = (feature.Class as IFeatureClass).CloneFeatureClassFieldsSimple();
-            var feildArray = fields.FieldsToArray();
-            var faetureClass = FeatClassToPath.CreateToShpFile(shpPath, geoType, spatialReference, feildArray);
-
-            CopyDataToFeatClass(features, faetureClass);
-            return faetureClass;
+            Marshal.ReleaseComObject(featureCursor);
         }
         #endregion
 
@@ -625,7 +471,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 }
                 feature = cursor.NextFeature();
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
+            Marshal.ReleaseComObject(cursor);
             return union;
         }
         /// <summary>
@@ -645,7 +491,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             {
                 values.Add(feature.Shape);
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
             return values;
         }
         /// <summary>
@@ -668,13 +514,13 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 result.Add(feature.ShapeCopy);
                 feature = cursor.NextFeature();
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
+            Marshal.ReleaseComObject(cursor);
             return result;
         }
         #endregion
 
 
-        #region 查询值
+        #region 查询字段值
         /// <summary>
         /// 获取要素类指定字段的唯一值（全部不重复的值）
         /// </summary>
@@ -730,7 +576,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             {
                 value = feature.get_Value(fieldIndex);
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
             return value;
         }
         /// <summary>
@@ -772,7 +618,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                     values.Add(feature.get_Value(feature.Fields.FindField(fieldName)));
                 }
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(feature);
+            Marshal.ReleaseComObject(feature);
             return values;
         }
         /// <summary>
@@ -795,7 +641,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             {
                 values.Add(feature.get_Value(fieldIndex));
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
             return values;
         }
         /// <summary>
@@ -839,7 +685,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 }
                 values.Add(key, feature.get_Value(valueFieldIndex));
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
             return values;
         }
         /// <summary>
@@ -872,14 +718,14 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 }
                 values.Add(key, feature.get_Value(valueFieldIndex).ToString());
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
+            Marshal.ReleaseComObject(featureCursor);
             return values;
         }
 
         #endregion
 
 
-        #region 数据源
+        #region 获取数据源
         /// <summary>
         /// 获取要素类所属的工作空间（IFeatureWorkspace）
         /// </summary>
@@ -919,7 +765,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static string GetWorkspacePathName(this IFeatureClass featureClass)
         {
-            var workspace = GetFeatureWorkspace(featureClass) as IWorkspace;
+            var workspace = (IWorkspace)GetFeatureWorkspace(featureClass);
             return workspace.PathName;
         }
         /// <summary>
@@ -929,12 +775,10 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static string GetSourcePath(this IFeatureClass featureClass)
         {
-            var sourceName = (featureClass as IDataset).Name;
-            var featureDataset = featureClass.FeatureDataset;
-            if (featureDataset != null)
-            {
-                sourceName = featureDataset.Name + "\\" + sourceName;
-            }
+            var sourceName = ((IDataset)featureClass).Name;
+            if (featureClass.FeatureDataset != null)
+                sourceName = featureClass.FeatureDataset.Name + "\\" + sourceName;
+
             return GetWorkspacePathName(featureClass) + "\\" + sourceName;
         }
         #endregion

@@ -153,7 +153,6 @@ namespace WLib.ArcGis.Data
 
 
         #region IFeatureClass转DataTable
-
         /// <summary>
         /// 将要素IFeatureClass指定字段数据转成DataTable
         /// </summary>
@@ -194,7 +193,6 @@ namespace WLib.ArcGis.Data
             System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
             return dataTable;
         }
-
         /// <summary>
         /// 将要素IFeatureClass指定字段数据转成DataTable
         /// </summary>
@@ -286,8 +284,8 @@ namespace WLib.ArcGis.Data
         {
             ITable table = featureClass as ITable;
             DataTable dataTable = CreateDataTableScheme(table, "");
-            //图斑面积
-            DataColumn areaDc = new DataColumn(areaColumnName, typeof(double));//, string areaColumnName
+            
+            DataColumn areaDc = new DataColumn(areaColumnName, typeof(double));//图斑面积
             dataTable.Columns.Add(areaDc);
             IFeatureCursor featureCursor = featureClass.Search(null, false);
             IFeature feature;

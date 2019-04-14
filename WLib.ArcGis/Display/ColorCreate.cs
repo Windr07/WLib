@@ -10,7 +10,7 @@ using ESRI.ArcGIS.Display;
 namespace WLib.ArcGis.Display
 {
     /// <summary>
-    /// 获得颜色IColor
+    /// 提供获得颜色IColor的方法
     /// </summary>
     public static class ColorCreate
     {

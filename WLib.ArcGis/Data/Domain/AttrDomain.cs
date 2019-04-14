@@ -55,10 +55,7 @@ namespace WLib.ArcGis.Data.Domain
         /// <returns></returns>
         public string GetValue(string key)
         {
-            if (CodeValues.Keys.Contains(key))
-                return CodeValues[key];
-            else
-                return null;
+            return CodeValues.Keys.Contains(key) ? CodeValues[key] : null;
         }
         /// <summary>
         /// 判断输入值，若为属性域值则返回该属性域值，若为属性域的编码则返回此编码对应的值，否则返回null
@@ -89,10 +86,7 @@ namespace WLib.ArcGis.Data.Domain
                 return inputString;
             //应该判断字典表的每个编码值的值，例如输入值为"曾孙子"，符合编码值"曾孙子或外曾孙子"
             var value = CodeValues.Values.FirstOrDefault(v => v.Contains(inputString));
-            if (value != null)
-                return CodeValues.FirstOrDefault(v => v.Value == value).Key;
-            else
-                return null;
+            return value != null ? CodeValues.FirstOrDefault(v => v.Value == value).Key : null;
         }
         /// <summary>
         /// 将属性域数据转成DataTable

@@ -12,7 +12,7 @@ using WLib.ArcGis.GeoDatabase.WorkSpace;
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
     /// <summary>
-    /// 将数据源存储的要素类结果转为TreeNode形式的树结构信息
+    /// 提供将数据源的要素类存储结构转为TreeNode（树结构）的方法
     /// </summary>
     public class FeatClassToTreeNodes
     {

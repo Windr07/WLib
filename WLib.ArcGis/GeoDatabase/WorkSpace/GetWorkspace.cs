@@ -188,37 +188,6 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         }
 
 
-        #region 获取各类工作空间的连接字符串
-        /// <summary>
-        /// 构造连接Access个人地理数据库的连接字符串
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string AccessConnectionString(string path)
-        {
-            return ($"Provider=ESRI.GeoDB.OLEDB.1;Data Source={path};Extended Properties=workspacetype=esriDataSourcesGDB.AccessWorkspaceFactory.1;Geometry=WKB");
-        }
-        /// <summary>
-        /// 构造连接Shapefile文件的连接字符串
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string ShpConnectionString(string path)
-        {
-            return $"Provider=ESRI.GeoDB.OLEDB.1;Data Source={System.IO.Path.GetDirectoryName(path)};Extended Properties=WorkspaceType=esriDataSourcesFile.ShapefileWorkspaceFactory.1;Geometry=WKB|OBJECT";
-        }
-        /// <summary>
-        /// 构造连接SDE地理数据库的连接字符串
-        /// </summary>
-        /// <param name="serverName"></param>
-        /// <param name="dataSource"></param>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public static string SdeConnectionString(string serverName, string dataSource, string userName, string password)
-        {
-            return $"Provider=ESRI.GeoDB.OLEDB.1;Location={serverName};Data Source={dataSource};User Id={userName};Password={password};Extended Properties=WorkspaceType=esriDataSourcesGDB.SDEWorkspaceFactory.1;Geometry=WKB|OBJECT;Instance=5151;Version=SDE.DEFAULT";
-        }
-        #endregion
+       
     }
 }

@@ -13,7 +13,7 @@ using ESRI.ArcGIS.Geometry;
 namespace WLib.ArcGis.Analysis.OnClass
 {
     /// <summary>
-    /// 空间过滤器
+    /// 提供空间过滤要素的方法
     /// </summary>
     public static class SpatialFilterOpt
     {

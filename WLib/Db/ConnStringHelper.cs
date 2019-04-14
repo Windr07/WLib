@@ -10,11 +10,12 @@ using System;
 namespace WLib.Db
 {
     /// <summary>
-    /// 提供构建简单常用的连接字符串的方法，
+    /// 提供构建简单常用的连接字符串的方法（包括连接GIS数据）
     /// 连接字符串可参考
     /// ①https://www.connectionstrings.com/
     /// ②https://blog.csdn.net/Xiongchao99/article/details/51670139
     /// ③https://www.connectionstrings.com/net-framework-data-provider-for-ole-db/
+    /// ④http://resources.esri.com/help/9.3/ArcGISEngine/dotnet/0ec7f577-5dbd-4a60-b1f3-d5ef4a1426e4.htm
     /// </summary>
     public class ConnStringHelper
     {
@@ -149,5 +150,83 @@ namespace WLib.Db
         {
             return $"Data Source=:memory:;Version=3;New=True;";
         }
+
+
+        #region OleDb连接ArcGIS数据的连接字符串
+        //参考：http://resources.esri.com/help/9.3/ArcGISEngine/dotnet/0ec7f577-5dbd-4a60-b1f3-d5ef4a1426e4.htm
+
+        /// <summary>
+        /// 构造OleDb连接Access *.mdb个人地理数据库的连接字符串
+        /// </summary>
+        /// <param name="mdbPath">Access数据库mdb文件路径</param>
+        /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
+        /// <returns></returns>
+        public static string PersonalGdb(string mdbPath, string geometry = "WKB")
+        {
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Data Source={mdbPath};Extended Properties=workspacetype=esriDataSourcesGDB.AccessWorkspaceFactory.1;Geometry={geometry}";
+        }
+        /// <summary>
+        /// 构造OleDb连接*.gdb文件地理数据库的连接字符串
+        /// </summary>
+        /// <param name="gdbDir">文件地理数据库gdb文件夹目录</param>
+        /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
+        /// <returns></returns>
+        public static string FileGdb(string gdbDir, string geometry = "WKB")
+        {
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Data Source={gdbDir};Extended Properties=WorkspaceType=esriDataSourcesGDB.FileGDBWorkspaceFactory.1;Geometry={geometry}";
+        }
+        /// <summary>
+        /// 构造OleDb连接Shapefile文件的连接字符串
+        /// </summary>
+        /// <param name="shpPath">shp文件路径</param>
+        /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
+        /// <returns></returns>
+        public static string Shapefile(string shpPath, string geometry = "WKB")
+        {
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Data Source={System.IO.Path.GetDirectoryName(shpPath)};Extended Properties=WorkspaceType=esriDataSourcesFile.ShapefileWorkspaceFactory.1;Geometry={geometry}";
+        }
+        /// <summary>
+        /// 构造OleDb连接Shapefile文件的连接字符串
+        /// </summary>
+        /// <param name="shpDir">shp文件所在目录</param>
+        /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
+        /// <returns></returns>
+        public static string ShapefileDir(string shpDir, string geometry = "WKB")
+        {
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Data Source={shpDir};Extended Properties=WorkspaceType=esriDataSourcesFile.ShapefileWorkspaceFactory.1;Geometry={geometry}";
+        }
+        /// <summary>
+        /// 构造OleDb连接coverage文件的连接字符串
+        /// </summary>
+        /// <param name="coverageDir">coverage文件所在目录</param>
+        /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
+        /// <returns></returns>
+        public static string Coverage(string coverageDir, string geometry = "WKB")
+        {
+            return $"Provider=ESRI.GeoDB.OleDB.1;Data Source={coverageDir};Extended Properties=workspacetype=esriDataSourcesFile.ArcInfoWorkspaceFactory.1;Geometry={geometry}";
+        }
+        /// <summary>
+        /// 构造OleDb连接SDE地理数据库的连接字符串
+        /// </summary>
+        /// <param name="serverName"></param>
+        /// <param name="dataSource"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
+        /// <returns></returns>
+        public static string Sde(string serverName, string dataSource, string userName, string password, string geometry = "WKB")
+        {
+            return $"Provider=ESRI.GeoDB.OLEDB.1;Location={serverName};Data Source={dataSource};User Id={userName};Password={password};Extended Properties=WorkspaceType=esriDataSourcesGDB.SDEWorkspaceFactory.1;Geometry={geometry};Instance=5151;Version=SDE.DEFAULT";
+        }
+        /// <summary>
+        /// 构造OleDb连接SDE地理数据库的连接字符串，通过读取连接文件（.sde）进行连接
+        /// </summary>
+        /// <param name="connectFile">e.g. C:\\Temp\\MySdeConnection.sde</param>
+        /// <returns></returns>
+        public static string SdeWithFile(string connectFile)
+        {
+            return $"Provider=ESRI.GeoDB.OleDB.1;Extended Properties=workspacetype=esriDataSourcesGDB.SdeWorkspaceFactory.1;ConnectionFile={connectFile}";
+        }
+        #endregion
     }
 }

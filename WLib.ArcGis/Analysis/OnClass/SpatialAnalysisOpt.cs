@@ -16,7 +16,7 @@ namespace WLib.ArcGis.Analysis.OnClass
     /// <summary>
     /// 提供空间分析相关操作方法
     /// </summary>
-    public class SpatialAnalysisOpt
+    public static class SpatialAnalysisOpt
     {
         /// <summary>
         /// 相交分析，返回相交部分的要素（注意输入要素类和叠加要素类不能有空几何等问题）
@@ -26,7 +26,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <param name="outPath">保存分析结果的工作空间路径</param>
         /// <param name="outName">保存分析结果的要素类名称</param>
         /// <returns></returns>
-        public static IFeatureClass Intersect(IFeatureClass inClass, IFeatureClass overlayClass, string outPath, string outName)
+        public static IFeatureClass Intersect(this IFeatureClass inClass, IFeatureClass overlayClass, string outPath, string outName)
         {
             var workspaceType = GetWorkspace.GetDefaultWorkspaceType(outPath);
             if (workspaceType == EWorkspaceType.Default)

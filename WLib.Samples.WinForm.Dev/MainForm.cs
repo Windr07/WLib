@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.Utils;
+using WLib.ArcGis.Analysis.Gp;
 using WLib.ArcGis.Analysis.OnClass;
 using WLib.UserCtrls.Dev;
 using WLib.UserCtrls.Dev.CtrlExtension;
@@ -43,7 +44,7 @@ namespace WLib.Samples.WinForm.Dev
                 var path2 = dbPath + @"\ZDZWZJCGSXB";
                 var path3 = dbPath + @"\JZZWZJCGSXB";
                 var resultPath = @"";
-                new GpTools().Intersect(path1, resultPath);
+                new GpHelper(true).Intersect(path1, resultPath);
             }
             catch (Exception ex)
             {

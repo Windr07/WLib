@@ -28,20 +28,17 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="fullPath">
         /// 要素类的完整保存路径，包含以下情况：
-        /// ①shp文件路径，创建shp文件；
-        /// ②mdb文件路径[\DatasetName]\FeatureClassName，在mdb中或mdb的指定要素集中，创建指定名称的图层；mdb或要素集不存在则自动创建；
-        /// ③gdb目录[\DatasetName]\FeatureClassName，在gdb中或gdb的指定要素集中，创建指定名称的图层；gdb或要素集不存在则自动创建；
+        /// ①shp文件路径，创建shp文件；若shp文件所在目录不存在则自动创建；
+        /// ②mdb文件路径[\DatasetName]\FeatureClassName，在mdb中或mdb的指定要素集中，创建指定名称的图层；若mdb或要素集不存在则自动创建；
+        /// ③gdb目录[\DatasetName]\FeatureClassName，在gdb中或gdb的指定要素集中，创建指定名称的图层；若gdb或要素集不存在则自动创建；
         /// </param>
-        /// <param name="fields">要创建的字段集（必须包含SHAPE字段）</param>
+        /// <param name="fields">要创建的字段集，必须包含SHAPE字段，创建字段集可参考<see cref="FieldOpt.CreateBaseFields"/>等方法</param>
         /// <returns></returns>
         public static IFeatureClass CreateToPath(string fullPath, IFields fields)
         {
             var chars = Path.GetInvalidPathChars();
             foreach (var c in chars)
-            {
-                if (fullPath.Contains(c))
-                    throw new Exception("路径不符合规范，文件路径不能包含以下字符串：" + string.Concat(chars));
-            }
+                if (fullPath.Contains(c)) throw new Exception("路径不符合规范，文件路径不能包含以下字符串：" + string.Concat(chars));
 
             fullPath = fullPath.ToLower();
             if (fullPath.EndsWith(".shp"))
@@ -85,7 +82,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="shpPath">新建的Shp文件路径（注意目录中不能存在同名文件）</param>
         /// <param name="geoType">要素类的几何类型</param>
-        /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="CoordinateSystem.CreateSpatialReference(int, ESrType)"/>及该方法的重载</param>
+        /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="SpatialRefOpt.CreateSpatialReference(int, ESrType)"/>及该方法的重载</param>
         /// <param name="otherFields">除了OID和SHAPE字段的其他字段</param>
         /// <returns></returns>
         public static IFeatureClass CreateToShpFile(string shpPath, esriGeometryType geoType, ISpatialReference spatialRef, IField[] otherFields = null)
@@ -111,7 +108,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="datasetName">要素数据集名称，若赋值为null则直接在数据库下创建要素类，否则在该要素数据集(不存在则创建)下创建要素类</param>
         /// <param name="className">需要创建的要素类名称</param>
         /// <param name="geoType">要素类的几何类型</param>
-        /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="CoordinateSystem.CreateSpatialReference(int, ESrType)"/>及该方法的重载</param>
+        /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="SpatialRefOpt.CreateSpatialReference(int, ESrType)"/>及该方法的重载</param>
         /// <param name="otherFields">除了OID和SHAPE字段的其他字段</param>
         /// <returns></returns>
         public static IFeatureClass CreateToDb(string geoDbPath, string datasetName, string className, esriGeometryType geoType,
