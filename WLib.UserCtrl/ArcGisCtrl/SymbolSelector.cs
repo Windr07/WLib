@@ -14,6 +14,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using WLib.Envir.ArcGis;
+using Path = System.IO.Path;
 
 namespace WLib.UserCtrls.ArcGisCtrl
 {
@@ -46,7 +47,6 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// 查看更多符号的右键菜单
         /// </summary>
         public ContextMenuStrip MoreSymbolMenuStrip => _moreSymbolMenuStrip ?? (_moreSymbolMenuStrip = CreateMoreSymbolToMenuStrip());
-
         /// <summary>
         /// 添加更多符号
         /// </summary>
@@ -92,9 +92,9 @@ namespace WLib.UserCtrls.ArcGisCtrl
         {
             var paths = new[]
             {
-                AppDomain.CurrentDomain.BaseDirectory + @"\Styles\ESRI.ServerStyle",
-                ArcGisEnvironment.GetInstallPath() + @"\Styles\ESRI.ServerStyle",
-                RuntimeManager.ActiveRuntime.Path + @"\Styles\ESRI.ServerStyle",
+               Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Styles","ESRI.ServerStyle"),
+               Path.Combine(ArcGisEnvironment.GetInstallPath(), "Styles","ESRI.ServerStyle"),
+               Path.Combine(RuntimeManager.ActiveRuntime.Path, "Styles","ESRI.ServerStyle"),
             };
             foreach (var path in paths)
             {
@@ -141,11 +141,11 @@ namespace WLib.UserCtrls.ArcGisCtrl
             var contextMenuStrip = new ContextMenuStrip();
             contextMenuStrip.ItemClicked += contextMenuStripMoreSymbol_ItemClicked;
 
-            var dir = ArcGisEnvironment.GetInstallPath() + "\\Styles";//var dir = ESRI.ArcGIS.RuntimeManager.ActiveRuntime.Path;
+            var dir = Path.Combine(ArcGisEnvironment.GetInstallPath(), "Styles");//var dir = ESRI.ArcGIS.RuntimeManager.ActiveRuntime.Path;
             var filePaths = Directory.GetFiles(dir, "*.ServerStyle");//取得菜单项数量
             foreach (var filePath in filePaths)//循环添加其它符号菜单项到菜单
             {
-                var text = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                var text = Path.GetFileNameWithoutExtension(filePath);
                 contextMenuStrip.Items.Add(new ToolStripMenuItem
                 {
                     Name = filePath,

@@ -5,9 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
 using System.IO;
-using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using WLib.WinForm;

@@ -15,7 +15,18 @@ using ESRI.ArcGIS.esriSystem;
 namespace WLib.ArcGis
 {
     /// <summary>
-    /// Initialize ArcObjects runtime environment for this application
+    /// 初始化ARCGIS运行环境许可：
+    /// licenseInitializer.InitializeApplication(
+    ///     new[]
+    ///     {
+    ///         /* 此处绑定Advanced/Desktop后不要再绑定其他权限，若绑定Engine权限有些GP工具无法使用 */
+    ///         esriLicenseProductCode.esriLicenseProductCodeAdvanced
+    ///     },
+    ///     new[]
+    ///     {
+    ///         esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
+    ///         esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork
+    ///     });
     /// </summary>
     public partial class LicenseInitializer
     {

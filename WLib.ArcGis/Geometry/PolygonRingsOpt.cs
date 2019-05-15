@@ -19,6 +19,7 @@ namespace WLib.ArcGis.Geometry
     /// </summary>
     public static class PolygonRingsOpt
     {
+        #region 获取环
         /// <summary>
         /// 获取多边形的外环
         /// </summary>
@@ -55,6 +56,28 @@ namespace WLib.ArcGis.Geometry
             return rings;
         }
         /// <summary>
+        /// 获取构成多边形的所有环（包括外环和内环）
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <returns></returns>
+        public static List<IRing> GetRings(this IPolygon4 polygon)
+        {
+            List<IRing> rings = new List<IRing>();
+            IGeometryBag exteriorRingGeometryBag = polygon.ExteriorRingBag;//全部外部环
+            IGeometryCollection exteriorRingGeometryCollection = (IGeometryCollection)exteriorRingGeometryBag;
+            for (int i = 0; i < exteriorRingGeometryCollection.GeometryCount; i++)
+            {
+                IGeometry exteriorRingGeometry = exteriorRingGeometryCollection.get_Geometry(i);
+                rings.Add(exteriorRingGeometry as IRing);//外部环
+                rings.AddRange(GetInteriorRings(polygon, exteriorRingGeometry as IRing));//内部环
+            }
+            return rings;
+        }
+        #endregion
+
+
+        #region 获取环的点集
+        /// <summary>
         /// 获取多边形指定外环所包含的内环的点集
         /// </summary>
         /// <param name="polygon"></param>
@@ -70,26 +93,6 @@ namespace WLib.ArcGis.Geometry
                 IGeometry interiorRingGeometry = interiorRingGeometryCollection.get_Geometry(k);
                 var interiorPoints = (interiorRingGeometry as IPointCollection).GetPointList();
                 rings.Add(interiorPoints);
-            }
-            return rings;
-        }
-
-
-        /// <summary>
-        /// 获取构成多边形的所有环（包括外环和内环）
-        /// </summary>
-        /// <param name="polygon"></param>
-        /// <returns></returns>
-        public static List<IRing> GetRings(this IPolygon4 polygon)
-        {
-            List<IRing> rings = new List<IRing>();
-            IGeometryBag exteriorRingGeometryBag = polygon.ExteriorRingBag;//全部外部环
-            IGeometryCollection exteriorRingGeometryCollection = (IGeometryCollection)exteriorRingGeometryBag;
-            for (int i = 0; i < exteriorRingGeometryCollection.GeometryCount; i++)
-            {
-                IGeometry exteriorRingGeometry = exteriorRingGeometryCollection.get_Geometry(i);
-                rings.Add(exteriorRingGeometry as IRing);//外部环
-                rings.AddRange(GetInteriorRings(polygon, exteriorRingGeometry as IRing));//内部环
             }
             return rings;
         }
@@ -157,8 +160,63 @@ namespace WLib.ArcGis.Geometry
             IPointCollection pointCollection = ring as IPointCollection;
             return pointCollection.GetPointList();
         }
+        #endregion
 
 
+        #region 获取环的数量
+        /// <summary>
+        /// 获取构成多边形的所有环的数量
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <returns></returns>
+        public static int GetOutRingCount(this IPolygon4 polygon)
+        {
+            return ((IGeometryCollection)polygon.ExteriorRingBag).GeometryCount;
+        }
+        /// <summary>
+        /// 获取多边形指定外环所包含的内环的数量
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <param name="exteriorRing"></param>
+        /// <returns></returns>
+        public static int GetInnerRingCount(this IPolygon4 polygon, IRing exteriorRing)
+        {
+            return ((IGeometryCollection)polygon.get_InteriorRingBag(exteriorRing)).GeometryCount;
+        }
+        /// <summary>
+        /// 获取构成多边形的所有环的数量
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <returns></returns>
+        public static int GetRingCount(this IPolygon4 polygon)
+        {
+            int count = 0;
+            IGeometryCollection exteriorRingGeometryCollection = (IGeometryCollection)polygon.ExteriorRingBag;//全部外部环
+            for (int i = 0; i < exteriorRingGeometryCollection.GeometryCount; i++)
+            {
+                count++;
+                IGeometry exteriorRingGeometry = exteriorRingGeometryCollection.get_Geometry(i);
+                count += GetInnerRingCount(polygon, exteriorRingGeometry as IRing); //内部环
+            }
+            return count;
+        }
+        #endregion
+
+
+        /// <summary>
+        /// 由环的点集构成多边形
+        /// </summary>
+        /// <param name="pointRings"></param>
+        /// <returns></returns>
+        public static IPolygon CreatePolygon(IEnumerable<IEnumerable<IPoint>> pointRings)
+        {
+            List<IRing> rings = new List<IRing>();
+            foreach (var ptRing in pointRings)
+            {
+                rings.Add(CreateRing(ptRing));
+            }
+            return CreatePolygon(rings);
+        }
         /// <summary>
         /// 由环构成多边形
         /// </summary>
@@ -188,20 +246,6 @@ namespace WLib.ArcGis.Geometry
                 pointColl.AddPoint(point);
             }
             return ring;
-        }
-        /// <summary>
-        /// 由环的点集构成多边形
-        /// </summary>
-        /// <param name="pointRings"></param>
-        /// <returns></returns>
-        public static IPolygon CreatePolygon(IEnumerable<IEnumerable<IPoint>> pointRings)
-        {
-            List<IRing> rings = new List<IRing>();
-            foreach (var ptRing in pointRings)
-            {
-                rings.Add(CreateRing(ptRing));
-            }
-            return CreatePolygon(rings);
         }
     }
 }

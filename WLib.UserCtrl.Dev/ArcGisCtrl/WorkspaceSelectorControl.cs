@@ -55,25 +55,18 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// 获取所选的工作空间类别
         /// </summary>
         public EWorkspaceType WorkspaceType => this.cmbADBType.SelectedItem.ToString().GetEnum<EWorkspaceType>();
-
         /// <summary>
         /// 获取或设置可选工作空间列表中选中项的索引
         /// </summary>
-        public int WorkspaceIndex { get => this.cmbADBType.SelectedIndex;
-            set => this.cmbADBType.SelectedIndex = value;
-        }
+        public int WorkspaceIndex { get => this.cmbADBType.SelectedIndex; set => this.cmbADBType.SelectedIndex = value; }
         /// <summary>
         /// 标示除浏览按钮外，其余操作是否可用
         /// </summary>
-        public bool OptEnable { get => this.SourcePathBox.OptEnable;
-            set => this.SourcePathBox.OptEnable = this.cmbADBType.Enabled = value;
-        }
+        public bool OptEnable { get => this.SourcePathBox.OptEnable; set => this.SourcePathBox.OptEnable = this.cmbADBType.Enabled = value; }
         /// <summary>
         /// 控件左侧的提示信息（eg:工作空间）
         /// </summary>
-        public string Description { get => this.lblWorkspaceDesc.Text;
-            set => this.lblWorkspaceDesc.Text = value;
-        }
+        public string Description { get => this.lblWorkspaceDesc.Text; set => this.lblWorkspaceDesc.Text = value; }
         /// <summary>
         /// 路径或连接字符串
         /// </summary>
@@ -88,6 +81,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             }
         }
         #endregion
+
 
         #region 基础事件
         /// <summary>
@@ -115,6 +109,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         }
         #endregion
 
+
         #region GIS相关属性、方法
         /// <summary>
         /// 获取的工作空间
@@ -131,11 +126,11 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <summary>
         /// 获取工作空间中的要素的名称
         /// </summary>
-        public string[] FeatureClassNames { get { return FeatureClasses?.Select(v => ((IDataset) v).Name).ToArray(); } }
+        public string[] FeatureClassNames { get { return FeatureClasses?.Select(v => ((IDataset)v).Name).ToArray(); } }
         /// <summary>
         /// 获取工作空间中的表格的名称
         /// </summary>
-        public string[] TableNames { get { return Tables?.Select(v => ((IDataset) v).Name).ToArray(); } }
+        public string[] TableNames { get { return Tables?.Select(v => ((IDataset)v).Name).ToArray(); } }
         /// <summary>
         /// 返回指定名称或别名的要素类（未连接工作空间或找不到时返回null）
         /// </summary>
@@ -143,13 +138,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <returns></returns>
         public IFeatureClass GetFeatureClassByName(string name)
         {
-            if (FeatureClasses == null) return null;
-            foreach (var cls in FeatureClasses)
-            {
-                if (cls.AliasName == name || ((IDataset) cls).Name == name)
-                    return cls;
-            }
-            return null;
+            return FeatureClasses?.FirstOrDefault(cls => cls.AliasName == name || ((IDataset)cls).Name == name);
         }
         /// <summary>
         /// 返回指定名称或别名关键字的要素类（模糊匹配）（未连接工作空间或找不到时返回null）
@@ -158,13 +147,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <returns></returns>
         public IFeatureClass GetFeatureClassByKeyName(string name)
         {
-            if (FeatureClasses == null) return null;
-            foreach (var cls in FeatureClasses)
-            {
-                if (cls.AliasName.Contains(name) || ((IDataset) cls).Name.Contains(name))
-                    return cls;
-            }
-            return null;
+            return FeatureClasses?.FirstOrDefault(cls => cls.AliasName.Contains(name) || ((IDataset)cls).Name.Contains(name));
         }
         /// <summary>
         /// 返回指定名称或别名的表格（未连接工作空间或找不到时返回null）
@@ -173,15 +156,10 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <returns></returns>
         public ITable GetTableByName(string name)
         {
-            if (Tables == null) return null;
-            foreach (var table in Tables)
-            {
-                if (((IObjectClass) table).AliasName == name || ((IDataset) table).Name == name)
-                    return table;
-            }
-            return null;
+            return Tables?.FirstOrDefault(tbl => ((IObjectClass)tbl).AliasName == name || ((IDataset)tbl).Name == name);
         }
         #endregion
+
 
         /// <summary>
         /// 工作空间选择器

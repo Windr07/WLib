@@ -6,9 +6,14 @@
 //----------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
+using WLib.ArcGis.Geometry;
 using WLib.Attributes;
 
 namespace WLib.ArcGis.Analysis.OnClass
@@ -48,6 +53,83 @@ namespace WLib.ArcGis.Analysis.OnClass
             datasetName.WorkspaceName = workspaceName;
 
             return new BasicGeoprocessorClass().Intersect((ITable)inClass, false, (ITable)overlayClass, false, 0.01, outClassName);
+        }
+
+        /// <summary>
+        /// 多边形转点，将多边形要素类每个图斑的中心（重心）点存入新的点要素类中
+        /// </summary>
+        /// <param name="sourceClass"></param>
+        /// <param name="targeClassPath"></param>
+        /// <returns></returns>
+        public static IFeatureClass PolygonClassToPoint(this IFeatureClass sourceClass, string targeClassPath)
+        {
+            if (sourceClass.ShapeType != esriGeometryType.esriGeometryPolygon)
+                throw new Exception($"{sourceClass}不是面图层！");
+
+            var outClass = sourceClass.CopyStruct(targeClassPath, esriGeometryType.esriGeometryPoint);
+            var outFeatureCursor = outClass.Insert(true);
+            var outFeatureBuffer = outClass.CreateFeatureBuffer();
+            sourceClass.QueryFeatures(null, feature =>
+            {
+                var shape = feature.Shape;
+                if (shape == null || shape.IsEmpty)
+                    throw new Exception($"{sourceClass}图层中存在几何为空的记录，请先进行修复几何！");
+
+                var dict = GetFieldIndexFromTwoClass(sourceClass, outClass, true);//其他字段值都从原图层复制过来
+                foreach (var pair in dict)
+                {
+                    outFeatureBuffer.set_Value(pair.Value, feature.get_Value(pair.Key));
+                }
+                outFeatureBuffer.Shape = (shape as IPolygon).GetPolygonCenter();//获取多边形的中心点
+                outFeatureCursor.InsertFeature(outFeatureBuffer);
+            }, true);
+
+            outFeatureCursor.Flush();
+
+            Marshal.ReleaseComObject(sourceClass);
+            Marshal.ReleaseComObject(outFeatureBuffer);
+            Marshal.ReleaseComObject(outFeatureCursor);
+            Marshal.ReleaseComObject(outClass);
+
+            return outClass;
+        }
+        /// <summary>
+        /// 多边形转点，将多边形要素类每个图斑的中心（重心）点存入新的点要素类中
+        /// </summary>
+        /// <param name="sourceClassPath"></param>
+        /// <param name="targeClassPath"></param>
+        /// <returns></returns>
+        public static IFeatureClass PolygonClassToPoint(string sourceClassPath, string targeClassPath)
+        {
+            var sourceClass = FeatClassFromPath.FromPath(sourceClassPath);
+            return sourceClass.PolygonClassToPoint(targeClassPath);
+        }
+        /// <summary>
+        /// 获取两个要素类同名字段的索引的对应关系，存入键值对中
+        /// </summary>
+        /// <param name="classOne">第一个要素类</param>
+        /// <param name="classTwo">第二个要素类</param>
+        /// <param name="withOutOidShape">去除OID和Shape字段的获取，默认true</param>
+        /// <returns></returns>
+        private static Dictionary<int, int> GetFieldIndexFromTwoClass(IFeatureClass classOne, IFeatureClass classTwo, bool withOutOidShape = true)
+        {
+            var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
+            var sourceFields = classOne.Fields;
+            var tarFields = classTwo.Fields;
+
+            var shapeFieldName = classOne.ShapeFieldName;
+            var oidFieldName = classOne.OIDFieldName;
+            for (var i = 0; i < sourceFields.FieldCount; i++)
+            {
+                var fieldName = sourceFields.get_Field(i).Name;
+                if (withOutOidShape && (fieldName == shapeFieldName || fieldName == oidFieldName))
+                    continue;
+
+                var index = tarFields.FindField(fieldName);
+                if (index > -1 && tarFields.get_Field(index).Editable)
+                    dict.Add(i, index);
+            }
+            return dict;
         }
     }
 }

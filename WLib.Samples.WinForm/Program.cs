@@ -3,13 +3,13 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.esriSystem;
 using WLib.ArcGis;
 using WLib.Samples.WinForm.SubForm;
+using WLib.UserCtrls.ExplorerCtrl.PathFolderCtrl;
 
 namespace WLib.Samples.WinForm
 {
     static class Program
     {
-
-        private static LicenseInitializer m_AOLicenseInitializer = new LicenseInitializer();
+        private static readonly LicenseInitializer licenseInitializer = new LicenseInitializer();
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -18,10 +18,8 @@ namespace WLib.Samples.WinForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            m_AOLicenseInitializer.InitializeApplication(
+            licenseInitializer.InitializeApplication(
                 new[] {
-                    esriLicenseProductCode.esriLicenseProductCodeEngineGeoDB,
-                    esriLicenseProductCode.esriLicenseProductCodeEngine,
                     esriLicenseProductCode.esriLicenseProductCodeAdvanced
                 },
                 new[] {
@@ -29,11 +27,12 @@ namespace WLib.Samples.WinForm
                     esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
                 });
 
-
             //ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
-            //Application.Run(new OleDbTestForm());
-            Application.Run(new MainForm());
-            m_AOLicenseInitializer.ShutdownApplication();
+            //Application.Run(new MainForm());
+            //Application.Run(new OleDbQueryForm());
+            Application.Run(new ExportMapForm());
+            //Application.Run(new PathFolderBrowserDialog(@""));
+            licenseInitializer.ShutdownApplication();
         }
     }
 }

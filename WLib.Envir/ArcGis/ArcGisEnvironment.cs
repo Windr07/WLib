@@ -53,6 +53,8 @@ namespace WLib.Envir.ArcGis
                 new CheckArcGis103Install(),
                 new CheckArcGis104Install(),
                 new CheckArcGis105Install(),
+                new CheckArcGis106Install(),
+                new CheckArcGis107Install(),
             };
             foreach (var checker in checkers)
             {

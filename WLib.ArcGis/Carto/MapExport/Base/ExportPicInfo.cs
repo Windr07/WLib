@@ -5,11 +5,14 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
+
 namespace WLib.ArcGis.Carto.MapExport.Base
 {
     /// <summary>
     /// 将地图导出为图片的配置
     /// </summary>
+    [Serializable]
     public class ExportPicInfo
     {
         /// <summary>

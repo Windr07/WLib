@@ -46,7 +46,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="featureDataset">要素集</param>
         /// <returns></returns>
-        public static ISpatialReference GetSpatialReference(this IFeatureDataset featureDataset)
+        public static ISpatialReference GetSpatialRef(this IFeatureDataset featureDataset)
         {
             IGeoDataset geoDataset = (IGeoDataset)featureDataset;
             return geoDataset.SpatialReference;
@@ -56,7 +56,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="featureLayer">要素层</param>
         /// <returns></returns>
-        public static ISpatialReference GetSpatialReference(this IFeatureLayer featureLayer)
+        public static ISpatialReference GetSpatialRef(this IFeatureLayer featureLayer)
         {
             IGeoDataset geoDataset = (IGeoDataset)featureLayer.FeatureClass;
             return geoDataset.SpatialReference;
@@ -66,7 +66,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="featureClass">要素类</param>
         /// <returns></returns>
-        public static ISpatialReference GetSpatialReference(this IFeatureClass featureClass)
+        public static ISpatialReference GetSpatialRef(this IFeatureClass featureClass)
         {
             IGeoDataset geoDataset = (IGeoDataset)featureClass;
             return geoDataset.SpatialReference;
@@ -76,19 +76,19 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="fields">字段集</param>
         /// <returns></returns>
-        public static ISpatialReference GetSpatialReference(this IFields fields)
+        public static ISpatialReference GetSpatialRef(this IFields fields)
         {
             var shapeField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeGeometry);
             if (shapeField == null) throw new Exception("字段集中不包含SHAPE字段！");
 
-            return GetSpatialReference(shapeField);
+            return GetSpatialRef(shapeField);
         }
         /// <summary>
         /// 获取SHAPE字段包含的坐标系信息
         /// </summary>
         /// <param name="shapeField">SHAPE字段</param>
         /// <returns></returns>
-        public static ISpatialReference GetSpatialReference(this IField shapeField)
+        public static ISpatialReference GetSpatialRef(this IField shapeField)
         {
             return shapeField.GeometryDef.SpatialReference;
         }
@@ -102,7 +102,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="featureClass">要素类</param>
         /// <param name="type">创建的坐标系类别</param>
         /// <returns></returns>
-        public static ISpatialReference CreateSpatialReference(this IFeatureClass featureClass, ESrType type = ESrType.Projected)
+        public static ISpatialReference CreateSpatialRef(this IFeatureClass featureClass, ESrType type = ESrType.Projected)
         {
             IField souceGeoField = featureClass.Fields.get_Field(featureClass.FindField(featureClass.ShapeFieldName));
             int factoryCode = souceGeoField.GeometryDef.SpatialReference.FactoryCode;
@@ -111,7 +111,7 @@ namespace WLib.ArcGis.Geometry
             //Console.WriteLine(YYGISLib.ArcGisHelper.Data.CoordinateSystem.GetCoordinateDetail(featureClass));
             //Console.WriteLine(YYGISLib.ArcGisHelper.FeatureHelper.FeatureClassOpt.GetSourcePath(featureClass));
 
-            return CreateSpatialReference(factoryCode, type);
+            return CreateSpatialRef(factoryCode, type);
         }
         /// <summary>
         /// 创建与指定要素坐标系相同的坐标系
@@ -119,28 +119,28 @@ namespace WLib.ArcGis.Geometry
         /// <param name="feature">要素</param>
         /// <param name="type">创建的坐标系类别</param>
         /// <returns></returns>
-        public static ISpatialReference CreateSpatialReference(this IFeature feature, ESrType type = ESrType.Projected)
+        public static ISpatialReference CreateSpatialRef(this IFeature feature, ESrType type = ESrType.Projected)
         {
             int factoryCode = feature.Shape.SpatialReference.FactoryCode;
-            return CreateSpatialReference(factoryCode, type);
+            return CreateSpatialRef(factoryCode, type);
         }
         /// <summary>
         ///  根据指定投影类型创建投影坐标系
         /// </summary>
         /// <param name="pcsType">投影类型枚举(esriSRProjCS4Type)</param>
         /// <returns></returns>
-        public static ISpatialReference CreateSpatialReference(esriSRProjCS4Type pcsType)
+        public static ISpatialReference CreateSpatialRef(esriSRProjCS4Type pcsType)
         {
-            return CreateSpatialReference((int)pcsType, ESrType.Projected);
+            return CreateSpatialRef((int)pcsType, ESrType.Projected);
         }
         /// <summary>
         ///  根据指定投影类型创建地理坐标系
         /// </summary>
         /// <param name="gcsType">地理坐标系枚举(esriSRGeoCS3Type)</param>
         /// <returns></returns>
-        public static ISpatialReference CreateSpatialReference(esriSRGeoCS3Type gcsType)
+        public static ISpatialReference CreateSpatialRef(esriSRGeoCS3Type gcsType)
         {
-            return CreateSpatialReference((int)gcsType, ESrType.Geographic);
+            return CreateSpatialRef((int)gcsType, ESrType.Geographic);
         }
         /// <summary>
         /// 根据指定坐标系代码创建坐标系
@@ -148,7 +148,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="factoryCode">坐标系代码</param>
         /// <param name="type">创建的坐标系类别</param>
         /// <returns></returns>
-        public static ISpatialReference CreateSpatialReference(int factoryCode, ESrType type = ESrType.Projected)
+        public static ISpatialReference CreateSpatialRef(int factoryCode, ESrType type = ESrType.Projected)
         {
             if (type == ESrType.Geographic)
                 return new SpatialReferenceEnvironmentClass().CreateGeographicCoordinateSystem(factoryCode);
@@ -161,7 +161,7 @@ namespace WLib.ArcGis.Geometry
         /// 创建空坐标系
         /// </summary>
         /// <returns></returns>
-        public static ISpatialReference CreateUnKnownSpatialReference()
+        public static ISpatialReference CreateUnKnownSpatialRef()
         {
             ISpatialReference spatialReference = new UnknownCoordinateSystemClass();
             spatialReference.SetDomain(0, 99999999, 0, 99999999);//设置空间范围
@@ -170,13 +170,13 @@ namespace WLib.ArcGis.Geometry
         #endregion
 
 
-        #region 修改数据集坐标系
+        #region 修改坐标系
         /// <summary>
         /// 修改要素集坐标系
         /// </summary>
         /// <param name="featureDataset">要素集</param>
         /// <param name="spatialReference">新坐标系</param>
-        public static void AlterSpatialReference(this IFeatureDataset featureDataset, ISpatialReference spatialReference)
+        public static void AlterSpatialRef(this IFeatureDataset featureDataset, ISpatialReference spatialReference)
         {
             IGeoDataset geoDataset = (IGeoDataset)featureDataset;
             IGeoDatasetSchemaEdit geoDatasetSchemaEdit = (IGeoDatasetSchemaEdit)geoDataset;
@@ -188,7 +188,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="featureClass">要素类</param>
         /// <param name="spatialReference">新坐标系</param>
-        public static void AlterSpatialReference(this IFeatureClass featureClass, ISpatialReference spatialReference)
+        public static void AlterSpatialRef(this IFeatureClass featureClass, ISpatialReference spatialReference)
         {
             IGeoDataset geoDataset = (IGeoDataset)featureClass;
             IGeoDatasetSchemaEdit geoDatasetSchemaEdit = (IGeoDatasetSchemaEdit)geoDataset;
@@ -200,12 +200,12 @@ namespace WLib.ArcGis.Geometry
 
         #region 修改图形坐标系
         /// <summary>
-        /// 将图形转换成指定坐标系（要求图形已定义了坐标系），
+        /// 将图形转换成指定坐标系（要求图形已定义了坐标系）
         /// </summary>
         /// <param name="geometry">被转换坐标系的几何图形</param>
         /// <param name="spatialReference">转换后的坐标系</param>
         [Obsolete("该方法仅用作提示，实际中应直接调用IGeometry.Project(spatialReference)，不必使用此方法")]
-        public static void AlterSpatialReference(this IGeometry geometry, ISpatialReference spatialReference)
+        public static void AlterSpatialRef(this IGeometry geometry, ISpatialReference spatialReference)
         {
             geometry.Project(spatialReference);
         }
@@ -292,35 +292,33 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="featureClass"></param>
         /// <returns></returns>
-        public static string GetCoordinateDetail(this IFeatureClass featureClass)
+        public static string GetSpatialRefDetail(this IFeatureClass featureClass)
         {
             if (featureClass == null)
                 throw new Exception("要素类为空，无法获取坐标系信息！");
-            return GetCoordinateDetail(((IGeoDataset)featureClass).SpatialReference);
+            return GetSpatialRefDetail(((IGeoDataset)featureClass).SpatialReference);
         }
         /// <summary>
         /// 获取坐标系详细参数信息
         /// </summary>
         /// <param name="spatialRef"></param>
         /// <returns></returns>
-        public static string GetCoordinateDetail(this ISpatialReference spatialRef)
+        public static string GetSpatialRefDetail(this ISpatialReference spatialRef)
         {
             if (spatialRef == null)
                 throw new Exception("坐标系(ISpatialReference)对象为Null，无法获取坐标系信息！");
 
             string str = string.Empty;
-            int cBytes;
             try
             {
-                IPRJSpatialReferenceGEN gen1 = spatialRef as IPRJSpatialReferenceGEN;
-                if (gen1 != null)
+                if (spatialRef is IPRJSpatialReferenceGEN gen1)
                 {
-                    gen1.ExportSpatialReferenceToPRJ(out str, out cBytes);
+                    gen1.ExportSpatialReferenceToPRJ(out str, out _);
                 }
                 else
                 {
                     IESRISpatialReferenceGEN gen2 = spatialRef as IESRISpatialReferenceGEN;
-                    gen2.ExportToESRISpatialReference(out str, out cBytes);
+                    gen2.ExportToESRISpatialReference(out str, out _);
                 }
                 str = Environment.NewLine + str;
             }
@@ -337,7 +335,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="spatialRef1"></param>
         /// <param name="spatialRef2"></param>
         /// <returns></returns>
-        private static bool CheckCoordinateSimple(this ISpatialReference spatialRef1, ISpatialReference spatialRef2)
+        private static bool CheckSpatialRefSimple(this ISpatialReference spatialRef1, ISpatialReference spatialRef2)
         {
             return spatialRef1.FactoryCode == spatialRef2.FactoryCode && spatialRef1.Name == spatialRef2.Name;
         }
@@ -347,10 +345,10 @@ namespace WLib.ArcGis.Geometry
         /// <param name="spatialRef1"></param>
         /// <param name="spatialRef2"></param>
         /// <returns></returns>
-        private static bool CheckCoordinateDetail(this ISpatialReference spatialRef1, ISpatialReference spatialRef2)
+        private static bool CheckSpatialRefDetail(this ISpatialReference spatialRef1, ISpatialReference spatialRef2)
         {
-            string str1 = GetCoordinateDetail(spatialRef1);
-            string str2 = GetCoordinateDetail(spatialRef2);
+            string str1 = GetSpatialRefDetail(spatialRef1);
+            string str2 = GetSpatialRefDetail(spatialRef2);
             return str1.Trim() == str2.Trim();
         }
 
@@ -361,13 +359,13 @@ namespace WLib.ArcGis.Geometry
         /// <param name="spatialRef2"></param>
         /// <param name="message">若两要素类坐标系一致，此值为坐标系信息，否则提示坐标不一致并列出各坐标系信息</param>
         /// <returns></returns>
-        public static bool CheckCoordinate(this ISpatialReference spatialRef1, ISpatialReference spatialRef2, out string message)
+        public static bool CheckSpatialRef(this ISpatialReference spatialRef1, ISpatialReference spatialRef2, out string message)
         {
-            bool result = CheckCoordinateSimple(spatialRef1, spatialRef2);
+            bool result = CheckSpatialRefSimple(spatialRef1, spatialRef2);
             if (result)
             {
-                var str1 = GetCoordinateDetail(spatialRef1);
-                var str2 = GetCoordinateDetail(spatialRef2);
+                var str1 = GetSpatialRefDetail(spatialRef1);
+                var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
                 message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
             }
@@ -384,15 +382,15 @@ namespace WLib.ArcGis.Geometry
         /// <param name="featureClass2"></param>
         /// <param name="message">若两要素类坐标系一致，此值为坐标系信息，否则提示坐标不一致并列出各坐标系信息</param>
         /// <returns></returns>
-        public static bool CheckClassesCoordinate(this IFeatureClass featureClass1, IFeatureClass featureClass2, out string message)
+        public static bool CheckSpatialRef(this IFeatureClass featureClass1, IFeatureClass featureClass2, out string message)
         {
-            var spatialRef1 = GetSpatialReference(featureClass1);
-            var spatialRef2 = GetSpatialReference(featureClass2);
-            bool result = CheckCoordinateSimple(spatialRef1, spatialRef2);
+            var spatialRef1 = GetSpatialRef(featureClass1);
+            var spatialRef2 = GetSpatialRef(featureClass2);
+            bool result = CheckSpatialRefSimple(spatialRef1, spatialRef2);
             if (result)
             {
-                var str1 = GetCoordinateDetail(spatialRef1);
-                var str2 = GetCoordinateDetail(spatialRef2);
+                var str1 = GetSpatialRefDetail(spatialRef1);
+                var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
                 message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
             }
@@ -409,16 +407,16 @@ namespace WLib.ArcGis.Geometry
         /// <param name="featureClasses"></param>
         /// <param name="message">判断结果信息，若要素类坐标系一致，此值为坐标系详细参数，否则提示坐标不一致并列出各坐标系详细参数</param>
         /// <returns></returns>
-        public static bool CheckClassesCoordinate(this IEnumerable<IFeatureClass> featureClasses, out string message)
+        public static bool CheckSpatialRef(this IEnumerable<IFeatureClass> featureClasses, out string message)
         {
             bool result = true;
             StringBuilder sb = new StringBuilder();
-            string str1 = GetCoordinateDetail(featureClasses.ElementAt(0));
+            string str1 = GetSpatialRefDetail(featureClasses.ElementAt(0));
             sb.AppendFormat("{0}-坐标系:\r\n{1}\r\n", featureClasses.ElementAt(0).AliasName, str1);
 
             for (int i = 1; i < featureClasses.Count(); i++)
             {
-                string str2 = GetCoordinateDetail(featureClasses.ElementAt(i));
+                string str2 = GetSpatialRefDetail(featureClasses.ElementAt(i));
                 if (str1.Trim() != str2.Trim())
                     result = false;
                 sb.AppendFormat("\r\n{0}-坐标系:\r\n{1}\r\n", featureClasses.ElementAt(i).AliasName, str2);
@@ -441,15 +439,15 @@ namespace WLib.ArcGis.Geometry
         /// <param name="map"></param>
         /// <param name="message">判断结果信息，若地图与图层坐标系一致，此值为null，否则提示坐标不一致并列出各坐标系详细参数</param>
         /// <returns></returns>
-        public static bool CheckMapCoordinate(this IMap map, out string message)
+        public static bool CheckSpatialRef(this IMap map, out string message)
         {
             var featureLayers = map.GetFeatureLayers();
             var featureClasses = featureLayers.Select(v => v.FeatureClass).ToArray();
-            bool result = CheckClassesCoordinate(featureClasses, out message);
+            bool result = CheckSpatialRef(featureClasses, out message);
             if (result)
             {
-                string str1 = GetCoordinateDetail(map.SpatialReference);
-                string str2 = GetCoordinateDetail(featureClasses[0]);
+                string str1 = GetSpatialRefDetail(map.SpatialReference);
+                string str2 = GetSpatialRefDetail(featureClasses[0]);
                 if (str1 != str2)
                 {
                     message = $"地图(数据框)坐标系与各图层坐标系不一致！\r\n地图坐标系为：{str1}\r\n各图层坐标系为：{str2}";
@@ -543,7 +541,7 @@ namespace WLib.ArcGis.Geometry
         #endregion
 
 
-        #region 西安80坐标系——广东省
+        #region 西安80坐标系广东省范围
         /// <summary>
         ///  获取“西安1980高斯克吕格3度分带含带号”的指定带号的投影坐标系的枚举，
         ///  带号不在广东省范围（37,38,39）内则抛出异常

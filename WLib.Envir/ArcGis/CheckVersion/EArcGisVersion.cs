@@ -43,6 +43,14 @@ namespace WLib.Envir.ArcGis.CheckVersion
         /// <summary>
         /// ArcGIS10.5
         /// </summary>
-        ArcGIS105
+        ArcGIS105,
+        /// <summary>
+        /// ArcGIS10.6
+        /// </summary>
+        ArcGIS106,
+        /// <summary>
+        /// ArcGIS10.7
+        /// </summary>
+        ArcGIS107,
     }
 }

@@ -5,29 +5,32 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
+
 namespace WLib.ArcGis.Carto.MapExport.Base
 {
     /// <summary>
     /// 表示出图时一个图层的设置信息
     /// </summary>
-    public class LayerInfo
+    [Serializable]
+    public class LayerInfo : TableInfo
     {
         /// <summary>
         /// 图层在地图中的位置索引，索引≤-1表示图层在地图中没有固定索引位置
         /// </summary>
-        public int LayerIndex { get; set; }
+        public int Index { get; set; }
         /// <summary>
         /// 图层名称
         /// </summary>
-        public string LayerName { get; set; }
+        public new string Name { get; set; }
         /// <summary>
         /// 图层定义查询
         /// </summary>
-        public string Definition { get; set; }
+        public new string Definition { get; set; }
         /// <summary>
         /// 图层数据源
         /// </summary>
-        public string DataSource { get; set; }
+        public new string DataSource { get; set; }
         /// <summary>
         /// 地图是否缩放至当前图层
         /// </summary>
@@ -39,7 +42,7 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         /// </summary>
         public LayerInfo()
         {
-            LayerIndex = -1;
+            Index = -1;
         }
 
         /// <summary>
@@ -53,9 +56,9 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         public LayerInfo(string layerName, string dataSource,
             int index = -1, string layerDefinition = null, bool zoomTo = false)
         {
-            LayerName = layerName;
+            Name = layerName;
             DataSource = dataSource;
-            LayerIndex = index;
+            Index = index;
             Definition = layerDefinition;
             ZoomTo = zoomTo;
         }
@@ -72,9 +75,9 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         public LayerInfo(string layerName, string workspacePath, string objectName,
             int index = -1, string layerDefinition = null, bool zoomTo = false)
         {
-            LayerName = layerName;
+            Name = layerName;
             DataSource = System.IO.Path.Combine(workspacePath, objectName);
-            LayerIndex = index;
+            Index = index;
             Definition = layerDefinition;
             ZoomTo = zoomTo;
         }
@@ -92,9 +95,9 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         public LayerInfo(string layerName, string workspacePath, string datasetName, string objectName,
             int index = -1, string layerDefinition = null, bool zoomTo = false)
         {
-            LayerName = layerName;
+            Name = layerName;
             DataSource = System.IO.Path.Combine(workspacePath, datasetName, objectName);
-            LayerIndex = index;
+            Index = index;
             Definition = layerDefinition;
             ZoomTo = zoomTo;
         }

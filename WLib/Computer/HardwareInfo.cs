@@ -16,39 +16,6 @@ namespace WLib.Computer
     public class HardwareInfo
     {
         /// <summary>
-        /// 获取计算机硬件信息
-        /// </summary>
-        /// <param name="typePath"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private static string GetHardWareInfo(string typePath, string key)
-        {
-            try
-            {
-                ManagementClass managementClass = new ManagementClass(typePath);
-                ManagementObjectCollection managementObjColl = managementClass.GetInstances();
-                PropertyDataCollection properties = managementClass.Properties;
-                foreach (PropertyData property in properties)
-                {
-                    if (property.Name == key)
-                    {
-                        foreach (var managementBaseObject in managementObjColl)
-                        {
-                            var managementObject = (ManagementObject) managementBaseObject;
-                            return managementObject.Properties[property.Name].Value.ToString();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-            return string.Empty;
-        }
-
-
-        /// <summary>
         /// 获取系统所在盘符（eg:"c:\"）
         /// </summary>
         /// <returns></returns>
@@ -157,6 +124,39 @@ namespace WLib.Computer
                 }
             }
             return mac;
+        }
+
+
+        /// <summary>
+        /// 获取计算机硬件信息
+        /// </summary>
+        /// <param name="typePath"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private static string GetHardWareInfo(string typePath, string key)
+        {
+            try
+            {
+                ManagementClass managementClass = new ManagementClass(typePath);
+                ManagementObjectCollection managementObjColl = managementClass.GetInstances();
+                PropertyDataCollection properties = managementClass.Properties;
+                foreach (PropertyData property in properties)
+                {
+                    if (property.Name == key)
+                    {
+                        foreach (var managementBaseObject in managementObjColl)
+                        {
+                            var managementObject = (ManagementObject)managementBaseObject;
+                            return managementObject.Properties[property.Name].Value.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return string.Empty;
         }
     }
 }

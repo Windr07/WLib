@@ -20,7 +20,7 @@ namespace WLib.Files.Excel.NPOI
     /// <summary>
     /// NPOI操作Excel的帮助类
     /// </summary>
-    public class NPOIHelper
+    public static class NPOIHelper
     {
         /// <summary>
         /// 打开Excel工作簿（兼容xls和xlsx）
@@ -50,7 +50,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        public static string GetCellValue(ISheet sheet, int row, int col)
+        public static string GetCellValue(this ISheet sheet, int row, int col)
         {
             ICell cell = sheet.GetRow(row).GetCell(col);
             if (cell == null || cell.ToString().Trim() == string.Empty)
@@ -68,7 +68,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="insertRowIndex">指定在第几行插入（插入行的位置）</param>
         /// <param name="insertRowCount">指定要插入多少行</param>
         /// <param name="sourceStyleRow">源单元格格式的行，注意源格式行应为插入行之前的行</param>
-        public static void InsertRow(ISheet sheet, int insertRowIndex, int insertRowCount, IRow sourceStyleRow, int lastRowNum = -1)
+        public static void InsertRow(this ISheet sheet, int insertRowIndex, int insertRowCount, IRow sourceStyleRow, int lastRowNum = -1)
         {
             if (lastRowNum < 0)
                 lastRowNum = sheet.LastRowNum;
@@ -97,7 +97,7 @@ namespace WLib.Files.Excel.NPOI
         /// </summary>
         /// <param name="sourceStyleRow"></param>
         /// <param name="desRow"></param>
-        public static void CopyCellStyle(IRow sourceStyleRow, IRow desRow)
+        public static void CopyCellStyle(this IRow sourceStyleRow, IRow desRow)
         {
             IRow firstTargetRow = desRow;
             ICell firstSourceCell;
@@ -121,7 +121,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="workbook">工作表</param
         /// <param name="row">设置行</param>
         /// <param name="col">设置列</param>
-        public static void SetBorderLine(IWorkbook workbook, int row, int col)
+        public static void SetBorderLine(this IWorkbook workbook, int row, int col)
         {
             ISheet sheet = workbook.GetSheetAt(0);
             ICell cell = sheet.GetRow(row).GetCell(col);
@@ -143,7 +143,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="col">开始列</param>
         /// <param name="endRow">结束行</param>
         /// <param name="endCol">结束列</param>
-        public static void SetBorderLine(IWorkbook workbook, int row, int col, int endRow, int endCol)
+        public static void SetBorderLine(this IWorkbook workbook, int row, int col, int endRow, int endCol)
         {
             ISheet sheet = workbook.GetSheetAt(0);
             for (int i = row; i <= endRow; i++)
@@ -175,7 +175,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="col">开始列</param>
         /// <param name="eRow">结束行</param>
         /// <param name="eCol">结束列</param>
-        public static void MergeCells(ISheet sheet, Object value, int row, int eRow, int col, int eCol)
+        public static void MergeCells(this ISheet sheet, Object value, int row, int eRow, int col, int eCol)
         {
             sheet.AddMergedRegion(new CellRangeAddress(row, eRow, col, eCol));
             sheet.GetRow(row).GetCell(col).SetCellValue(value.ToString());
@@ -186,7 +186,7 @@ namespace WLib.Files.Excel.NPOI
         /// </summary>
         /// <param name="workbook">指定要保存的工作簿</param>
         /// <param name="savePath">指定保存工作簿的路径</param>
-        public static void SaveWoorkbook(IWorkbook workbook, string savePath)
+        public static void SaveWoorkbook(this IWorkbook workbook, string savePath)
         {
             FileStream fileStream = new FileStream(savePath, FileMode.Create);
             workbook.Write(fileStream);
@@ -200,7 +200,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="richText">单元格上的字符串</param>
         /// <param name="fontSize">字体大小</param>
         /// <param name="fontName">字体名称</param>
-        public static IFont ApplyFont(IWorkbook workbook, IRichTextString richText, short fontSize, string fontName = "宋体")
+        public static IFont ApplyFont(this IWorkbook workbook, IRichTextString richText, short fontSize, string fontName = "宋体")
         {
             IFont font = workbook.CreateFont();
             font.Underline = FontUnderlineType.None;
@@ -217,7 +217,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="richText">单元格上的字符串</param>
         /// <param name="fontSize">字体大小</param>
         /// <param name="fontName">字体名称</param>
-        public static IFont ApplyFont(ISheet sheet, IRichTextString richText, short fontSize, string fontName = "宋体")
+        public static IFont ApplyFont(this ISheet sheet, IRichTextString richText, short fontSize, string fontName = "宋体")
         {
             return ApplyFont(sheet.Workbook, richText, fontSize, fontName);
         }
@@ -231,7 +231,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="startIndex">添加下划线的起始字符索引</param>
         /// <param name="endIndex">添加下划线的末尾字符索引</param>
         /// <param name="fontName">字体名称</param>
-        public static IFont SetUnderline(IWorkbook workbook, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
+        public static IFont SetUnderline(this IWorkbook workbook, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
         {
             IFont font = workbook.CreateFont();
             font.Underline = FontUnderlineType.Single;
@@ -250,7 +250,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="startIndex">添加下划线的起始字符索引</param>
         /// <param name="endIndex">添加下划线的末尾字符索引</param>
         /// <param name="fontName">字体名称</param>
-        public static IFont SetUnderline(ISheet sheet, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
+        public static IFont SetUnderline(this ISheet sheet, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
         {
             return SetUnderline(sheet.Workbook, richText, fontSize, startIndex, endIndex, fontName);
         }
@@ -264,7 +264,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="vaule">需要单元格所需传入的值</param>
         /// <param name="startIndex">需要添加下划线的起始位置</param>
         /// <param name="endIndex">需要添加下划线的末尾位置</param>
-        public static void SetUnderline(ISheet sheet, int row, int cell, string vaule, int startIndex, int endIndex)
+        public static void SetUnderline(this ISheet sheet, int row, int cell, string vaule, int startIndex, int endIndex)
         {
             HSSFRichTextString richtext = new HSSFRichTextString(vaule);
             ApplyFont(sheet, richtext, 11);
@@ -282,7 +282,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="vaule"></param>
         /// <param name="startTime">起始日期</param>
         /// <param name="endTime">截止日期</param>
-        public static void SetDateTimeUnderline(IWorkbook workbook, int row, int cell, string vaule, DateTime startTime, DateTime endTime)
+        public static void SetDateTimeUnderline(this IWorkbook workbook, int row, int cell, string vaule, DateTime startTime, DateTime endTime)
         {
             string startYear = startTime.Year.ToString();
             string startMonth = startTime.Month.ToString();

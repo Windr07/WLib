@@ -18,6 +18,9 @@ namespace WLib.UserCtrls.FileViewer.Picture
     /// </summary>
     public partial class PicViewer : UserControl, IFileViewer
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly Timer _timer = new Timer();
         /// <summary>
         /// 图片
@@ -78,17 +81,27 @@ namespace WLib.UserCtrls.FileViewer.Picture
         /// 
         /// </summary>
         private Point _zoomPoint;
-     
-
         /// <summary>
-        /// 光标
+        /// 鼠标指针效果：可移动
         /// </summary>
         private readonly Cursor _pan;
+        /// <summary>
+        /// 鼠标指针效果：移动中
+        /// </summary>
         private readonly Cursor _mPaning;
+        /// <summary>
+        /// 鼠标指针效果：放大
+        /// </summary>
         private readonly Cursor _zoomIn;
+        /// <summary>
+        /// 鼠标指针效果：缩小
+        /// </summary>
         private readonly Cursor _zoomOut;
 
-      
+
+        /// <summary>
+        /// 图片简单浏览控件
+        /// </summary>
         public PicViewer()
         {
             InitializeComponent();
@@ -100,29 +113,13 @@ namespace WLib.UserCtrls.FileViewer.Picture
             BackColor = Color.Transparent;
             pictureBox.MouseWheel += pictureBox1_MouseWheel;
         }
-
+        /// <summary>
+        /// 释放图片资源
+        /// </summary>
         public void DisposeImage()
         {
             _image?.Dispose();
         }
-
-        void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta > 0)
-                ZoomIn();
-            else
-                ZoomOut();
-        }
-
-        private void pictureBox1_Resize(object sender, EventArgs e)
-        {
-            if (Width < 200)
-                Width = 200;
-            if (Height < 200)
-                Height = 200;
-        }
-
-       
         /// <summary>
         /// 放大操作
         /// </summary>
@@ -313,8 +310,6 @@ namespace WLib.UserCtrls.FileViewer.Picture
             pictureBox.Invalidate();
             ShowPercentLabel();
         }
-
-
         /// <summary>
         /// 拉框放大
         /// </summary>
@@ -505,7 +500,7 @@ namespace WLib.UserCtrls.FileViewer.Picture
         /// 平移
         /// </summary>
         /// <param name="toPoint"></param>
-        private void Pad(Point toPoint)
+        private void Pan(Point toPoint)
         {
             int newht = _curDrawRect.Height;
             int newwt = _curDrawRect.Width;
@@ -524,7 +519,48 @@ namespace WLib.UserCtrls.FileViewer.Picture
             _curDrawRect = newDrawRect;
             pictureBox.Invalidate();
         }
+        /// <summary>
+        /// 显示当前图片比例3秒钟
+        /// </summary>
+        private void ShowPercentLabel()
+        {
+            label1.Text = (_curDrawRect.Width * 100.0 / _image.Width).ToString("f0") + "%";
+            label1.Visible = true;
+            Application.DoEvents();
+            if (_timer.Enabled) _timer.Stop();
+            _timer.Interval = 3000;
+            _timer.Tick += m_LabelTicker_Tick;
+            _timer.Start();
+        }
+        /// <summary>
+        /// 刷新
+        /// </summary>
+        public new void Refresh()
+        {
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.DoubleBuffer, true);
+            ((Control)this).Refresh();
+        }
 
+
+
+        private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                ZoomIn();
+            else
+                ZoomOut();
+        }
+
+        private void pictureBox1_Resize(object sender, EventArgs e)
+        {
+            if (Width < 200)
+                Width = 200;
+            if (Height < 200)
+                Height = 200;
+        }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -601,7 +637,7 @@ namespace WLib.UserCtrls.FileViewer.Picture
                 //超出picturebox就不处理
                 if (_padPoint != Point.Empty && standardRect.Contains(thisPoint))//平移
                 {
-                    Pad(thisPoint);
+                    Pan(thisPoint);
                     _padPoint = thisPoint;
                 }
             }
@@ -671,22 +707,7 @@ namespace WLib.UserCtrls.FileViewer.Picture
             }
         }
 
-
-        /// <summary>
-        /// 显示当前图片比例3秒钟
-        /// </summary>
-        private void ShowPercentLabel()
-        {
-            label1.Text = (_curDrawRect.Width * 100.0 / _image.Width).ToString("f0") + "%";
-            label1.Visible = true;
-            Application.DoEvents();
-            if (_timer.Enabled) _timer.Stop();
-            _timer.Interval = 3000;
-            _timer.Tick += m_LabelTicker_Tick;
-            _timer.Start();
-        }
-
-        void m_LabelTicker_Tick(object sender, EventArgs e)
+        private void m_LabelTicker_Tick(object sender, EventArgs e)
         {
             _timer.Stop();
             _timer.Tick -= m_LabelTicker_Tick;
@@ -729,21 +750,7 @@ namespace WLib.UserCtrls.FileViewer.Picture
             OnPaint(e);
         }
 
-        public new void Refresh()
-        {
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            SetStyle(ControlStyles.UserPaint, true);
-            SetStyle(ControlStyles.DoubleBuffer, true);
-            ((Control)this).Refresh();
-        }
-
-        /// <summary>
-        /// 左键双击放大，右键双击缩小
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void pictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void pictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)//左键双击放大，右键双击缩小
         {
             if (e.Button == MouseButtons.Left)
                 ZoomIn();
@@ -751,22 +758,13 @@ namespace WLib.UserCtrls.FileViewer.Picture
                 ZoomOut();
         }
 
-        /// <summary>
-        /// 一旦进入picturebox就捕捉鼠标，以便进行滚轮缩放
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void pictureBox1_MouseEnter(object sender, EventArgs e)
+        private void pictureBox1_MouseEnter(object sender, EventArgs e)//一旦进入picturebox就捕捉鼠标，以便进行滚轮缩放
         {
             pictureBox.Focus();
         }
 
 
         #region IViewer 成员
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filePath"></param>
         public void LoadFile(string filePath)
         {
             if (!System.IO.File.Exists(filePath))
@@ -791,9 +789,6 @@ namespace WLib.UserCtrls.FileViewer.Picture
                 }
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
         public void Close()
         {
             PicFilePath = "";

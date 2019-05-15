@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.GeoDatabase.Table
 {
@@ -528,7 +529,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         public static string GetSourcePath(this ITable table)
         {
             var dataset = table as IDataset;
-            return dataset?.Workspace.PathName + "\\" + dataset?.Name;
+            return System.IO.Path.Combine(dataset?.Workspace.PathName, dataset?.Name);
         }
         #endregion
 
@@ -574,6 +575,35 @@ namespace WLib.ArcGis.GeoDatabase.Table
                     $"修改表格名称失败（{oldName}，别名：{oldAliasName}，改为：{newName}，别名：{newAliasName}）：\r\n{ex.Message}");
             }
             return isRename;
+        }
+        #endregion
+
+
+        #region 校验WhereClause
+        /// <summary>
+        /// 校验并返回与数据源一致的条件查询语句
+        /// （例如table的数据源是mdb，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// </summary>
+        /// <param name="table">执行条件查询的表</param>
+        /// <param name="whereClause">需要校验的条件查询语句</param>
+        public static string ValidateWhereClause(this ITable table, string whereClause)
+        {
+            var workspacePath = GetWorkspacePathName(table);
+            if (System.IO.Path.GetExtension(workspacePath) == ".mdb" && whereClause.Contains("like"))
+                return whereClause.Replace('_', '?').Replace('%', '*');
+            return whereClause;
+        }
+        /// <summary>
+        /// 校验并返回与数据源一致的条件查询语句
+        /// （例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// </summary>
+        /// <param name="eType">数据源类型</param>
+        /// <param name="whereClause">需要校验的条件查询语句</param>
+        public static string ValidateWhereClause(EWorkspaceType eType, string whereClause)
+        {
+            if (eType == EWorkspaceType.Access && whereClause.Contains("like"))
+                return whereClause.Replace('_', '?').Replace('%', '*');
+            return whereClause;
         }
         #endregion
 

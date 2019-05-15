@@ -6,9 +6,7 @@
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
-using stdole;
 using System;
 using WLib.ArcGis.Display;
 

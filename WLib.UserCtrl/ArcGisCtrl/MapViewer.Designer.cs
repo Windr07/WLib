@@ -34,6 +34,7 @@
             this.TableListBox = new WLib.UserCtrls.ArcGisCtrl.TableListBox();
             this.TocControl = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.tocGroupControl = new System.Windows.Forms.Panel();
+            this.lblTocTips = new System.Windows.Forms.Label();
             this.btnExpand = new System.Windows.Forms.Button();
             this.btnCollapsed = new System.Windows.Forms.Button();
             this.btnSwitchContent = new System.Windows.Forms.Button();
@@ -45,7 +46,6 @@
             this.MapNavigationTools = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
             this.xtpPageLayout = new System.Windows.Forms.TabPage();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
-            this.lblTocTips = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -91,9 +91,9 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.TableListBox);
             this.splitContainer2.Panel1.Controls.Add(this.TocControl);
             this.splitContainer2.Panel1.Controls.Add(this.tocGroupControl);
+            this.splitContainer2.Panel1.Controls.Add(this.TableListBox);
             // 
             // splitContainer2.Panel2
             // 
@@ -105,9 +105,10 @@
             // TableListBox
             // 
             this.TableListBox.AttributeForm = null;
-            this.TableListBox.Location = new System.Drawing.Point(94, 99);
+            this.TableListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TableListBox.Location = new System.Drawing.Point(0, 0);
             this.TableListBox.Name = "TableListBox";
-            this.TableListBox.Size = new System.Drawing.Size(150, 150);
+            this.TableListBox.Size = new System.Drawing.Size(255, 335);
             this.TableListBox.TabIndex = 2;
             this.TableListBox.Visible = false;
             // 
@@ -132,6 +133,15 @@
             this.tocGroupControl.Name = "tocGroupControl";
             this.tocGroupControl.Size = new System.Drawing.Size(255, 24);
             this.tocGroupControl.TabIndex = 1;
+            // 
+            // lblTocTips
+            // 
+            this.lblTocTips.AutoSize = true;
+            this.lblTocTips.Location = new System.Drawing.Point(4, 7);
+            this.lblTocTips.Name = "lblTocTips";
+            this.lblTocTips.Size = new System.Drawing.Size(53, 12);
+            this.lblTocTips.TabIndex = 1;
+            this.lblTocTips.Text = "图层列表";
             // 
             // btnExpand
             // 
@@ -248,15 +258,6 @@
             this.PageLayoutControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("PageLayoutControl.OcxState")));
             this.PageLayoutControl.Size = new System.Drawing.Size(654, 505);
             this.PageLayoutControl.TabIndex = 0;
-            // 
-            // lblTocTips
-            // 
-            this.lblTocTips.AutoSize = true;
-            this.lblTocTips.Location = new System.Drawing.Point(4, 7);
-            this.lblTocTips.Name = "lblTocTips";
-            this.lblTocTips.Size = new System.Drawing.Size(53, 12);
-            this.lblTocTips.TabIndex = 1;
-            this.lblTocTips.Text = "图层列表";
             // 
             // MapViewer
             // 

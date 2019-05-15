@@ -98,7 +98,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         [Description("InMemory", 2)]
         [Description("esriDataSourcesGDB.InMemoryWorkspaceFactory", 1)]
         InMemory = 11,
-
+        
         //关于UID：https://blog.csdn.net/yulongguiziyao/article/details/16119633
         //关于WorkspaceFactoryProgID：http://edndoc.esri.com/arcobjects/9.2/ComponentHelp/esriGeodatabase/IWorkspaceName_WorkspaceFactoryProgID.htm
         //  esriDataSourcesGDB.AccessWorkspaceFactory  

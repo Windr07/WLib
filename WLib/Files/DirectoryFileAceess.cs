@@ -36,7 +36,6 @@ namespace WLib.Files
             }
             return allDirs;
         }
-
         /// <summary>
         /// 获取给出文件夹及其各级子文件夹下的所有文件路径
         /// </summary>
@@ -56,6 +55,7 @@ namespace WLib.Files
 
             return list;
         }
+
 
         /// <summary>
         /// 从指定目录及其各级子目录中，选取指定扩展名的文件，返回文件路径
@@ -80,7 +80,6 @@ namespace WLib.Files
             }
             return resultPaths;
         }
-
         /// <summary>
         /// 从指定目录及其各级子目录中，选取指定扩展名的文件，返回文件名与路径构成的键值对
         /// </summary>

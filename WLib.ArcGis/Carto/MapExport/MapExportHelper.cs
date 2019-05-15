@@ -13,8 +13,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geometry;
-using WLib.ArcGis.Carto.DataSource;
 using WLib.ArcGis.Carto.Element;
+using WLib.ArcGis.Carto.Layer;
 using WLib.ArcGis.Carto.Map;
 using WLib.ArcGis.Carto.MapExport.Base;
 using WLib.ArcGis.Control;
@@ -29,20 +29,23 @@ namespace WLib.ArcGis.Carto.MapExport
     public class MapExportHelper
     {
         /// <summary>
-        /// 根据地图导出配置，设置地图文档并出图
+        /// 设置地图文档内容并进行出图的操作
         /// </summary>
-        /// <param name="cfg">导出地图配置</param>
-        /// <param name="mapDoc">地图文档，若值为null则根据配置复制地图模板到生成目录或临时目录，打开复制后的地图文档进行设置和出图</param>
+        public MapExportHelper() { }
+        /// <summary>
+        /// 根据地图出图配置，设置地图文档并出图
+        /// </summary>
+        /// <param name="cfg">对地图进行各项配置和出图的信息</param>
+        /// <param name="mapDoc">要设置并出图的地图文档，若值为null则根据<see cref="cfg"/>参数指定的信息
+        /// 复制地图模板到生成目录或临时目录，打开复制后的地图文档进行设置和出图</param>
         public virtual void ExportMap(MapExportInfo cfg, IMapDocument mapDoc = null)
         {
             //是否在完成出图后关闭地图文档，地图文档来自外部传参（mapDoc != null）则不关闭，来自内部打开则应关闭
             bool closeMapDoc = mapDoc == null;
             try
             {
-                if (!ValidateConfig(cfg, out var message)) //验证导出地图配置是否正确
-                    throw new Exception(message);
-                if (mapDoc == null)
-                    mapDoc = GetMapDocument(cfg);
+                if (!ValidateConfig(cfg, out var message)) throw new Exception(message);
+                if (mapDoc == null) mapDoc = GetMapDocument(cfg);
                 ExportMapMainOperation(cfg, mapDoc);
             }
             catch (Exception ex)
@@ -58,13 +61,13 @@ namespace WLib.ArcGis.Carto.MapExport
 
 
         /// <summary>
-        /// 根据地图导出配置，设置地图文档并导出地图
+        /// 根据地图出图配置，设置地图文档并导出地图
         /// </summary>
         /// <param name="cfg"></param>
         /// <param name="mapDoc"></param>
         protected virtual void ExportMapMainOperation(MapExportInfo cfg, IMapDocument mapDoc)
         {
-            //设置地图数据源、定义查询、比例尺、显示范围
+            //设置数据源、定义查询、比例尺、显示范围
             var graphicsContainer = mapDoc.PageLayout as IGraphicsContainer;
             foreach (var mapFrameInfo in cfg.MapFrames)
                 SetMapFrame(graphicsContainer, mapFrameInfo);
@@ -89,7 +92,7 @@ namespace WLib.ArcGis.Carto.MapExport
             Marshal.ReleaseComObject(mapDoc);
         }
         /// <summary>
-        /// 验证导出地图配置是否正确
+        /// 验证出图配置是否正确
         /// </summary>
         /// <param name="cfg">导出地图配置</param>
         /// <param name="message">验证信息</param>
@@ -164,9 +167,9 @@ namespace WLib.ArcGis.Carto.MapExport
         /// <returns></returns>
         protected virtual ILayer SetLayerDataSource(IMap map, LayerInfo layerInfo)
         {
-            var layer = layerInfo.LayerIndex > -1 ?
-                map.get_Layer(layerInfo.LayerIndex) :
-                map.GetFeatureLayer(layerInfo.LayerName);
+            var layer = layerInfo.Index > -1 ?
+                map.get_Layer(layerInfo.Index) :
+                map.GetFeatureLayer(layerInfo.Name);
 
             var sourcePath = layer.GetSourcePath()?.ToLower().Trim();
             var setSourcePath = layerInfo.DataSource?.ToLower().Trim();

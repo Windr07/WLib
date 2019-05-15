@@ -23,7 +23,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
      */
 
     /// <summary>
-    /// 标注与注记的操作
+    /// 提供标注转注记的方法
     /// </summary>
     public static class LabelAnnoConvert
     {

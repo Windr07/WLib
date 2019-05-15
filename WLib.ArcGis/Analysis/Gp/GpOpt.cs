@@ -15,13 +15,17 @@ using ESRI.ArcGIS.Geoprocessor;
 
 namespace WLib.ArcGis.Analysis.Gp
 {
-    /**
-     * ------------------------------------GP工具调用成功条件总结----------------------------------------
+    /** GP工具调用成功条件总结
      * 1、运行问题：部分GP工具要先在ArcMap上运行一遍
      * 2、补丁问题：若是ArcGIS 10.0，要安装SP5
-     * 3、权限问题：Lincense权限：Products为权限最高的ArcInfo(在License控件中不要同时选中其他项)， 并选择扩展项：Spatial Analyst
+     * 3、权限问题：
+     *   1)Lincense控件设置：Products为权限最高的ArcInfo(在License控件中不要同时选中其他项)， 并选择扩展项：Spatial Analyst
+     *   2)LicenseInitializer类设置：只能设置esriLicenseProductCode.esriLicenseProductCodeAdvanced，或者esriLicenseProductCodeDesktop，不要再加其他权限
      * 4、参数问题：(具体参考ArcGIS帮助文档)
-     *   1)参数为whereClause：sql语句不能有误且要与数据库类型适配
+     *   1)参数为whereClause：sql语句不能有误且要与数据库类型适配，例如：
+     *     mdb: select [fieldName] from City
+     *     shp: select "fieldName" from City
+     *     gdb: select  fieldName  from City
      *   2)参数为图层或表名：开头不能是数字，不能加上".shp"，或不能有小数点/空格/其他特殊字符
      *   3)参数为路径：路径不能太深，确保输入路径的对象存在，输出目录存在但输出位置不能有同名文件/图层/表
      *   4)参数为路径：一些GP工具要求路径中不能有小数点、空格或其他特殊字符

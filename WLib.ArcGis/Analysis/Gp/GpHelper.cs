@@ -29,7 +29,7 @@ namespace WLib.ArcGis.Analysis.Gp
         /// Geoprocessor操作帮助类
         /// </summary>
         /// <param name="overwriteOutput">输出时是否覆盖同名文件</param>
-        public GpHelper(bool overwriteOutput) => OverwriteOutput = overwriteOutput;
+        public GpHelper(bool overwriteOutput = true) => OverwriteOutput = overwriteOutput;
 
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace WLib.ArcGis.Analysis.Gp
         /// </summary>
         /// <param name="gpResult">GP工具执行结果</param>
         /// <returns></returns>
-        public string GetGpMessage(IGeoProcessorResult gpResult)
+        private string GetGpMessage(IGeoProcessorResult gpResult)
         {
             var sb = new StringBuilder();
             if (gpResult != null && gpResult.Status == esriJobStatus.esriJobSucceeded)

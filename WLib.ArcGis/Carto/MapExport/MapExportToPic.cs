@@ -23,12 +23,12 @@ namespace WLib.ArcGis.Carto.MapExport
         /// 输出图片
         /// </summary>
         /// <param name="activeView"></param>
-        /// <param name="filePath">图片输出的完整路径，路径扩展名应为jpg,tiff,bmp,emf,png,gif,pdf,eps,ai,svg之一</param>
+        /// <param name="outPath">图片输出的完整路径，路径扩展名应为jpg,tiff,bmp,emf,png,gif,pdf,eps,ai,svg之一</param>
         /// <param name="resolution">图片分辨率（每英寸点数）</param>
         /// <returns></returns>
-        public static bool ExportToPicture(this IActiveView activeView, string filePath, double resolution = 300)
+        public static bool ExportToPicture(this IActiveView activeView, string outPath, double resolution = 300)
         {
-            IExport export = CreateExport(filePath, resolution);
+            IExport export = CreateExport(outPath, resolution);
             tagRECT exportRECT = activeView.ExportFrame;
             export.PixelBounds = new EnvelopeClass
             {

@@ -1,11 +1,14 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019/3/27
+// desc： 列表控件ListBox的扩展控件，重绘ListBox的列表项，在每一列表项的左侧显示图标，同时实现IListControl
+// mdfy:  None
+//----------------------------------------------------------------*/
+
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace WLib.UserCtrls.ListCtrl

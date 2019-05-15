@@ -4,6 +4,25 @@ using ESRI.ArcGIS;
 
 namespace WLib.ArcGis
 {
+    /** LicenseInitializer使用说明：
+     * private static LicenseInitializer licenseInitializer = new LicenseInitializer();
+     *   //Main Method：
+     *   licenseInitializer.InitializeApplication(
+     *   new[]
+     *   {
+     *       // 此处绑定Advanced后不要再绑定其他权限， 如果绑定esriLicenseProductCodeEngine权限有些GP工具无法使用
+     *       // ArcGIS10.1以上版本为esriLicenseProductCodeAdvanced，ArcGIS10.0应改为esriLicenseProductCodeDesktop
+     *       esriLicenseProductCode.esriLicenseProductCodeAdvanced
+     *   },
+     *   new[]
+     *   {
+     *       esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
+     *       esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork
+     *   });
+     *   Application.Run(new MainForm());
+     *   licenseInitializer.ShutdownApplication();
+     */
+
     /// <summary>
     /// 初始化ARCGIS许可
     /// </summary>
@@ -17,7 +36,7 @@ namespace WLib.ArcGis
             ResolveBindingEvent += BindingArcGISRuntime;
         }
 
-        void BindingArcGISRuntime(object sender, EventArgs e)
+        private void BindingArcGISRuntime(object sender, EventArgs e)
         {
             ProductCode[] supportedRuntimes = { ProductCode.Engine, ProductCode.Desktop };
             foreach (ProductCode productCode in supportedRuntimes)

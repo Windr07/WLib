@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace WLib.Files
@@ -31,20 +32,18 @@ namespace WLib.Files
         /// <param name="dir"></param>
         public static void DeleteFromPath(string dir)
         {
-            string[] files = System.IO.Directory.GetFiles(dir);
-            for (int i = 0; i < files.Length; i++)
+            var filePaths = Directory.GetFiles(dir);
+            foreach (var filePath in filePaths)
             {
                 try
                 {
-                    if (System.IO.File.Exists(files[i]))
+                    if (File.Exists(filePath))
                     {
-                        string type = System.IO.Path.GetExtension(files[i]);
-                        if (type == null)
-                            continue;
-                        if (ShpExtensions.Contains(type.ToLower()))//检查shp文件
-                            System.IO.File.Delete(files[i]);
-                        else if (MapExtensions.Contains(type.ToLower()))//检查mxd文件
-                            System.IO.File.Delete(files[i]);
+                        var extension = Path.GetExtension(filePath).ToLower();
+                        if (ShpExtensions.Contains(extension))//检查shp文件
+                            File.Delete(filePath);
+                        else if (MapExtensions.Contains(extension))//检查mxd文件
+                            File.Delete(filePath);
                     }
                 }
                 catch { }
@@ -57,12 +56,10 @@ namespace WLib.Files
         /// <param name="filePath">文件全路径</param>
         public static void DeleteFileFormPath(string filePath)
         {
-            var fileDir = System.IO.Path.GetDirectoryName(filePath);
-            var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            var fileDir = Path.GetDirectoryName(filePath);
+            var fileName = Path.GetFileNameWithoutExtension(filePath);
             foreach (var extension in ShpExtensions)
-            {
-                System.IO.File.Delete(System.IO.Path.Combine(fileDir, fileName + extension));
-            }
+                File.Delete(Path.Combine(fileDir, fileName + extension));
         }
         /// <summary>
         /// 获取指定shp文件关联的shp文件组（包括".shp", ".shx", ".dbf", ".prj", ".sbn", ".sbx",".shp.xml"等）
@@ -72,12 +69,12 @@ namespace WLib.Files
         public static string[] GetShpFileFromPath(string filePath)
         {
             var filePaths = new List<string>();
-            var fileDir = System.IO.Path.GetDirectoryName(filePath);
-            var fileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            var fileDir = Path.GetDirectoryName(filePath);
+            var fileName = Path.GetFileNameWithoutExtension(filePath);
             foreach (var extension in ShpExtensions)
             {
-                var path = System.IO.Path.Combine(fileDir, fileName + extension);
-                if (System.IO.File.Exists(path))
+                var path = Path.Combine(fileDir, fileName + extension);
+                if (File.Exists(path))
                     filePaths.Add(path);
             }
             return filePaths.ToArray();

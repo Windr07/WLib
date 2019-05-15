@@ -6,10 +6,12 @@
 //----------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.GeoDatabase.FeatClass;
 
 namespace WLib.UserCtrls.PathCtrl
 {
@@ -19,11 +21,11 @@ namespace WLib.UserCtrls.PathCtrl
     public partial class DataSelectorForm : Form
     {
         /// <summary>
-        /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素类等）
+        /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素图层、栅格图层等）
         /// </summary>
         private EObjectFilter _filter;
         /// <summary>
-        /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素类等）
+        /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素图层、栅格图层等）
         /// </summary>
         public EObjectFilter Filter
         {
@@ -31,8 +33,11 @@ namespace WLib.UserCtrls.PathCtrl
             set
             {
                 _filter = value;
-                cbTables.Visible = _filter == EObjectFilter.All || _filter == EObjectFilter.Tables;
-                cbLayers.Visible = cbPoint.Visible = cbLine.Visible = cbPolygon.Visible = _filter == EObjectFilter.All || _filter == EObjectFilter.FeatureClasses;
+                cbTables.Visible = cbTables.Checked = (_filter & EObjectFilter.Tables) == EObjectFilter.Tables;
+                cbLayers.Visible = cbLayers.Checked = (_filter & EObjectFilter.FeatureLayer) == EObjectFilter.FeatureLayer;
+                cbPoint.Visible = cbPoint.Checked = (_filter & EObjectFilter.PointLayer) == EObjectFilter.PointLayer;
+                cbLine.Visible = cbLine.Checked = (_filter & EObjectFilter.PolylineLayer) == EObjectFilter.PolylineLayer;
+                cbPolygon.Visible = cbPolygon.Checked = (_filter & EObjectFilter.PolygonLayer) == EObjectFilter.PolygonLayer;
             }
         }
         /// <summary>
@@ -54,14 +59,7 @@ namespace WLib.UserCtrls.PathCtrl
         /// <summary>
         /// 单选时所选的图层或表格，或多选时所选的第一个图层或表格的名称
         /// </summary>
-        public string SelectedObjectName
-        {
-            get
-            {
-                var selectedItems = listViewLayers.SelectedItems.Cast<ListViewItem>().Select(v => v.Text).ToArray();
-                return selectedItems.Length > 0 ? selectedItems[0] : null;
-            }
-        }
+        public string SelectedObjectName => SelectedObjectNames.FirstOrDefault();
 
 
         /// <summary>
@@ -69,19 +67,13 @@ namespace WLib.UserCtrls.PathCtrl
         /// </summary>
         /// <param name="name">要素类名称或要素类别名</param>
         /// <returns></returns>
-        public IFeatureClass GetFeatureClassByName(string name)
-        {
-            return workspaceSelector1.GetFeatureClassByName(name);
-        }
+        public IFeatureClass GetFeatureClassByName(string name) => workspaceSelector1.GetFeatureClassByName(name);
         /// <summary>
         /// 返回指定名称或别名的表格（未连接工作空间或找不到时返回null）
         /// </summary>
         /// <param name="name">表名或表的别名</param>
         /// <returns></returns>
-        public ITable GetTableByName(string name)
-        {
-            return workspaceSelector1.GetTableByName(name);
-        }
+        public ITable GetTableByName(string name) => workspaceSelector1.GetTableByName(name);
         /// <summary>
         /// 从工作空间中选取图层或表格的窗体
         /// </summary>
@@ -110,29 +102,39 @@ namespace WLib.UserCtrls.PathCtrl
         private void workspaceSelector1_AfterSelectPath(object sender, EventArgs e)//选定工作空间后，将图层或表格显示到ListView中
         {
             listViewLayers.Items.Clear();
-            var classNames = workspaceSelector1.FeatureClassNames;
-            var tableNames = workspaceSelector1.TableNames;
 
-            switch (Filter)
+            var classes = workspaceSelector1.FeatureClasses;
+            if (classes != null)
             {
-                case EObjectFilter.FeatureClasses:
-                    if (classNames != null)
-                        foreach (var name in classNames) { listViewLayers.Items.Add(new ListViewItem(name, 0)); }
-                    break;
-                case EObjectFilter.Tables:
-                    if (tableNames != null)
-                        foreach (var name in tableNames) { listViewLayers.Items.Add(new ListViewItem(name, 1)); }
-                    break;
-                case EObjectFilter.All:
-                    if (classNames != null)
-                        foreach (var name in classNames) { listViewLayers.Items.Add(new ListViewItem(name, 0)); }
-                    if (tableNames != null)
-                        foreach (var name in tableNames) { listViewLayers.Items.Add(new ListViewItem(name, 1)); }
-                    break;
+                if ((Filter & EObjectFilter.FeatureLayer) == EObjectFilter.FeatureLayer)
+                    foreach (var cls in classes)
+                        listViewLayers.Items.Add(new ListViewItem(((IDataset)cls).Name, 0));
+                else
+                {
+                    var eType = esriGeometryType.esriGeometryAny;
+                    if ((Filter & EObjectFilter.PointLayer) == EObjectFilter.PointLayer)
+                        eType = esriGeometryType.esriGeometryPoint;
+                    else if ((Filter & EObjectFilter.PolylineLayer) == EObjectFilter.PolylineLayer)
+                        eType = esriGeometryType.esriGeometryPolyline;
+                    else if ((Filter & EObjectFilter.PolygonLayer) == EObjectFilter.PolygonLayer)
+                        eType = esriGeometryType.esriGeometryPolygon;
+
+                    if (eType != esriGeometryType.esriGeometryAny)
+                        foreach (var cls in classes.FilterByGeoType(eType))
+                            listViewLayers.Items.Add(new ListViewItem(((IDataset)cls).Name, 0));
+                }
+            }
+
+            var tableNames = workspaceSelector1.TableNames;
+            if (tableNames != null)
+            {
+                if ((Filter & EObjectFilter.Tables) == EObjectFilter.Tables)
+                    foreach (var name in tableNames)
+                        listViewLayers.Items.Add(new ListViewItem(name, 0));
             }
         }
 
-        private void listViewLayers_ItemCheck(object sender, ItemCheckEventArgs e)//单选
+        private void listViewLayers_ItemCheck(object sender, ItemCheckEventArgs e)//单选时，勾选当前项则其他项取消勾选
         {
             if (!MultiSelect && listViewLayers.SelectedItems.Count > 0)
             {
@@ -140,6 +142,35 @@ namespace WLib.UserCtrls.PathCtrl
                 {
                     if (i != e.Index)
                         listViewLayers.Items[i].Selected = false;
+                }
+            }
+        }
+
+        private void cbAll_cckedChanged(object sender, EventArgs e)//全选
+        {
+            for (int i = 0; i < listViewLayers.Items.Count; i++)
+                listViewLayers.Items[i].Selected = cbAll.Checked;
+        }
+
+        private void cbShowItems_CheckedChanged(object sender, EventArgs e)//是否选择表格、图层（点、线、面）
+        {
+            listViewLayers.Items.Clear();
+            var classNames = workspaceSelector1.FeatureClassNames;
+            var tableNames = workspaceSelector1.TableNames;
+
+            if (cbTables.Checked && tableNames != null)
+                foreach (var name in tableNames) { listViewLayers.Items.Add(new ListViewItem(name, 0)); }
+
+            if (cbLayers.Checked && classNames != null)
+            {
+                var shapeTypeGroups = workspaceSelector1.FeatureClasses.GroupBy(v => v.ShapeType);
+                foreach (var group in shapeTypeGroups)
+                {
+                    if (group.Key == esriGeometryType.esriGeometryPoint && !cbPoint.Checked) continue;
+                    if (group.Key == esriGeometryType.esriGeometryPolyline && !cbLine.Checked) continue;
+                    if (group.Key == esriGeometryType.esriGeometryPolygon && !cbPolygon.Checked) continue;
+
+                    foreach (var cls in group) { listViewLayers.Items.Add(new ListViewItem(((IDataset)cls).Name, 0)); }
                 }
             }
         }
@@ -159,41 +190,6 @@ namespace WLib.UserCtrls.PathCtrl
         {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-
-        #region CheckBox事件处理
-        private void cbAll_cckedChanged(object sender, EventArgs e)//全选
-        {
-            for (int i = 0; i < listViewLayers.Items.Count; i++)
-            {
-                listViewLayers.Items[i].Selected = cbAll.Checked;
-            }
-        }
-
-        #endregion
-
-        private void cbShowItems_CheckedChanged(object sender, EventArgs e)
-        {
-            listViewLayers.Items.Clear();
-            var classNames = workspaceSelector1.FeatureClassNames;
-            var tableNames = workspaceSelector1.TableNames;
-
-            if (cbTables.Checked && tableNames != null)
-                foreach (var name in classNames) { listViewLayers.Items.Add(new ListViewItem(name, 0)); }
-
-            if (cbLayers.Checked && classNames != null)
-            {
-                var shapeTypeGroups = workspaceSelector1.FeatureClasses.GroupBy(v => v.ShapeType);
-                foreach (var group in shapeTypeGroups)
-                {
-                    if (group.Key == esriGeometryType.esriGeometryPoint && !cbPoint.Checked) continue;
-                    if (group.Key == esriGeometryType.esriGeometryPolyline && !cbLine.Checked) continue;
-                    if (group.Key == esriGeometryType.esriGeometryPolygon && !cbPolygon.Checked) continue;
-
-                    foreach (var cls in group) { listViewLayers.Items.Add(new ListViewItem(((IDataset)cls).Name, 0)); }
-                }
-            }
         }
     }
 }

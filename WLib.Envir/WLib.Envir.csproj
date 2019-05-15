@@ -70,6 +70,8 @@
     <Compile Include="ArcGis\CheckVersion\CheckArcGis103Install.cs" />
     <Compile Include="ArcGis\CheckVersion\CheckArcGis104Install.cs" />
     <Compile Include="ArcGis\CheckVersion\CheckArcGis105Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis106Install.cs" />
+    <Compile Include="ArcGis\CheckVersion\CheckArcGis107Install.cs" />
     <Compile Include="ArcGis\CheckVersion\CheckArcGis93Install.cs" />
     <Compile Include="ArcGis\CheckVersion\CheckArcGisInstall.cs" />
     <Compile Include="ArcGis\CheckVersion\CheckArcGis100Install.cs" />

@@ -11,7 +11,7 @@ using ESRI.ArcGIS.SystemUI;
 namespace WLib.ArcGis.Control.MapAssociation
 {
     /// <summary>
-    /// 地图控件的常用右键菜单
+    /// 地图控件与常用右键菜单操作
     /// </summary>
     public class MapCtrlMenu: IMapCtrlAssociation
     {

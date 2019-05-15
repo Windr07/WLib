@@ -24,7 +24,7 @@ namespace WLib.Gdal
     /// <summary>
     /// GDAL帮助类
     /// </summary>
-    public class GdalHelper
+    public static class GdalHelper
     {
         /// <summary>
         /// 初始化Gdal，注册所有驱动并支持中文
@@ -121,7 +121,7 @@ namespace WLib.Gdal
         /// <param name="layer"></param>
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
-        private static void ResetLayerReading(Layer layer, string whereClause = null, Geometry geometry = null)
+        private static void ResetLayerReading(this Layer layer, string whereClause = null, Geometry geometry = null)
         {
             layer.ResetReading();
             layer.SetAttributeFilter(whereClause);
@@ -131,7 +131,7 @@ namespace WLib.Gdal
         /// 按照名称查找图层
         /// </summary>
         /// <returns></returns>
-        public static Layer GetLayerByName(DataSource dataSource, string layerName, bool notFoundException = true)
+        public static Layer GetLayerByName(this DataSource dataSource, string layerName, bool notFoundException = true)
         {
             layerName = layerName.Replace("dbo.", "");
 
@@ -158,7 +158,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="dataSource"></param>
         /// <returns></returns>
-        public static List<Layer> GetLayers(DataSource dataSource)
+        public static List<Layer> GetLayers(this DataSource dataSource)
         {
             var layers = new List<Layer>();
             for (int i = 0; i < dataSource.GetLayerCount(); i++)
@@ -175,7 +175,7 @@ namespace WLib.Gdal
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public static List<Feature> GetFeatures(Layer layer, string whereClause = null, Geometry geometry = null)
+        public static List<Feature> GetFeatures(this Layer layer, string whereClause = null, Geometry geometry = null)
         {
             ResetLayerReading(layer, whereClause, geometry);
 
@@ -195,7 +195,7 @@ namespace WLib.Gdal
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public static List<long> GetFeatureFids(Layer layer, string whereClause = null, Geometry geometry = null)
+        public static List<long> GetFeatureFids(this Layer layer, string whereClause = null, Geometry geometry = null)
         {
             ResetLayerReading(layer, whereClause, geometry);
 
@@ -214,7 +214,7 @@ namespace WLib.Gdal
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public static Feature GetFirstFeature(Layer layer, string whereClause = null, Geometry geometry = null)
+        public static Feature GetFirstFeature(this Layer layer, string whereClause = null, Geometry geometry = null)
         {
             ResetLayerReading(layer, whereClause, geometry);
             return layer.GetNextFeature();
@@ -227,7 +227,7 @@ namespace WLib.Gdal
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public static string GetFirstStrValue(Layer layer, string fieldName, string whereClause = null, Geometry geometry = null)
+        public static string GetFirstStrValue(this Layer layer, string fieldName, string whereClause = null, Geometry geometry = null)
         {
             var feature = GetFirstFeature(layer, whereClause, geometry);
             if (feature == null)
@@ -241,7 +241,7 @@ namespace WLib.Gdal
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        public static List<Geometry> GetGeometries(Layer layer, string whereClause = null, Geometry geometry = null)
+        public static List<Geometry> GetGeometries(this Layer layer, string whereClause = null, Geometry geometry = null)
         {
             ResetLayerReading(layer, whereClause, geometry);
 
@@ -260,7 +260,7 @@ namespace WLib.Gdal
         /// <param name="action"></param>
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
-        public static void UpdateFeatures(Layer layer, Action<Feature> action, string whereClause = null, Geometry geometry = null)
+        public static void UpdateFeatures(this Layer layer, Action<Feature> action, string whereClause = null, Geometry geometry = null)
         {
             ResetLayerReading(layer, whereClause, geometry);
 
@@ -277,7 +277,7 @@ namespace WLib.Gdal
         /// <param name="whereClause"></param>
         /// <param name="geometry"></param>
         /// <returns>删除的要素的个数</returns>
-        public static int DeleteFeatures(Layer layer, string whereClause = null, Geometry geometry = null)
+        public static int DeleteFeatures(this Layer layer, string whereClause = null, Geometry geometry = null)
         {
             var oids = GetFeatureFids(layer, whereClause, geometry);
             oids.ForEach(oid => layer.DeleteFeature(oid));
@@ -293,7 +293,7 @@ namespace WLib.Gdal
         /// <param name="prjectionSpatialRef">投影坐标系</param>
         /// <seealso cref="http://spatialreference.org/ref/"/>
         /// <returns></returns>
-        public static string GetProjectionSrName(SpatialReference prjectionSpatialRef)
+        public static string GetProjectionSrName(this SpatialReference prjectionSpatialRef)
         {
             prjectionSpatialRef.AutoIdentifyEPSG();
             var projsc = prjectionSpatialRef.GetAttrValue("PROJCS", 0);
@@ -305,7 +305,7 @@ namespace WLib.Gdal
         /// <param name="geographySpatialRef">地理坐标系</param>
         /// <seealso cref="http://spatialreference.org/ref/"/>
         /// <returns></returns>
-        public static string GetGeographySrName(SpatialReference geographySpatialRef)
+        public static string GetGeographySrName(this SpatialReference geographySpatialRef)
         {
             geographySpatialRef.AutoIdentifyEPSG();
             var projsc = geographySpatialRef.GetAttrValue("GEOGCS", 0);
@@ -317,7 +317,7 @@ namespace WLib.Gdal
         /// <param name="prjectionSpatialRef">投影坐标系</param>
         /// <seealso cref="http://spatialreference.org/ref/"/>
         /// <returns></returns>
-        public static int GetWkid(SpatialReference prjectionSpatialRef)
+        public static int GetWkid(this SpatialReference prjectionSpatialRef)
         {
             prjectionSpatialRef.AutoIdentifyEPSG();
 
@@ -334,7 +334,7 @@ namespace WLib.Gdal
         /// <param name="xyGeometries">投影坐标系图斑</param>
         /// <param name="projectionSpatialRef">投影坐标系</param>
         /// <returns></returns>
-        public static Geometry[] ProjectionToGeography(Geometry[] xyGeometries, SpatialReference projectionSpatialRef)
+        public static Geometry[] ProjectionToGeography(this Geometry[] xyGeometries, SpatialReference projectionSpatialRef)
         {
             //将投影坐标转成地理坐标
             var geographySpatialRef = projectionSpatialRef.CloneGeogCS(); //获取投影坐标对应的地理坐标系
@@ -355,7 +355,7 @@ namespace WLib.Gdal
         /// <param name="llGeometries">地理坐标几何图斑</param>
         /// <param name="geographySpatialRef">地理坐标系</param>
         /// <returns></returns>
-        public static Geometry[] ChangedRingDirection(Geometry[] llGeometries, SpatialReference geographySpatialRef)
+        public static Geometry[] ChangedRingDirection(this Geometry[] llGeometries, SpatialReference geographySpatialRef)
         {
             List<Geometry> resultGeometries = new List<Geometry>();
             foreach (var llGoemetry in llGeometries)
@@ -379,7 +379,7 @@ namespace WLib.Gdal
         /// <param name="geographySpatialRef"></param>
         /// <param name="projectionSpatialRef"></param>
         /// <returns></returns>
-        public static Geometry GeographyToProjection(Geometry llGeomerty, SpatialReference geographySpatialRef, SpatialReference projectionSpatialRef)
+        public static Geometry GeographyToProjection(this Geometry llGeomerty, SpatialReference geographySpatialRef, SpatialReference projectionSpatialRef)
         {
             llGeomerty.AssignSpatialReference(geographySpatialRef);
             string wkt = null;
@@ -400,7 +400,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static List<FieldDefn> GetFields(Layer layer)
+        public static List<FieldDefn> GetFields(this Layer layer)
         {
             var fields = new List<FieldDefn>();
             FeatureDefn featureDefn = layer.GetLayerDefn();
@@ -416,7 +416,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static List<string> GetFieldNames(Layer layer)
+        public static List<string> GetFieldNames(this Layer layer)
         {
             return GetFields(layer).Select(v => v.GetName()).ToList();
         }
@@ -425,7 +425,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="fieldType"></param>
         /// <returns></returns>
-        public static Type ConvertFieldType(FieldType fieldType)
+        public static Type ConvertFieldType(this FieldType fieldType)
         {
             Type type = null;
             switch (fieldType)
@@ -485,7 +485,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="geometries"></param>
         /// <returns></returns>
-        public static Geometry UnionGeometries(IEnumerable<Geometry> geometries)
+        public static Geometry UnionGeometries(this IEnumerable<Geometry> geometries)
         {
             Geometry unionGeometry = null;
             foreach (Geometry geometry in geometries)
@@ -503,7 +503,7 @@ namespace WLib.Gdal
         /// <param name="geometries">几何图形</param>
         /// <param name="properties">属性值，可以为null</param>
         /// <returns></returns>
-        public static string GeometriesToJson(IEnumerable<Geometry> geometries, string[] properties = null)
+        public static string GeometriesToJson(this IEnumerable<Geometry> geometries, string[] properties = null)
         {
             StringBuilder json = new StringBuilder("{\"type\":\"FeatureCollection\",\"features\":[");
             int index = 0;
@@ -530,7 +530,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static DataTable LayerToEmptyDataTable(Layer layer)
+        public static DataTable LayerToEmptyDataTable(this Layer layer)
         {
             var fields = GetFields(layer);
             var features = GetFeatures(layer);
@@ -549,7 +549,7 @@ namespace WLib.Gdal
         /// </summary>
         /// <param name="layer"></param>
         /// <returns></returns>
-        public static DataTable LayerToStrDataTable(Layer layer)
+        public static DataTable LayerToStrDataTable(this Layer layer)
         {
             var fields = GetFields(layer);
             var features = GetFeatures(layer);

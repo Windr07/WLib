@@ -1,16 +1,17 @@
 ﻿using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.esriSystem;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Carto.Element;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
+using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
-using WLib.Db;
-using WLib.Db.DbBase;
+using WLib.Database;
+using WLib.Database.DbBase;
 using WLib.UserCtrls.ArcGisCtrl;
+using FolderBrowserDialog = WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
 
 namespace WLib.Samples.WinForm
 {
@@ -101,21 +102,24 @@ namespace WLib.Samples.WinForm
 
         private void Test()
         {
-            FeatClassFromPath.FromPath(@"").QueryFeatures(@"XZQDM = '12345'", feature => { });
+            double sumRiverLength = 0.0;
+            FeatClassFromPath.FromPath(@"c:\River.shp").QueryFeatures(@"XZQDM = '440000'",
+                feature => sumRiverLength += feature.ToDouble("RiverLength"));
 
-            var workspace = GetWorkspace.GetWorkSpace(@"");
-            FeatClassFromPath.FromPath(@"").CopyStruct(workspace, "NewClass", "新要素类");
+            var workspace = GetWorkspace.GetWorkSpace(@"c:\World.mdb");
+            FeatClassFromPath.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, "NewRiver", "河流");
 
-            var connString = ConnStringHelper.Dbf_OleDb4(@"");
-            new DbHelper(connString, EDbProviderType.OleDb).ExcNonQuery(@"");
+            var connString = ConnStringHelper.Dbf_OleDb4(@"c:\River.dbf");
 
-            var connString2 = ConnStringHelper.Access_OleDb4(@"");
+            new DbHelper(connString, EDbProviderType.OleDb).ExcNonQuery(@"update River set Name = 'Pearl River' where RiverCode ='003'");
+
+            var connString2 = ConnStringHelper.Access_OleDb4(@"c:\World.mdb");
         }
 
-        private void Test2()
+        private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            IWorkspace w;
-            
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            dlg.ShowDialog(this);
         }
     }
 }

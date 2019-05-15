@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 
+using System;
 using ESRI.ArcGIS.Geometry;
 
 namespace WLib.ArcGis.Carto.MapExport.Base
@@ -13,6 +14,7 @@ namespace WLib.ArcGis.Carto.MapExport.Base
     /// <summary>
     /// 表示一个地图框中的信息
     /// </summary>
+    [Serializable]
     public class MapFrameInfo
     {
         /// <summary>

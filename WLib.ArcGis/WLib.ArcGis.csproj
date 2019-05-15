@@ -167,7 +167,6 @@
     <Compile Include="Analysis\OnShape\TopologicalOpt.cs" />
     <Compile Include="Analysis\Topology\TopologyOpt.cs" />
     <Compile Include="Calculate\AngleCalculate.cs" />
-    <Compile Include="Carto\DataSource\DataSourceOpt.cs" />
     <Compile Include="Carto\Element\ElementCreate.cs" />
     <Compile Include="Carto\Element\EDrawElementType.cs" />
     <Compile Include="Carto\LabelAnno\AnnoOpt.cs" />
@@ -182,6 +181,8 @@
     <Compile Include="Carto\MapExport\Base\MapFrameInfoCollection.cs" />
     <Compile Include="Carto\MapExport\Base\EElementValueType.cs" />
     <Compile Include="Carto\MapExport\Base\EPageElementType.cs" />
+    <Compile Include="Carto\MapExport\Base\TableInfo.cs" />
+    <Compile Include="Carto\MapExport\Base\TableInfoCollection.cs" />
     <Compile Include="Carto\MapExport\MapExportInfo.cs" />
     <Compile Include="Carto\MapExport\MapExportHelper.cs" />
     <Compile Include="Carto\MapExport\MapExportToPic.cs" />
@@ -203,6 +204,8 @@
     <Compile Include="Control\MapAssociation\MapCtrlMenu.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlPageLayoutSyn.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlToc.cs" />
+    <Compile Include="Data\EStatisticsType.cs" />
+    <Compile Include="Data\TypeConvert.cs" />
     <Compile Include="Display\ColorCreate.cs" />
     <Compile Include="Display\SymbolCreate.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatClassToTreeNodes.cs" />
@@ -212,7 +215,7 @@
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceCreate.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceOpt.cs" />
     <Compile Include="Geometry\SpatialRefOpt.cs" />
-    <Compile Include="Data\TableConvert.cs" />
+    <Compile Include="Data\DataTableConvert.cs" />
     <Compile Include="Geometry\ESrType.cs" />
     <Compile Include="Data\DataStatistics.cs" />
     <Compile Include="Data\ModelConvert.cs" />
@@ -247,7 +250,7 @@
     <Compile Include="Control\ZoomTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeoDatabase\Raster\RasterOpt.cs" />
-    <Compile Include="Server\LoadServerMap.cs" />
+    <Compile Include="Server\ServerLayerOpt.cs" />
     <Compile Include="Sql\SqlQuery.cs" />
     <Compile Include="GeoDatabase\Table\TableCreate.cs" />
     <Compile Include="GeoDatabase\Table\OleDbfHelper.cs" />

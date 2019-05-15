@@ -53,53 +53,6 @@ namespace WLib.Data
 
 
         /// <summary>
-        /// 将DataTable中的数据转成文本
-        /// </summary>
-        /// <param name="dataTable">需要将数据转成文本的DataTable</param>
-        /// <param name="split">分隔符，用于分隔每一行的每一个值</param>
-        /// <param name="containsHeader">是否包含表头</param>
-        /// <returns></returns>
-        public static string DataTableToText(this DataTable dataTable, string split, bool containsHeader = true)
-        {
-            StringBuilder sb = new StringBuilder();
-            var cols = dataTable.Columns;
-            if (containsHeader)
-            {
-                for (int i = 0; i < cols.Count - 1; i++)
-                {
-                    sb.Append(cols[i].ColumnName + split);
-                }
-                sb.Append(cols[cols.Count - 1].ColumnName + Environment.NewLine);
-            }
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                for (int i = 0; i < cols.Count - 1; i++)
-                {
-                    sb.Append(row[i] + split);
-                }
-                sb.Append(row[cols.Count - 1] + Environment.NewLine);
-            }
-            return sb.ToString();
-        }
-        /// <summary>
-        /// 将DataTable中每一列的列名(ColumnName)和列标题(Caption)对调
-        /// </summary>
-        /// <param name="dataTable"></param>
-        /// <returns>对dataTable本身对调列表和列标题后返回，没有进行对象克隆</returns>
-        public static DataTable SwitchColumnNameAndCaption(this DataTable dataTable)
-        {
-            foreach (DataColumn column in dataTable.Columns)
-            {
-                var tmp = column.ColumnName;
-                column.ColumnName = column.Caption;
-                column.Caption = tmp;
-            }
-            return dataTable;
-        }
-
-
-        /// <summary>
         /// 转置DataTable，即将行列对换（注意dataTable的行数不能太多）
         /// </summary>
         /// <param name="sourceTable"></param>
@@ -146,5 +99,51 @@ namespace WLib.Data
             return TransposeDataTable(dataRow.Table);
         }
 
+
+        /// <summary>
+        /// 将DataTable中的数据转成文本
+        /// </summary>
+        /// <param name="dataTable">需要将数据转成文本的DataTable</param>
+        /// <param name="split">分隔符，用于分隔每一行的每一个值</param>
+        /// <param name="containsHeader">是否包含表头</param>
+        /// <returns></returns>
+        public static string DataTableToText(this DataTable dataTable, string split, bool containsHeader = true)
+        {
+            StringBuilder sb = new StringBuilder();
+            var cols = dataTable.Columns;
+            if (containsHeader)
+            {
+                for (int i = 0; i < cols.Count - 1; i++)
+                {
+                    sb.Append(cols[i].ColumnName + split);
+                }
+                sb.Append(cols[cols.Count - 1].ColumnName + Environment.NewLine);
+            }
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                for (int i = 0; i < cols.Count - 1; i++)
+                {
+                    sb.Append(row[i] + split);
+                }
+                sb.Append(row[cols.Count - 1] + Environment.NewLine);
+            }
+            return sb.ToString();
+        }
+        /// <summary>
+        /// 将DataTable中每一列的列名(ColumnName)和列标题(Caption)对调
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <returns>对dataTable本身对调列表和列标题后返回，没有进行对象克隆</returns>
+        public static DataTable SwitchColumnNameAndCaption(this DataTable dataTable)
+        {
+            foreach (DataColumn column in dataTable.Columns)
+            {
+                var tmp = column.ColumnName;
+                column.ColumnName = column.Caption;
+                column.Caption = tmp;
+            }
+            return dataTable;
+        }
     }
 }

@@ -245,7 +245,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         public static IFields CreateBaseFields(esriGeometryType geometryType, ISpatialReference spatialRef)
         {
             IFields fields = new FieldsClass();
-            IFieldsEdit fieldsEdit = fields as IFieldsEdit;
+            IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
             fieldsEdit.AddField(CreateOidField());
             fieldsEdit.AddField(CreateShapeField(geometryType, spatialRef));
             return fields;
@@ -257,7 +257,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="spatialRef">坐标系（若Shape字段所在要素类在工作空间中则此值不可为null，若位于要素数据集则应设置为null</param>
         /// <param name="otherFields">除了ObjectID和Shape字段以外的字段（可以为null）</param>
         /// <returns></returns>
-        public static IFields CreateFields(esriGeometryType geometryType, ISpatialReference spatialRef, params IField[] otherFields)
+        public static IFields CreateFields(esriGeometryType geometryType, ISpatialReference spatialRef, IEnumerable<IField> otherFields)
         {
             var fields = CreateBaseFields(geometryType, spatialRef);
             if (otherFields != null)
@@ -289,9 +289,26 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <returns></returns>
         public static IField CreateShapeField(esriGeometryType geometryType, ISpatialReference spatialRef)
         {
+            //创建几何字段
+            IField shapeField = new FieldClass();
+            IFieldEdit shapeFieldEdit = (IFieldEdit)shapeField;
+            shapeFieldEdit.Name_2 = "SHAPE";
+            shapeFieldEdit.AliasName_2 = "SHAPE";
+            shapeFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+            shapeFieldEdit.GeometryDef_2 = CreateGeometryDef(geometryType, spatialRef);
+            return shapeField;
+        }
+        /// <summary>
+        /// 创建几何对象字段定义字段
+        /// </summary>
+        /// <param name="geometryType"></param>
+        /// <param name="spatialRef"></param>
+        /// <returns></returns>
+        private static IGeometryDef CreateGeometryDef(esriGeometryType geometryType, ISpatialReference spatialRef)
+        {
             //创建几何对象字段定义字段
             IGeometryDef geometryDef = new GeometryDefClass();
-            IGeometryDefEdit geometryDefEdit = geometryDef as IGeometryDefEdit;
+            IGeometryDefEdit geometryDefEdit = (IGeometryDefEdit)geometryDef;
 
             //指定几何对象字段属性值
             geometryDefEdit.GeometryType_2 = geometryType;
@@ -300,16 +317,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             if (spatialRef != null)
                 geometryDefEdit.SpatialReference_2 = spatialRef;
 
-
-            //创建几何字段
-            IField fieldShape = new FieldClass();
-            IFieldEdit fieldEditShape = fieldShape as IFieldEdit;
-            fieldEditShape.Name_2 = "SHAPE";
-            fieldEditShape.AliasName_2 = "SHAPE";
-            fieldEditShape.Type_2 = esriFieldType.esriFieldTypeGeometry;
-            fieldEditShape.GeometryDef_2 = geometryDef;
-
-            return fieldShape;
+            return geometryDef;
         }
         /// <summary>
         /// 创建字段
@@ -342,20 +350,43 @@ namespace WLib.ArcGis.GeoDatabase.Fields
 
         #region 添加字段
         /// <summary>
-        /// 向已有字段集添加多个字段
+        /// 向字段集添加多个字段
         /// </summary>
         /// <param name="iFields"></param>
         /// <param name="otherFields"></param>
         public static void AddFields(this IFields iFields, IEnumerable<IField> otherFields)
         {
-            var fieldsEdit = iFields as IFieldsEdit;
+            var fieldsEdit = (IFieldsEdit)iFields;
             if (otherFields != null)
-            {
                 foreach (var field in otherFields)
-                {
                     fieldsEdit.AddField(field);
-                }
+        }
+        /// <summary>
+        /// 向字段集添加或修改ObjectID和拥有指定几何类型与坐标系Shape字段，若字段存在且符合要求则不添加或修改
+        /// （ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID）
+        /// </summary>
+        /// <param name="fields">字段集</param>
+        /// <param name="geometryType">需要添加的Shape字段存储的几何类型</param>
+        /// <param name="spatialRef">需要添加的Shape字段存储的坐标系</param>
+        /// <returns></returns>
+        public static IFields AddBaseFields(this IFields fields, esriGeometryType geometryType, ISpatialReference spatialRef)
+        {
+            IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
+            var oidField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeOID);
+            if (oidField == null)
+                fieldsEdit.AddField(CreateOidField());
+
+            var shapeField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeGeometry);
+            if (shapeField == null)
+                fieldsEdit.AddField(CreateShapeField(geometryType, spatialRef));
+            else if (shapeField.GeometryDef.GeometryType != geometryType ||
+                     shapeField.GeometryDef.SpatialReference != spatialRef)
+            {
+                IFieldEdit shapeFieldEdit = (IFieldEdit)shapeField;
+                shapeFieldEdit.GeometryDef_2 = CreateGeometryDef(geometryType, spatialRef);
             }
+
+            return fields;
         }
         /// <summary>
         /// 向已有要素类添加新字段，若字段存在则不添加，并返回字段索引

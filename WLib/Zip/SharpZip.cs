@@ -119,7 +119,7 @@ namespace WLib.Zip
                         }
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception("压缩字节数组发生错误", ex);
                 }
@@ -218,7 +218,7 @@ namespace WLib.Zip
         /// <summary>
         /// 压缩单个文件/文件夹
         /// </summary>
-        /// <param name="path">源文件/文件夹路径列表</param>
+        /// <param name="path">源文件/文件夹路径</param>
         /// <param name="zipFilePath">压缩文件路径</param>
         /// <param name="comment">注释信息</param>
         /// <param name="password">压缩密码</param>

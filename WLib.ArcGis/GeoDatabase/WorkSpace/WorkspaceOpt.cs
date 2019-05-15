@@ -343,8 +343,5 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             return ((IFeatureWorkspace)workspace).CreateFeatureDataset(featureDatasetName, spatialRef);
         }
         #endregion
-
-
-
     }
 }

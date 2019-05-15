@@ -5,7 +5,6 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using ESRI.ArcGIS.Geometry;
 using WLib.Attributes;
 
 namespace WLib.ArcGis.Carto.Element

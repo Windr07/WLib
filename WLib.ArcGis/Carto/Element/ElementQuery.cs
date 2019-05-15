@@ -8,7 +8,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Geodatabase;
 
 namespace WLib.ArcGis.Carto.Element
 {

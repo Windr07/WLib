@@ -5,6 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
 using WLib.ArcGis.Carto.MapExport.Base;
 
 namespace WLib.ArcGis.Carto.MapExport
@@ -12,16 +13,13 @@ namespace WLib.ArcGis.Carto.MapExport
     /// <summary>
     /// 对地图进行各项配置和出图的信息
     /// </summary>
+    [Serializable]
     public class MapExportInfo
     {
         /// <summary>
         /// 配置名称
         /// </summary>
         public string CfgName { get; set; }
-        /// <summary>
-        /// 地图名称
-        /// </summary>
-        public string MapName { get; set; }
         /// <summary>
         /// 出图文档模板路径
         /// </summary>
@@ -56,6 +54,10 @@ namespace WLib.ArcGis.Carto.MapExport
         /// 出图文档中包含的地图框（地图）
         /// </summary>
         public MapFrameInfoCollection MapFrames { get; set; }
+        /// <summary>
+        /// 出图文档中包含的表格
+        /// </summary>
+        public TableInfoCollection Tables { get; set; }
 
 
         /// <summary>

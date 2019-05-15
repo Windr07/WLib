@@ -26,12 +26,8 @@ namespace WLib.UserCtrls
         }
 
 
-        #region 重写的事件
         protected override void OnPaint(PaintEventArgs pe)
         {
-            // TODO: 在此处添加自定义绘制代码
-
-            // 调用基类 OnPaint
             base.OnPaint(pe);
         }
         protected override void OnCellPainting(DataGridViewCellPaintingEventArgs e)
@@ -58,14 +54,9 @@ namespace WLib.UserCtrls
 
                             switch (_spanRows[e.ColumnIndex].Position)
                             {
-                                case 1:
-                                    left += 2;
-                                    break;
-                                case 2:
-                                    break;
-                                case 3:
-                                    right -= 2;
-                                    break;
+                                case 1: left += 2; break;
+                                case 2: break;
+                                case 3: right -= 2; break;
                             }
 
                             //画上半部分底色
@@ -100,11 +91,6 @@ namespace WLib.UserCtrls
             catch
             { }
         }
-        protected override void OnCellClick(DataGridViewCellEventArgs e)
-        {
-            base.OnCellClick(e);
-        }
-        #endregion
 
 
         /// <summary>
@@ -140,8 +126,6 @@ namespace WLib.UserCtrls
                     {
                         if (this.Rows[i].Cells[e.ColumnIndex].Value.ToString().Equals(curValue))
                         {
-                            //this.Rows[i].Cells[e.ColumnIndex].Selected = this.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected;
-
                             downRows++;
                             if (e.RowIndex != i)
                             {
@@ -159,7 +143,6 @@ namespace WLib.UserCtrls
                     {
                         if (this.Rows[i].Cells[e.ColumnIndex].Value.ToString().Equals(curValue))
                         {
-                            //this.Rows[i].Cells[e.ColumnIndex].Selected = this.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected;
                             upRows++;
                             if (e.RowIndex != i)
                             {
@@ -316,7 +299,6 @@ namespace WLib.UserCtrls
         public void ClearSpanInfo()
         {
             _spanRows.Clear();
-            //ReDrawHead();
         }
         private void DataGridViewEx_Scroll(object sender, ScrollEventArgs e)
         {

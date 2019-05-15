@@ -182,6 +182,7 @@
             this.cbLayers.TabIndex = 6;
             this.cbLayers.Text = "图层 (";
             this.cbLayers.UseVisualStyleBackColor = true;
+            this.cbLayers.CheckedChanged += new System.EventHandler(this.cbShowItems_CheckedChanged);
             // 
             // cbPoint
             // 
@@ -195,6 +196,7 @@
             this.cbPoint.TabIndex = 7;
             this.cbPoint.Text = "点";
             this.cbPoint.UseVisualStyleBackColor = true;
+            this.cbPoint.CheckedChanged += new System.EventHandler(this.cbShowItems_CheckedChanged);
             // 
             // cbLine
             // 
@@ -208,6 +210,7 @@
             this.cbLine.TabIndex = 8;
             this.cbLine.Text = "线";
             this.cbLine.UseVisualStyleBackColor = true;
+            this.cbLine.CheckedChanged += new System.EventHandler(this.cbShowItems_CheckedChanged);
             // 
             // cbPolygon
             // 
@@ -221,6 +224,7 @@
             this.cbPolygon.TabIndex = 9;
             this.cbPolygon.Text = "面 )";
             this.cbPolygon.UseVisualStyleBackColor = true;
+            this.cbPolygon.CheckedChanged += new System.EventHandler(this.cbShowItems_CheckedChanged);
             // 
             // DataSelectorForm
             // 

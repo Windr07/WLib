@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDatabase.Fields;
@@ -46,10 +45,31 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static IFeatureClass CopyStruct(this IFeatureClass sourceClass, object resultObject, string name, esriGeometryType geoType, string aliasName = null)
         {
-            var spatialRef = sourceClass.GetSpatialReference();
+            var spatialRef = sourceClass.GetSpatialRef();
             var feilds = sourceClass.CloneFeatureClassFieldsSimple();
 
             var featureClass = FeatClassCreate.Create(resultObject, name, spatialRef, geoType, feilds);
+
+            if (!String.IsNullOrEmpty(aliasName))
+                featureClass.RenameFeatureClassAliasName(aliasName);
+            return featureClass;
+        }
+        /// <summary>
+        /// 复制源要素类的表结构，创建一个空的要素类
+        /// </summary>
+        /// <param name="sourceClass">源要素类</param>
+        /// <param name="targetFullPath">新要素类的保存路径</param>
+        /// <param name="geoType">要素类的几何类型</param>
+        /// <param name="aliasName">新要素类别名，值为null则别名与名字相同</param>
+        /// <returns></returns>
+        public static IFeatureClass CopyStruct(this IFeatureClass sourceClass, string targetFullPath, esriGeometryType geoType, string aliasName = null)
+        {
+            var spatialRef = sourceClass.GetSpatialRef();
+            var feilds = sourceClass.CloneFeatureClassFieldsSimple();
+
+            var shapeField = FieldOpt.CreateShapeField(geoType, spatialRef);
+            ((IFieldsEdit)feilds).AddField(shapeField);
+            var featureClass = FeatClassToPath.CreateToPath(targetFullPath, feilds);
 
             if (!String.IsNullOrEmpty(aliasName))
                 featureClass.RenameFeatureClassAliasName(aliasName);
@@ -60,12 +80,12 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
         #region 复制数据，生成新要素类
         /// <summary>
-        /// 复制要素，生成为新的shp文件（注意目录中不能存在同名文件）
+        /// 复制要素，生成为新的要素类（注意目标位置不能存在同名要素类）
         /// </summary>
         /// <param name="features">需要复制的要素集合，不能有null</param>
-        /// <param name="newShpPath">新建的Shp文件路径（注意目录中不能存在同名文件）</param>
+        /// <param name="targetFullPath">新建的要素类的完整保存路径（注意目标位置不能存在同名要素类）</param>
         /// <returns>新的要素类(shp)</returns>
-        public static IFeatureClass CopyDataToNewShp(this IEnumerable<IFeature> features, string newShpPath)
+        public static IFeatureClass CopyDataToNewPath(this IEnumerable<IFeature> features, string targetFullPath)
         {
             var feature = features.FirstOrDefault();
             if (feature == null)
@@ -75,7 +95,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             var spatialReference = feature.Shape.SpatialReference;
             var fields = (feature.Class as IFeatureClass).CloneFeatureClassFieldsSimple();
             var feildArray = fields.FieldsToArray();
-            var faetureClass = FeatClassToPath.CreateToShpFile(newShpPath, geoType, spatialReference, feildArray);
+            var faetureClass = FeatClassToPath.CreateToPath(targetFullPath, geoType, spatialReference, feildArray);
 
             CopyDataTo(features, faetureClass);
             return faetureClass;
@@ -84,10 +104,10 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// 在内存中创建新要素类，根据查询条件复制要素到新要素类，返回新要素类
         /// </summary> 
         /// <param name="sourceClass">要素类</param>
-        /// <param name="whereClause">查询条件</param>
+        /// <param name="whereClause">筛选条件，值为null或Empty时将复制全部要素</param>
         /// <param name="memoryClassName">内存要素类的名称</param>
         /// <returns></returns>
-        public static IFeatureClass CopyDataToMemory(this IFeatureClass sourceClass, string whereClause, string memoryClassName = "tempFeatureClass")
+        public static IFeatureClass CopyDataToNewMemory(this IFeatureClass sourceClass, string whereClause, string memoryClassName = "tempFeatureClass")
         {
             IFields fields = sourceClass.CloneFeatureClassFields();
             IFeatureClass memoryClass = FeatClassCreate.CreateInMemory(memoryClassName, fields);
@@ -212,7 +232,6 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             var dict = new Dictionary<int, int>();//key：字段在源要素类的索引；value：在目标要素类中的索引
             var sourceFields = features.First().Fields;
             var tarShapeFieldIndex = sourceFields.FindField(targetClass.ShapeFieldName);//目标要素类的Shape字段索引
-            ISpatialReferenceFactory saptialRefFact = new SpatialReferenceEnvironmentClass();
 
             for (var i = 0; i < sourceFields.FieldCount; i++)
             {
@@ -230,7 +249,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
                 //投影变换，赋值Shape字段
                 var shape = sourceFeature.ShapeCopy;
-                var spatialReference = targetClass.GetSpatialReference();
+                var spatialReference = targetClass.GetSpatialRef();
                 shape.Project(spatialReference);
                 tarFeatureBuffer.Shape = shape;
             });

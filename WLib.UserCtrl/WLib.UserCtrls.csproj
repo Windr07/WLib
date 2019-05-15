@@ -205,18 +205,44 @@
     <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
       <DependentUpon>MapViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExplorerCtrl\ExplorerTreeView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ExplorerCtrl\ExplorerTreeView.designer.cs">
-      <DependentUpon>ExplorerTreeView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExplorerCtrl\ExplorerTreeViewWnd.cs">
+    <Compile Include="ComboCtrl\ComboBoxPlus.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ExplorerCtrl\ShellAPI.cs" />
-    <Compile Include="ExplorerCtrl\ShellItem.cs" />
-    <Compile Include="ExplorerCtrl\SystemImageList.cs" />
+    <Compile Include="ComboCtrl\DeleteEventArgs.cs" />
+    <Compile Include="ComboCtrl\NativeCombo.cs" />
+    <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\ExplorerTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\ExplorerTreeView.designer.cs">
+      <DependentUpon>ExplorerTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\ExplorerTreeViewWnd.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\FileOpenDialog.cs" />
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\FolderBrowserDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\FolderNameEditor.cs" />
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\FOS.cs" />
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\IFileOpenDialog.cs" />
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\IShellItem.cs" />
+    <Compile Include="ExplorerCtrl\FileFolderCtrl\SIGDN.cs" />
+    <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.Designer.cs">
+      <DependentUpon>PathFolderBrowserDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\ShellAPI.cs" />
+    <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\ShellItem.cs" />
+    <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\SystemImageList.cs" />
+    <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.Designer.cs">
+      <DependentUpon>PathFolderBrowser.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListCtrl\IListControl.cs" />
     <Compile Include="ListCtrl\ImageListBox.cs">
       <SubType>Component</SubType>
@@ -325,8 +351,14 @@
       <DependentUpon>MapViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExplorerCtrl\ExplorerTreeView.resx">
+    <EmbeddedResource Include="ExplorerCtrl\ExplorerTreeCtrl\ExplorerTreeView.resx">
       <DependentUpon>ExplorerTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.resx">
+      <DependentUpon>PathFolderBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.resx">
+      <DependentUpon>PathFolderBrowserDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathCtrl\DataSelectorForm.resx">
       <DependentUpon>DataSelectorForm.cs</DependentUpon>

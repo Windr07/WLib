@@ -58,15 +58,15 @@ namespace WLib.UserCtrls.PathCtrl
         /// <summary>
         /// 获取或设置可选工作空间列表中选中项的索引
         /// </summary>
-        public int WorkspaceIndex { get => this.cmbADBType.SelectedIndex;  set => this.cmbADBType.SelectedIndex = value; }
+        public int WorkspaceIndex { get => this.cmbADBType.SelectedIndex; set => this.cmbADBType.SelectedIndex = value; }
         /// <summary>
         /// 标示除浏览按钮外，其余操作是否可用
         /// </summary>
-        public bool OptEnable { get => this.SourcePathBox.OptEnable;  set => this.SourcePathBox.OptEnable = this.cmbADBType.Enabled = value;  }
+        public bool OptEnable { get => this.SourcePathBox.OptEnable; set => this.SourcePathBox.OptEnable = this.cmbADBType.Enabled = value; }
         /// <summary>
         /// 控件左侧的提示信息（eg:工作空间）
         /// </summary>
-        public string Description { get => this.lblWorkspaceDesc.Text;  set => this.lblWorkspaceDesc.Text = value;  }
+        public string Description { get => this.lblWorkspaceDesc.Text; set => this.lblWorkspaceDesc.Text = value; }
         /// <summary>
         /// 路径或连接字符串
         /// </summary>
@@ -129,32 +129,23 @@ namespace WLib.UserCtrls.PathCtrl
         /// 获取工作空间中的表格的名称
         /// </summary>
         public string[] TableNames { get { return Tables?.Select(v => (v as IDataset).Name).ToArray(); } }
+
         /// <summary>
         /// 返回指定名称或别名的要素类（未连接工作空间或找不到时返回null）
         /// </summary>
         /// <param name="name">要素类名称或要素类别名</param>
+        /// <param name="searchKeyword">是否模糊匹配要素类名称或要素类别名，默认否</param>
         /// <returns></returns>
-        public IFeatureClass GetFeatureClassByName(string name)
+        public IFeatureClass GetFeatureClassByName(string name, bool searchKeyword = false)
         {
             if (FeatureClasses == null) return null;
             foreach (var cls in FeatureClasses)
             {
-                if (cls.AliasName == name || (cls as IDataset).Name == name)
+                if (searchKeyword &&
+                    (cls.AliasName.Contains(name) || ((IDataset)cls).Name.Contains(name)))
                     return cls;
-            }
-            return null;
-        }
-        /// <summary>
-        /// 返回指定名称或别名关键字的要素类（模糊匹配）（未连接工作空间或找不到时返回null）
-        /// </summary>
-        /// <param name="name">要素类名称或要素类别名</param>
-        /// <returns></returns>
-        public IFeatureClass GetFeatureClassByKeyName(string name)
-        {
-            if (FeatureClasses == null) return null;
-            foreach (var cls in FeatureClasses)
-            {
-                if (cls.AliasName.Contains(name) || (cls as IDataset).Name.Contains(name))
+
+                if (cls.AliasName == name || ((IDataset)cls).Name == name)
                     return cls;
             }
             return null;
@@ -163,13 +154,18 @@ namespace WLib.UserCtrls.PathCtrl
         /// 返回指定名称或别名的表格（未连接工作空间或找不到时返回null）
         /// </summary>
         /// <param name="name">表名或表的别名</param>
+        /// <param name="searchKeyword">是否模糊匹配表名或表的别名，默认否</param>
         /// <returns></returns>
-        public ITable GetTableByName(string name)
+        public ITable GetTableByName(string name, bool searchKeyword = false)
         {
             if (Tables == null) return null;
             foreach (var table in Tables)
             {
-                if ((table as IObjectClass).AliasName == name || (table as IDataset).Name == name)
+                if (searchKeyword &&
+                    (((IObjectClass)table).AliasName.Contains(name) || ((IDataset)table).Name.Contains(name)))
+                    return table;
+
+                if (((IObjectClass)table).AliasName == name || ((IDataset)table).Name == name)
                     return table;
             }
             return null;

@@ -10,7 +10,6 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Carto.Element;
-using WLib.ArcGis.Display;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {
@@ -55,9 +54,9 @@ namespace WLib.ArcGis.Control.MapAssociation
             MapControl = mapControl;
             DrawElementType = EDrawElementType.None;
             MapControl.OnMouseDown += MapControl_OnMouseDown;
-            FillSymbol = new SimpleFillSymbolClass(); //RenderOpt.GetSimpleFillSymbol("ff000000", "ff0000ff");
-            LineSymbol = new SimpleLineSymbolClass();//RenderOpt.GetSimpleLineSymbol("ff000000");
-            MarkerSymbol = new SimpleMarkerSymbolClass();//RenderOpt.GetSimpleMarkerSymbol("ff0000ff");
+            FillSymbol = new SimpleFillSymbolClass();
+            LineSymbol = new SimpleLineSymbolClass();
+            MarkerSymbol = new SimpleMarkerSymbolClass();
             TextSymbol = new TextSymbolClass();
         }
 

@@ -9,9 +9,6 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
 
@@ -23,7 +20,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
     public class MapViewerManager
     {
         /// <summary>
-        /// 将视图切换到主地图控件所在视图的操作
+        ///  MapView控件中,显示指定的界面视图的操作
         /// </summary>
         protected Action<EViewActionType[]> SwitchView;
         /// <summary>

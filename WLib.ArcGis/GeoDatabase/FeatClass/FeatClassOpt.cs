@@ -5,15 +5,14 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Geometry;
-using WLib.ArcGis.GeoDatabase.Fields;
-using WLib.ArcGis.Geometry;
+using WLib.ArcGis.GeoDatabase.Table;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
@@ -31,7 +30,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
      */
 
     /// <summary>
-    /// 提供对要素类数据的增、删、改、查、复制、检查、重命名等方法
+    /// 提供对要素类数据的增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static class FeatClassOpt
     {
@@ -377,17 +376,6 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <summary>
         /// 查找符合条件的第一个要素
         /// </summary>
-        /// <param name="featureLayer">查询图层</param>
-        /// <param name="whereClause">查询条件</param>
-        /// <param name="subFields"></param>
-        /// <returns></returns>
-        public static IFeature QueryFirstFeature(this IFeatureLayer featureLayer, string whereClause = null, string subFields = null)
-        {
-            return QueryFirstFeature(featureLayer.FeatureClass, whereClause, subFields);
-        }
-        /// <summary>
-        /// 查找符合条件的第一个要素
-        /// </summary>
         /// <param name="featureClass">查询要素类</param>
         /// <param name="whereClause">查询条件</param>
         /// <param name="subFields"></param>
@@ -655,6 +643,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             return QueryValues(featureClass, queryFiledName, whereClause).Select(v => v.ToString()).ToList();
         }
+        
         /// <summary>
         /// 查询符合条件的字段值组，组合成键值对（注意key字段符合唯一值规范，包括不能存在多个null、Empty或空格的值，否则抛出异常）
         /// </summary>
@@ -721,7 +710,6 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             Marshal.ReleaseComObject(featureCursor);
             return values;
         }
-
         #endregion
 
 
@@ -835,7 +823,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClasses">要素类集合</param>
         /// <returns></returns>
-        public static List<IFeatureClass> SortByGeometryType(this IEnumerable<IFeatureClass> featureClasses)
+        public static List<IFeatureClass> SortByGeoType(this IEnumerable<IFeatureClass> featureClasses)
         {
             var newClasses = new List<IFeatureClass>();
             newClasses.AddRange(featureClasses.Where(v => v.ShapeType == esriGeometryType.esriGeometryPoint || v.ShapeType == esriGeometryType.esriGeometryMultipoint));
@@ -849,7 +837,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="featureClasses">要素类集合</param>
         /// <param name="geometryTypes">几何类型</param>
         /// <returns></returns>
-        public static List<IFeatureClass> FilterByGeometryType(this IEnumerable<IFeatureClass> featureClasses, params esriGeometryType[] geometryTypes)
+        public static List<IFeatureClass> FilterByGeoType(this IEnumerable<IFeatureClass> featureClasses, params esriGeometryType[] geometryTypes)
         {
             var newClasses = new List<IFeatureClass>();
             foreach (var geometryType in geometryTypes)
@@ -857,6 +845,33 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 newClasses.AddRange(featureClasses.Where(v => v.ShapeType == geometryType));
             }
             return newClasses;
+        }
+        #endregion
+
+
+        #region 校验WhereClause
+        /// <summary>
+        /// 校验并返回与数据源一致的条件查询语句
+        /// （例如table的数据源是mdb，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// </summary>
+        /// <param name="featureClass">执行条件查询的要素类</param>
+        /// <param name="whereClause">需要校验的条件查询语句</param>
+        public static string ValidateWhereClause(this IFeatureClass featureClass, string whereClause)
+        {
+            var workspacePath = GetWorkspacePathName(featureClass);
+            if (System.IO.Path.GetExtension(workspacePath) == ".mdb" && whereClause.Contains("like"))
+                return whereClause.Replace('_', '?').Replace('%', '*');
+            return whereClause;
+        }
+        /// <summary>
+        /// 校验并返回与数据源一致的条件查询语句
+        /// （例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// </summary>
+        /// <param name="eType">数据源类型</param>
+        /// <param name="whereClause">需要校验的条件查询语句</param>
+        public static string ValidateWhereClause(EWorkspaceType eType, string whereClause)
+        {
+            return TableOpt.ValidateWhereClause(eType, whereClause);
         }
         #endregion
 

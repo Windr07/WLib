@@ -5,11 +5,14 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
+
 namespace WLib.ArcGis.Carto.MapExport.Base
 {
     /// <summary>
     /// 出图的元素信息
     /// </summary>
+    [Serializable]
     public class ElementInfo
     {
         /// <summary>

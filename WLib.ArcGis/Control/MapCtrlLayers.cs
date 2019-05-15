@@ -129,7 +129,7 @@ namespace WLib.ArcGis.Control
         {
             var featureClasses = workspace.GetFeatureClasses();
 
-            featureClasses = featureClasses.SortByGeometryType();
+            featureClasses = featureClasses.SortByGeoType();
 
             //将要素类作为图层加入地图控件中
             for (int i = featureClasses.Count - 1; i >= 0; i--)

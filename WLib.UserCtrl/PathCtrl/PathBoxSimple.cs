@@ -7,10 +7,12 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using WLib.Files;
+using WLib.WinForm;
 
 namespace WLib.UserCtrls.PathCtrl
 {
@@ -115,7 +117,6 @@ namespace WLib.UserCtrls.PathCtrl
         /// 路径文本框
         /// </summary>
         public TextBox PathTextBox => txtPath;
-
         /// <summary>
         /// 验证路径是否存在
         /// </summary>
@@ -130,7 +131,7 @@ namespace WLib.UserCtrls.PathCtrl
                     case ESelectPathType.OpenFile:
                         return File.Exists(Text);
                     case ESelectPathType.SaveFile:
-                        return Directory.Exists(System.IO.Path.GetDirectoryName(Text)) && ValidFileName(System.IO.Path.GetFileNameWithoutExtension(Text));
+                        return Directory.Exists(System.IO.Path.GetDirectoryName(Text)) && FileOpt.ValidFileName(System.IO.Path.GetFileNameWithoutExtension(Text));
                     default:
                         return false;
                 }
@@ -195,7 +196,6 @@ namespace WLib.UserCtrls.PathCtrl
         }
         #endregion
 
-
         /// <summary>
         /// 表示一个路径选择与显示的组合框
         /// </summary>
@@ -246,76 +246,34 @@ namespace WLib.UserCtrls.PathCtrl
             Text = path;
             OnAfeterSelectPath();
         }
-        /// <summary>
-        /// 检查文件名是否合法：文字名中不能包含字符\/:*?"&lt;>|
-        /// </summary>
-        /// <param name="fileName">文件名，不包含路径</param>
-        /// <returns></returns>
-        public static bool ValidFileName(string fileName)
-        {
-            return FileOpt.ValidFileName(fileName);
-        }
 
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
+            string selectedPath;
             string path = txtPath.Text.Trim();
-            if (SelectPathType == ESelectPathType.Folder)
+            if (SelectPathType == ESelectPathType.Folder &&
+               (selectedPath = DialogOpt.ShowFolderBrowserDialog(path, SelectTips)) != null)
             {
-                var dialog = new FolderBrowserDialog { Description = SelectTips, ShowNewFolderButton = true };
-                if (Directory.Exists(path))
-                    dialog.SelectedPath = path;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtPath.Text = dialog.SelectedPath;
-                    OnAfeterSelectPath();
-                }
+                txtPath.Text = selectedPath;
+                OnAfeterSelectPath();
             }
-            else if (SelectPathType == ESelectPathType.OpenFile)
+            else if (SelectPathType == ESelectPathType.OpenFile &&
+               (selectedPath = DialogOpt.ShowOpenFileDialog(FileFilter, SelectTips, null, path)) != null)
             {
-                var dialog = new OpenFileDialog{ Title = SelectTips };
-                try
-                {
-                    dialog.Filter = FileFilter;
-                }
-                catch { }
-
-                if (!System.IO.Path.IsPathRooted(path))
-                    path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-
-                if (Directory.Exists(path))
-                    dialog.InitialDirectory = path;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtPath.Text = dialog.FileName;
-                    OnAfeterSelectPath();
-                }
+                txtPath.Text = selectedPath;
+                OnAfeterSelectPath();
             }
-            else if (SelectPathType == ESelectPathType.SaveFile)
+            else if (SelectPathType == ESelectPathType.SaveFile &&
+               (selectedPath = DialogOpt.ShowSaveFileDialog(FileFilter, SelectTips, null, path)) != null)
             {
-                var dialog = new SaveFileDialog{ Title = SelectTips };
-                try
-                {
-                    dialog.Filter = FileFilter;
-                }
-                catch { }
-
-                if (Directory.Exists(path))
-                    dialog.InitialDirectory = path;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtPath.Text = dialog.FileName;
-                    OnAfeterSelectPath();
-                }
+                txtPath.Text = selectedPath;
+                OnAfeterSelectPath();
             }
             else if (SelectPathType == ESelectPathType.Customize)
             {
                 OnCustomizeSelectPath();
             }
-
             if (txtPath.Text != string.Empty && txtPath.Text != _defultTips)
                 txtPath.ForeColor = SystemColors.WindowText;
         }
@@ -369,9 +327,9 @@ namespace WLib.UserCtrls.PathCtrl
         {
             string path = txtPath.Text.Trim();
             if (Directory.Exists(path))
-                System.Diagnostics.Process.Start("explorer.exe", path);
+                Process.Start("explorer.exe", path);
             else if (File.Exists(path))
-                System.Diagnostics.Process.Start("explorer.exe", "/select," + path);
+                Process.Start("explorer.exe", "/select," + path);
         }
 
         private void txtPath_MouseEnter(object sender, EventArgs e)
@@ -394,7 +352,6 @@ namespace WLib.UserCtrls.PathCtrl
                 if (!rectangle.Contains(MousePosition))
                     picBoxViewFile.Visible = false;
             }
-
         }
     }
 }

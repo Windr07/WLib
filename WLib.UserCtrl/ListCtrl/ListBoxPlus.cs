@@ -97,10 +97,6 @@ namespace WLib.UserCtrls.ListCtrl
         /// 响应界面一次时，向列表添加的项数
         /// </summary>
         public int ResponseCount { get; set; } = 30;
-        /// <summary>
-        /// 列表的右键菜单
-        /// </summary>
-        public ContextMenuStrip ListMenuStrip => cMenuCheckList;
 
 
         /// <summary>
@@ -113,26 +109,26 @@ namespace WLib.UserCtrls.ListCtrl
         /// <summary>
         /// 清空并添加列表项，并将添加的列表项全部设为选中
         /// </summary>
-        /// <param name="valueList"></param>
-        public void Init(object[] valueList)
+        /// <param name="values"></param>
+        public void Init(object[] values)
         {
             checkedListBox1.Items.Clear();
             labelSelectedState.Text = "0";
-            if (valueList == null)
+            if (values == null)
                 return;
-            for (int i = 0; i < valueList.Length; i++)
+            for (int i = 0; i < values.Length; i++)
             {
-                checkedListBox1.Items.Add(valueList[i], true);
+                checkedListBox1.Items.Add(values[i], true);
                 if (i % ResponseCount == 0)
                 {
                     labelSelectedState.Text = (i + 1).ToString();
                     Application.DoEvents();
                 }
             }
-            labelSelectedState.Text = valueList.Length.ToString();
-            numUpDwEnd.Maximum = valueList.Length;
-            numUpDwStart.Maximum = valueList.Length;
-            numUpDwEnd.Value = valueList.Length;
+            labelSelectedState.Text = values.Length.ToString();
+            numUpDwEnd.Maximum = values.Length;
+            numUpDwStart.Maximum = values.Length;
+            numUpDwEnd.Value = values.Length;
         }
         /// <summary>
         /// 获取所有选中的列表项

@@ -44,7 +44,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
         /// 显示指定的界面视图
         /// </summary>
         /// <param name="eTypes"></param>
-        public void SwitchView(EViewActionType[] eTypes)
+        public void SwitchView(params EViewActionType[] eTypes)
         {
             foreach (var eType in eTypes)
             {
@@ -60,13 +60,11 @@ namespace WLib.UserCtrls.ArcGisCtrl
                     case EViewActionType.LayerToc:
                         TocControl.Visible = btnCollapsed.Enabled = btnExpand.Enabled = true;
                         TableListBox.Visible = false;
-                        TocControl.Dock = DockStyle.Fill;
                         lblTocTips.Text = @"图层控制";
                         break;
                     case EViewActionType.TableList:
                         TocControl.Visible = btnCollapsed.Enabled = btnExpand.Enabled = false;
                         TableListBox.Visible = true;
-                        TableListBox.Dock = DockStyle.Fill;
                         lblTocTips.Text = @"表格列表";
                         break;
                     case EViewActionType.EagleMap:
@@ -84,7 +82,7 @@ namespace WLib.UserCtrls.ArcGisCtrl
             var btnName = ((Button)sender).Name;
             if (btnName == btnSwitchContent.Name)
             {
-                SwitchView(new[] { TocControl.Visible ? EViewActionType.TableList : EViewActionType.LayerToc });
+                SwitchView(TocControl.Visible ? EViewActionType.TableList : EViewActionType.LayerToc);
                 tocGroupControl.Update();
             }
             else if (btnName == btnCollapsed.Name) Manger.TocHelper.ExpandLegend(false);

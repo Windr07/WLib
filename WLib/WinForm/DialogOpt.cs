@@ -5,6 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
 using System.Windows.Forms;
 
 namespace WLib.WinForm
@@ -58,6 +59,9 @@ namespace WLib.WinForm
         /// <returns></returns>
         public static string ShowSaveFileDialog(string filter, string title = null, string fileName = null, string initDir = null)
         {
+            if (!string.IsNullOrWhiteSpace(initDir) && !System.IO.Path.IsPathRooted(initDir))
+                initDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, initDir);
+
             var dialog = new SaveFileDialog
             {
                 Filter = filter,
@@ -78,6 +82,9 @@ namespace WLib.WinForm
         /// <returns></returns>
         public static string ShowOpenFileDialog(string filter, string title = null, string fileName = null, string initDir = null, bool multiSelect = false)
         {
+            if (!string.IsNullOrWhiteSpace(initDir) && !System.IO.Path.IsPathRooted(initDir))
+                initDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, initDir);
+
             var dialog = new OpenFileDialog
             {
                 Filter = filter,

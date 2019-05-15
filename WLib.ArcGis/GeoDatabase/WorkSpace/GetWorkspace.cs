@@ -22,7 +22,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
     public static class GetWorkspace
     {
         /// <summary>
-        /// 判断指定的路径是否为工作空间路径（任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间）
+        /// 判断径是否为工作空间路径，任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间
         /// </summary>
         /// <param name="path">工作空间路径，任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间</param>
         /// <returns></returns>
@@ -39,7 +39,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             return extension == ".mdb" || extension == ".xls" || extension == ".xlsx";
         }
         /// <summary>
-        /// 判断指定的字符串是否符合连接字符串规范（sde/sql/oleDb连接字符串）（不判断是否能成功连接）
+        /// 判断字符串是否符合连接字符串规范（例如sde/sql/oledb连接字符串），不判断是否能成功连接
         /// </summary>
         /// <param name="str">需要判定的字符串</param>
         /// <returns></returns>
@@ -50,9 +50,9 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             return strConnectArray.Length > 0 && strConnectArray.Length % 2 == 0;
         }
         /// <summary>
-        /// 根据路径或连接参数，判断工作空间类型，只判断shp/gdb/mdb/sde/xls(xlsx)，当参数为不含后缀的目录时将当成shp工作空间
+        /// 根据路径或连接参数，判断工作空间类型，只判断shp/gdb/mdb/sde/xls/xlsx，非gdb目录都将当成shp工作空间
         /// </summary>
-        /// <param name="connStrOrPath">工作空间的路径或连接参数，可以是shp/gdb文件夹路径、mdb文件路径或SDE连接参数</param>
+        /// <param name="connStrOrPath">工作空间的路径或连接参数，可以是shp/gdb文件夹路径、mdb/xls/xlsx文件路径、sde连接字符串</param>
         /// <returns>若strConnOrPath不是连接字符串，且指示的不是gdb,mdb,shp路径或路径不存在，返回null</returns>
         public static EWorkspaceType GetDefaultWorkspaceType(string connStrOrPath)
         {
@@ -91,17 +91,17 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// 打开工作空间
         /// </summary>
         /// <param name="connStrOrPath">
-        /// 工作空间路径或连接字符串：
+        /// 工作空间路径或连接字符串，可以是以下情况：
         /// 1、shp、txt、dwg、栅格文件（GRID、TIFF、ERDAS IMAGE等）所在目录；
         /// 2、gdb文件夹自身路径；
         /// 3、mdb、xls、xlsx文件路径；
         /// 4、sde连接字符串（SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT）；
-        /// 5、oleDb连接字符串，包括连接Excel、Access、Oracle、SQLServer等（Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;）；
+        /// 5、oledb连接字符串，包括连接Excel、Access、Oracle、SQLServer等（Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;）；
         /// 6、直连sql连接字符串（server=localhost;uid=sa;pwd=sa;database=myDatabase）
         /// </param>
         /// <param name="eType">
         /// 标识优先将strConnOrPath作为打开哪种工作空间的参数，值为Default时，
-        /// 根据strConnOrPath参数自动识别为shp/gdb/mdb/sde的其中一种工作空间</param>
+        /// 根据strConnOrPath参数自动识别为shp/gdb/mdb/sde/oledb的其中一种工作空间</param>
         /// <returns></returns>
         public static IWorkspace GetWorkSpace(string connStrOrPath, EWorkspaceType eType = EWorkspaceType.Default)
         {
@@ -119,7 +119,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             else if (IsWorkspacePath(connStrOrPath))
             {
                 if (!System.IO.Path.IsPathRooted(connStrOrPath))
-                    connStrOrPath = AppDomain.CurrentDomain.BaseDirectory + connStrOrPath;
+                    connStrOrPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, connStrOrPath);
 
                 if (System.IO.Directory.Exists(connStrOrPath)) //当参数是文件夹路径时
                 {
@@ -147,8 +147,8 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// ②sql： server=localhost;uid=sa;pwd=sa;database=myDatabase
         /// ③oleDb： Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;
         /// </summary>
-        /// <param name="eType"></param>
-        /// <param name="connnectString"></param>
+        /// <param name="eType">要打开的工作空间类别</param>
+        /// <param name="connnectString">连接字符串</param>
         /// <returns></returns>
         public static IWorkspace GetWorksapceFromConnStr(string connnectString, EWorkspaceType eType)
         {
@@ -166,10 +166,10 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             }
         }
         /// <summary>
-        /// 通过文件路径获取工作空间
+        /// 通过路径获取工作空间
         /// </summary>
-        /// <param name="eType"></param>
-        /// <param name="path"></param>
+        /// <param name="eType">要打开的工作空间类别</param>
+        /// <param name="path">文件或文件夹路径</param>
         /// <returns></returns>
         public static IWorkspace GetWorkspaceFromFile(string path, EWorkspaceType eType)
         {
@@ -186,8 +186,5 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 throw new Exception($"打开{ eType.GetDescription(2)}工作空间：{path}出错；{ex.Message}");
             }
         }
-
-
-       
     }
 }

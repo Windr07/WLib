@@ -5,6 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace WLib.ArcGis.Carto.MapExport.Base
     /// <summary>
     /// 地图框信息集合
     /// </summary>
+    [Serializable]
     public class MapFrameInfoCollection : List<MapFrameInfo>
     {
         /// <summary>

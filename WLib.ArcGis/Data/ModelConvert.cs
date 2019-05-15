@@ -49,7 +49,6 @@ namespace WLib.ArcGis.Data
             }
             return model;
         }
-
         /// <summary>
         /// 将IRow的数据转化为 T 类型的对象
         /// </summary>
@@ -179,7 +178,6 @@ namespace WLib.ArcGis.Data
             }
             return value;
         }
-
         /// <summary>
         /// 获取ITable在 T 类中包含同名可写属性的集合
         /// </summary>

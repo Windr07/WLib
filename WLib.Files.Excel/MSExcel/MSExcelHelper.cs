@@ -33,7 +33,7 @@ namespace WLib.Files.Excel.MSExcel
     /// <summary>
     /// Excel操作类（引用微软的dll）
     /// </summary>
-    public class MsExcelHelper
+    public static class MsExcelHelper
     {
         /// <summary>
         /// 获取单元格
@@ -42,7 +42,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="sRow">指定行</param>
         /// <param name="sCol">指定列</param>
         /// <returns></returns>
-        public static Microsoft.Office.Interop.Excel.Range GetRange(Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol)
+        public static Microsoft.Office.Interop.Excel.Range GetRange(this Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol)
         {
             return ws.get_Range(ws.Cells[sRow, sCol], ws.Cells[sRow, sCol]);
         }
@@ -56,7 +56,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="eRow">结束行</param>
         /// <param name="eCol">结束列</param>
         /// <returns></returns>
-        public static Microsoft.Office.Interop.Excel.Range GetRange(Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol, int eRow, int eCol)
+        public static Microsoft.Office.Interop.Excel.Range GetRange(this Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol, int eRow, int eCol)
         {
             return ws.get_Range(ws.Cells[sRow, sCol], ws.Cells[eRow, eCol]);
         }
@@ -69,7 +69,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="sCol">开始列</param>
         /// <param name="eRow">结束行</param>
         /// <param name="eCol">结束列</param>
-        public static void SetBorderLine(Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol, int eRow, int eCol)
+        public static void SetBorderLine(this Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol, int eRow, int eCol)
         {
             Microsoft.Office.Interop.Excel.Range range = ws.get_Range(ws.Cells[sRow, sCol], ws.Cells[eRow, eCol]);
             range.Cells.Borders.LineStyle = 1;
@@ -83,7 +83,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="sCol">开始列</param>
         /// <param name="eRow">结束行</param>
         /// <param name="eCol">结束列</param>
-        public static void MergeCells(Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol, int eRow, int eCol)
+        public static void MergeCells(this Microsoft.Office.Interop.Excel.Worksheet ws, int sRow, int sCol, int eRow, int eCol)
         {
             ws.get_Range(ws.Cells[sRow, sCol], ws.Cells[eRow, eCol]).Merge(Type.Missing);
         }
@@ -97,7 +97,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="sCol">开始列</param>
         /// <param name="endRow">结束行</param>
         /// <param name="endCol">结束列</param>
-        public static void MergeCells(Microsoft.Office.Interop.Excel.Worksheet worksheet, object value, int sRow, int sCol, int endRow, int endCol)
+        public static void MergeCells(this Microsoft.Office.Interop.Excel.Worksheet worksheet, object value, int sRow, int sCol, int endRow, int endCol)
         {
             Microsoft.Office.Interop.Excel.Range range = worksheet.get_Range(worksheet.Cells[sRow, sCol], worksheet.Cells[endRow, endCol]);
             range.Merge();
@@ -113,7 +113,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="sCol">开始列</param>
         /// <param name="endRow">结束行</param>
         /// <param name="endCol">结束列</param>
-        public static void MergeCells2(Microsoft.Office.Interop.Excel.Worksheet worksheet, object value, int sRow, int sCol, int endRow, int endCol)
+        public static void MergeCells2(this Microsoft.Office.Interop.Excel.Worksheet worksheet, object value, int sRow, int sCol, int endRow, int endCol)
         {
             Microsoft.Office.Interop.Excel.Range range = worksheet.get_Range(worksheet.Cells[sRow, sCol], worksheet.Cells[endRow, endCol]);
             range.Merge();
@@ -127,7 +127,7 @@ namespace WLib.Files.Excel.MSExcel
         /// </summary>
         /// <param name="sheet">worksheet</param>
         /// <param name="rowIndex">行数</param>
-        public static void DeleteRows(Microsoft.Office.Interop.Excel.Worksheet sheet, int rowIndex)
+        public static void DeleteRows(this Microsoft.Office.Interop.Excel.Worksheet sheet, int rowIndex)
         {
             Microsoft.Office.Interop.Excel.Range range = (Microsoft.Office.Interop.Excel.Range)sheet.Rows[rowIndex, Type.Missing];
             range.Delete(Microsoft.Office.Interop.Excel.XlDeleteShiftDirection.xlShiftUp);
@@ -138,7 +138,7 @@ namespace WLib.Files.Excel.MSExcel
         /// </summary>
         /// <param name="sheet">worksheet</param>
         /// <param name="rowIndex">行数</param>
-        public static void InsertRows(Microsoft.Office.Interop.Excel.Worksheet sheet, int rowIndex)
+        public static void InsertRows(this Microsoft.Office.Interop.Excel.Worksheet sheet, int rowIndex)
         {
             Microsoft.Office.Interop.Excel.Range range = (Microsoft.Office.Interop.Excel.Range)sheet.Rows[rowIndex, Type.Missing];
             //object Range.Insert(object shift, object copyorigin);
@@ -155,7 +155,7 @@ namespace WLib.Files.Excel.MSExcel
         /// <param name="col">单元格列号</param>
         /// <param name="start">添加下划线的字符段的开头位置索引</param>
         /// <param name="length">添加下划线的字符串长度</param>
-        public static void InsertUnderLine(Microsoft.Office.Interop.Excel.Worksheet ws, int row, int col, int start, int length)
+        public static void InsertUnderLine(this Microsoft.Office.Interop.Excel.Worksheet ws, int row, int col, int start, int length)
         {
             Microsoft.Office.Interop.Excel.Range range = ws.get_Range(ws.Cells[row, col], ws.Cells[row, col]);
             Microsoft.Office.Interop.Excel.Characters chars = range.Characters[start, length];

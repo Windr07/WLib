@@ -33,6 +33,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ESRI.ArcGIS.3DAnalyst, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <SpecificVersion>False</SpecificVersion>
@@ -98,6 +106,10 @@
     <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -112,12 +124,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SubForm\ExportDataForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SubForm\ExportDataForm.Designer.cs">
-      <DependentUpon>ExportDataForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SubForm\ExportMapForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,27 +136,24 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SubForm\OleDbTestForm.cs">
+    <Compile Include="SubForm\OleDbQueryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SubForm\OleDbTestForm.Designer.cs">
-      <DependentUpon>OleDbTestForm.cs</DependentUpon>
+    <Compile Include="SubForm\OleDbQueryForm.Designer.cs">
+      <DependentUpon>OleDbQueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubForm\TownInfo.cs" />
     <Compile Include="SubForm\VillageInfo.cs" />
-    <EmbeddedResource Include="SubForm\ExportDataForm.resx">
-      <DependentUpon>ExportDataForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="SubForm\ExportMapForm.resx">
       <DependentUpon>ExportMapForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SubForm\OleDbTestForm.resx">
-      <DependentUpon>OleDbTestForm.cs</DependentUpon>
+    <EmbeddedResource Include="SubForm\OleDbQueryForm.resx">
+      <DependentUpon>OleDbQueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -183,6 +186,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ExportMapInfo.json" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -11,6 +11,7 @@ using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDatabase.Fields;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.ArcGis.Geometry;
 
 namespace WLib.ArcGis.GeoDatabase.FeatClass
@@ -25,7 +26,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
-        /// <param name="fields">要创建的字段集（必须包含SHAPE字段）</param>
+        /// <param name="fields">要创建的字段集（必须包含SHAPE字段），可参考<see cref="FieldOpt.CreateBaseFields"/>等方法创建字段集</param>
         /// <returns></returns>
         public static IFeatureClass Create(object obj, string name, IFields fields)
         {
@@ -33,9 +34,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             if (shapeField == null)
                 throw new Exception($"在要创建的字段集（参数{nameof(fields)}）中找不到几何字段，创建要素类时应指定几何字段以确定几何类型和坐标系！");
 
-            var fieldType = shapeField.GeometryDef.GeometryType;//几何类型
-            var spatialRef = shapeField.GetSpatialReference();//坐标系
-            return Create(obj, name, spatialRef, esriFeatureType.esriFTSimple, fieldType, fields, null, null, "");
+            var geometryType = shapeField.GeometryDef.GeometryType;//几何类型
+            var spatialRef = shapeField.GetSpatialRef();//坐标系
+            return Create(obj, name, spatialRef, esriFeatureType.esriFTSimple, geometryType, fields, null, null, "");
         }
         /// <summary>
         /// 创建要素类
@@ -43,9 +44,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
         /// <param name="sptialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
-        /// 可使用<see cref="SpatialRefOpt.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
+        /// 可使用<see cref="SpatialRefOpt.CreateSpatialRef(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
         /// <param name="geometryType">几何类型（点/线/面等）</param>
-        /// <param name="fields">要创建的字段集（若值为null或不包含OID和SHAPE字段，则该方法内会创建和加入OID和SHAPE字段）</param>
+        /// <param name="fields">要创建的字段集（可以为null，该方法自动修改或加入OID和SHAPE字段以确保几何类型、坐标系与参数一致）</param>
         /// <returns></returns>
         public static IFeatureClass Create(object obj, string name, ISpatialReference sptialRef, esriGeometryType geometryType, IFields fields = null)
         {
@@ -57,10 +58,10 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名.shp）</param>
         /// <param name="spatialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
-        /// 可使用<see cref="SpatialRefOpt.CreateSpatialReference(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
+        /// 可使用<see cref="SpatialRefOpt.CreateSpatialRef(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
         /// <param name="featureType">要素类型</param>
         /// <param name="geometryType">几何类型</param>
-        /// <param name="fields">要创建的字段集（可设置为null，如果为null或不包含OID和SHAPE字段，则该方法内会创建和加入OID和SHAPE字段）</param>
+        /// <param name="fields">要创建的字段集（可以为null，该方法自动修改或加入OID和SHAPE字段以确保几何类型、坐标系与参数一致）</param>
         /// <param name="uidClsId">CLSID值（可以为Null）</param>
         /// <param name="uidClsExt">EXTCLSID值（可以为Null）</param>
         /// <param name="configWord">配置信息关键词（可以为""）</param>
@@ -138,48 +139,47 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             #endregion
 
             #region 添加OID和SHAPE字段
-            if (fields == null) fields = new FieldsClass();
-
-            IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
-            if (!fields.IsExsitOid())
-                fieldsEdit.AddField(FieldOpt.CreateOidField());
-
-            if (!fields.IsExsitShapeField())
-                fieldsEdit.AddField(FieldOpt.CreateShapeField(geometryType, spatialRef));
+            if (fields == null)
+                fields = new FieldsClass();
+            fields.AddBaseFields(geometryType, spatialRef);
             #endregion
 
-            IFeatureClass featureClass = null;
-            if (obj is IWorkspace || obj is IFeatureWorkspace)
-            {
-                //创建独立的FeatureClass
-                IFeatureWorkspace featureWorkspace = obj as IFeatureWorkspace;
-                featureClass = featureWorkspace.CreateFeatureClass(name, fields, null, uidClsExt, featureType, "SHAPE", configWord);
-            }
-            else
-            {
-                //在要素集中创建FeatureClass
-                featureClass = ((IFeatureDataset)obj).CreateFeatureClass(name, fields, uidClsId, uidClsExt, featureType, "SHAPE", configWord);
-            }
-
-            return featureClass;
+            if (obj is IFeatureWorkspace featureWorkspace) //创建独立的FeatureClass
+                return featureWorkspace.CreateFeatureClass(name, fields, null, uidClsExt, featureType, "SHAPE", configWord);
+            else//在要素集中创建FeatureClass
+                return ((IFeatureDataset)obj).CreateFeatureClass(name, fields, uidClsId, uidClsExt, featureType, "SHAPE", configWord);
         }
 
 
         /// <summary>
         /// 创建要素类，该要素类仅存储在内存中
         /// </summary>
-        /// <param name="className">要素类名称</param>
-        /// <param name="fields">字段集</param>
+        /// <param name="name">要素类名称</param>
+        /// <param name="fields">要创建的字段集（必须包含SHAPE字段和OID字段），可参考<see cref="FieldOpt.CreateBaseFields"/>等方法创建字段集</param>
         /// <param name="strWorkspaceName">内存工作空间的名称</param>
         /// <returns></returns>
-        public static IFeatureClass CreateInMemory(string className, IFields fields, string strWorkspaceName = "InMemoryWorkspace")
+        public static IFeatureClass CreateInMemory(string name, IFields fields, string strWorkspaceName = "InMemoryWorkspace")
         {
-            IWorkspaceFactory inMemoryWorkspaceFactory = new InMemoryWorkspaceFactoryClass();
-            IWorkspaceName workspaceName = inMemoryWorkspaceFactory.Create("", strWorkspaceName, null, 0);
-            IName wsName = (IName)workspaceName;
-            IWorkspace workspace = (IWorkspace)wsName.Open();
+            var workspace = WorkspaceCreate.NewInMemoryWorkspace(strWorkspaceName);
             IFeatureWorkspace featureWorkspace = (IFeatureWorkspace)workspace;
-            return featureWorkspace.CreateFeatureClass(className, fields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+            return featureWorkspace.CreateFeatureClass(name, fields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+        }
+        /// <summary>
+        /// 创建要素类，该要素类仅存储在内存中
+        /// </summary>
+        /// <param name="name">要素类名称</param>
+        /// <param name="spatialRef">空间参考坐标系，可使用<see cref="SpatialRefOpt.CreateSpatialRef(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
+        /// <param name="geometryType">几何类型</param>
+        /// <param name="fields">要创建的字段集（可以为null，该方法自动修改或加入OID和SHAPE字段以确保几何类型、坐标系与参数一致）</param>
+        /// <param name="strWorkspaceName">内存工作空间的名称</param>
+        /// <returns></returns>
+        public static IFeatureClass CreateInMemory(string name, ISpatialReference spatialRef,
+            esriGeometryType geometryType, IFields fields = null, string strWorkspaceName = "InMemoryWorkspace")
+        {
+            if (fields == null)
+                fields = new FieldsClass();
+            fields.AddBaseFields(geometryType, spatialRef);
+            return CreateInMemory(name, fields, strWorkspaceName);
         }
     }
 }

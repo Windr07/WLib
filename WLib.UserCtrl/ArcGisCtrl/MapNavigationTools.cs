@@ -9,7 +9,6 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.SystemUI;
 using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control;

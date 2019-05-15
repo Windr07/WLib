@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using WLib.ArcGis.Carto;
 using WLib.ArcGis.Carto.LabelAnno;
 using WLib.ArcGis.Carto.Layer;
 using WLib.ArcGis.Control.AttributeCtrl;
@@ -25,7 +24,18 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// </summary>
     public class MapCtrlToc : IMapCtrlAssociation
     {
-        private Type _attributeCtrlType;
+        /// <summary>
+        /// 属性表控件的类型
+        /// </summary>
+        private readonly Type _attributeCtrlType;
+        /// <summary>
+        /// 在TOC控件选择的图层
+        /// </summary>
+        public ILayer SelectedLayer;
+        /// <summary>
+        /// 属性表窗口
+        /// </summary>
+        public IAttributeCtrl AttributeCtrl;
         /// <summary>
         /// TOC控件
         /// </summary>
@@ -42,14 +52,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// 图层和对应的字段菜单列表
         /// </summary>
         public readonly Dictionary<string, ToolStripMenuItem[]> Layer2FieldsMenuItems;
-        /// <summary>
-        /// 在TOC控件选择的图层
-        /// </summary>
-        public ILayer SelectedLayer;
-        /// <summary>
-        /// 属性表窗口
-        /// </summary>
-        public IAttributeCtrl AttributeCtrl;
+       
 
         /// <summary>
         /// 地图控件与TOC控件的关联操作
@@ -57,7 +60,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <param name="tocCtrl">TOC控件</param>
         /// <param name="mapCtrl">地图控件</param>
         /// <param name="attributeCtrl">显示属性表的控件/窗体</param>
-        /// <param name="goToMapView">将当前标签页设为地图页面</param>
+        /// <param name="switchView">将当前标签页设为地图页面</param>
         public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, IAttributeCtrl attributeCtrl, Action<EViewActionType[]> switchView = null)
         {
             MapControl = mapCtrl;
@@ -251,7 +254,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                 MapControl.Extent = envelope;
             }
         }
-        protected void 打开属性表ToolStripMenuItem_Click(object sender, EventArgs e)
+        protected virtual void 打开属性表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (SelectedLayer is ITable table)
             {
@@ -264,7 +267,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                 AttributeCtrl.LoadAttribute((IFeatureLayer)SelectedLayer, ((IFeatureLayerDefinition)SelectedLayer).DefinitionExpression);
             }
         }
-        protected void 定义查询IToolStripMenuItem_Click(object sender, EventArgs e)
+        protected virtual void 定义查询IToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!(SelectedLayer is IFeatureLayer featureLayer)) return;
 
@@ -273,16 +276,6 @@ namespace WLib.ArcGis.Control.MapAssociation
             AttributeCtrl.AtrributeQueryCtrl.LoadQueryInfo(featureLayer.FeatureClass as ITable);
             AttributeCtrl.AtrributeQueryCtrl.Show(MapControl);
         }
-
-        private void _queryForm_Query(object sender, EventArgs e)
-        {
-            if (SelectedLayer is IFeatureLayer featureLayer && featureLayer is IFeatureLayerDefinition featureLyrDef)
-            {
-                featureLyrDef.DefinitionExpression = AttributeCtrl.AtrributeQueryCtrl.WhereClause;
-                RemoveDefinitionMenuItem.Visible = true;
-            }
-        }
-
         protected virtual void 移除定义查询CToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (SelectedLayer is IFeatureLayer featureLayer)
@@ -297,6 +290,14 @@ namespace WLib.ArcGis.Control.MapAssociation
         protected virtual void 移除DToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MapControl.Map.DeleteLayer(SelectedLayer);
+        }
+        protected virtual void _queryForm_Query(object sender, EventArgs e)
+        {
+            if (SelectedLayer is IFeatureLayer featureLayer && featureLayer is IFeatureLayerDefinition featureLyrDef)
+            {
+                featureLyrDef.DefinitionExpression = AttributeCtrl.AtrributeQueryCtrl.WhereClause;
+                RemoveDefinitionMenuItem.Visible = true;
+            }
         }
         #endregion
     }
