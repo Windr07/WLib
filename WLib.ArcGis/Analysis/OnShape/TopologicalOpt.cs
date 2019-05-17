@@ -176,24 +176,24 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <returns></returns>
         private static IGeometry UnionGeometryEx(this IGeometry geometryBag, esriGeometryType geometryType)
         {
-            ITopologicalOperator unionedPolygon;
+            ITopologicalOperator unionedGeometry;
             switch (geometryType)
             {
                 case esriGeometryType.esriGeometryPoint:
-                    unionedPolygon = new PointClass();
+                    unionedGeometry = new PointClass();
                     break;
                 case esriGeometryType.esriGeometryPolyline:
-                    unionedPolygon = new PolylineClass();
+                    unionedGeometry = new PolylineClass();
                     break;
                 case esriGeometryType.esriGeometryPolygon:
-                    unionedPolygon = new PolygonClass();
+                    unionedGeometry = new PolygonClass();
                     break;
                 default:
-                    throw new NotImplementedException($"几何类型({nameof(geometryType)})应是点(point)、线(polyline)、多边形(polygon)之一，其他类型暂未实现！");
+                    throw new NotImplementedException($"几何类型({nameof(geometryType)})应是点(point)、线(polyline)、多边形(polygon)之一，未实现{geometryType}类型的图形合并（Union）！");
             }
 
-            unionedPolygon.ConstructUnion(geometryBag as IEnumGeometry);
-            return (IGeometry)unionedPolygon;
+            unionedGeometry.ConstructUnion(geometryBag as IEnumGeometry);
+            return (IGeometry)unionedGeometry;
         }
         #endregion
     }

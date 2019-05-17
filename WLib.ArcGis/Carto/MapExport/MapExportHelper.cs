@@ -169,7 +169,7 @@ namespace WLib.ArcGis.Carto.MapExport
         {
             var layer = layerInfo.Index > -1 ?
                 map.get_Layer(layerInfo.Index) :
-                map.GetFeatureLayer(layerInfo.Name);
+                map.GetLayer(layerInfo.Name);
 
             var sourcePath = layer.GetSourcePath()?.ToLower().Trim();
             var setSourcePath = layerInfo.DataSource?.ToLower().Trim();
@@ -195,7 +195,7 @@ namespace WLib.ArcGis.Carto.MapExport
                 if (layerInfo != null)
                 {
                     var featureClass = FeatClassFromPath.FromPath(layerInfo.DataSource);
-                    var geometries = featureClass.QueryGeometries(layerInfo.Definition);
+                    var geometries =  featureClass.QueryGeometries(layerInfo.Definition);
                     activeView.MapZoomTo(geometries, 1.3);
                 }
             }
