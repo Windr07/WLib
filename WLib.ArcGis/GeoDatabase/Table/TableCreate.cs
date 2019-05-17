@@ -21,7 +21,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="featureWorkspace">创建表格的工作空间</param>
         /// <param name="name">表格名称</param>
         /// <returns></returns>
-        public static ITable CreateTable(this IFeatureWorkspace featureWorkspace, string name)
+        public static ITable Create(this IFeatureWorkspace featureWorkspace, string name)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
@@ -35,7 +35,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="name">表格名称</param>
         /// <param name="fields">字段集，注意必须包含OID字段</param>
         /// <returns></returns>
-        public static ITable CreateTable(this IFeatureWorkspace featureWorkspace, string name, IFields fields)
+        public static ITable Create(this IFeatureWorkspace featureWorkspace, string name, IFields fields)
         {
             return featureWorkspace.CreateTable(name, fields, null, null, "");
         }
@@ -47,10 +47,10 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// <param name="tableName">新表格的名称</param>
         /// <param name="tableAliasName">新表格的别名，值为null则别名与名字相同</param>
         /// <returns></returns>
-        public static ITable CreateTable(this IFeatureWorkspace featureWorkspace, ITable sourceTable, string tableName, string tableAliasName = null)
+        public static ITable Create(this IFeatureWorkspace featureWorkspace, ITable sourceTable, string tableName, string tableAliasName = null)
         {
             var feilds = sourceTable.CloneTableFields(true);
-            var table = CreateTable(featureWorkspace, tableName, feilds);
+            var table = Create(featureWorkspace, tableName, feilds);
 
             if (!string.IsNullOrEmpty(tableAliasName))
                 table.RenameTableAliasName(tableAliasName);

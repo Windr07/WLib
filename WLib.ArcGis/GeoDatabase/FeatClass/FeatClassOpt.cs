@@ -643,7 +643,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             return QueryValues(featureClass, queryFiledName, whereClause).Select(v => v.ToString()).ToList();
         }
-
+        
         /// <summary>
         /// 查询符合条件的字段值组，组合成键值对（注意key字段符合唯一值规范，包括不能存在多个null、Empty或空格的值，否则抛出异常）
         /// </summary>
@@ -765,9 +765,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             var sourceName = ((IDataset)featureClass).Name;
             if (featureClass.FeatureDataset != null)
-                sourceName = System.IO.Path.Combine(featureClass.FeatureDataset.Name, sourceName);
+                sourceName = featureClass.FeatureDataset.Name + "\\" + sourceName;
 
-            return System.IO.Path.Combine(GetWorkspacePathName(featureClass), sourceName);
+            return GetWorkspacePathName(featureClass) + "\\" + sourceName;
         }
         #endregion
 
@@ -876,12 +876,6 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         #endregion
 
 
-        /// <summary>
-        /// 获取要素类名称
-        /// </summary>
-        /// <param name="featureClass"></param>
-        /// <returns></returns>
-        public static string GetName(this IFeatureClass featureClass) => (featureClass as IDataset)?.Name;
         /// <summary>
         /// 创建查询要素的游标
         /// </summary>

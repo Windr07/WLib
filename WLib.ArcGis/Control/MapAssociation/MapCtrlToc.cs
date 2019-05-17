@@ -82,7 +82,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <param name="isExpand"></param>
         public void ExpandLegend(bool isExpand)
         {
-            IEnumLayer layers = MapControl.Map.Layers[LayerUid.IFeatureLayer.CreateUid(), true];
+            IEnumLayer layers = MapControl.Map.Layers[LayerUid.IFeatureLayer, true];
             layers.Reset();
             ILayer layer;
             while ((layer = layers.Next()) != null)

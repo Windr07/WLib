@@ -250,12 +250,6 @@
     <Compile Include="ListCtrl\ImageListBox.Designer.cs">
       <DependentUpon>ImageListBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="OleDbQueryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OleDbQueryForm.Designer.cs">
-      <DependentUpon>OleDbQueryForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="PathCtrl\EObjectFilter.cs" />
     <Compile Include="PathCtrl\ESelectPathType.cs" />
     <Compile Include="PathCtrl\EShowButtonOption.cs" />
@@ -365,9 +359,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.resx">
       <DependentUpon>PathFolderBrowserDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OleDbQueryForm.resx">
-      <DependentUpon>OleDbQueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathCtrl\DataSelectorForm.resx">
       <DependentUpon>DataSelectorForm.cs</DependentUpon>
