@@ -26,29 +26,29 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// 复制源要素类的表结构，创建一个空的要素类
         /// </summary>
         /// <param name="sourceClass">源要素类</param>
-        /// <param name="resultObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param>
+        /// <param name="targetObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param>
         /// <param name="name">新要素类名称</param>
         /// <param name="aliasName">新要素类别名，值为null则别名与名字相同</param>
         /// <returns></returns>
-        public static IFeatureClass CopyStruct(this IFeatureClass sourceClass, object resultObject, string name, string aliasName = null)
+        public static IFeatureClass CopyStruct(this IFeatureClass sourceClass, object targetObject, string name, string aliasName = null)
         {
-            return CopyStruct(sourceClass, resultObject, name, sourceClass.ShapeType, aliasName);
+            return CopyStruct(sourceClass, targetObject, name, sourceClass.ShapeType, aliasName);
         }
         /// <summary>
         /// 复制源要素类的表结构，创建一个空的要素类
         /// </summary>
         /// <param name="sourceClass">源要素类</param>
-        /// <param name="resultObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param>
+        /// <param name="targetObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param>
         /// <param name="name">新要素类名称</param>
         /// <param name="geoType">要素类的几何类型</param>
         /// <param name="aliasName">新要素类别名，值为null则别名与名字相同</param>
         /// <returns></returns>
-        public static IFeatureClass CopyStruct(this IFeatureClass sourceClass, object resultObject, string name, esriGeometryType geoType, string aliasName = null)
+        public static IFeatureClass CopyStruct(this IFeatureClass sourceClass, object targetObject, string name, esriGeometryType geoType, string aliasName = null)
         {
             var spatialRef = sourceClass.GetSpatialRef();
             var feilds = sourceClass.CloneFeatureClassFieldsSimple();
 
-            var featureClass = FeatClassCreate.Create(resultObject, name, spatialRef, geoType, feilds);
+            var featureClass = FeatClassCreate.Create(targetObject, name, spatialRef, geoType, feilds);
 
             if (!String.IsNullOrEmpty(aliasName))
                 featureClass.RenameFeatureClassAliasName(aliasName);

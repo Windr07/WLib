@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Attributes;
 
@@ -43,14 +44,19 @@ namespace WLib.ArcGis.Carto.Layer
                 case IFeatureLayer featureLayer:
                     if (featureLayer is IDataLayer dataLayer)
                     {
-                        IDatasetName datasetName = (IDatasetName)dataLayer.DataSourceName;
+                        IDatasetName2 datasetName = (IDatasetName2)dataLayer.DataSourceName;
                         var dataSourceType = featureLayer.DataSourceType.ToLower();
                         var extension = string.Empty;
                         if (dataSourceType.Contains("shapefile"))
                             extension = ".shp";
                         else if (dataSourceType.Contains("cad"))
                             extension = ".dwg";
-                        return Path.Combine(datasetName.WorkspaceName.PathName, datasetName.Name + extension);
+
+                        var featureDatasetName = GetLayerFeatureDataset(dataLayer);
+                        if (featureDatasetName == null)
+                            return Path.Combine(datasetName.WorkspaceName.PathName, datasetName.Name + extension);
+                        else
+                            return Path.Combine(datasetName.WorkspaceName.PathName, featureDatasetName, datasetName.Name + extension);
                     }
                     break;
                 case IRasterLayer rasterLayer:
@@ -61,6 +67,26 @@ namespace WLib.ArcGis.Carto.Layer
                     throw new NotImplementedException("图层不是要素图层(IFeatureLayer)，也不是栅格图层(IRasterLayer)，未实现其他类型图层的数据源获取");
             }
             return null;
+        }
+
+        /// <summary>
+        /// 获取一个图层数据源所在的要素数据集
+        /// </summary>
+        /// <returns></returns>
+        private static string GetLayerFeatureDataset(IDataLayer dataLayer)
+        {
+            string datasetName = null;
+            try
+            {
+                IDatasetName2 datasetName2 = (IDatasetName2)dataLayer.DataSourceName;
+                IEnumDatasetName enumDatasetName = datasetName2.ControllerNames[esriDatasetType.esriDTFeatureDataset];
+                IDatasetName ds = enumDatasetName.Next();
+                datasetName = ds.Name;
+            }
+            catch
+            {
+            }
+            return datasetName;
         }
 
 
@@ -79,9 +105,8 @@ namespace WLib.ArcGis.Carto.Layer
         public static void SetSourcePath(this ILayer layer, string sourcePath)
         {
             string workspacePath = null, datasetName = null, className = null;
-            if (File.Exists(sourcePath))
+            if (File.Exists(sourcePath))//&& Path.GetExtension(sourcePath) == ".shp" //.jpg.tiff.bmp.emf.png.gif.pdf.eps.ai.svg
             {
-                //&& Path.GetExtension(sourcePath) == ".shp" //.jpg.tiff.bmp.emf.png.gif.pdf.eps.ai.svg
                 workspacePath = Path.GetDirectoryName(sourcePath);
                 className = Path.GetFileNameWithoutExtension(sourcePath);
             }

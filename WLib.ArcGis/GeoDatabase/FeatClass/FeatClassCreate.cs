@@ -24,7 +24,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <summary>
         /// 创建要素类
         /// </summary>
-        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
+        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建要素类</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
         /// <param name="fields">要创建的字段集（必须包含SHAPE字段），可参考<see cref="FieldOpt.CreateBaseFields"/>等方法创建字段集</param>
         /// <returns></returns>
@@ -41,7 +41,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <summary>
         /// 创建要素类
         /// </summary>
-        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
+        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建要素类</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
         /// <param name="sptialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
         /// 可使用<see cref="SpatialRefOpt.CreateSpatialRef(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
@@ -55,7 +55,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <summary>
         /// 创建要素类
         /// </summary>
-        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象</param>
+        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建要素类</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名.shp）</param>
         /// <param name="spatialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
         /// 可使用<see cref="SpatialRefOpt.CreateSpatialRef(esriSRProjCS4Type)"/>或其重载方法进行创建</param>

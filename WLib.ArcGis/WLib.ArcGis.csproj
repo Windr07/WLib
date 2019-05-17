@@ -171,6 +171,7 @@
     <Compile Include="Carto\Element\EDrawElementType.cs" />
     <Compile Include="Carto\LabelAnno\AnnoOpt.cs" />
     <Compile Include="Carto\LabelAnno\LabelOpt.cs" />
+    <Compile Include="Carto\Layer\LayerUid.cs" />
     <Compile Include="Carto\MapExport\Base\ElementInfo.cs" />
     <Compile Include="Carto\MapExport\Base\ElementInfoCollection.cs" />
     <Compile Include="Carto\MapExport\Base\ExportPicInfo.cs" />
@@ -240,7 +241,6 @@
     <Compile Include="Carto\Map\FeatureSelection.cs" />
     <Compile Include="Carto\LabelAnno\LabelAnnoConvert.cs" />
     <Compile Include="Carto\Layer\LayerOpt.cs" />
-    <Compile Include="Carto\Layer\LayerUid.cs" />
     <Compile Include="Control\MapCtrlLayers.cs" />
     <Compile Include="Carto\Map\MapOption.cs" />
     <Compile Include="Carto\Map\MapQuery.cs" />
