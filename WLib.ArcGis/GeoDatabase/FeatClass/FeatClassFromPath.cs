@@ -64,7 +64,37 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             return FromFullPath(connStrOrPath);
         }
 
-
+        /// <summary>
+        /// 从完整的要素类路径中，获取工作空间路径、数据集名称、要素类名称
+        /// </summary>
+        /// <param name="fullPath">格式为“工作空间路径[\要素集名称]\要素类名称”的路径</param>
+        /// <param name="workspacePath">工作空间路径</param>
+        /// <param name="datasetName">数据集名称</param>
+        /// <param name="featureClassName">要素类名称</param>
+        /// <returns></returns>
+        public static void SplitPath(string fullPath, out string workspacePath, out string datasetName, out string featureClassName)
+        {
+            workspacePath = null; datasetName = null; featureClassName = null;
+            fullPath = fullPath.ToLower();
+            foreach (var extension in new[] { ".gdb", ".mdb" })
+            {
+                int index;
+                if ((index = fullPath.LastIndexOf(extension, StringComparison.OrdinalIgnoreCase)) > -1)
+                {
+                    workspacePath = fullPath.Substring(0, index + 4);
+                    break;
+                }
+            }
+            if (Path.GetExtension(fullPath) == ".shp")
+                workspacePath = Path.GetDirectoryName(fullPath);
+            if (!string.IsNullOrWhiteSpace(workspacePath))//按照"\"或者"/"分割子路径，获得要素集名称、要素类名称
+            {
+                var subPath = fullPath.Replace(workspacePath, "");
+                var names = subPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+                if (names.Length == 1) { datasetName = null; featureClassName = names[0]; }
+                if (names.Length == 2) { datasetName = names[0]; featureClassName = names[1]; }
+            }
+        }
 
         #region 私有方法 - 获取路径下的第一个要素类
         /// <summary>
