@@ -122,6 +122,8 @@
     <Compile Include="ExtProgress\ProgressOptManager.cs" />
     <Compile Include="Test\Tester.cs" />
     <Compile Include="ThreadHelper\EControlInvokeType.cs" />
+    <Compile Include="Web\FtpHelper.cs" />
+    <Compile Include="Web\TransferProgressEventArgs.cs" />
     <Compile Include="Web\WebServiceAgent.cs" />
     <Compile Include="WindowsAPI\WinMsg.cs" />
     <Compile Include="WinForm\DialogOpt.cs" />

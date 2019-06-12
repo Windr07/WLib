@@ -7,8 +7,8 @@
     <ProjectGuid>{AEB9C1BE-96CF-42F5-AB08-7A45817CF906}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WLib.Files.Excel</RootNamespace>
-    <AssemblyName>WLib.Files.Excel</AssemblyName>
+    <RootNamespace>WLib.Files</RootNamespace>
+    <AssemblyName>WLib.Files</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -42,10 +42,18 @@
     <Reference Include="AppLibrary">
       <HintPath>..\DLL\AppLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\DLL\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Office.Interop.Excel">
       <HintPath>..\DLL\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\DLL\Microsoft.Office.Interop.Word.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
       <HintPath>..\DLL\NPOI.dll</HintPath>
@@ -61,30 +69,34 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MSExcel\ExcelBind\Application.cs" />
-    <Compile Include="MSExcel\MSExcelHelper.cs" />
-    <Compile Include="AppLibExcel\DataFromExcel.cs" />
-    <Compile Include="AppLibExcel\DataToExcel.cs" />
-    <Compile Include="AppLibExcel\MergeCellsOpt.cs" />
-    <Compile Include="AppLibExcel\StyleHelper\CellLine.cs" />
-    <Compile Include="AppLibExcel\StyleHelper\CellStyle.cs" />
-    <Compile Include="MSExcel\ExcelBind\Range.cs" />
-    <Compile Include="MSExcel\ExcelBind\Workbook.cs" />
-    <Compile Include="MSExcel\ExcelBind\Workbooks.cs" />
-    <Compile Include="MSExcel\ExcelBind\Worksheet.cs" />
-    <Compile Include="MSExcel\ExcelBind\Worksheets.cs" />
-    <Compile Include="NPOI\NPOIHelper.cs" />
+    <Compile Include="Excel\MSExcel\ExcelBind\Application.cs" />
+    <Compile Include="Excel\MSExcel\MSExcelHelper.cs" />
+    <Compile Include="Excel\AppLibExcel\DataFromExcel.cs" />
+    <Compile Include="Excel\AppLibExcel\DataToExcel.cs" />
+    <Compile Include="Excel\AppLibExcel\MergeCellsOpt.cs" />
+    <Compile Include="Excel\AppLibExcel\StyleHelper\CellLine.cs" />
+    <Compile Include="Excel\AppLibExcel\StyleHelper\CellStyle.cs" />
+    <Compile Include="Excel\MSExcel\ExcelBind\Range.cs" />
+    <Compile Include="Excel\MSExcel\ExcelBind\Workbook.cs" />
+    <Compile Include="Excel\MSExcel\ExcelBind\Workbooks.cs" />
+    <Compile Include="Excel\MSExcel\ExcelBind\Worksheet.cs" />
+    <Compile Include="Excel\MSExcel\ExcelBind\Worksheets.cs" />
+    <Compile Include="Excel\NPOI\NPOIHelper.cs" />
+    <Compile Include="Pdf\PdfHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Word\MSWordHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\DLL\AppLibrary.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

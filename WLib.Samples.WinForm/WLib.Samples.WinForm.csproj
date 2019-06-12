@@ -124,12 +124,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SubForm\ExportMapForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SubForm\ExportMapForm.Designer.cs">
-      <DependentUpon>ExportMapForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,11 +132,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SubForm\TownInfo.cs" />
-    <Compile Include="SubForm\VillageInfo.cs" />
-    <EmbeddedResource Include="SubForm\ExportMapForm.resx">
-      <DependentUpon>ExportMapForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,15 +148,6 @@
     <None Include="Data\SampleData.mxd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\XX县XX村委会耕地分等样点分布图（村级）.mxd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\XX县XX乡耕地分等样点分布图（镇级）.mxd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\XX县耕地分等样点分布图（县级）.mxd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -177,7 +157,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="ExportMapInfo.json" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -189,9 +168,9 @@
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.Files.Excel\WLib.Files.Excel.csproj">
+    <ProjectReference Include="..\WLib.Files.Excel\WLib.Files.csproj">
       <Project>{aeb9c1be-96cf-42f5-ab08-7a45817cf906}</Project>
-      <Name>WLib.Files.Excel</Name>
+      <Name>WLib.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\WLib.UserCtrl\WLib.UserCtrls.csproj">
       <Project>{854a8e9d-31d4-4bc5-89ff-703318999065}</Project>

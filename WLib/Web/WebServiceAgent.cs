@@ -65,8 +65,8 @@ namespace WLib.Web
         private void CreateServiceAssembly()
         {
             //获取WSDL
-            WebClient wc = new WebClient();
-            Stream stream = wc.OpenRead(ServiceUrl + "?WSDL");
+            WebClient webClient = new WebClient();
+            Stream stream = webClient.OpenRead(ServiceUrl + "?WSDL");
             ServiceDescription serviceDesc = ServiceDescription.Read(stream);//服务的描述信息都可以通过ServiceDescription获取  
             ClassName = serviceDesc.Services[0].Name;
 
