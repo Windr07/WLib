@@ -154,9 +154,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\Gp\ESjMatchOption.cs" />
-    <Compile Include="Analysis\Gp\ESjOperation.cs" />
-    <Compile Include="Analysis\Gp\GpOpt.cs" />
+    <Compile Include="Analysis\GpEnum\EFpPointLocation.cs" />
+    <Compile Include="Analysis\GpEnum\EIsJoinAttributes.cs" />
+    <Compile Include="Analysis\GpEnum\ESjMatchOption.cs" />
+    <Compile Include="Analysis\GpEnum\ESjOperation.cs" />
     <Compile Include="Analysis\OnShape\GeometryCheck.cs" />
     <Compile Include="Analysis\Gp\GpHelper.cs" />
     <Compile Include="Analysis\OnShape\RelationalOpt.cs" />
@@ -209,12 +210,12 @@
     <Compile Include="Data\TypeConvert.cs" />
     <Compile Include="Display\ColorCreate.cs" />
     <Compile Include="Display\SymbolCreate.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatClassToTreeNodes.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatClassToPath.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatClassFromPath.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatClassCopy.cs" />
-    <Compile Include="GeoDatabase\WorkSpace\WorkspaceCreate.cs" />
-    <Compile Include="GeoDatabase\WorkSpace\WorkspaceOpt.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToTreeNodes.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToPath.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.FromPath.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.Copy.cs" />
+    <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Create.cs" />
+    <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.cs" />
     <Compile Include="Geometry\SpatialRefOpt.cs" />
     <Compile Include="Data\DataTableConvert.cs" />
     <Compile Include="Geometry\ESrType.cs" />
@@ -225,8 +226,8 @@
     <Compile Include="Data\Domain\AttrDomain.cs" />
     <Compile Include="Data\Domain\AttrDomainCollection.cs" />
     <Compile Include="Carto\Element\ElementQuery.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatClassOpt.cs" />
-    <Compile Include="GeoDatabase\FeatDataset\FeatDatasetOpt.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.cs" />
+    <Compile Include="GeoDatabase\FeatDataset\FeatureDatasetEx.cs" />
     <Compile Include="GeoDatabase\Fields\FieldItem.cs" />
     <Compile Include="GeoDatabase\Fields\FieldOpt.cs" />
     <Compile Include="Geometry\GeometryOpt.cs" />
@@ -244,8 +245,6 @@
     <Compile Include="Control\MapCtrlLayers.cs" />
     <Compile Include="Carto\Map\MapOption.cs" />
     <Compile Include="Carto\Map\MapQuery.cs" />
-    <Compile Include="Carto\DataSource\MapSourceChecker.cs" />
-    <Compile Include="Carto\DataSource\MapSource.cs" />
     <Compile Include="Display\RenderCreate.cs" />
     <Compile Include="Control\ZoomTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -254,12 +253,12 @@
     <Compile Include="Sql\SqlQuery.cs" />
     <Compile Include="GeoDatabase\Table\TableCreate.cs" />
     <Compile Include="GeoDatabase\Table\OleDbfHelper.cs" />
-    <Compile Include="GeoDatabase\Table\TableOpt.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatClassCreate.cs" />
+    <Compile Include="GeoDatabase\Table\TableEx.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.Create.cs" />
     <Compile Include="GeoDatabase\WorkSpace\EWorkspaceType.cs" />
-    <Compile Include="GeoDatabase\WorkSpace\GetWorkspace.cs" />
+    <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Get.cs" />
     <Compile Include="GeoDatabase\WorkSpace\SubTypeDomian.cs" />
-    <Compile Include="GeoDatabase\WorkSpace\WorkspaceEditEx.cs" />
+    <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Edit.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="stdole">

@@ -17,7 +17,7 @@ using WLib.ArcGis.Control.MapAssociation;
 using WLib.ArcGis.Display;
 using WLib.Attributes;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     /// <summary>
     /// 地图导航条

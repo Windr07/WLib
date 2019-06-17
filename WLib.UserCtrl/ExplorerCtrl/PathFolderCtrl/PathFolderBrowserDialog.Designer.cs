@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.ExplorerCtrl.PathFolderCtrl
+﻿namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
 {
     partial class PathFolderBrowserDialog
     {

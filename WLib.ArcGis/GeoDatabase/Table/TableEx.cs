@@ -17,7 +17,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
     /// <summary>
     /// 提供对表格(ITable)数据的增、删、改、查、复制、检查、重命名等方法
     /// </summary>
-    public static class TableOpt
+    public static class TableEx
     {
         #region 新增记录
         /// <summary>

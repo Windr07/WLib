@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.ArcGisCtrl
+﻿namespace WLib.WinCtrls.ArcGisCtrl
 {
     partial class MapViewer
     {
@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapViewer));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.TableListBox = new WLib.UserCtrls.ArcGisCtrl.TableListBox();
+            this.TableListBox = new WLib.WinCtrls.ArcGisCtrl.TableListBox();
             this.TocControl = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.tocGroupControl = new System.Windows.Forms.Panel();
             this.lblTocTips = new System.Windows.Forms.Label();
@@ -43,7 +43,7 @@
             this.ViewerTabControl = new System.Windows.Forms.TabControl();
             this.xtpMapView = new System.Windows.Forms.TabPage();
             this.MainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.MapNavigationTools = new WLib.UserCtrls.ArcGisCtrl.MapNavigationTools();
+            this.MapNavigationTools = new WLib.WinCtrls.ArcGisCtrl.MapNavigationTools();
             this.xtpPageLayout = new System.Windows.Forms.TabPage();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();

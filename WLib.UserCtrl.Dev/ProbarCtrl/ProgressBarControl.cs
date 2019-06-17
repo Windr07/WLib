@@ -8,7 +8,7 @@
 using System.Windows.Forms;
 using DevExpress.XtraEditors.Controls;
 
-namespace WLib.UserCtrls.Dev.ProbarCtrl
+namespace WLib.WinCtrls.Dev.ProbarCtrl
 {
     /// <summary>
     /// 

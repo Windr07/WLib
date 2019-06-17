@@ -18,7 +18,7 @@ using WLib.ArcGis.Geometry;
 using WLib.Data;
 using static WLib.WinForm.MenuOpt;
 
-namespace WLib.UserCtrls.ArcGisCtrl
+namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
     /// 图层属性表窗口

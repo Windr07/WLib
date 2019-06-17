@@ -12,9 +12,9 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Attributes;
-using WLib.UserCtrls.PathCtrl;
+using WLib.WinCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     /// <summary>
     /// 工作空间选择器
@@ -75,7 +75,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
             get => this.SourcePathBox.Path;
             set
             {
-                var wsType = GetWorkspace.GetDefaultWorkspaceType(value);
+                var wsType = WorkspaceEx.GetDefaultWorkspaceType(value);
                 WorkspaceIndex = wsType == EWorkspaceType.Default ? 0 : this.cmbADBType.Properties.Items.IndexOf(wsType.GetDescription());
                 this.SourcePathBox.Path = value;
             }
@@ -179,7 +179,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
         /// <param name="pathOrConStr"></param>
         public void LoadWorkspace(string pathOrConStr)
         {
-            var eType = GetWorkspace.GetDefaultWorkspaceType(PathOrConnStr);
+            var eType = WorkspaceEx.GetDefaultWorkspaceType(PathOrConnStr);
             this.cmbADBType.SelectedItem = eType.GetDescription();
             this.PathOrConnStr = pathOrConStr;
             this.SourcePathBox.SelectPath(pathOrConStr);
@@ -230,7 +230,7 @@ namespace WLib.UserCtrls.Dev.ArcGisCtrl
                 Workspace = null;
 
                 var eType = this.cmbADBType.SelectedItem.ToString().GetEnum<EWorkspaceType>();
-                Workspace = GetWorkspace.GetWorkSpace(this.SourcePathBox.Path, eType);
+                Workspace = WorkspaceEx.GetWorkSpace(this.SourcePathBox.Path, eType);
                 if (Workspace != null)
                 {
                     Tables = Workspace.GetTables().ToArray();

@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WLib.UserCtrls.Dev.EditForm
+namespace WLib.WinCtrls.Dev.EditForm
 {
     /// <summary>
     /// 为YYGISLib.UserDevControls.EditForm的SaveEditEvent事件提供数据（一条记录中被编辑的字段值）

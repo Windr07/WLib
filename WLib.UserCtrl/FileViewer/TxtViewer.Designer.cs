@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.FileViewer
+﻿namespace WLib.WinCtrls.FileViewer
 {
     partial class TxtViewer
     {

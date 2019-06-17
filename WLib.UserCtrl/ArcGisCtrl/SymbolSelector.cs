@@ -16,7 +16,7 @@ using System.Windows.Forms;
 using WLib.Envir.ArcGis;
 using Path = System.IO.Path;
 
-namespace WLib.UserCtrls.ArcGisCtrl
+namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
     /// 封装AxSymbologyControl的常用操作的符号选择器

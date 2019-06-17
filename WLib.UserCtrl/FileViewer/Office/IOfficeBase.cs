@@ -5,7 +5,7 @@
 // mdfy:  Windragon
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.FileViewer.Office
+namespace WLib.WinCtrls.FileViewer.Office
 {
     /// <summary>
     /// Office文档的一些基础操作

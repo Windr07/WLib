@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using WLib.WindowsAPI;
 
-namespace WLib.UserCtrls.Dev.ChildForm
+namespace WLib.WinCtrls.Dev.ChildForm
 {
     /// <summary>
     /// 自定义的子窗体，包含重复打开的控制

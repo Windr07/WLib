@@ -8,9 +8,9 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using WLib.UserCtrls.AddItemCtrl.Base;
+using WLib.WinCtrls.AddItemCtrl.Base;
 
-namespace WLib.UserCtrls.AddItemCtrl
+namespace WLib.WinCtrls.AddItemCtrl
 {
     /// <summary>
     /// 路径拼接或筛选窗体

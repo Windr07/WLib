@@ -1,4 +1,4 @@
-namespace WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
 {
     partial class ExplorerTreeView
     {

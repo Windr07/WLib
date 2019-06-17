@@ -19,7 +19,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
     /// （参考：http://blog.csdn.net/guangliang1102/article/details/51154893）
     /// （连接字符串：https://www.connectionstrings.com）
     /// </summary>
-    public static class GetWorkspace
+    public static partial class WorkspaceEx
     {
         /// <summary>
         /// 判断径是否为工作空间路径，任意已存在的目录、mdb文件、xls或xlsx文件均认为是工作空间

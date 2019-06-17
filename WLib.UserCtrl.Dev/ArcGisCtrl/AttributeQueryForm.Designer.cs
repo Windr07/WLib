@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.ArcGisCtrl
+﻿namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     partial class AttributeQueryForm
     {

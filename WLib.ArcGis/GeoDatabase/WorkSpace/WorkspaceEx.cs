@@ -17,7 +17,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
     /// <summary>
     /// 提供在工作空间中操作表格、要素类、数据集的操作
     /// </summary>
-    public static class WorkspaceOpt
+    public static partial class WorkspaceEx
     {
         #region 删除要素类
         /// <summary>

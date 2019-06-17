@@ -6,7 +6,7 @@
 // mdfy:  Windragon
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.FileViewer
+namespace WLib.WinCtrls.FileViewer
 {
     /// <summary>
     /// 文件查看器，即几种查看文件内容的控件的共同接口

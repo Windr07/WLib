@@ -116,7 +116,7 @@ namespace WLib.ArcGis.Control
         /// <param name="zoomToClass">指定要素类名称或别名，地图将缩放到此要素类的显示范围</param>
         public static void LoadAllFeatureLayers(this AxMapControl mapControl, string strConOrPath, string zoomToClass = null)
         {
-            var workspace = GetWorkspace.GetWorkSpace(strConOrPath);
+            var workspace = WorkspaceEx.GetWorkSpace(strConOrPath);
             LoadAllFeatureLayers(mapControl, workspace, zoomToClass);
         }
         /// <summary>

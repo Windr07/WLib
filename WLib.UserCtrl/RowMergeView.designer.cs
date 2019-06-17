@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls
+﻿namespace WLib.WinCtrls
 {
     partial class RowMergeView
     {

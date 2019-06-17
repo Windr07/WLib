@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-namespace WLib.ArcGis.Analysis.Gp
+namespace WLib.ArcGis.Analysis.GpEnum
 {
     /// <summary>
     /// 空间连接工具连接操作枚举（Spatial Join - join_operation，from arcgis desktop help）

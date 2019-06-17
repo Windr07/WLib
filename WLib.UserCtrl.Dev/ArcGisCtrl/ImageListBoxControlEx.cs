@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraEditors.Controls;
-using WLib.UserCtrls.ListCtrl;
+using WLib.WinCtrls.ListCtrl;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     /// <summary>
     /// 图片列表控件<see cref="DevExpress.XtraEditors.ImageListBoxControl"/>的扩展控件，实现<see cref="IListControl"/>

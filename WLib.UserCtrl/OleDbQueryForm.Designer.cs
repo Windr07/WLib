@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls
+﻿namespace WLib.WinCtrls
 {
     partial class OleDbQueryForm
     {
@@ -43,7 +43,7 @@
             this.listBoxFields = new System.Windows.Forms.ListBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
-            this.workspaceSelector1 = new WLib.UserCtrls.PathCtrl.WorkspaceSelector();
+            this.workspaceSelector1 = new WLib.WinCtrls.PathCtrl.WorkspaceSelector();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -273,7 +273,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnQuery;
-        private UserCtrls.PathCtrl.WorkspaceSelector workspaceSelector1;
+        private WinCtrls.PathCtrl.WorkspaceSelector workspaceSelector1;
         private System.Windows.Forms.ListBox listBoxTables;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panelTables;

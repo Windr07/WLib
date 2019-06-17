@@ -14,9 +14,9 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using WLib.Files.Excel.AppLibExcel;
-using WLib.UserCtrls.Dev.InputCtrl;
+using WLib.WinCtrls.Dev.InputCtrl;
 
-namespace WLib.UserCtrls.Dev.ListCtrl
+namespace WLib.WinCtrls.Dev.ListCtrl
 {
     /// <summary>
     /// 列表控件，基于CheckedListBox控件扩展对列表的选择查询等操作

@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.ChildForm
+﻿namespace WLib.WinCtrls.Dev.ChildForm
 {
     partial class DockFormControl
     {

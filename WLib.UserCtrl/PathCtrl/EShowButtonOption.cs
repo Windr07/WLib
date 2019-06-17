@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.PathCtrl
+namespace WLib.WinCtrls.PathCtrl
 {
     /// <summary>
     /// 路径选择框按钮显示选项

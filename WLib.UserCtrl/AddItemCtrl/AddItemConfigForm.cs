@@ -8,9 +8,9 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using WLib.UserCtrls.AddItemCtrl.Base;
+using WLib.WinCtrls.AddItemCtrl.Base;
 
-namespace WLib.UserCtrls.AddItemCtrl
+namespace WLib.WinCtrls.AddItemCtrl
 {
     /// <summary>
     /// 数据筛选设置窗口

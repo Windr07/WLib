@@ -1,7 +1,7 @@
-﻿using WLib.UserCtrls.Dev.PathCtrl;
-using WLib.UserCtrls.PathCtrl;
+﻿using WLib.WinCtrls.Dev.PathCtrl;
+using WLib.WinCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     partial class WorkspaceSelectorControl
     {

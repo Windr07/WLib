@@ -29,14 +29,14 @@ namespace WLib.ArcGis.Analysis.OnShape
     /// <summary>
     /// 检查几何（提供判断图形是否自相交等方法）
     /// </summary>
-    public class GeometryCheck
+    public static class GeometryCheck
     {
         /// <summary>
         /// 判断是否自相交
         /// </summary>
         /// <param name="geometry"></param>
         /// <returns>True表示自相交，False表示不自相交</returns>
-        public static bool IsSelfCross(IGeometry geometry)
+        public static bool IsSelfCross(this IGeometry geometry)
         {
             ITopologicalOperator3 topologicalOperator = (ITopologicalOperator3)geometry;
             topologicalOperator.IsKnownSimple_2 = false;//布尔型，指示此几何图形是否是已知的（或假设）是拓扑正确。这里赋值false,就是非已知的几何图形
@@ -58,7 +58,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="geometry"></param>
         /// <param name="eNonSimpleReason">几何错误情况枚举，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 </param>
         /// <returns>True表示存在指定几何错误，False表示不存在指定几何错误</returns>
-        public static bool Check(IGeometry geometry, esriNonSimpleReasonEnum eNonSimpleReason)
+        public static bool Check(this IGeometry geometry, esriNonSimpleReasonEnum eNonSimpleReason)
         {
             ITopologicalOperator3 topologicalOperator = (ITopologicalOperator3)geometry;
             topologicalOperator.IsKnownSimple_2 = false;//布尔型，指示此几何图形是否是已知的（或假设）是拓扑正确。这里赋值false,就是非已知的几何图形

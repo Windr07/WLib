@@ -8,7 +8,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
 {
     class SystemImageList
     {

@@ -13,7 +13,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WLib.ArcGis.Display;
 
-namespace WLib.UserCtrls.ArcGisCtrl
+namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
     /// 符号选择器(Symbology)窗体，

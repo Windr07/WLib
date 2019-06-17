@@ -8,7 +8,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.Dev.InputCtrl
+namespace WLib.WinCtrls.Dev.InputCtrl
 {
     /// <summary>
     /// 输入框窗体

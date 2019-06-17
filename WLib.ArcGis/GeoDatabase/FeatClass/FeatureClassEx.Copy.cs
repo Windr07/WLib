@@ -19,7 +19,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
     /// <summary>
     /// 提供复制要素类的方法
     /// </summary>
-    public static class FeatClassCopy
+    public static partial class FeatureClassEx
     {
         #region 复制表结构，生成新要素类
         /// <summary>
@@ -48,7 +48,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             var spatialRef = sourceClass.GetSpatialRef();
             var feilds = sourceClass.CloneFeatureClassFieldsSimple();
 
-            var featureClass = FeatClassCreate.Create(targetObject, name, spatialRef, geoType, feilds);
+            var featureClass = Create(targetObject, name, spatialRef, geoType, feilds);
 
             if (!String.IsNullOrEmpty(aliasName))
                 featureClass.RenameFeatureClassAliasName(aliasName);
@@ -69,7 +69,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
             var shapeField = FieldOpt.CreateShapeField(geoType, spatialRef);
             ((IFieldsEdit)feilds).AddField(shapeField);
-            var featureClass = FeatClassToPath.CreateToPath(targetFullPath, feilds);
+            var featureClass = FeatureClassEx.CreateToPath(targetFullPath, feilds);
 
             if (!String.IsNullOrEmpty(aliasName))
                 featureClass.RenameFeatureClassAliasName(aliasName);
@@ -95,7 +95,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             var spatialReference = feature.Shape.SpatialReference;
             var fields = (feature.Class as IFeatureClass).CloneFeatureClassFieldsSimple();
             var feildArray = fields.FieldsToArray();
-            var faetureClass = FeatClassToPath.CreateToPath(targetFullPath, geoType, spatialReference, feildArray);
+            var faetureClass = FeatureClassEx.CreateToPath(targetFullPath, geoType, spatialReference, feildArray);
 
             CopyDataTo(features, faetureClass);
             return faetureClass;
@@ -110,7 +110,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         public static IFeatureClass CopyDataToNewMemory(this IFeatureClass sourceClass, string whereClause, string memoryClassName = "tempFeatureClass")
         {
             IFields fields = sourceClass.CloneFeatureClassFields();
-            IFeatureClass memoryClass = FeatClassCreate.CreateInMemory(memoryClassName, fields);
+            IFeatureClass memoryClass = CreateInMemory(memoryClassName, fields);
             IQueryFilter filter = new QueryFilterClass();
             filter.WhereClause = whereClause;
             IFeatureCursor cursor = sourceClass.Search(filter, false);

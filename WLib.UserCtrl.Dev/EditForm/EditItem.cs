@@ -9,7 +9,7 @@ using System;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.GeoDatabase.Fields;
 
-namespace WLib.UserCtrls.Dev.EditForm
+namespace WLib.WinCtrls.Dev.EditForm
 {
     /// <summary>
     /// 被编辑的字段值对象，包含字段名、别名、类型、值、是否可编辑

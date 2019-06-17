@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.PathCtrl
+namespace WLib.WinCtrls.PathCtrl
 {
     /// <summary>
     /// 路径类别（文件夹路径、打开文件路径、保存文件路径、自定义路径选择）

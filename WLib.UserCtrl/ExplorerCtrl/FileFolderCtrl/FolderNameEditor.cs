@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
 {
     public class FolderNameEditor : UITypeEditor
     {

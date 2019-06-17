@@ -10,9 +10,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using WLib.Files;
-using WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl;
+using WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl;
 
-namespace WLib.UserCtrls.ExplorerCtrl.PathFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
 {
     /// <summary>
     /// 与<see cref="FolderBrowserDialog"/>功能相近的文件夹选择对话框，添加可以通过粘贴路径以定位和选择目录的功能

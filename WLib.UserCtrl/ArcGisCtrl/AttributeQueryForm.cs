@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.GeoDatabase.Fields;
 
-namespace WLib.UserCtrls.ArcGisCtrl
+namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
     /// 属性查询窗口

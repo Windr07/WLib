@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.Dev.ChildForm
+namespace WLib.WinCtrls.Dev.ChildForm
 {
     /// <summary>
     /// 表示鼠标的拖动方向

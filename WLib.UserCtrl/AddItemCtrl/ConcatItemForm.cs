@@ -7,9 +7,9 @@
 
 using System;
 using System.Linq;
-using WLib.UserCtrls.AddItemCtrl.Base;
+using WLib.WinCtrls.AddItemCtrl.Base;
 
-namespace WLib.UserCtrls.AddItemCtrl
+namespace WLib.WinCtrls.AddItemCtrl
 {
     /// <summary>
     /// 把输入的文本按分隔符或正则表达式筛选出所需的列表，再拼接列表项的窗体

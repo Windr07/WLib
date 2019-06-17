@@ -14,10 +14,10 @@ using System.Text;
 using System.Windows.Forms;
 using WLib.Data;
 using WLib.Files.Excel.AppLibExcel;
-using WLib.UserCtrls.InputCtrl;
+using WLib.WinCtrls.InputCtrl;
 using WLib.WinForm;
 
-namespace WLib.UserCtrls.ListCtrl
+namespace WLib.WinCtrls.ListCtrl
 {
     /// <summary>
     /// 列表控件，基于CheckedListBox控件扩展对列表的选择查询等操作

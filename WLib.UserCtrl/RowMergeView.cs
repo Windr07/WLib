@@ -13,7 +13,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls
+namespace WLib.WinCtrls
 {
     /// <summary>
     /// DataGridView行合并.请对属性MergeColumnNames 赋值即可

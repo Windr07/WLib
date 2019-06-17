@@ -5,7 +5,7 @@
 // mdfy:  Windragon
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.FileViewer.Picture
+namespace WLib.WinCtrls.FileViewer.Picture
 {
     /// <summary>
     /// PicViewer控件的操作状态（平移、放大、缩小）

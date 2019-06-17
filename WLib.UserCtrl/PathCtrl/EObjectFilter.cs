@@ -7,7 +7,7 @@
 
 using System;
 
-namespace WLib.UserCtrls.PathCtrl
+namespace WLib.WinCtrls.PathCtrl
 {
     /// <summary>
     /// 表示从工作空间中筛选获得哪些类型的数据（表格、要素图层、栅格图层等）

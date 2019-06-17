@@ -12,7 +12,7 @@ using System;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
 
-namespace WLib.UserCtrls.ArcGisCtrl
+namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
     /// 地图及其图层/表格树、鹰眼图、导航工具、页面布局视图的组合控件的管理类

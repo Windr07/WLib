@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.InputCtrl
+﻿namespace WLib.WinCtrls.Dev.InputCtrl
 {
     partial class InputForm
     {

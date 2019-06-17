@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.AddItemCtrl.Base
+namespace WLib.WinCtrls.AddItemCtrl.Base
 {
     /// <summary>
     /// 区分是拼接路径，还是分隔路径

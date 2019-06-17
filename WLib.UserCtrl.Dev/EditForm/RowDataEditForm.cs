@@ -12,7 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using WLib.Attributes;
 
-namespace WLib.UserCtrls.Dev.EditForm
+namespace WLib.WinCtrls.Dev.EditForm
 {
     /// <summary>
     /// 对一条数据记录进行编辑的窗体

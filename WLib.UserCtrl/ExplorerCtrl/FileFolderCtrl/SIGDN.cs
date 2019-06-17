@@ -6,7 +6,7 @@
 //----------------------------------------------------------------*/
 
 
-namespace WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
 {
     public enum SIGDN : uint
     {

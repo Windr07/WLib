@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.ArcGisCtrl
+﻿namespace WLib.WinCtrls.ArcGisCtrl
 {
     partial class TableListBox
     {

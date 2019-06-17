@@ -10,7 +10,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
 {
     public class ShellItem
     {

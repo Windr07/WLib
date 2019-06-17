@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.PathCtrl
+﻿namespace WLib.WinCtrls.PathCtrl
 {
     partial class DataSelectorForm
     {
@@ -32,7 +32,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.cbAll = new System.Windows.Forms.CheckBox();
             this.listViewLayers = new System.Windows.Forms.ListView();
-            this.workspaceSelector1 = new WLib.UserCtrls.PathCtrl.WorkspaceSelector();
+            this.workspaceSelector1 = new WLib.WinCtrls.PathCtrl.WorkspaceSelector();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cbTables = new System.Windows.Forms.CheckBox();

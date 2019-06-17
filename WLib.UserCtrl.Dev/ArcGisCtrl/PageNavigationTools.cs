@@ -14,7 +14,7 @@ using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
 using WLib.Attributes;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     public partial class PageNavigationTools : UserControl, IPageNavigationTools
     {

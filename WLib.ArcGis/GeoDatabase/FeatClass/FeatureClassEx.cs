@@ -32,7 +32,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
     /// <summary>
     /// 提供对要素类数据的增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
-    public static class FeatClassOpt
+    public static partial class FeatureClassEx
     {
         #region 新增要素
         /// <summary>
@@ -871,7 +871,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="whereClause">需要校验的条件查询语句</param>
         public static string ValidateWhereClause(EWorkspaceType eType, string whereClause)
         {
-            return TableOpt.ValidateWhereClause(eType, whereClause);
+            return TableEx.ValidateWhereClause(eType, whereClause);
         }
         #endregion
 

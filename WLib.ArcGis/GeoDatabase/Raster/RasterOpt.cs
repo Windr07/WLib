@@ -27,7 +27,7 @@ namespace WLib.ArcGis.GeoDatabase.Raster
             var dir = System.IO.Path.GetDirectoryName(rasterPath);  //获取文件路径
             var name = System.IO.Path.GetFileName(rasterPath);      //获取栅格文件名
 
-            var workspace = GetWorkspace.GetWorkSpace(dir, EWorkspaceType.Raster);
+            var workspace = WorkspaceEx.GetWorkSpace(dir, EWorkspaceType.Raster);
             var rasterWorkspace = workspace as IRasterWorkspace;
             if (rasterWorkspace == null)
                 throw new Exception($"指定的工作空间“{dir}”不是栅格数据集工作空间！");

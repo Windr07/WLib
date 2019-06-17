@@ -11,9 +11,9 @@ using System.Linq;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
-using WLib.UserCtrls.PathCtrl;
+using WLib.WinCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.Dev.PathCtrl
+namespace WLib.WinCtrls.Dev.PathCtrl
 {
     /// <summary>
     /// 表示一个路径选择与显示的组合框

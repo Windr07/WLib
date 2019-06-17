@@ -7,8 +7,8 @@
     <ProjectGuid>{854A8E9D-31D4-4BC5-89FF-703318999065}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WLib.UserCtrls</RootNamespace>
-    <AssemblyName>WLib.UserCtrls</AssemblyName>
+    <RootNamespace>WLib.WinCtrls</RootNamespace>
+    <AssemblyName>WLib.WinCtrls</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -428,7 +428,7 @@
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.Files.Excel\WLib.Files.csproj">
+    <ProjectReference Include="..\WLib.Files\WLib.Files.csproj">
       <Project>{aeb9c1be-96cf-42f5-ab08-7a45817cf906}</Project>
       <Name>WLib.Files</Name>
     </ProjectReference>

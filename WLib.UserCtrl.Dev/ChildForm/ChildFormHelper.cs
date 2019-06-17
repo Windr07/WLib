@@ -8,7 +8,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.Dev.ChildForm
+namespace WLib.WinCtrls.Dev.ChildForm
 {
     /// <summary>
     /// 子窗体管理类

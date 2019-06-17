@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ComboCtrl
+namespace WLib.WinCtrls.ComboCtrl
 {
     /// <summary>
     /// 带有添加新项和删除操作的ComboBox

@@ -1,6 +1,6 @@
-﻿using WLib.UserCtrls.PathCtrl;
+﻿using WLib.WinCtrls.PathCtrl;
 
-namespace WLib.UserCtrls.AddItemCtrl
+namespace WLib.WinCtrls.AddItemCtrl
 {
     partial class ConcatPathForm
     {

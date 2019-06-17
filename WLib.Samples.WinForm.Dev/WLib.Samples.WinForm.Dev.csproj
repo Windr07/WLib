@@ -148,13 +148,13 @@
       <Project>{0e418c82-3534-4604-bee4-4e5bd0bb926d}</Project>
       <Name>WLib.ArcGis</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.UserCtrl.Dev\WLib.UserCtrls.Dev.csproj">
+    <ProjectReference Include="..\WLib.UserCtrl.Dev\WLib.WinCtrls.Dev.csproj">
       <Project>{5ac4fbca-7dc4-49ad-b3ef-f5a7ba5a5a47}</Project>
-      <Name>WLib.UserCtrls.Dev</Name>
+      <Name>WLib.WinCtrls.Dev</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.UserCtrl\WLib.UserCtrls.csproj">
+    <ProjectReference Include="..\WLib.UserCtrl\WLib.WinCtrls.csproj">
       <Project>{854a8e9d-31d4-4bc5-89ff-703318999065}</Project>
-      <Name>WLib.UserCtrls</Name>
+      <Name>WLib.WinCtrls</Name>
     </ProjectReference>
     <ProjectReference Include="..\WLib\WLib.csproj">
       <Project>{69d92973-b7bc-4c0b-8038-f9063d2eb2a1}</Project>

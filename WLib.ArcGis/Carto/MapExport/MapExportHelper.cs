@@ -194,7 +194,7 @@ namespace WLib.ArcGis.Carto.MapExport
                 var layerInfo = mapFrameInfo.LayerInfos.FirstOrDefault(v => v.ZoomTo);
                 if (layerInfo != null)
                 {
-                    var featureClass = FeatClassFromPath.FromPath(layerInfo.DataSource);
+                    var featureClass = FeatureClassEx.FromPath(layerInfo.DataSource);
                     var geometries =  featureClass.QueryGeometries(layerInfo.Definition);
                     activeView.MapZoomTo(geometries, 1.3);
                 }

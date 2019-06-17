@@ -10,7 +10,7 @@ using System.IO;
 using System.Windows.Forms;
 using WLib.Files;
 
-namespace WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
 {
     /// <summary>
     /// Ä¿Â¼Ê÷¿Ø¼þ

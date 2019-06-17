@@ -37,7 +37,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <returns></returns>
         public DataRow[] GetSheetData(string sheetName, string whereClause)
         {
-            DataTable dataTable = GetSheetData(sheetName);
+            var dataTable = GetSheetData(sheetName);
             return dataTable.Select(whereClause);
         }
         /// <summary>
@@ -47,10 +47,10 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <returns></returns>
         public DataTable GetSheetData(string sheetName)
         {
-            AppLibrary.ReadExcel.Sheet sheet = _workbook.Sheets.First(p => p.Name == sheetName);
+            var sheet = _workbook.Sheets.First(p => p.Name == sheetName);
             if (sheet == null)
                 throw new Exception("找不到表格名为：" + sheetName + " 的表格，请检查数据");
-            DataTable dataTable = ReadSheetData(sheet);
+            var dataTable = ReadSheetData(sheet);
             return dataTable;
         }
         /// <summary>
@@ -60,10 +60,10 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <returns></returns>
         public DataTable GetSheetData(int sheetIndex)
         {
-            AppLibrary.ReadExcel.Sheet sheet = _workbook.Sheets[sheetIndex];
+            var sheet = _workbook.Sheets[sheetIndex];
             if (sheet == null)
                 throw new Exception("文件中没有可用表格数据");
-            DataTable dataTable = ReadSheetData(sheet);
+            var dataTable = ReadSheetData(sheet);
             return dataTable;
         }
         /// <summary>
@@ -73,7 +73,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <returns></returns>
         private DataTable ReadSheetData(AppLibrary.ReadExcel.Sheet sheet)
         {
-            DataTable dataTable = new DataTable();
+            var dataTable = new DataTable();
             for (int iRow = 0; iRow < sheet.Rows; iRow++)
             {
                 DataRow dr = null;
@@ -81,11 +81,11 @@ namespace WLib.Files.Excel.AppLibExcel
                     dr = dataTable.NewRow();
                 for (int iCol = 0; iCol < sheet.Columns; iCol++)
                 {
-                    AppLibrary.ReadExcel.Cell colCell = sheet.getCell(iCol, iRow);
+                    var cell = sheet.getCell(iCol, iRow);
                     if (iRow == 0)
-                        dataTable.Columns.Add(colCell.Value.ToString());
+                        dataTable.Columns.Add(cell.Value.ToString());
                     else
-                        dr[iCol] = colCell.Value;
+                        dr[iCol] = cell.Value;
                 }
                 if (dr != null)
                     dataTable.Rows.Add(dr);

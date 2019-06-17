@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace WLib.UserCtrls.FileViewer.Picture
+namespace WLib.WinCtrls.FileViewer.Picture
 {
     partial class PicViewer
     {

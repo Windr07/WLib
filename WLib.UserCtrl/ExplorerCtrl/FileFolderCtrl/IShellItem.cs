@@ -7,7 +7,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
 {
 
     [ComImport]

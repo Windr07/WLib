@@ -14,7 +14,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatDataset
     /// <summary>
     /// 提供对要素数据集的增、删、改、查等操作
     /// </summary>
-    public static class FeatDatasetOpt
+    public static partial class FeatureDatasetEx
     {
         /// <summary>
         /// 获取要素数据集中指定名称或别名的要素类

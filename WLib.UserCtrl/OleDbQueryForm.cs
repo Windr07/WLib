@@ -6,7 +6,7 @@ using WLib.ArcGis.GeoDatabase.Fields;
 using WLib.Database;
 using WLib.Database.DbBase;
 
-namespace WLib.UserCtrls
+namespace WLib.WinCtrls
 {
     /// <summary>
     /// 通过OleDb连接和使用sql查询mdb/shp/gdb等数据的窗体

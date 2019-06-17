@@ -7,7 +7,7 @@
 
 using System;
 
-namespace WLib.UserCtrls.ComboCtrl
+namespace WLib.WinCtrls.ComboCtrl
 {
     public class DeleteEventArgs : EventArgs
     {

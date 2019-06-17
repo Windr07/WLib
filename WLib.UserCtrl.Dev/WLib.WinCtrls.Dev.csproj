@@ -7,8 +7,8 @@
     <ProjectGuid>{5AC4FBCA-7DC4-49AD-B3EF-F5A7BA5A5A47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WLib.UserCtrls.Dev</RootNamespace>
-    <AssemblyName>WLib.UserCtrls.Dev</AssemblyName>
+    <RootNamespace>WLib.WinCtrls.Dev</RootNamespace>
+    <AssemblyName>WLib.WinCtrls.Dev</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -39,6 +39,9 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChineseLanguage">
+      <HintPath>..\DLL\ChineseLanguage.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,9 +50,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ChineseLanguage">
-      <HintPath>..\DLL\ChineseLanguage.dll</HintPath>
-    </Reference>
     <Reference Include="DevExpress.BonusSkins.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=95fc6c5621878f0a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.BonusSkins.v10.1.dll</HintPath>
@@ -456,13 +456,13 @@
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.Files.Excel\WLib.Files.csproj">
+    <ProjectReference Include="..\WLib.Files\WLib.Files.csproj">
       <Project>{aeb9c1be-96cf-42f5-ab08-7a45817cf906}</Project>
       <Name>WLib.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.UserCtrl\WLib.UserCtrls.csproj">
+    <ProjectReference Include="..\WLib.UserCtrl\WLib.WinCtrls.csproj">
       <Project>{854a8e9d-31d4-4bc5-89ff-703318999065}</Project>
-      <Name>WLib.UserCtrls</Name>
+      <Name>WLib.WinCtrls</Name>
     </ProjectReference>
     <ProjectReference Include="..\WLib\WLib.csproj">
       <Project>{69d92973-b7bc-4c0b-8038-f9063d2eb2a1}</Project>

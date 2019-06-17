@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.EditForm
+﻿namespace WLib.WinCtrls.Dev.EditForm
 {
     partial class RowDataEditForm
     {

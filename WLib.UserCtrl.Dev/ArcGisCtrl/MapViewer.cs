@@ -13,9 +13,9 @@ using System;
 using System.Windows.Forms;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
-using WLib.UserCtrls.ArcGisCtrl;
+using WLib.WinCtrls.ArcGisCtrl;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     /// <summary>
     /// 地图及其图层/表格控制、鹰眼图、导航工具的组合控件

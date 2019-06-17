@@ -10,8 +10,8 @@ using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Database;
 using WLib.Database.DbBase;
-using WLib.UserCtrls.ArcGisCtrl;
-using FolderBrowserDialog = WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
+using WLib.WinCtrls.ArcGisCtrl;
+using FolderBrowserDialog = WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
 
 namespace WLib.Samples.WinForm
 {
@@ -103,11 +103,11 @@ namespace WLib.Samples.WinForm
         private void Test()
         {
             double sumRiverLength = 0.0;
-            FeatClassFromPath.FromPath(@"c:\River.shp").QueryFeatures(@"XZQDM = '440000'",
+            FeatureClassEx.FromPath(@"c:\River.shp").QueryFeatures(@"XZQDM = '440000'",
                 feature => sumRiverLength += feature.ToDouble("RiverLength"));
 
-            var workspace = GetWorkspace.GetWorkSpace(@"c:\World.mdb");
-            FeatClassFromPath.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, "NewRiver", "河流");
+            var workspace = WorkspaceEx.GetWorkSpace(@"c:\World.mdb");
+            FeatureClassEx.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, "NewRiver", "河流");
 
             var connString = ConnStringHelper.Dbf_OleDb4(@"c:\River.dbf");
 

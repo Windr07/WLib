@@ -6,7 +6,7 @@ using System.Text;
 using DevExpress.Utils;
 using DevExpress.XtraCharts;
 
-namespace WLib.UserCtrls.Dev.CtrlExtension
+namespace WLib.WinCtrls.Dev.CtrlExtension
 {
     /// <summary>
     /// <see cref="DevExpress.XtraCharts.ChartControl"/>控件的扩展功能

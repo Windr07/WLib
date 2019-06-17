@@ -8,7 +8,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.FileViewer
+namespace WLib.WinCtrls.FileViewer
 {
     /// <summary>
     /// 读取文本的控件

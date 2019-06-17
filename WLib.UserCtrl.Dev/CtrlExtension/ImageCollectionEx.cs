@@ -9,7 +9,7 @@
 using System.IO;
 using DevExpress.Utils;
 
-namespace WLib.UserCtrls.Dev.CtrlExtension
+namespace WLib.WinCtrls.Dev.CtrlExtension
 {
     /// <summary>
     /// <see cref="DevExpress.Utils.ImageCollection"/>控件的扩展功能

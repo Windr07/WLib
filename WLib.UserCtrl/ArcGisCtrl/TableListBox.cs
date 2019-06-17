@@ -13,9 +13,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control.AttributeCtrl;
-using WLib.UserCtrls.ListCtrl;
+using WLib.WinCtrls.ListCtrl;
 
-namespace WLib.UserCtrls.ArcGisCtrl
+namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
     /// 表格(ArcGIS ITable)列表控件

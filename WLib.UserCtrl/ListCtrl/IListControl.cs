@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ListCtrl
+namespace WLib.WinCtrls.ListCtrl
 {
     /// <summary>
     /// 列表控件

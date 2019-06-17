@@ -9,9 +9,9 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using WLib.UserCtrls.AddItemCtrl.Base;
+using WLib.WinCtrls.AddItemCtrl.Base;
 
-namespace WLib.UserCtrls.Dev.AddItemCtrl
+namespace WLib.WinCtrls.Dev.AddItemCtrl
 {
     /// <summary>
     /// 把输入的字符串按分隔符或正则表达式筛选出所需的列表的窗体

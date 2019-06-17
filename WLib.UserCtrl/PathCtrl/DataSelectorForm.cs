@@ -13,7 +13,7 @@ using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 
-namespace WLib.UserCtrls.PathCtrl
+namespace WLib.WinCtrls.PathCtrl
 {
     /// <summary>
     /// 从工作空间中选取图层或表格的窗体

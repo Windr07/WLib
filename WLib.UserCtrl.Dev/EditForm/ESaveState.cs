@@ -7,7 +7,7 @@
 
 using WLib.Attributes;
 
-namespace WLib.UserCtrls.Dev.EditForm
+namespace WLib.WinCtrls.Dev.EditForm
 {
     /// <summary>
     /// 保存结果状态（0-保存失败，1-保存成功）

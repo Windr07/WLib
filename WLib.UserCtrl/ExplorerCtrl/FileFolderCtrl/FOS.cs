@@ -7,7 +7,7 @@
 
 using System;
 
-namespace WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
 {
     [Flags]
     public enum FOS

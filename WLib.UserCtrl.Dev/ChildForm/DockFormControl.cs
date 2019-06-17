@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using DevExpress.XtraBars.Docking;
 using WLib.WindowsAPI;
 
-namespace WLib.UserCtrls.Dev.ChildForm
+namespace WLib.WinCtrls.Dev.ChildForm
 {
     /// <summary>
     /// 提供窗体停靠的容器控件，

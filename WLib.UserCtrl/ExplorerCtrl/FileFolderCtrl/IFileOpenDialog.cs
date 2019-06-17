@@ -8,7 +8,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
 {
     [ComImport]
     [Guid("42f85136-db7e-439c-85f1-e4075d135fc8")]

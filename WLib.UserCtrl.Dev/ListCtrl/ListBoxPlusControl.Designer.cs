@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.ListCtrl
+﻿namespace WLib.WinCtrls.Dev.ListCtrl
 {
     partial class ListBoxPlusControl
     {

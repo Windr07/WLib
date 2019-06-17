@@ -14,7 +14,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
     /// <summary>
     /// 提供将数据源的要素类存储结构转为TreeNode（树结构）的方法
     /// </summary>
-    public class FeatClassToTreeNodes
+    public static partial class FeatureClassEx
     {
         /// <summary>
         /// 获取指定路径或连接字符串对应数据库下，以数据库名为根节点，要素集或要素类为子节点的树结构信息
@@ -26,7 +26,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             var fileName = System.IO.Path.GetFileNameWithoutExtension(strConnOrPath);
             var rootNode = new TreeNode(fileName) { Tag = 0 };
-            var workspace = GetWorkspace.GetWorkSpace(strConnOrPath);
+            var workspace = WorkspaceEx.GetWorkSpace(strConnOrPath);
 
             //不放到DataSet的要素数据
             var dataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];

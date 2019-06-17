@@ -8,7 +8,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.Dev.ProbarCtrl
+namespace WLib.WinCtrls.Dev.ProbarCtrl
 {
     /// <summary>
     /// 进度条窗体

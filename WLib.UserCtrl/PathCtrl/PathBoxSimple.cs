@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using WLib.Files;
 using WLib.WinForm;
 
-namespace WLib.UserCtrls.PathCtrl
+namespace WLib.WinCtrls.PathCtrl
 {
     /// <summary>
     /// 表示一个路径选择与显示的组合框

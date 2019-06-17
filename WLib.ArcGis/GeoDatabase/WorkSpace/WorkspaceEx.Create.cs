@@ -16,9 +16,10 @@ using WLib.Attributes;
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {
     /// <summary>
-    /// 提供创建不同类型的工作空间的方法
+    /// 提供对工作空间的扩展操作
+    /// <para>包括工作空间的增删改查、打开、编辑、要素类/数据集/表格查询创建删除等</para>
     /// </summary>
-    public static class WorkspaceCreate
+    public static partial class WorkspaceEx
     {
         /// <summary>
         /// 创建内存工作空间
@@ -56,7 +57,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         public static IWorkspace NewWorkspace(EWorkspaceType eType, string parentDirectory, string strWorkspaceName)
         {
             if (eType == EWorkspaceType.Default)
-                eType = GetWorkspace.GetDefaultWorkspaceType(strWorkspaceName);
+                eType = GetDefaultWorkspaceType(strWorkspaceName);
 
             switch (eType)
             {

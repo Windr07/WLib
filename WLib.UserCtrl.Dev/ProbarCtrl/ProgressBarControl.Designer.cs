@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.ProbarCtrl
+﻿namespace WLib.WinCtrls.Dev.ProbarCtrl
 {
     partial class ProgressBarControl
     {

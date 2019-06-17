@@ -11,7 +11,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ExplorerCtrl.FileFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
 {
     /// <summary>
     /// 提供只能选择文件夹的打开文件对话框（OpenFileDialog, Open Folder）

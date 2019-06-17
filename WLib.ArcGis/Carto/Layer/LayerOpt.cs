@@ -147,8 +147,8 @@ namespace WLib.ArcGis.Carto.Layer
         /// <param name="objectName">图层关联对象的名称，即要素类名称或栅格数据集名称</param>
         public static void SetSourcePath(this ILayer layer, string workspacePath, string dataSetName, string objectName)
         {
-            if (!GetWorkspace.IsWorkspacePath(workspacePath) &&
-                !GetWorkspace.IsConnectionString(workspacePath))
+            if (!WorkspaceEx.IsWorkspacePath(workspacePath) &&
+                !WorkspaceEx.IsConnectionString(workspacePath))
                 throw new ArgumentException($"找不到数据源({workspacePath})，请指定正确的数据源！");
 
             switch (layer)
@@ -157,7 +157,7 @@ namespace WLib.ArcGis.Carto.Layer
                     if (featureLayer is IDataLayer dataLayer)
                     {
                         IDatasetName datasetName = (IDatasetName)dataLayer.DataSourceName;
-                        EWorkspaceType eWorkspaceType = GetWorkspace.GetDefaultWorkspaceType(workspacePath);
+                        EWorkspaceType eWorkspaceType = WorkspaceEx.GetDefaultWorkspaceType(workspacePath);
                         datasetName.WorkspaceName.WorkspaceFactoryProgID = eWorkspaceType.GetDescription(1);
                         datasetName.WorkspaceName.PathName = workspacePath;
                         //TODO:

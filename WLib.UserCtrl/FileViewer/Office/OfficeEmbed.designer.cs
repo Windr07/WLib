@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.FileViewer.Office
+﻿namespace WLib.WinCtrls.FileViewer.Office
 {
     partial class OfficeEmbed
     {

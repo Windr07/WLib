@@ -1,6 +1,6 @@
-﻿using WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl;
+﻿using WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl;
 
-namespace WLib.UserCtrls.ExplorerCtrl.PathFolderCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
 {
     partial class PathFolderBrowser
     {

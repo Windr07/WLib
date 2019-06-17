@@ -2,8 +2,6 @@
 using System.Windows.Forms;
 using ESRI.ArcGIS.esriSystem;
 using WLib.ArcGis;
-using WLib.Samples.WinForm.SubForm;
-using WLib.UserCtrls.ExplorerCtrl.PathFolderCtrl;
 
 namespace WLib.Samples.WinForm
 {
@@ -18,19 +16,19 @@ namespace WLib.Samples.WinForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            licenseInitializer.InitializeApplication(
-                new[] {
-                    esriLicenseProductCode.esriLicenseProductCodeAdvanced
-                },
-                new[] {
-                    esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork,
-                    esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
-                });
+            //licenseInitializer.InitializeApplication(
+            //    new[] {
+            //        esriLicenseProductCode.esriLicenseProductCodeAdvanced
+            //    },
+            //    new[] {
+            //        esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork,
+            //        esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
+            //    });
 
-            //ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
-            //Application.Run(new MainForm());
+            ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+            Application.Run(new MainForm());
             //Application.Run(new OleDbQueryForm());
-            Application.Run(new ExportMapForm());
+            //Application.Run(new ExportMapForm());
             //Application.Run(new PathFolderBrowserDialog(@""));
             licenseInitializer.ShutdownApplication();
         }

@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.ArcGisCtrl
+﻿namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     partial class MapViewer
     {
@@ -42,7 +42,7 @@
             DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
             DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
             DevExpress.Utils.ToolTipItem toolTipItem8 = new DevExpress.Utils.ToolTipItem();
-            this.TableListBox = new WLib.UserCtrls.ArcGisCtrl.TableListBox();
+            this.TableListBox = new WLib.WinCtrls.ArcGisCtrl.TableListBox();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.tocGroupControl = new DevExpress.XtraEditors.GroupControl();
@@ -55,13 +55,13 @@
             this.EagleMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.ViewerTabControl = new DevExpress.XtraTab.XtraTabControl();
             this.xtpMapView = new DevExpress.XtraTab.XtraTabPage();
-            this.MapNavigationTools = new WLib.UserCtrls.Dev.ArcGisCtrl.MapNavigationTools();
+            this.MapNavigationTools = new WLib.WinCtrls.Dev.ArcGisCtrl.MapNavigationTools();
             this.MainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.xtpPageLayout = new DevExpress.XtraTab.XtraTabPage();
             this.imageCollection_Nav = new DevExpress.Utils.ImageCollection(this.components);
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
-            this.pageNavigationTools1 = new WLib.UserCtrls.Dev.ArcGisCtrl.PageNavigationTools();
+            this.pageNavigationTools1 = new WLib.WinCtrls.Dev.ArcGisCtrl.PageNavigationTools();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2)).BeginInit();
@@ -387,7 +387,7 @@
         public DevExpress.XtraTab.XtraTabControl ViewerTabControl;
         private DevExpress.XtraTab.XtraTabPage xtpMapView;
         private MapNavigationTools MapNavigationTools;
-        public WLib.UserCtrls.ArcGisCtrl.TableListBox TableListBox;
+        public WLib.WinCtrls.ArcGisCtrl.TableListBox TableListBox;
         public ESRI.ArcGIS.Controls.AxMapControl MainMapControl;
         public ESRI.ArcGIS.Controls.AxTOCControl TocControl;
         private PageNavigationTools pageNavigationTools1;

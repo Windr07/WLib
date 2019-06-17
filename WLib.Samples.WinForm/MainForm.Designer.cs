@@ -1,4 +1,4 @@
-﻿using WLib.UserCtrls.ArcGisCtrl;
+﻿using WLib.WinCtrls.ArcGisCtrl;
 
 namespace WLib.Samples.WinForm
 {
@@ -67,7 +67,7 @@ namespace WLib.Samples.WinForm
             this.导出数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.导入数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapViewer1 = new WLib.UserCtrls.ArcGisCtrl.MapViewer();
+            this.mapViewer1 = new WLib.WinCtrls.ArcGisCtrl.MapViewer();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 

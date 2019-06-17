@@ -14,9 +14,9 @@ using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Display;
 using WLib.Envir.ArcGis;
-using WLib.UserCtrls.ArcGisCtrl;
+using WLib.WinCtrls.ArcGisCtrl;
 
-namespace WLib.UserCtrls.Dev.ArcGisCtrl
+namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {
     /// <summary>
     /// 符号选择器(Symbology)窗体

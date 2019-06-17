@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Office.Interop.Excel;
 using WLib.WindowsAPI;
 
-namespace WLib.UserCtrls.FileViewer.Office
+namespace WLib.WinCtrls.FileViewer.Office
 {
     /// <summary>
     /// Excel文档基础操作

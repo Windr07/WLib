@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-namespace WLib.UserCtrls.AddItemCtrl.Base
+namespace WLib.WinCtrls.AddItemCtrl.Base
 {
     /// <summary>
     /// 匹配模式

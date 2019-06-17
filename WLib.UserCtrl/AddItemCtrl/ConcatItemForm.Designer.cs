@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.AddItemCtrl
+﻿namespace WLib.WinCtrls.AddItemCtrl
 {
     partial class ConcatItemForm
     {

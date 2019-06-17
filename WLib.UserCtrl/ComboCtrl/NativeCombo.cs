@@ -7,7 +7,7 @@
 
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ComboCtrl
+namespace WLib.WinCtrls.ComboCtrl
 {
     internal class NativeCombo : NativeWindow
     {

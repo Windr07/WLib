@@ -11,7 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ListCtrl
+namespace WLib.WinCtrls.ListCtrl
 {
     /// <summary>
     /// 列表控件<see cref="ListBox"/>的扩展控件，在每一列表项的左侧显示图标，实现<see cref="IListControl"/>

@@ -9,7 +9,7 @@
 
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.FileViewer.Office
+namespace WLib.WinCtrls.FileViewer.Office
 {
     /// <summary>
     /// Office程序嵌入面板

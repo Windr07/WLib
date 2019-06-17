@@ -1,4 +1,4 @@
-﻿namespace WLib.UserCtrls.Dev.PathCtrl
+﻿namespace WLib.WinCtrls.Dev.PathCtrl
 {
     partial class PathBoxControl
     {

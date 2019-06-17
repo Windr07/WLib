@@ -19,7 +19,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
     /// <summary>
     /// 提供创建要素类的方法
     /// </summary>
-    public static class FeatClassCreate
+    public static partial class FeatureClassEx
     {
         /// <summary>
         /// 创建要素类
@@ -160,7 +160,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static IFeatureClass CreateInMemory(string name, IFields fields, string strWorkspaceName = "InMemoryWorkspace")
         {
-            var workspace = WorkspaceCreate.NewInMemoryWorkspace(strWorkspaceName);
+            var workspace = WorkspaceEx.NewInMemoryWorkspace(strWorkspaceName);
             IFeatureWorkspace featureWorkspace = (IFeatureWorkspace)workspace;
             return featureWorkspace.CreateFeatureClass(name, fields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
         }

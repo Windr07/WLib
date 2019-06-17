@@ -8,7 +8,7 @@
 using System.Collections;
 using System.Windows.Forms;
 
-namespace WLib.UserCtrls.ExplorerCtrl.ExplorerTreeCtrl
+namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
 {
     /// <summary>
     /// 对TreeView进行扩展的目录树视图控件

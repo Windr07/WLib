@@ -11,7 +11,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-namespace WLib.UserCtrls.FileViewer.Picture
+namespace WLib.WinCtrls.FileViewer.Picture
 {
     /// <summary>
     /// 图片简单浏览控件
