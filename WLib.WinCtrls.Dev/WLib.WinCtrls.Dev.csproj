@@ -460,7 +460,7 @@
       <Project>{aeb9c1be-96cf-42f5-ab08-7a45817cf906}</Project>
       <Name>WLib.Files</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.UserCtrl\WLib.WinCtrls.csproj">
+    <ProjectReference Include="..\WLib.WinCtrls\WLib.WinCtrls.csproj">
       <Project>{854a8e9d-31d4-4bc5-89ff-703318999065}</Project>
       <Name>WLib.WinCtrls</Name>
     </ProjectReference>

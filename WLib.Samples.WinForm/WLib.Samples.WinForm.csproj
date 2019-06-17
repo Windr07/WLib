@@ -168,7 +168,7 @@
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLib.UserCtrl\WLib.WinCtrls.csproj">
+    <ProjectReference Include="..\WLib.WinCtrls\WLib.WinCtrls.csproj">
       <Project>{854a8e9d-31d4-4bc5-89ff-703318999065}</Project>
       <Name>WLib.WinCtrls</Name>
     </ProjectReference>
