@@ -9,11 +9,10 @@
 WLib|C#基础库|DbHelper、Windows API、硬件信息获取、压缩与解压缩、反射、DataTable转对象（简单ORM）等
 WLib.ArcGis|ArcGIS基础库|优化和封装的ArcObject代码集，内容包含GP调用、拓扑、空间查询、地图查询、标注、注记、元素增删改查、制图出图、样式、专题渲染、坐标系判读转换、点线面几何创建、控件组合联动、许可初始化、shp/gdb/mdb/sde/sql/oledb连接和表格/矢量/栅格数据增删改查等
 WLib.Envir|环境检测库|获取安装的.NET版本、ArcGIS版本、Windows操作系统版本
-WLib.Files.Excel|excel读写库|使用[NPOI](https://github.com/tonyqus/npoi/)读写xls和xlsx、使用[AppLibrary.dll](http://www.pudn.com/Download/item/id/2192742.html) 库的简单xls操作、使用官方库[Microsoft.Office.Interop.Excel]()操作xls和xlsx
- WLib.Files.Word|word读写库|使用官方库[Microsoft.Office.Interop.Word]()读写doc、docx
+WLib.Files|excel、Word、pdf读写库|使用[NPOI](https://github.com/tonyqus/npoi/)读写xls和xlsx、使用[AppLibrary.dll](http://www.pudn.com/Download/item/id/2192742.html) 库的简单xls操作、使用官方库[Microsoft.Office.Interop.Excel]()操作xls和xlsx、使用官方库[Microsoft.Office.Interop.Word]()读写doc和docx、使用[itextsharp]()操作pdf文档
  WLib.Gdal|GDAL帮助库|开源GIS库[GDAL(Geospatial Data Abstraction Library)](https://www.gdal.org/)的Helper代码
- WLib.UserCtrls|WinForm控件库|一些自定义的WinForm和ArcEngine控件
- WLib.UserCtrls.Dev|DevExpress WinForm控件库|一些自定义的DevExpress WinForm和ArcEngine控件
+ WLib.WinCtrls|WinForm控件库|一些自定义的WinForm和ArcEngine控件
+ WLib.WinCtrls.Dev|DevExpress WinForm控件库|一些自定义的DevExpress WinForm和ArcEngine控件
  
  ## 环境
  ### 开发环境
