@@ -5,13 +5,13 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 using WLib.WinCtrls.PathCtrl;
 
 namespace WLib.WinCtrls.Dev.ArcGisCtrl

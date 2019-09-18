@@ -42,6 +42,10 @@
     <Reference Include="ChineseLanguage">
       <HintPath>..\DLL\ChineseLanguage.dll</HintPath>
     </Reference>
+    <Reference Include="Office">
+      <HintPath>..\DLL\Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -272,10 +276,10 @@
     <Compile Include="AddItemCtrl\ConcatItemForm.Designer.cs">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\ImageListBoxControlEx.cs">
+    <Compile Include="ListCtrl\ImageListBoxControlEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\ImageListBoxControlEx.Designer.cs">
+    <Compile Include="ListCtrl\ImageListBoxControlEx.Designer.cs">
       <DependentUpon>ImageListBoxControlEx.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
@@ -302,37 +306,45 @@
     <Compile Include="ArcGisCtrl\AttributeForm.designer.cs">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChildForm\ChildFormHelper.cs" />
-    <Compile Include="ChildForm\ChildSizableForm.cs">
+    <Compile Include="ChildCtrl\ChildFormHelper.cs" />
+    <Compile Include="ChildCtrl\ChildSizableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChildForm\ChildSizableForm.Designer.cs">
+    <Compile Include="ChildCtrl\ChildSizableForm.Designer.cs">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChildForm\DockFormControl.cs">
+    <Compile Include="ChildCtrl\DockFormControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ChildForm\DockFormControl.Designer.cs">
+    <Compile Include="ChildCtrl\DockFormControl.Designer.cs">
       <DependentUpon>DockFormControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChildForm\EMouseDirection.cs" />
-    <Compile Include="CtrlExtension\ChartControlEx.cs" />
-    <Compile Include="EditForm\EditItem.cs" />
-    <Compile Include="EditForm\ESaveState.cs" />
-    <Compile Include="EditForm\RowDataEditForm.cs">
+    <Compile Include="ChildCtrl\EMouseDirection.cs" />
+    <Compile Include="PluginCtrl\PluginRibbonForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditForm\RowDataEditForm.Designer.cs">
+    <Compile Include="PluginCtrl\PluginRibbonForm.Designer.cs">
+      <DependentUpon>PluginRibbonForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginRibbonFormHelper.cs" />
+    <Compile Include="`Extension\ChartControlEx.cs" />
+    <Compile Include="EditCtrl\EditItem.cs" />
+    <Compile Include="EditCtrl\ESaveState.cs" />
+    <Compile Include="EditCtrl\RowDataEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCtrl\RowDataEditForm.Designer.cs">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditForm\SaveEditEventArgs.cs" />
-    <Compile Include="CtrlExtension\ImageCollectionEx.cs" />
+    <Compile Include="EditCtrl\SaveEditEventArgs.cs" />
+    <Compile Include="`Extension\ImageCollectionEx.cs" />
     <Compile Include="InputCtrl\InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InputCtrl\InputForm.Designer.cs">
       <DependentUpon>InputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DevProgressViewManager.cs" />
     <Compile Include="ListCtrl\ListBoxPlusControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -381,6 +393,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkinCtrl\SkinOpt.cs" />
+    <Compile Include="`Extension\SuperTipsEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
@@ -408,13 +422,13 @@
     <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
       <DependentUpon>AttributeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChildForm\ChildSizableForm.resx">
+    <EmbeddedResource Include="ChildCtrl\ChildSizableForm.resx">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChildForm\DockFormControl.resx">
+    <EmbeddedResource Include="ChildCtrl\DockFormControl.resx">
       <DependentUpon>DockFormControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditForm\RowDataEditForm.resx">
+    <EmbeddedResource Include="EditCtrl\RowDataEditForm.resx">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputCtrl\InputForm.resx">
@@ -428,6 +442,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\WorkspaceSelectorControl.resx">
       <DependentUpon>WorkspaceSelectorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginCtrl\PluginRibbonForm.resx">
+      <DependentUpon>PluginRibbonForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProbarCtrl\ProbarForm.resx">
       <DependentUpon>ProbarForm.cs</DependentUpon>
@@ -469,7 +486,6 @@
       <Name>WLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

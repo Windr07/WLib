@@ -318,22 +318,36 @@ namespace WLib.ArcGis.Geometry
 
         #region 构造面
         /// <summary>
-        /// 通过点集构成多边形
+        /// 通过点集构成多边形（只适用单环多边形）
         /// </summary>
-        /// <param name="pointList"></param>
+        /// <param name="points">按顺序构成一个环的点集</param>
         /// <returns></returns>
-        public static IPolygon CreatePolygon(List<IPoint> pointList)
+        public static IPolygon CreatePolygon(IEnumerable<double[]> points)
         {
-            if (pointList.Count < 3)
+            List<IPoint> iPoints = new List<IPoint>();
+            foreach (var pt in points)
+                iPoints.Add(new PointClass { X = pt[0], Y = pt[1] });
+
+            return CreatePolygon(iPoints);
+        }
+        /// <summary>
+        /// 通过点集构成多边形（只适用单环多边形）
+        /// </summary>
+        /// <param name="pointList">按顺序构成一个环的点集</param>
+        /// <returns></returns>
+        public static IPolygon CreatePolygon(IEnumerable<IPoint> pointList)
+        {
+            if (pointList.Count() < 3)
                 throw new Exception("地块点数小于3，不能构成多边形！");
 
             IGeometryCollection pointPolygon = new PolygonClass();
             Ring ring = new RingClass();
             object missing = Type.Missing;
-            for (int i = 0; i < pointList.Count; i++)
+            foreach (var pt in pointList)
             {
-                ring.AddPoint(pointList[i], ref missing, ref missing);
+                ring.AddPoint(pt, ref missing, ref missing);
             }
+
             pointPolygon.AddGeometry(ring as IGeometry, ref missing, ref missing);
             IPolygon polygon = pointPolygon as IPolygon;
             polygon.SimplifyPreserveFromTo();

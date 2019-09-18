@@ -595,7 +595,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         }
         /// <summary>
         /// 校验并返回与数据源一致的条件查询语句
-        /// （例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// <para>例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'</para>
         /// </summary>
         /// <param name="eType">数据源类型</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>

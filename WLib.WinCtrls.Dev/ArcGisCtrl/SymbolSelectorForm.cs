@@ -11,9 +11,7 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
-using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Display;
-using WLib.Envir.ArcGis;
 using WLib.WinCtrls.ArcGisCtrl;
 
 namespace WLib.WinCtrls.Dev.ArcGisCtrl

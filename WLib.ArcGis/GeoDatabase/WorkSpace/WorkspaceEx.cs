@@ -204,28 +204,59 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             return featureClass;
         }
         /// <summary>
-        /// 根据要素类的名称或别名，查找工作空间中的数据要素类
+        /// 根据要素类的名称或别名（或名称/别名的关键字），查找工作空间中的数据要素类
         /// </summary>
         /// <param name="workspace">工作空间</param>
         /// <param name="featureClassName">要素类名称或别名</param>
         /// <param name="unFindException">当找不到要素类时，是否抛出异常</param>
+        /// <param name="nameIsKeyword">表示是否按关键字查找，True则按关键字模糊匹配，False则名称/别名必须完全匹配</param>
         /// <returns></returns>
-        public static IFeatureClass GetFeatureClassByName(this IWorkspace workspace, string featureClassName, bool unFindException = true)
+        public static IFeatureClass GetFeatureClassByName(this IWorkspace workspace, string featureClassName, bool unFindException = true, bool nameIsKeyword = false)
         {
             if (string.IsNullOrEmpty(featureClassName))
-                throw new Exception("查找的数据集名称为空。");
+                throw new Exception("查找的数据类名称为空。");
 
             //遍历FeatureClass
             featureClassName = featureClassName.ToLower();
             foreach (IFeatureClass featureClass in GetDataset(workspace))
             {
-                if (featureClass.AliasName.ToLower() == featureClassName || (featureClass as IDataset)?.Name.ToLower() == featureClassName)
-                    return featureClass;
+                if (nameIsKeyword)
+                {
+                    if (featureClass.AliasName.ToLower().Contains(featureClassName) || ((IDataset)featureClass).Name.ToLower().Contains(featureClassName))
+                        return featureClass;
+                }
+                else
+                {
+                    if (featureClass.AliasName.ToLower() == featureClassName || ((IDataset)featureClass).Name.ToLower() == featureClassName)
+                        return featureClass;
+                }
             }
             if (unFindException)
-                throw new Exception("找不到要素名为：" + featureClassName + "的要素，请检查数据");
+                throw new Exception("找不到名为：" + featureClassName + "的要素类，请检查数据");
             else
                 return null;
+        }
+        /// <summary>
+        /// 根据要素类的名称/别名的关键字，查找工作空间中的数据要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="keyName">要素类名称或别名</param>
+        /// <returns></returns>
+        public static List<IFeatureClass> GetFeatureClassesByKeyName(this IWorkspace workspace, string keyName)
+        {
+            var featureClassList = new List<IFeatureClass>();
+            if (workspace == null)
+                throw new Exception("工作空间为空，检查连接信息。");
+            if (keyName == null)
+                throw new Exception("查找的数据类名称为空。");
+
+            keyName = keyName.ToLower();
+            foreach (IFeatureClass featureClass in GetDataset(workspace))
+            {
+                if (featureClass.AliasName.ToLower().Contains(keyName) || ((IDataset)featureClass).Name.Contains(keyName))
+                    featureClassList.Add(featureClass);
+            }
+            return featureClassList;
         }
         /// <summary>
         /// 根据要素类的名称或别名，查找工作空间中的数据要素类
@@ -239,9 +270,8 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             if (workspace == null)
                 throw new Exception("工作空间为空，检查连接信息。");
             if (featureClassNames == null || featureClassNames.Length == 0)
-                throw new Exception("查找的数据集名称为空。");
+                throw new Exception("查找的数据类名称为空。");
 
-            //遍历FeatureClass
             featureClassNames = featureClassNames.Select(v => v.ToLower()).ToArray();
             foreach (IFeatureClass featureClass in GetDataset(workspace))
             {
@@ -261,7 +291,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             return GetDataset(workspace).Cast<IFeatureClass>().ToList();
         }
         /// <summary>
-        /// 以迭代形式返回工作空间下的所有要素类
+        /// 以迭代形式返回工作空间下的所有要素类，包括数据集中的要素类
         /// </summary>
         /// <param name="workspace">工作空间</param>
         /// <returns>要素类枚举数（要素类集合）</returns>

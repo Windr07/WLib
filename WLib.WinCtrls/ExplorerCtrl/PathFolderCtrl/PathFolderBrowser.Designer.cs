@@ -30,7 +30,7 @@ namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
         /// </summary>
         private void InitializeComponent()
         {
-            this.explorerTreeView1 = new ExplorerTreeView();
+            this.explorerTreeView1 = new WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl.ExplorerTreeView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();

@@ -88,7 +88,7 @@ namespace WLib.WinCtrls.PathCtrl
         /// <summary>
         /// 文件筛选，等同于OpenFileDialog或SaveFileDialog控件的Filter属性
         /// </summary>
-        public String FileFilter { get => _fileFilter; set => _fileFilter = (value != null && !value.Contains("|")) ? value + "|" + value : value; }
+        public string FileFilter { get => _fileFilter; set => _fileFilter = (value != null && !value.Contains("|")) ? value + "|" + value : value; }
         /// <summary>
         /// 选择文件或目录的标题或提示信息
         /// </summary>
@@ -176,25 +176,17 @@ namespace WLib.WinCtrls.PathCtrl
         /// <summary>
         /// 触发选择或设置路径后的事件
         /// </summary>
-        protected void OnAfeterSelectPath()
-        {
-            AfeterSelectPath?.Invoke(this, new EventArgs());
-        }
+        protected void OnAfeterSelectPath() => AfeterSelectPath?.Invoke(this, new EventArgs());
         /// <summary>
         /// 触发点击操作按钮事件
         /// </summary>
-        protected void OnOperateButtonClick()
-        {
-            OperateButtonClick?.Invoke(this, new EventArgs());
-        }
+        protected void OnOperateButtonClick() => OperateButtonClick?.Invoke(this, new EventArgs());
         /// <summary>
         /// 触发自定义路径选择事件
         /// </summary>
-        protected void OnCustomizeSelectPath()
-        {
-            CustomizeSelectPath?.Invoke(this, new EventArgs());
-        }
+        protected void OnCustomizeSelectPath() => CustomizeSelectPath?.Invoke(this, new EventArgs());
         #endregion
+
 
         /// <summary>
         /// 表示一个路径选择与显示的组合框
@@ -234,10 +226,7 @@ namespace WLib.WinCtrls.PathCtrl
         /// <summary>
         /// 清理路径
         /// </summary>
-        public void Clear()
-        {
-            txtPath.Clear();
-        }
+        public void Clear() => txtPath.Clear();
         /// <summary>
         /// 向路径框中添加路径，并触发AfeterSelectPath事件
         /// </summary>
@@ -250,29 +239,20 @@ namespace WLib.WinCtrls.PathCtrl
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            string selectedPath;
             string path = txtPath.Text.Trim();
-            if (SelectPathType == ESelectPathType.Folder &&
-               (selectedPath = DialogOpt.ShowFolderBrowserDialog(path, SelectTips)) != null)
-            {
-                txtPath.Text = selectedPath;
-                OnAfeterSelectPath();
-            }
-            else if (SelectPathType == ESelectPathType.OpenFile &&
-               (selectedPath = DialogOpt.ShowOpenFileDialog(FileFilter, SelectTips, null, path)) != null)
-            {
-                txtPath.Text = selectedPath;
-                OnAfeterSelectPath();
-            }
-            else if (SelectPathType == ESelectPathType.SaveFile &&
-               (selectedPath = DialogOpt.ShowSaveFileDialog(FileFilter, SelectTips, null, path)) != null)
-            {
-                txtPath.Text = selectedPath;
-                OnAfeterSelectPath();
-            }
-            else if (SelectPathType == ESelectPathType.Customize)
-            {
+            if (SelectPathType == ESelectPathType.Customize)
                 OnCustomizeSelectPath();
+            else
+            {
+                string selPath = null;
+                switch (SelectPathType)
+                {
+                    case ESelectPathType.Folder: selPath = DialogOpt.ShowFolderBrowserDialog(path, SelectTips); break;
+                    case ESelectPathType.OpenFile: selPath = DialogOpt.ShowOpenFileDialog(FileFilter, SelectTips, null, path); break;
+                    case ESelectPathType.SaveFile: selPath = DialogOpt.ShowSaveFileDialog(FileFilter, SelectTips, null, path); break;
+                }
+                txtPath.Text = selPath;
+                OnAfeterSelectPath();
             }
             if (txtPath.Text != string.Empty && txtPath.Text != _defultTips)
                 txtPath.ForeColor = SystemColors.WindowText;

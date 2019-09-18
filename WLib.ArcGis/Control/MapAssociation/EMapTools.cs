@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using WLib.Attributes;
+using System.ComponentModel;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {

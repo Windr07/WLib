@@ -31,53 +31,49 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             return CreateField(fieldItem.Name, fieldItem.AliasName, fieldItem.FieldType);
         }
         /// <summary>
-        /// 将ArcGIS表格的指定字段转为自定义类FieldItem集
+        /// 将ArcGIS表格的字段转为自定义类FieldItem集
         /// </summary>
         /// <param name="fields"></param>
         /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
         /// <returns></returns>
-        public static List<FieldItem> GetFieldItems(this IFields fields, string[] fieldNames = null)
+        public static IEnumerable<FieldItem> ToFieldItems(this IFields fields, string[] fieldNames = null)
         {
-            List<FieldItem> fieldItems = new List<FieldItem>();
-            List<IField> fieldList = FieldsToList(fields);
-            if (fieldNames == null)
-            {
-                fieldItems = fieldList.Select(v => new FieldItem(v.Name, v.AliasName, v.Type)).ToList();
-            }
-            else
-            {
-                foreach (var field in fieldList)
-                {
-                    if (fieldNames.Contains(field.Name) || fieldNames.Contains(field.AliasName))
-                        fieldItems.Add(new FieldItem(field.Name, field.AliasName, field.Type));
-                }
-            }
-            return fieldItems;
+            var eFields = ToEnumerable(fields);
+            if (fieldNames == null || fieldNames.Length == 0)
+                return eFields.Select(v => new FieldItem(v.Name, v.AliasName, v.Type));
+
+            var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
+            return filterFields.Select(v => new FieldItem(v.Name, v.AliasName, v.Type));
         }
         /// <summary>
-        /// 将IFields转成IField列表
+        /// 将ArcGIS表格的字段转为自定义类FieldItemEx集
         /// </summary>
         /// <param name="fields"></param>
+        /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
         /// <returns></returns>
-        public static List<IField> FieldsToList(this IFields fields)
+        public static IEnumerable<FieldItemEx> ToFieldItemExs(this IFields fields, string[] fieldNames = null)
         {
-            List<IField> fieldList = new List<IField>();
-            for (int i = 0; i < fields.FieldCount; i++)
-            {
-                fieldList.Add(fields.get_Field(i));
-            }
-            return fieldList;
-        }
-        /// <summary>
-        /// 将IFields转成字段数组
-        /// </summary>
-        /// <param name="fields"></param>
-        /// <returns></returns>
-        public static IField[] FieldsToArray(this IFields fields)
-        {
-            return FieldsToList(fields).ToArray();
+            var eFields = ToEnumerable(fields);
+            if (fieldNames == null || fieldNames.Length == 0)
+                return eFields.Select(v => new FieldItemEx(
+                    v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
+
+            var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
+            return filterFields.Select(v => new FieldItemEx(
+                v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
         }
 
+
+        /// <summary>
+        /// 将IFields转成可枚举类型IEnumerable
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static IEnumerable<IField> ToEnumerable(this IFields fields)
+        {
+            for (int i = 0; i < fields.FieldCount; i++)
+                yield return fields.get_Field(i);
+        }
 
         #region 重设字段
         /// <summary>
@@ -792,7 +788,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// 将esriFieldType类型转成.NET的基本类型（数值类型、字符串、日期）
         /// </summary>
         /// <returns></returns>
-        public static Type FieldTypeToDoNetType(esriFieldType eFieldType)
+        public static Type FieldTypeToDotNetType(this esriFieldType eFieldType)
         {
             Type type;
             switch (eFieldType)

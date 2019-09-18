@@ -361,17 +361,15 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="whereClause">查询条件</param>
         /// <param name="subFields"></param>
         /// <returns></returns>
-        public static List<IFeature> QueryFeatures(this IFeatureClass featureClass, string whereClause = null, string subFields = null)
+        public static IEnumerable<IFeature> QueryFeatures(this IFeatureClass featureClass, string whereClause = null, string subFields = null)
         {
-            var features = new List<IFeature>();
             var featureCursor = GetSearchCursor(featureClass, whereClause, subFields);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
             {
-                features.Add(feature);
+                yield return feature;
             }
             Marshal.ReleaseComObject(featureCursor);
-            return features;
         }
         /// <summary>
         /// 查找符合条件的第一个要素
@@ -468,19 +466,16 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="featureClass">查询的要素类</param>
         /// <param name="whereClause">查询条件</param>
         /// <returns></returns>
-        public static List<IGeometry> QueryGeometries(this IFeatureClass featureClass, string whereClause = null)
+        public static IEnumerable<IGeometry> QueryGeometries(this IFeatureClass featureClass, string whereClause = null)
         {
-            var values = new List<IGeometry>();
             IQueryFilter queryFilter = new QueryFilterClass();
             queryFilter.WhereClause = whereClause;
             var featureCursor = featureClass.Search(queryFilter, false);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
-            {
-                values.Add(feature.Shape);
-            }
+                yield return feature.Shape;
+
             Marshal.ReleaseComObject(featureCursor);
-            return values;
         }
         /// <summary>
         /// 根据查询条件查询矢量图层的图斑，获取图斑的副本
@@ -516,7 +511,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="fieldName">字段名</param>
         /// <param name="whereClause">条件语句</param>
         /// <returns></returns>
-        public static List<object> GetUniqueValues(this IFeatureClass featureClass, string fieldName, string whereClause = null)
+        public static IEnumerable<object> GetUniqueValues(this IFeatureClass featureClass, string fieldName, string whereClause = null)
         {
             var featureCursor = GetSearchCursor(featureClass, whereClause, fieldName, true);
 
@@ -525,14 +520,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             dataStatistics.Cursor = featureCursor as ICursor;
             var enumerator = dataStatistics.UniqueValues;
             enumerator.Reset();
-
-            var uniqueValues = new List<object>();
             while (enumerator.MoveNext())
-            {
-                uniqueValues.Add(enumerator.Current);
-            }
-            uniqueValues.Sort();
-            return uniqueValues;
+                yield return enumerator.Current;
         }
         /// <summary>
         /// 获取要素类指定字段的唯一字符串值（全部不重复的值）
@@ -541,9 +530,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="fieldName">字段名</param>
         /// <param name="whereClause">条件语句</param>
         /// <returns></returns>
-        public static List<string> GetUniqueStrValues(this IFeatureClass featureClass, string fieldName, string whereClause = null)
+        public static IEnumerable<string> GetUniqueStrValues(this IFeatureClass featureClass, string fieldName, string whereClause = null)
         {
-            return GetUniqueValues(featureClass, fieldName, whereClause).Select(v => v.ToString()).ToList();
+            return GetUniqueValues(featureClass, fieldName, whereClause).Select(v => v.ToString());
         }
         /// <summary>
         ///  查找符合条件的第一条记录，并返回记录中指定字段的值
@@ -587,27 +576,20 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="queryFiledNames">查询的字段集合（当此数组为null时返回记录的全部字段值，否则字段必须存在，不存在则会出现异常）</param>
         /// <param name="whereClause">查询条件</param>
         /// <returns></returns>
-        public static List<object> QueryFirstFeatureValues(this IFeatureClass featureClass, string[] queryFiledNames = null, string whereClause = null)
+        public static IEnumerable<object> QueryFirstFeatureValues(this IFeatureClass featureClass, string[] queryFiledNames = null, string whereClause = null)
         {
-            var values = new List<object>();
             var feature = QueryFirstFeature(featureClass, whereClause);
-
             if (queryFiledNames == null)
             {
                 for (var i = 0; i < feature.Fields.FieldCount; i++)
-                {
-                    values.Add(feature.get_Value(i));
-                }
+                    yield return feature.get_Value(i);
             }
             else
             {
                 foreach (var fieldName in queryFiledNames)
-                {
-                    values.Add(feature.get_Value(feature.Fields.FindField(fieldName)));
-                }
+                    yield return feature.get_Value(feature.Fields.FindField(fieldName));
             }
             Marshal.ReleaseComObject(feature);
-            return values;
         }
         /// <summary>
         /// 查询符合条件的指定字段值
@@ -616,21 +598,18 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="queryFiledName">查询的字段（该字段必须存在否则抛出异常）</param>
         /// <param name="whereClause">查询条件</param>
         /// <returns></returns>
-        public static List<object> QueryValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
+        public static IEnumerable<object> QueryValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
         {
             var fieldIndex = featureClass.FindField(queryFiledName);
             if (fieldIndex < 0)
                 throw new Exception("找不到字段：" + queryFiledName);
 
-            var values = new List<object>();
             var featureCursor = GetSearchCursor(featureClass, whereClause, queryFiledName, true);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
-            {
-                values.Add(feature.get_Value(fieldIndex));
-            }
+                yield return feature.get_Value(fieldIndex);
+
             Marshal.ReleaseComObject(featureCursor);
-            return values;
         }
         /// <summary>
         /// 查询符合条件的指定字段值，并转化成字符串
@@ -639,9 +618,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="queryFiledName">查询的字段（该字段必须存在否则抛出异常）</param>
         /// <param name="whereClause">查询条件</param>
         /// <returns></returns>
-        public static List<string> QueryStrValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
+        public static IEnumerable<string> QueryStrValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
         {
-            return QueryValues(featureClass, queryFiledName, whereClause).Select(v => v.ToString()).ToList();
+            return QueryValues(featureClass, queryFiledName, whereClause).Select(v => v.ToString());
         }
 
         /// <summary>
@@ -865,7 +844,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         }
         /// <summary>
         /// 校验并返回与数据源一致的条件查询语句
-        /// （例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// <para>例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'</para>
         /// </summary>
         /// <param name="eType">数据源类型</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
@@ -951,5 +930,10 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             return (featureClass as IDatasetEdit).IsBeingEdited();
         }
+        /// <summary>
+        /// 获取要素类范围
+        /// </summary>
+        /// <param name="featureClass"></param>
+        public static IEnvelope GetExtent(this IFeatureClass featureClass) => ((IGeoDataset)featureClass).Extent;
     }
 }

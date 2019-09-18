@@ -129,6 +129,7 @@
     </Reference>
     <Reference Include="ESRI.ArcGIS.GISClient, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Output, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -142,6 +143,7 @@
     </Reference>
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -188,6 +190,7 @@
     <Compile Include="Carto\MapExport\MapExportInfo.cs" />
     <Compile Include="Carto\MapExport\MapExportHelper.cs" />
     <Compile Include="Carto\MapExport\MapExportToPic.cs" />
+    <Compile Include="ComObjManager.cs" />
     <Compile Include="Control\AttributeCtrl\AttributeQuery.cs" />
     <Compile Include="Control\IMapNavigationTools.cs" />
     <Compile Include="Control\IPageNavigationTools.cs" />
@@ -214,6 +217,7 @@
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToPath.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.FromPath.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.Copy.cs" />
+    <Compile Include="GeoDatabase\Fields\FieldItemEx.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Create.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.cs" />
     <Compile Include="Geometry\SpatialRefOpt.cs" />

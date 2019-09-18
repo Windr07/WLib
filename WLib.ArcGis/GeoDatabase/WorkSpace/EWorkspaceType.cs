@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {

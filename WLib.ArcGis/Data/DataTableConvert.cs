@@ -151,7 +151,7 @@ namespace WLib.ArcGis.Data
 
         #region IFeatureClass转DataTable
         /// <summary>
-        /// 将要素IFeatureClass指定字段数据转成DataTable
+        /// 将IFeatureClass指定字段数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="fieldNames">指定字段列表</param>
@@ -191,7 +191,7 @@ namespace WLib.ArcGis.Data
             return dataTable;
         }
         /// <summary>
-        /// 将要素IFeatureClass指定字段数据转成DataTable
+        /// 将IFeatureClass指定字段数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="nameToAliasNamesDict">字段名及别名（作为DataTable列标题）的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
@@ -232,7 +232,7 @@ namespace WLib.ArcGis.Data
             return result;
         }
         /// <summary>
-        /// 将要素IFeatureClass指定条件、指定行数的数据转成DataTable
+        /// 将IFeatureClass指定条件、指定行数的数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="tableName"></param>
@@ -272,7 +272,7 @@ namespace WLib.ArcGis.Data
             return result;
         }
         /// <summary>
-        /// 将要素IFeatureClass数据转成DataTable，在最后增加面积列并列出面积
+        /// 将IFeatureClass数据转成DataTable，在最后增加面积列并列出面积
         /// </summary>
         /// <param name="featureClass">要素集</param>
         /// <param name="areaColumnName">在DataTable加上面积列并计算面积，此为面积列的列名</param>

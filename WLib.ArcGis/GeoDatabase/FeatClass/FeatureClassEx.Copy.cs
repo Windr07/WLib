@@ -80,6 +80,17 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
         #region 复制数据，生成新要素类
         /// <summary>
+        /// 复制要素类，生成为新的要素类（注意目标位置不能存在同名要素类）
+        /// </summary>
+        /// <param name="features">需要复制的要素类</param>
+        /// <param name="targetFullPath">新建的要素类的完整保存路径（注意目标位置不能存在同名要素类）</param>
+        /// <returns>新的要素类(shp)</returns>
+        public static IFeatureClass CopyDataToNewPath(this IFeatureClass featureClass, string targetFullPath)
+        {
+            var features = featureClass.QueryFeatures();
+            return CopyDataToNewPath(features, targetFullPath);
+        }
+        /// <summary>
         /// 复制要素，生成为新的要素类（注意目标位置不能存在同名要素类）
         /// </summary>
         /// <param name="features">需要复制的要素集合，不能有null</param>
@@ -89,16 +100,16 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             var feature = features.FirstOrDefault();
             if (feature == null)
-                throw new Exception("复制要素至新的shp文件时，至少要有一个要素！");
+                throw new Exception("复制要素至新的要素类时，至少要有一个要素！");
 
             var geoType = feature.Shape.GeometryType;
             var spatialReference = feature.Shape.SpatialReference;
             var fields = (feature.Class as IFeatureClass).CloneFeatureClassFieldsSimple();
-            var feildArray = fields.FieldsToArray();
-            var faetureClass = FeatureClassEx.CreateToPath(targetFullPath, geoType, spatialReference, feildArray);
+            var eFields = fields.ToEnumerable();
+            var featureClass = CreateToPath(targetFullPath, geoType, spatialReference, eFields);
 
-            CopyDataTo(features, faetureClass);
-            return faetureClass;
+            CopyDataTo(features, featureClass);
+            return featureClass;
         }
         /// <summary>
         /// 在内存中创建新要素类，根据查询条件复制要素到新要素类，返回新要素类

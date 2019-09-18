@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Windows.Forms;
 
 namespace WLib.WinForm

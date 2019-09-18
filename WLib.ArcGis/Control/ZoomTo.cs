@@ -102,10 +102,10 @@ namespace WLib.ArcGis.Control
         /// <param name="activeView"></param>
         /// <param name="geometries"></param>
         /// <param name="expendRate">实际显示范围与图形范围框的比值，即放大的倍数</param>
-        public static void MapZoomTo(this IActiveView activeView, List<IGeometry> geometries, double expendRate = 2)
+        public static void MapZoomTo(this IActiveView activeView, IEnumerable<IGeometry> geometries, double expendRate = 2)
         {
-            IGeometry uniongeo = TopologicalOpt.UnionGeometry(geometries);
-            MapZoomTo(activeView, uniongeo, expendRate);
+            var unionGeometry = TopologicalOpt.UnionGeometry(geometries);
+            MapZoomTo(activeView, unionGeometry, expendRate);
         }
         #endregion
 
@@ -151,14 +151,13 @@ namespace WLib.ArcGis.Control
         /// </summary>
         /// <param name="activeView"></param>
         /// <param name="geomtries"></param>
-        public static void MapZoomToAndHightLight(this IActiveView activeView, List<IGeometry> geomtries)
+        public static void MapZoomToAndHightLight(this IActiveView activeView, IEnumerable<IGeometry> geomtries)
         {
             activeView.GraphicsContainer.DeleteAllElements();
-            IGeometry unionGeometry = TopologicalOpt.UnionGeometry(geomtries);
+            var unionGeometry = TopologicalOpt.UnionGeometry(geomtries);
             foreach (IGeometry geometry in geomtries)
-            {
                 HightLightGeo(activeView, geometry);
-            }
+
             MapZoomTo(activeView, unionGeometry);
         }
         /// <summary>

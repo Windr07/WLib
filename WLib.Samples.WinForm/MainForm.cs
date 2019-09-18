@@ -9,7 +9,6 @@ using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Database;
-using WLib.Database.DbBase;
 using WLib.WinCtrls.ArcGisCtrl;
 using FolderBrowserDialog = WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
 
@@ -109,11 +108,8 @@ namespace WLib.Samples.WinForm
             var workspace = WorkspaceEx.GetWorkSpace(@"c:\World.mdb");
             FeatureClassEx.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, "NewRiver", "河流");
 
-            var connString = ConnStringHelper.Dbf_OleDb4(@"c:\River.dbf");
-
-            new DbHelper(connString, EDbProviderType.OleDb).ExcNonQuery(@"update River set Name = 'Pearl River' where RiverCode ='003'");
-
-            var connString2 = ConnStringHelper.Access_OleDb4(@"c:\World.mdb");
+            var connString = DbHelper.Dbf_OleDb4(@"c:\River.dbf");
+            var dbHelper = DbHelper.GetOleDbHelper(connString).ExcNonQuery(@"update River set Name = 'Pearl River' where RiverCode ='003'");
         }
 
         private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)

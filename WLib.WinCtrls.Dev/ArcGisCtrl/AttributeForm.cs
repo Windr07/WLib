@@ -88,7 +88,7 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
                 WhereClause = whereClause;
                 if (fieldNames == null)
                     fieldNames = table.GetFieldsNames().ToArray();
-                var dataTable = table.CreateDataTable(fieldNames, whereClause).SwitchColumnNameAndCaption();//创建数据表
+                var dataTable = table.CreateDataTable(fieldNames, null, whereClause).SwitchColumnNameAndCaption();//创建数据表
 
                 Text = ((IDataset)Table).Name + @" - 属性表";
                 this.dataGridView1.ContextMenuStrip.Items[0].Visible = false;

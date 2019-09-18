@@ -44,7 +44,7 @@ namespace WLib.ArcGis.Analysis.Gp
 
     /// <summary>
     /// Geoprocessor操作帮助类
-    /// <para> 使用示例：new GpHelper().RunGpTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
+    /// <para> 使用示例：new GpHelper().RunTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
     /// </summary>
     public class GpHelper : Geoprocessor
     {
@@ -56,7 +56,7 @@ namespace WLib.ArcGis.Analysis.Gp
                                                 "输入、输出对象或地理处理工具(GP)没有被其他软件占用；必要时请安装ArcGIS相关补丁，以及在勾选空间分析权限";
         /// <summary>
         /// Geoprocessor操作帮助类
-        /// <para> 使用示例：new GpHelper().RunGpTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
+        /// <para> 使用示例：new GpHelper().RunTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
         /// </summary>
         /// <param name="overwriteOutput">输出时是否覆盖同名文件</param>
         public GpHelper(bool overwriteOutput = true) => OverwriteOutput = overwriteOutput;
@@ -66,10 +66,34 @@ namespace WLib.ArcGis.Analysis.Gp
         /// <param name="process">GP工具</param>
         /// <param name="outFeatureClass">输出的要素类</param>
         /// <param name="message">GP工具执行结果信息或异常信息</param>
-        public bool RunGpTool(IGPProcess process, out IFeatureClass outFeatureClass, out string message)
+        public bool RunTool(IGPProcess process, out string message)
         {
             bool result;
-            message = null;
+            IGeoProcessorResult gpResult = null;
+            try
+            {
+                gpResult = this.Execute(process, null) as IGeoProcessorResult;
+                IGPUtilities gpUilities = new GPUtilitiesClass();
+                message = GetGpMessage(gpResult);
+                result = gpResult != null && gpResult.Status == esriJobStatus.esriJobSucceeded;
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                message = ex + Environment.NewLine + GetGpMessage(gpResult);
+            }
+            return result;
+        }
+        /// <summary>
+        /// 运行GP工具
+        /// <para>注意承接outFeatureClass参数后，可能要在外部对outFeatureClass进行COM组件释放</para>
+        /// </summary>
+        /// <param name="process">GP工具</param>
+        /// <param name="outFeatureClass">输出的要素类</param>
+        /// <param name="message">GP工具执行结果信息或异常信息</param>
+        public bool RunTool(IGPProcess process, out IFeatureClass outFeatureClass, out string message)
+        {
+            bool result;
             outFeatureClass = null;
             IGeoProcessorResult gpResult = null;
             try
@@ -245,14 +269,13 @@ namespace WLib.ArcGis.Analysis.Gp
         /// <summary>
         /// 调用空间连接工具，生成空间连接后的新图层
         /// </summary>
-        /// <param name="targetClass"></param>
-        /// <param name="joinClass"></param>
-        /// <param name="outFeatureClassPath"></param>
-        /// <param name="joinOperation"></param>
-        /// <param name="matchOption"></param>
+        /// <param name="targetClass">目标要素类或要素类路径</param>
+        /// <param name="joinClass">连接要素类或连接要素类路径</param>
+        /// <param name="outFeatureClassPath">连接后的要素类保存路径</param>
+        /// <param name="joinOperation">连接操作类型</param>
+        /// <param name="matchOption">行匹配选项类型</param>
         /// <returns></returns>
-        public static IGPProcess SpatialJoin(
-            IFeatureClass targetClass, IFeatureClass joinClass, string outFeatureClassPath,
+        public static IGPProcess SpatialJoin(object targetClass, object joinClass, string outFeatureClassPath,
             ESjOperation joinOperation = ESjOperation.JOIN_ONE_TO_ONE, ESjMatchOption matchOption = ESjMatchOption.INTERSECT)
         {
             return new SpatialJoin

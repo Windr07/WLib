@@ -6,7 +6,6 @@
 //----------------------------------------------------------------*/
 
 using System;
-using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;

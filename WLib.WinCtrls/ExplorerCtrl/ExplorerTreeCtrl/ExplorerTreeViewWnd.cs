@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------- 
 // auth： Source by WilsonProgramming
 // date： None
-// desc： None
+// desc： 扩展TreeView,用于目录树控件，用于方便加入窗体中显示，而不必使用FolderBrowserDialog弹框显示
 // mdfy:  Windragon
 //----------------------------------------------------------------*/
 

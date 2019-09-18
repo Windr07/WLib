@@ -53,6 +53,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="oracle.dataaccess">
       <HintPath>..\DLL\oracle.dataaccess.dll</HintPath>
       <Private>False</Private>
@@ -63,20 +67,46 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Table\ForeignKeyInfo.cs" />
+    <Compile Include="Attributes\Table\TableAttributeHelper.cs" />
+    <Compile Include="Attributes\Table\AliasNameAttribute.cs" />
+    <Compile Include="Attributes\Table\CandidateAttribute.cs" />
+    <Compile Include="Attributes\Table\ForeignKeyAttribute.cs" />
+    <Compile Include="Attributes\Table\HiddenAttribute.cs" />
+    <Compile Include="Attributes\Table\KeyAttribute.cs" />
+    <Compile Include="Attributes\Table\ReadOnlyAttribute.cs" />
+    <Compile Include="Data\Calculate\ChineseRound.cs" />
+    <Compile Include="Delegates\DelegateBinding.cs" />
+    <Compile Include="ExtProgress\IProgressView.cs" />
+    <Compile Include="Files\DirectoryOpt.cs" />
+    <Compile Include="Model\ObjectCopy.cs" />
+    <Compile Include="Plugins\EPluginContainerType.cs" />
+    <Compile Include="Plugins\EPluginInvokeType.cs" />
+    <Compile Include="Plugins\Interface\IItemBase.cs" />
+    <Compile Include="Plugins\Interface\ICommand`T1.cs" />
+    <Compile Include="Plugins\Interface\IPluginContainer.cs" />
+    <Compile Include="Plugins\Interface\IPluginPlan.cs" />
+    <Compile Include="Plugins\Interface\IPluginPlanSystem.cs" />
+    <Compile Include="Plugins\Interface\ISystemInfo.cs" />
+    <Compile Include="Plugins\Interface\IPluginSplitItem.cs" />
+    <Compile Include="Plugins\Model\Command.cs" />
+    <Compile Include="Plugins\Model\Command`T1.cs" />
+    <Compile Include="Plugins\Model\Command`T3.cs" />
     <Compile Include="Computer\HardwareInfo.cs" />
-    <Compile Include="Database\ArcGisConnStringHelper.cs" />
+    <Compile Include="Database\DbHelper.ArcGisConnStrBuilder.cs" />
     <Compile Include="Data\Calculate\RegressionAnalysis.cs" />
     <Compile Include="Data\DataTableOpt.cs" />
     <Compile Include="Data\ModelConvert.cs" />
     <Compile Include="Data\NullableConvert.cs" />
-    <Compile Include="Database\ConnStringHelper.cs" />
-    <Compile Include="Database\DbBase\BeforeExcuteEventArgs.cs" />
+    <Compile Include="Database\DbHelper.ConnStrBuilder.cs" />
+    <Compile Include="Database\DbBase\PreExcuteEventArgs.cs" />
     <Compile Include="Database\DbBase\EDbProviderType.cs" />
     <Compile Include="Database\DbBase\ProviderFactory.cs" />
     <Compile Include="Database\DbHelper.cs" />
@@ -97,13 +127,32 @@
     <Compile Include="Database\TableInfo\FieldDomain\IFieldDomain.cs" />
     <Compile Include="Database\TableInfo\TableStructure.cs" />
     <Compile Include="Database\TableInfo\TableStructureHelper.cs" />
-    <Compile Include="DesignPattern\SingletonProvider.cs" />
-    <Compile Include="Attributes\DescriptionAttribute.cs" />
-    <Compile Include="Attributes\EnumDescriptionHelper.cs" />
+    <Compile Include="DesignPattern\Singleton.cs" />
+    <Compile Include="Attributes\Description\DescriptionAttribute.cs" />
+    <Compile Include="Attributes\Description\EnumDescriptionHelper.cs" />
+    <Compile Include="Events\EventBinding.cs" />
     <Compile Include="ExtException\CatchAction.cs" />
     <Compile Include="ExtException\ICatchAction.cs" />
     <Compile Include="ExtException\TryCatch.cs" />
     <Compile Include="ExtProgram\QQInvoke.cs" />
+    <Compile Include="ExtProgress\Core\ProgressMsgs.cs" />
+    <Compile Include="ExtProgress\Core\ProgressOperation`T.cs" />
+    <Compile Include="ExtProgress\Core\ProgressOperation`T3.cs" />
+    <Compile Include="ExtProgress\ProEventArgs\ProErrorEventArgs.cs" />
+    <Compile Include="ExtProgress\ProEventArgs\ProChangedEventArgs.cs" />
+    <Compile Include="ExtProgress\ProEventArgs\ProMsgChangedEventArgs.cs" />
+    <Compile Include="ExtProgress\ProEventArgs\ProMsgChangedEventArgs`T.cs" />
+    <Compile Include="ExtProgress\Core\IProgressEvents.cs" />
+    <Compile Include="ExtProgress\Core\IProgressMsgs.cs" />
+    <Compile Include="ExtProgress\Core\IProgressMsgs`T.cs" />
+    <Compile Include="ExtProgress\Core\IProgressOperation.cs" />
+    <Compile Include="ExtProgress\Core\IProgressOperation`T.cs" />
+    <Compile Include="ExtProgress\Core\IProgressOperation`T2.cs" />
+    <Compile Include="ExtProgress\Core\ProgressMsgs`T.cs" />
+    <Compile Include="ExtProgress\Core\ProgressOperation`T2.cs" />
+    <Compile Include="ExtProgress\ProgressViewManager.cs" />
+    <Compile Include="ExtProgress\ProLogFileInfo.cs" />
+    <Compile Include="ExtProgress\ProLogManager.cs" />
     <Compile Include="Files\ArcGisFiles.cs" />
     <Compile Include="Files\DirectoryFileAceess.cs" />
     <Compile Include="Files\FileEncode.cs" />
@@ -112,43 +161,52 @@
     <Compile Include="Data\Format\StringUtility.cs" />
     <Compile Include="Data\Calculate\AngleCalculate.cs" />
     <Compile Include="Model\DcrPoint.cs" />
+    <Compile Include="Plugins\Interface\ICommand.cs" />
+    <Compile Include="Plugins\Interface\IPluginView.cs" />
+    <Compile Include="Plugins\Interface\ICommand`T3.cs" />
     <Compile Include="Model\ItemObject.cs" />
     <Compile Include="ExtProgram\Office\EOfficeVersion.cs" />
     <Compile Include="ExtProgram\Office\OfficeInfo.cs" />
+    <Compile Include="Plugins\Interface\IPluginItem.cs" />
+    <Compile Include="Plugins\Model\PluginContainer.cs" />
+    <Compile Include="Plugins\Model\PluginPlanSystem.cs" />
+    <Compile Include="Plugins\Model\PluginItem.cs" />
+    <Compile Include="Plugins\Model\PluginPlan.cs" />
+    <Compile Include="Plugins\Model\PluginView.cs" />
+    <Compile Include="Plugins\Model\SystemInfo.cs" />
+    <Compile Include="Model\JsonConverterEx.cs" />
+    <Compile Include="Plugins\PluginHelper.cs" />
     <Compile Include="Print\PrintOption.cs" />
-    <Compile Include="ExtProgress\ProEventArgs\MsgChangedEventArgs.cs" />
-    <Compile Include="ExtProgress\ProEventArgs\OptErrorEventArgs.cs" />
-    <Compile Include="ExtProgress\ProEventArgs\ProgressChangedEventArgs.cs" />
-    <Compile Include="ExtProgress\ProgressOptManager.cs" />
     <Compile Include="Test\Tester.cs" />
     <Compile Include="ThreadHelper\EControlInvokeType.cs" />
     <Compile Include="Web\FtpHelper.cs" />
     <Compile Include="Web\TransferProgressEventArgs.cs" />
     <Compile Include="Web\WebServiceAgent.cs" />
     <Compile Include="WindowsAPI\WinMsg.cs" />
-    <Compile Include="WinForm\DialogOpt.cs" />
-    <Compile Include="WinForm\MenuOpt.cs" />
-    <Compile Include="WinForm\WinFormOpt.cs" />
     <Compile Include="Model\ItemObjectCollection.cs" />
     <Compile Include="Model\ItemObject`T.cs" />
-    <Compile Include="ExtProgress\ProLogFileInfo.cs" />
-    <Compile Include="ExtProgress\ProLogManager.cs" />
     <Compile Include="Data\Format\CnNumberConversion.cs" />
-    <Compile Include="ExtProgress\ProEventArgs\GroupMsgChangedEventArgs.cs" />
-    <Compile Include="ExtProgress\GroupMessages.cs" />
-    <Compile Include="ExtProgress\ProgressMessages.cs" />
-    <Compile Include="ExtProgress\ProgressOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadHelper\ControlOpt.cs" />
     <Compile Include="ThreadHelper\ControlInvokeParam.cs" />
     <Compile Include="WindowsAPI\WinApi.cs" />
     <Compile Include="WindowsAPI\WinFormStyle.cs" />
+    <Compile Include="WinForm\AppExceptionOpt.cs" />
+    <Compile Include="WinForm\DialogOpt.cs" />
+    <Compile Include="WinForm\EResize.cs" />
+    <Compile Include="WinForm\MenuOpt.cs" />
+    <Compile Include="Reflection\ReflectionOpt.cs" />
+    <Compile Include="Attributes\ObjToNodeAttribute.cs" />
+    <Compile Include="WinForm\TreeNodeOpt.cs" />
+    <Compile Include="WinForm\WinFormOpt.cs" />
     <Compile Include="Xml\XmlConfig.cs" />
     <Compile Include="Xml\XmlSaveAttrParams.cs" />
     <Compile Include="Xml\XmlConvert.cs" />
     <Compile Include="Zip\SharpZip.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Database\DbHelper.Creator.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

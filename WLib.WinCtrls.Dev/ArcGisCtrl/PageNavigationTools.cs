@@ -12,7 +12,7 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.SystemUI;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {

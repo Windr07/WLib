@@ -19,7 +19,7 @@ namespace WLib.Model
         /// </summary>
         public int Index { get; set; } = -1;
         /// <summary>
-        /// 唯一值，通常为ID、编码、代码或图幅号等
+        /// 唯一值编码，通常为ID、编码、代码或图幅号等
         /// </summary>
         public string Code { get; set; }
         /// <summary>
@@ -42,7 +42,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         public ItemObject(string code, string name)
         {
@@ -52,7 +52,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
         public ItemObject(string code, string name, int index)
@@ -64,7 +64,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
         /// <param name="classify">所在分类</param>

@@ -21,14 +21,14 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
     {
         /// <summary>
         /// 从指定路径（或连接字符串）中获取要素类。
-        /// ①shp文件路径，返回该shp存储的要素类；
-        /// ②mdb文件路径，返回该mdb数据库第一个要素类；
-        /// ③dwg文件路径，返回该dwg数据集第一个要素类；
-        /// ④shp目录，返回目录下第一个shp文件存储的要素类；
-        /// ⑤gdb目录，返回gdb数据库第一个要素类；
-        /// ⑥mdb文件路径[\DatasetName]\FeatureClassName，返回mdb数据库中指定名称或别名的要素类；
-        /// ⑦gdb目录[\DatasetName]\FeatureClassName，返回gdb数据库中指定名称或别名的要素类；
-        /// ⑧sde或oleDb或sql连接字符串，返回数据库中的第一个要素类；
+        /// <para>①shp路径：返回该shp存储的要素类；</para>
+        /// <para>②mdb路径：返回该mdb数据库第一个要素类；</para>
+        /// <para>③dwg路径：返回该dwg数据集第一个要素类；</para>
+        /// <para>④shp目录：返回目录下第一个shp文件存储的要素类；</para>
+        /// <para>⑤gdb目录：返回gdb数据库第一个要素类；</para>
+        /// <para>⑥mdb文件路径[\DatasetName]\FeatureClassName：返回mdb数据库中指定名称或别名的要素类；</para>
+        /// <para>⑦gdb目录[\DatasetName]\FeatureClassName：返回gdb数据库中指定名称或别名的要素类；</para>
+        /// <para>⑧sde或oleDb或sql连接字符串：返回数据库中的第一个要素类；</para>
         /// </summary>
         /// <param name="connStrOrPath">路径或连接字符串</param>
         /// <returns></returns>
@@ -47,6 +47,14 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         }
         /// <summary>
         /// 从指定路径（或连接字符串）中获取全部要素类
+        /// <para>①shp路径：返回该shp存储的要素类；</para>
+        /// <para>②mdb路径：返回该mdb数据库的全部要素类；</para>
+        /// <para>③dwg路径：返回该dwg数据集的全部要素类；</para>
+        /// <para>④普通目录：返回目录下的全部shp和dwg要素类；</para>
+        /// <para>⑤gdb目录：返回gdb数据库的全部要素类；</para>
+        /// <para>⑥mdb文件路径[\DatasetName][\FeatureClassName]：返回mdb数据库中指定要素类，或指定数据集下的全部要素类；</para>
+        /// <para>⑦gdb目录[\DatasetName][\FeatureClassName]：返回gdb数据库中指定要素类，或指定数据集下的全部要素类；</para>
+        /// <para>⑧sde或oleDb或sql连接字符串：返回数据库的全部要素类；</para>
         /// </summary>
         /// <param name="connStrOrPath"></param>
         /// <returns></returns>
@@ -63,9 +71,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
             return FromFullPath(connStrOrPath);
         }
-
         /// <summary>
         /// 从完整的要素类路径中，获取工作空间路径、数据集名称、要素类名称
+        /// <para>注意：路径应为要素类路径或工作空间路径，指向数据集的路径是无法识别的</para>
         /// </summary>
         /// <param name="fullPath">格式为“工作空间路径[\要素集名称]\要素类名称”的路径</param>
         /// <param name="workspacePath">工作空间路径</param>
@@ -94,7 +102,13 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 if (names.Length == 1) { datasetName = null; featureClassName = names[0]; }
                 if (names.Length == 2) { datasetName = names[0]; featureClassName = names[1]; }
             }
+            else
+            {
+                if (Directory.Exists(fullPath))
+                    workspacePath = fullPath;
+            }
         }
+
 
         #region 私有方法 - 获取路径下的第一个要素类
         /// <summary>

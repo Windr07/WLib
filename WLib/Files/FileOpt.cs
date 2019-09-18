@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Windows.Forms;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace WLib.Files
 {
@@ -17,6 +19,57 @@ namespace WLib.Files
     /// </summary>
     public class FileOpt
     {
+        /// <summary>
+        /// 获取文件md5值
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns>MD5Hash</returns>
+        public static string GetMD5HashFromFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new ArgumentException(string.Format("文件“{0}”不存在！", filePath));
+
+            using (FileStream file = new FileStream(filePath, FileMode.Open))
+            {
+                MD5 md5 = new MD5CryptoServiceProvider();
+                byte[] retVal = md5.ComputeHash(file);
+                file.Close();
+
+                var sb = new StringBuilder();
+                foreach (byte b in retVal) sb.Append(b.ToString("x2"));
+                return sb.ToString();
+            }
+        }
+        /// <summary>
+        /// 通过HashAlgorithm的TransformBlock方法对流进行叠加运算获得MD5，
+        /// 可使用于传输文件或接收文件时同步计算MD5值，
+        /// 可自定义缓冲区大小，计算速度较快
+        /// (https://blog.csdn.net/qiujuer/article/details/19344527)
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns>MD5Hash</returns>
+        public static string GetMD5ByHashAlgorithm(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new ArgumentException(string.Format("<{0}>, 不存在", filePath));
+            int bufferSize = 1024 * 16;//自定义缓冲区大小16K
+            byte[] buffer = new byte[bufferSize];
+            Stream inputStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            HashAlgorithm hashAlgorithm = new MD5CryptoServiceProvider();
+            int readLength = 0;//每次读取长度
+            var output = new byte[bufferSize];
+            while ((readLength = inputStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                hashAlgorithm.TransformBlock(buffer, 0, readLength, output, 0);//计算MD5
+            }
+            //完成最后计算，必须调用(由于上一部循环已经完成所有运算，所以调用此方法时后面的两个参数都为0)
+            hashAlgorithm.TransformFinalBlock(buffer, 0, 0);
+            string md5 = BitConverter.ToString(hashAlgorithm.Hash);
+            hashAlgorithm.Clear();
+            inputStream.Close();
+            md5 = md5.Replace("-", "");
+            return md5;
+        }
         /// <summary>
         /// 检查文件名是否合法：不能为空或空白字符，不能包含字符\/:*?"&lt;>|
         /// </summary>
@@ -28,42 +81,8 @@ namespace WLib.Files
                 return false;
             return !Path.GetInvalidFileNameChars().Any(fileName.Contains);
         }
-        /// <summary>
-        /// 检查文件夹是否合法：不能为空或空白字符，不能包含字符\/:*?"&lt;>|
-        /// </summary>
-        /// <param name="folderName">文件夹名称，不包含路径</param>
-        /// <returns></returns>
-        public static bool ValidFolderName(string folderName)
-        {
-            if (string.IsNullOrWhiteSpace(folderName))
-                return false;
-            return !Path.GetInvalidPathChars().Any(folderName.Contains);
-        }
+     
 
-
-        /// <summary>
-        /// 重命名文件夹
-        /// </summary>
-        /// <param name="dir">文件夹路径</param>
-        /// <param name="newFolderName">新文件夹名称</param>
-        /// <param name="overwrite">是否覆盖同名文件夹，若不允许覆盖同名文件夹，则向文件夹名称末尾添加序号“(n)”直到不存在同名文件为止</param>
-        /// <returns></returns>
-        public static string ReNameFolder(string dir, string newFolderName, bool overwrite = true)
-        {
-            return MoveFolder(dir, Path.Combine(Path.GetDirectoryName(dir), newFolderName), overwrite);
-        }
-        /// <summary>
-        /// 重命名文件夹
-        /// </summary>
-        /// <param name="parentDirectory">文件夹所在目录</param>
-        /// <param name="oldFolerName">原文件夹名称</param>
-        /// <param name="newFolderName">新文件夹名称</param>
-        /// <param name="overwrite">是否覆盖同名文件夹，若不允许覆盖同名文件夹，则向文件夹名称末尾添加序号“(n)”直到不存在同名文件为止</param>
-        /// <returns></returns>
-        public static string ReNameFolder(string parentDirectory, string oldFolerName, string newFolderName, bool overwrite = true)
-        {
-            return MoveFolder(Path.Combine(parentDirectory, oldFolerName), Path.Combine(parentDirectory, newFolderName), overwrite);
-        }
         /// <summary>
         /// 重命名文件
         /// </summary>
@@ -86,6 +105,41 @@ namespace WLib.Files
         public static string ReNameFile(string directory, string oldFileName, string newFileName, bool overwrite = true)
         {
             return MoveFile(Path.Combine(directory, oldFileName), Path.Combine(directory, newFileName), overwrite);
+        }
+        ///  <summary>
+        /// 移动文件，
+        /// 若不允许覆盖同名文件，则向文件名末尾添加序号“(n)”直到不存在同名文件为止
+        ///  </summary>
+        ///  <param name="fromPath">源文件路径</param>
+        ///  <param name="destPath">目标文件位置</param>
+        /// <param name="isOverride">是否覆盖现有文件</param>
+        /// <returns></returns>
+        public static string MoveFile(string fromPath, string destPath, bool isOverride)
+        {
+            if (File.Exists(destPath))
+            {
+                if (isOverride)
+                {
+                    File.Delete(destPath);
+                    File.Move(fromPath, destPath);
+                }
+                else
+                {
+                    int i = 0;
+                    string path = Path.GetFileNameWithoutExtension(destPath);
+                    string extension = Path.GetExtension(destPath);
+                    while (File.Exists($"{path}({i}){extension}"))
+                        i++;
+
+                    destPath = $"{path}({i}){extension}";
+                    File.Move(fromPath, destPath);
+                }
+            }
+            else
+            {
+                File.Move(fromPath, destPath);
+            }
+            return destPath;
         }
 
 
@@ -135,76 +189,6 @@ namespace WLib.Files
                 }
             }
             return filePath;
-        }
-
-
-        ///  <summary>
-        /// 移动文件，
-        /// 若不允许覆盖同名文件，则向文件名末尾添加序号“(n)”直到不存在同名文件为止
-        ///  </summary>
-        ///  <param name="fromPath">源文件路径</param>
-        ///  <param name="destPath">目标文件位置</param>
-        /// <param name="isOverride">是否覆盖现有文件</param>
-        /// <returns></returns>
-        public static string MoveFile(string fromPath, string destPath, bool isOverride)
-        {
-            if (File.Exists(destPath))
-            {
-                if (isOverride)
-                {
-                    File.Delete(destPath);
-                    File.Move(fromPath, destPath);
-                }
-                else
-                {
-                    int i = 0;
-                    string path = Path.GetFileNameWithoutExtension(destPath);
-                    string extension = Path.GetExtension(destPath);
-                    while (File.Exists($"{path}({i}){extension}"))
-                        i++;
-
-                    destPath = $"{path}({i}){extension}";
-                    File.Move(fromPath, destPath);
-                }
-            }
-            else
-            {
-                File.Move(fromPath, destPath);
-            }
-            return destPath;
-        }
-        ///  <summary>
-        /// 移动文件夹，
-        /// 若不允许覆盖/合并同名文件夹，则向文件夹名末尾添加序号“(n)”直到不存在同名文件夹为止
-        ///  </summary>
-        ///  <param name="fromPath">源文件路径</param>
-        ///  <param name="destPath">目标文件夹位置</param>
-        /// <param name="isOverride">是否覆盖/合并现有文件夹</param>
-        /// <returns></returns>
-        public static string MoveFolder(string fromPath, string destPath, bool isOverride)
-        {
-            if (Directory.Exists(destPath))
-            {
-                if (isOverride)
-                {
-                    Directory.Move(fromPath, destPath);
-                }
-                else
-                {
-                    var i = 0;
-                    var dir = Path.GetDirectoryName(destPath);
-                    while (Directory.Exists($"{dir}({i})"))
-                        i++;
-
-                    destPath = $"{dir}({i})";
-                    Directory.Move(fromPath, destPath);
-                }
-            }
-            else
-            {
-                Directory.Move(fromPath, destPath);
-            }
-            return destPath;
         }
 
 

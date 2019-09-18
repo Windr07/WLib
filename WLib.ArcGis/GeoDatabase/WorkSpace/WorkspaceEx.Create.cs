@@ -11,7 +11,7 @@ using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {

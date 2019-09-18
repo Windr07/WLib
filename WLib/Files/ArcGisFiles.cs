@@ -17,7 +17,7 @@ namespace WLib.Files
     public class ArcGisFiles
     {
         /// <summary>
-        /// Shapefile相交的文件扩展名（包括.shp .shx .dbf .prj .sbn .sbx等等）
+        /// Shapefile相关的文件扩展名（包括.shp .shx .dbf .prj .sbn .sbx等等）
         /// </summary>
         public static string[] ShpExtensions = { ".shp", ".shx", ".dbf", ".prj", ".sbn", ".sbx", ".fbn", ".fbx", ".ain", ".aih", ".ixs", ".mxs", ".atx", ".cpg", ".shp.xml" };
         /// <summary>

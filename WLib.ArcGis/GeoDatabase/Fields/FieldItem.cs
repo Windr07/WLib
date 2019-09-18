@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------- 
 // auth： Windragon
 // date： 2017/1/6 16:20:43
-// desc： None
+// desc： 由于ArcGIS的IField是COM组件对象，不能反射且难于调试，通过将IField信息转入此类，以方便反射和调试等操作
 // mdfy:  None
 //----------------------------------------------------------------*/
 
@@ -11,6 +11,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
 {
     /// <summary>
     /// 表示字段
+    /// <para>包含字段名、别名、类型</para>
     /// </summary>
     public class FieldItem
     {

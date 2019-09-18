@@ -11,6 +11,9 @@ using System;
 
 namespace WLib.ArcGis.Data
 {
+    /// <summary>
+    /// ArcGIS字段类型和C#数据类型等的互相转换
+    /// </summary>
     public static class TypeConvert
     {
         /// <summary>

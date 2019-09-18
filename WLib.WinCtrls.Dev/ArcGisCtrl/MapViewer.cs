@@ -5,15 +5,13 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using DevExpress.XtraEditors;
 using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Windows.Forms;
-using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
 using WLib.WinCtrls.ArcGisCtrl;
+using WLib.WinCtrls.Dev.ListCtrl;
 
 namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {

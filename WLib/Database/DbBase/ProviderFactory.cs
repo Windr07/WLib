@@ -6,8 +6,8 @@
 //----------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.Common;
+using WLib.Attributes.Description;
 
 namespace WLib.Database.DbBase
 {
@@ -31,14 +31,7 @@ namespace WLib.Database.DbBase
         static ProviderFactory()
         {
             ProviderFactoryDict = new Dictionary<EDbProviderType, DbProviderFactory>();
-
-            ProviderNameDict = new Dictionary<EDbProviderType, string>();
-            var enumType = typeof(EDbProviderType);
-            foreach (var enumName in System.Enum.GetNames(enumType))//获取EDbProviderType枚举的Description特性，即数据提供程序名
-            {
-                var attributes = (DescriptionAttribute[])enumType.GetField(enumName).GetCustomAttributes(typeof(DescriptionAttribute), false);
-                ProviderNameDict.Add((EDbProviderType)System.Enum.Parse(enumType, enumName), attributes[0].Description);
-            }
+            ProviderNameDict = EnumDescriptionHelper.GetValueAndDescriptionDict<EDbProviderType>();
         }
         /// <summary>
         /// 根据数据库类型获取所对应的数据提供程序名

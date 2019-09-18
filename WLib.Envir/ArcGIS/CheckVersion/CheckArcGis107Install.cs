@@ -5,10 +5,6 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace WLib.Envir.ArcGis.CheckVersion
 {
     /// <summary>

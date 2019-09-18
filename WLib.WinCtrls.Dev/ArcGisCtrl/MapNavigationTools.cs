@@ -15,7 +15,7 @@ using System.Windows.Forms;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
 using WLib.ArcGis.Display;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.WinCtrls.Dev.ArcGisCtrl
 {

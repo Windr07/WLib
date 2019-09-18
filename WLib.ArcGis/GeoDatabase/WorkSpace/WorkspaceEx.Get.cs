@@ -5,10 +5,10 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.Attributes;
+using System;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {
@@ -143,9 +143,9 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         }
         /// <summary>
         /// 通过连接字符串获取工作空间，连接字符串参考：
-        /// ①sde： SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT
-        /// ②sql： server=localhost;uid=sa;pwd=sa;database=myDatabase
-        /// ③oleDb： Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;
+        /// <para>①sde： SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT</para>
+        /// <para>②sql： server=localhost;uid=sa;pwd=sa;database=myDatabase</para>
+        /// <para>③oleDb： Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;</para>
         /// </summary>
         /// <param name="eType">要打开的工作空间类别</param>
         /// <param name="connnectString">连接字符串</param>
@@ -162,7 +162,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception($"打开{ eType.GetDescription(2)}工作空间：{connnectString}出错；{ex.Message}");
+                throw new Exception($"打开{eType.GetDescription(2)}工作空间“{connnectString}”出错：{ex.Message}");
             }
         }
         /// <summary>
@@ -183,7 +183,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception($"打开{ eType.GetDescription(2)}工作空间：{path}出错；{ex.Message}");
+                throw new Exception($"打开{eType.GetDescription(2)}工作空间“{path}”出错：{ex.Message}");
             }
         }
     }
