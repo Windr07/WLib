@@ -9,9 +9,8 @@ using System;
 using System.IO;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.Carto.Layer
 {

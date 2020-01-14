@@ -5,10 +5,12 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.Attributes;
+using System;
+using System.Runtime.InteropServices;
+using WLib.Attributes.Description;
+using WLib.Files;
 
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {
@@ -45,6 +47,8 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// <returns></returns>
         public static bool IsConnectionString(string str)
         {
+            if (string.IsNullOrWhiteSpace(str))
+                return false;
             str = str.TrimEnd(';');//去掉最后一个分号
             var strConnectArray = str.Split('=', ';');
             return strConnectArray.Length > 0 && strConnectArray.Length % 2 == 0;
@@ -61,12 +65,12 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 eWorkspaceType = EWorkspaceType.Sde;
             else if (System.IO.File.Exists(connStrOrPath))
             {
-                var extension = System.IO.Path.GetExtension(connStrOrPath);
+                var extension = System.IO.Path.GetExtension(connStrOrPath).ToLower();
                 if (extension == ".mdb") eWorkspaceType = EWorkspaceType.Access;
                 else if (extension == ".xls" || extension == ".xlsx") eWorkspaceType = EWorkspaceType.Excel;
             }
             else if (System.IO.Directory.Exists(connStrOrPath))
-                eWorkspaceType = connStrOrPath.EndsWith(".gdb") ? EWorkspaceType.FileGDB : EWorkspaceType.ShapeFile;
+                eWorkspaceType = connStrOrPath.ToLower().EndsWith(".gdb") ? EWorkspaceType.FileGDB : EWorkspaceType.ShapeFile;
 
             return eWorkspaceType;
         }
@@ -143,9 +147,9 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         }
         /// <summary>
         /// 通过连接字符串获取工作空间，连接字符串参考：
-        /// ①sde： SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT
-        /// ②sql： server=localhost;uid=sa;pwd=sa;database=myDatabase
-        /// ③oleDb： Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;
+        /// <para>①sde： SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT</para>
+        /// <para>②sql： server=localhost;uid=sa;pwd=sa;database=myDatabase</para>
+        /// <para>③oleDb： Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;</para>
         /// </summary>
         /// <param name="eType">要打开的工作空间类别</param>
         /// <param name="connnectString">连接字符串</param>
@@ -158,11 +162,15 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 workspaceName.WorkspaceFactoryProgID = eType.GetDescription(1);
                 workspaceName.ConnectionProperties = ConnectStringToPropetySet(connnectString);
                 IName iName = (IName)workspaceName;
-                return iName.Open() as IWorkspace;
+                IWorkspace workspace = iName.Open() as IWorkspace;
+
+                Marshal.ReleaseComObject(iName);
+                Marshal.ReleaseComObject(workspaceName);
+                return workspace;
             }
             catch (Exception ex)
             {
-                throw new Exception($"打开{ eType.GetDescription(2)}工作空间：{connnectString}出错；{ex.Message}");
+                throw new Exception($"打开{eType.GetDescription(2)}工作空间“{connnectString}”出错：{ex.Message}");
             }
         }
         /// <summary>
@@ -179,12 +187,25 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 workspaceName.WorkspaceFactoryProgID = eType.GetDescription(1);
                 workspaceName.PathName = path;
                 IName iName = (IName)workspaceName;
-                return iName.Open() as IWorkspace;
+                IWorkspace workspace = iName.Open() as IWorkspace;
+
+                Marshal.ReleaseComObject(iName);
+                Marshal.ReleaseComObject(workspaceName);
+                return workspace;
             }
             catch (Exception ex)
             {
-                throw new Exception($"打开{ eType.GetDescription(2)}工作空间：{path}出错；{ex.Message}");
+                var msg = ex.Message;
+                //判断路径长度是否符合要求（Windows默认的字符的长度限制为260，一个中文字符长度为2）（路径超长不一定出错，mdb数据会出错，shp数据不一定出错）
+                if (!FileOpt.PathLengthValidate(path, out var length))
+                    msg += $"\r\n 可能原因为：路径长度超出限制，无法识别“{path}”的数据，请修改数据存放路径\r\n（允许路径最大长度为260，该路径长度为{length}）\r\n" ;
+                throw new Exception($"打开{eType.GetDescription(2)}工作空间“{path}”出错：{msg}");
             }
         }
+        /// <summary>
+        /// 获取内存工作空间
+        /// </summary>
+        /// <returns></returns>
+        public static IWorkspace GetWorkspaceInMemory() => GetWorkspaceFromFile("in_memory", EWorkspaceType.InMemory);
     }
 }

@@ -36,6 +36,11 @@ namespace WLib.ArcGis
             ResolveBindingEvent += BindingArcGISRuntime;
         }
 
+        public void InitializeApplication(object[] p1, object[] p2)
+        {
+            throw new NotImplementedException();
+        }
+
         private void BindingArcGISRuntime(object sender, EventArgs e)
         {
             ProductCode[] supportedRuntimes = { ProductCode.Engine, ProductCode.Desktop };

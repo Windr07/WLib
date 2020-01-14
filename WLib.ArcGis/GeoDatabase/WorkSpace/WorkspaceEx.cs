@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.GeoDatabase.FeatClass;
 
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {
@@ -19,6 +20,265 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
     /// </summary>
     public static partial class WorkspaceEx
     {
+        #region 获取要素数据集
+        /// <summary>
+        /// 获取指定名称的要素数据集
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="datasetName">要素数据集名称</param>
+        /// <returns></returns>
+        public static IFeatureDataset GetFeatureDataset(this IWorkspace workspace, string datasetName)
+        {
+            datasetName = datasetName.ToLower();
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
+            IDataset dataset;
+            while ((dataset = enumDataset.Next()) != null)
+            {
+                if (dataset.Name.ToLower() == datasetName)
+                    return (IFeatureDataset)dataset;
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取要素数据集
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <returns></returns>
+        public static List<IFeatureDataset> GetFeatureDatasets(this IWorkspace workspace)
+        {
+            List<IFeatureDataset> result = new List<IFeatureDataset>();
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
+            IDataset dataset;
+            while ((dataset = enumDataset.Next()) != null)
+            {
+                result.Add((IFeatureDataset)dataset);
+            }
+            return result;
+        }
+        #endregion
+
+
+        #region 创建要素数据集
+        /// <summary>
+        /// 创建要素数据集
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="featureDatasetName">要素数据集名称</param>
+        /// <param name="spatialRef">坐标系</param>
+        /// <returns></returns>
+        public static IFeatureDataset CreateFeatureDataset(this IWorkspace workspace, string featureDatasetName, ISpatialReference spatialRef)
+        {
+            return ((IFeatureWorkspace)workspace).CreateFeatureDataset(featureDatasetName, spatialRef);
+        }
+        #endregion
+
+
+        #region 创建要素类
+        /// <summary>
+        /// 将指定要素类复制到工作空间中
+        /// </summary>
+        /// <param name="workspace"></param>
+        /// <param name="sourceClass">源要素类</param>
+        /// <param name="targetClassName">新要素类名称，若为null则使用源要素类名称</param>
+        /// <param name="whereClause">筛选条件，从源要素类中筛选指定的要素复制到目标要素，为null或Empty时将复制全部要素</param>
+        /// <returns></returns>
+        public static IFeatureClass CreateFeatureClass(this IWorkspace workspace, IFeatureClass sourceClass, string targetClassName = null, string whereClause = null)
+        {
+            return FeatureClassEx.CopyDataTo(sourceClass, workspace, targetClassName, whereClause);
+        }
+        /// <summary>
+        /// 创建要素类
+        /// </summary>
+        /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建要素类</param>
+        /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
+        /// <param name="fields">要创建的字段集（必须包含SHAPE字段），可参考<see cref="FieldOpt.CreateBaseFields"/>等方法创建字段集</param>
+        /// <returns></returns>
+        public static IFeatureClass CreateFeatureClass(this IWorkspace workspace, string name, IFields fields)
+        {
+            return FeatureClassEx.Create(workspace, name, fields);
+        }
+        /// <summary>
+        /// 创建要素类
+        /// </summary>
+        /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
+        /// <param name="sptialRef">空间参考坐标系。若参数obj为IFeatureDataset则应赋值为null；否则不能为null，
+        /// 可使用<see cref="SpatialRefOpt.CreateSpatialRef(esriSRProjCS4Type)"/>或其重载方法进行创建</param>
+        /// <param name="geometryType">几何类型（点/线/面等）</param>
+        /// <param name="fields">要创建的字段集（可以为null，该方法自动修改或加入OID和SHAPE字段以确保几何类型、坐标系与参数一致）</param>
+        /// <returns></returns>
+        public static IFeatureClass CreateFeatureClass(this IWorkspace workspace, string name, ISpatialReference sptialRef, esriGeometryType geometryType, IFields fields = null)
+        {
+            return FeatureClassEx.Create(workspace, name, sptialRef, geometryType, fields);
+        }
+        #endregion
+
+
+        #region 获取要素类
+        /// <summary>
+        /// 判断工作空间中是否存在指定名称或别名的要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="featureClassName">要素类名称或别名</param>
+        /// <returns></returns>
+        public static bool IsFeatureClassExsit(this IWorkspace workspace, string featureClassName)
+        {
+            if (workspace == null)
+                throw new Exception("工作空间不能为空！");
+            if (string.IsNullOrEmpty(featureClassName))
+                throw new Exception("参数要素类名称(featureClassName)不能为空！");
+
+            featureClassName = featureClassName.ToLower();
+            foreach (IFeatureClass featureClass in GetDataset(workspace))
+            {
+                if (featureClass.AliasName.ToLower() == featureClassName || (featureClass as IDataset)?.Name == featureClassName.ToLower())
+                    return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 根据要素类的名称或别名，查找工作空间中的数据要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <returns></returns>
+        public static IFeatureClass GetFirstFeatureClass(this IWorkspace workspace)
+        {
+            IFeatureClass featureClass;
+            var enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
+            while ((featureClass = enumDataset.Next() as IFeatureClass) != null)
+            {
+                return featureClass;
+            }
+            IEnumDataset dsEnumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
+            IDataset dataset;
+            while ((dataset = dsEnumDataset.Next()) != null) //遍历要数集
+            {
+                featureClass = dataset as IFeatureClass;
+            }
+            return featureClass;
+        }
+        /// <summary>
+        /// 根据要素类的名称或别名（或名称/别名的关键字），查找工作空间中的数据要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="featureClassName">要素类名称或别名</param>
+        /// <param name="unFindException">当找不到要素类时，是否抛出异常</param>
+        /// <param name="nameIsKeyword">表示是否按关键字查找，True则按关键字模糊匹配，False则名称/别名必须完全匹配</param>
+        /// <returns></returns>
+        public static IFeatureClass GetFeatureClassByName(this IWorkspace workspace, string featureClassName, bool unFindException = true, bool nameIsKeyword = false)
+        {
+            if (string.IsNullOrEmpty(featureClassName))
+                throw new Exception("查找的数据类名称为空。");
+
+            //遍历FeatureClass
+            featureClassName = featureClassName.ToLower();
+            foreach (IFeatureClass featureClass in GetDataset(workspace))
+            {
+                if (nameIsKeyword)
+                {
+                    if (featureClass.AliasName.ToLower().Contains(featureClassName) || ((IDataset)featureClass).Name.ToLower().Contains(featureClassName))
+                        return featureClass;
+                }
+                else
+                {
+                    if (featureClass.AliasName.ToLower() == featureClassName || ((IDataset)featureClass).Name.ToLower() == featureClassName)
+                        return featureClass;
+                }
+            }
+            if (unFindException)
+                throw new Exception("找不到名为：" + featureClassName + "的要素类，请检查数据");
+            else
+                return null;
+        }
+        /// <summary>
+        /// 根据要素类的名称或别名，查找工作空间中的数据要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="featureClassNames">要素类名称或别名</param>
+        /// <returns></returns>
+        public static List<IFeatureClass> GetFeatureClassesByNames(this IWorkspace workspace, params string[] featureClassNames)
+        {
+            var featureClassList = new List<IFeatureClass>();
+            if (workspace == null)
+                throw new Exception("工作空间为空，检查连接信息。");
+            if (featureClassNames == null || featureClassNames.Length == 0)
+                throw new Exception("查找的数据类名称为空。");
+
+            featureClassNames = featureClassNames.Select(v => v.ToLower()).ToArray();
+            foreach (IFeatureClass featureClass in GetDataset(workspace))
+            {
+                if (featureClassNames.Contains(featureClass.AliasName.ToLower()) ||
+                    featureClassNames.Contains((featureClass as IDataset)?.Name.ToLower()))
+                    featureClassList.Add(featureClass);
+            }
+            return featureClassList;
+        }
+        /// <summary>
+        /// 根据要素类的名称/别名的关键字，查找工作空间中的数据要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <param name="keyName">要素类名称或别名</param>
+        /// <returns></returns>
+        public static List<IFeatureClass> GetFeatureClasses(this IWorkspace workspace, string keyName)
+        {
+            var featureClassList = new List<IFeatureClass>();
+            if (workspace == null)
+                throw new Exception("工作空间为空，检查连接信息。");
+            if (keyName == null)
+                throw new Exception("查找的数据类名称为空。");
+
+            keyName = keyName.ToLower();
+            foreach (IFeatureClass featureClass in GetDataset(workspace))
+            {
+                if (featureClass.AliasName.ToLower().Contains(keyName) || ((IDataset)featureClass).Name.Contains(keyName))
+                    featureClassList.Add(featureClass);
+            }
+            return featureClassList;
+        }
+        /// <summary>
+        /// 获取工作空间的全部要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <returns></returns>
+        public static List<IFeatureClass> GetFeatureClasses(this IWorkspace workspace)
+        {
+            return GetDataset(workspace).Cast<IFeatureClass>().ToList();
+        }
+        /// <summary>
+        /// 以迭代形式返回工作空间下的所有要素类，包括数据集中的要素类
+        /// </summary>
+        /// <param name="workspace">工作空间</param>
+        /// <returns>要素类枚举数（要素类集合）</returns>
+        private static IEnumerable GetDataset(this IWorkspace workspace)
+        {
+            //工作空间下的要素类
+            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
+            IFeatureClass featureClass = enumDataset.Next() as IFeatureClass;
+            while (featureClass != null)
+            {
+                yield return featureClass;
+                featureClass = enumDataset.Next() as IFeatureClass;
+            }
+
+            //工作空间下的要素集
+            IEnumDataset dsEnumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
+            IDataset dataset = dsEnumDataset.Next();
+            while (dataset != null)//遍历要数集
+            {
+                IFeatureDataset featureDataset = (IFeatureDataset)dataset;
+                IFeatureClassContainer featureclassContainer = (IFeatureClassContainer)featureDataset;
+                IEnumFeatureClass enumFeatureClass = featureclassContainer.Classes;
+                IFeatureClass dsFeatureClass = enumFeatureClass.Next();
+                while (dsFeatureClass != null)//在每一个数据集中遍历数据层IFeatureClass
+                {
+                    yield return dsFeatureClass;
+                    dsFeatureClass = enumFeatureClass.Next();
+                }
+                dataset = dsEnumDataset.Next();
+            }
+        }
+        #endregion
+
+
         #region 删除要素类
         /// <summary>
         /// 删除一个或多个要素类
@@ -60,6 +320,10 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                     featureWorkspaceMange.DeleteByName(datasetName);//删除指定要素类
             }
         }
+        #endregion
+
+
+        #region 删除要素
         /// <summary>
         /// 删除所有符合查询条件的要素（执行sql，此方法执行速度较ITable.DeleteSearchedRows更快）
         /// </summary>
@@ -156,191 +420,6 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         {
             var featureClass = GetFeatureClassByName(workspace, tableName, false);
             return featureClass == null ? GetITableByName(workspace, tableName) : featureClass as ITable;
-        }
-        #endregion
-
-
-        #region 获取要素类
-        /// <summary>
-        /// 判断工作空间中是否存在指定名称或别名的要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <param name="featureClassName">要素类名称或别名</param>
-        /// <returns></returns>
-        public static bool IsFeatureClassExsit(this IWorkspace workspace, string featureClassName)
-        {
-            if (workspace == null)
-                throw new Exception("工作空间不能为空！");
-            if (string.IsNullOrEmpty(featureClassName))
-                throw new Exception("参数要素类名称(featureClassName)不能为空！");
-
-            featureClassName = featureClassName.ToLower();
-            foreach (IFeatureClass featureClass in GetDataset(workspace))
-            {
-                if (featureClass.AliasName.ToLower() == featureClassName || (featureClass as IDataset)?.Name == featureClassName.ToLower())
-                    return true;
-            }
-            return false;
-        }
-        /// <summary>
-        /// 根据要素类的名称或别名，查找工作空间中的数据要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <returns></returns>
-        public static IFeatureClass GetFirstFeatureClass(this IWorkspace workspace)
-        {
-            IFeatureClass featureClass;
-            var enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
-            while ((featureClass = enumDataset.Next() as IFeatureClass) != null)
-            {
-                return featureClass;
-            }
-            IEnumDataset dsEnumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
-            IDataset dataset;
-            while ((dataset = dsEnumDataset.Next()) != null) //遍历要数集
-            {
-                featureClass = dataset as IFeatureClass;
-            }
-            return featureClass;
-        }
-        /// <summary>
-        /// 根据要素类的名称或别名，查找工作空间中的数据要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <param name="featureClassName">要素类名称或别名</param>
-        /// <param name="unFindException">当找不到要素类时，是否抛出异常</param>
-        /// <returns></returns>
-        public static IFeatureClass GetFeatureClassByName(this IWorkspace workspace, string featureClassName, bool unFindException = true)
-        {
-            if (string.IsNullOrEmpty(featureClassName))
-                throw new Exception("查找的数据集名称为空。");
-
-            //遍历FeatureClass
-            featureClassName = featureClassName.ToLower();
-            foreach (IFeatureClass featureClass in GetDataset(workspace))
-            {
-                if (featureClass.AliasName.ToLower() == featureClassName || (featureClass as IDataset)?.Name.ToLower() == featureClassName)
-                    return featureClass;
-            }
-            if (unFindException)
-                throw new Exception("找不到要素名为：" + featureClassName + "的要素，请检查数据");
-            else
-                return null;
-        }
-        /// <summary>
-        /// 根据要素类的名称或别名，查找工作空间中的数据要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <param name="featureClassNames">要素类名称或别名</param>
-        /// <returns></returns>
-        public static List<IFeatureClass> GetFeatureClassesByNames(this IWorkspace workspace, params string[] featureClassNames)
-        {
-            var featureClassList = new List<IFeatureClass>();
-            if (workspace == null)
-                throw new Exception("工作空间为空，检查连接信息。");
-            if (featureClassNames == null || featureClassNames.Length == 0)
-                throw new Exception("查找的数据集名称为空。");
-
-            //遍历FeatureClass
-            featureClassNames = featureClassNames.Select(v => v.ToLower()).ToArray();
-            foreach (IFeatureClass featureClass in GetDataset(workspace))
-            {
-                if (featureClassNames.Contains(featureClass.AliasName.ToLower()) ||
-                    featureClassNames.Contains((featureClass as IDataset)?.Name.ToLower()))
-                    featureClassList.Add(featureClass);
-            }
-            return featureClassList;
-        }
-        /// <summary>
-        /// 获取工作空间的全部要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <returns></returns>
-        public static List<IFeatureClass> GetFeatureClasses(this IWorkspace workspace)
-        {
-            return GetDataset(workspace).Cast<IFeatureClass>().ToList();
-        }
-        /// <summary>
-        /// 以迭代形式返回工作空间下的所有要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <returns>要素类枚举数（要素类集合）</returns>
-        private static IEnumerable GetDataset(this IWorkspace workspace)
-        {
-            //工作空间下的要素类
-            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureClass];
-            IFeatureClass featureClass = enumDataset.Next() as IFeatureClass;
-            while (featureClass != null)
-            {
-                yield return featureClass;
-                featureClass = enumDataset.Next() as IFeatureClass;
-            }
-
-            //工作空间下的要素集
-            IEnumDataset dsEnumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
-            IDataset dataset = dsEnumDataset.Next();
-            while (dataset != null)//遍历要数集
-            {
-                IFeatureDataset featureDataset = (IFeatureDataset)dataset;
-                IFeatureClassContainer featureclassContainer = (IFeatureClassContainer)featureDataset;
-                IEnumFeatureClass enumFeatureClass = featureclassContainer.Classes;
-                IFeatureClass dsFeatureClass = enumFeatureClass.Next();
-                while (dsFeatureClass != null)//在每一个数据集中遍历数据层IFeatureClass
-                {
-                    yield return dsFeatureClass;
-                    dsFeatureClass = enumFeatureClass.Next();
-                }
-                dataset = dsEnumDataset.Next();
-            }
-        }
-        #endregion
-
-
-        #region 获取、创建要素数据集
-        /// <summary>
-        /// 获取指定名称的要素数据集
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <param name="datasetName">要素数据集名称</param>
-        /// <returns></returns>
-        public static IFeatureDataset GetFeatureDataset(this IWorkspace workspace, string datasetName)
-        {
-            datasetName = datasetName.ToLower();
-            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
-            IDataset dataset;
-            while ((dataset = enumDataset.Next()) != null)
-            {
-                if (dataset.Name.ToLower() == datasetName)
-                    return (IFeatureDataset)dataset;
-            }
-            return null;
-        }
-        /// <summary>
-        /// 获取要素数据集
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <returns></returns>
-        public static List<IFeatureDataset> GetFeatureDatasets(this IWorkspace workspace)
-        {
-            List<IFeatureDataset> result = new List<IFeatureDataset>();
-            IEnumDataset enumDataset = workspace.Datasets[esriDatasetType.esriDTFeatureDataset];
-            IDataset dataset;
-            while ((dataset = enumDataset.Next()) != null)
-            {
-                result.Add((IFeatureDataset)dataset);
-            }
-            return result;
-        }
-        /// <summary>
-        /// 创建要素数据集
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <param name="featureDatasetName">要素数据集名称</param>
-        /// <param name="spatialRef">坐标系</param>
-        /// <returns></returns>
-        public static IFeatureDataset CreateFeatureDataset(this IWorkspace workspace, string featureDatasetName, ISpatialReference spatialRef)
-        {
-            return ((IFeatureWorkspace)workspace).CreateFeatureDataset(featureDatasetName, spatialRef);
         }
         #endregion
     }

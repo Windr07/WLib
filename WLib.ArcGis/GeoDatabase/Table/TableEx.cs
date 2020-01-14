@@ -595,7 +595,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         }
         /// <summary>
         /// 校验并返回与数据源一致的条件查询语句
-        /// （例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// <para>例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'</para>
         /// </summary>
         /// <param name="eType">数据源类型</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
@@ -607,6 +607,18 @@ namespace WLib.ArcGis.GeoDatabase.Table
         }
         #endregion
 
+        /// <summary>
+        /// 获取表格名称
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string GetName(this ITable table) => ((IDataset)table).Name;
+        /// <summary>
+        /// 获取表格别名
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string GetAliasName(this ITable table) => ((IObjectClass)table).AliasName;
 
         /// <summary>
         /// 创建查询要素的游标

@@ -5,7 +5,8 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using WLib.Attributes;
+
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {
@@ -29,10 +30,10 @@ namespace WLib.ArcGis.Control.MapAssociation
         [Description("平移")]
         Pan = 3,
 
-        [Description("上一视图")]
+        [Description("前一视图")]
         PreView = 4,
 
-        [Description("下一视图")]
+        [Description("后一视图")]
         NextView = 5,
 
         [Description("测量距离")]
@@ -47,7 +48,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         [Description("识别")]
         Identify = 9,
 
-        [Description("选择")]
+        [Description("选择图斑")]
         Selection = 10,
     }
 }

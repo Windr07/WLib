@@ -36,7 +36,7 @@ namespace WLib.ArcGis.Control.AttributeCtrl
         /// <summary>
         /// 字段集
         /// </summary>
-        public FieldItem[] FieldItems => SearchTable.Fields.GetFieldItems(QueryFieldNames).ToArray();
+        public FieldItem[] FieldItems => SearchTable.Fields.ToFieldItems(QueryFieldNames).ToArray();
         /// <summary>
         /// 属性查询帮助类
         /// </summary>

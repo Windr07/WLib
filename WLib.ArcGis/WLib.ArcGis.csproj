@@ -51,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.ADF.Local, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -129,6 +129,7 @@
     </Reference>
     <Reference Include="ESRI.ArcGIS.GISClient, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Output, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -142,6 +143,7 @@
     </Reference>
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -158,8 +160,11 @@
     <Compile Include="Analysis\GpEnum\EIsJoinAttributes.cs" />
     <Compile Include="Analysis\GpEnum\ESjMatchOption.cs" />
     <Compile Include="Analysis\GpEnum\ESjOperation.cs" />
+    <Compile Include="Analysis\Gp\GpHelper.Check.cs" />
+    <Compile Include="Analysis\Gp\GpHelper.Tool.cs" />
     <Compile Include="Analysis\OnShape\GeometryCheck.cs" />
     <Compile Include="Analysis\Gp\GpHelper.cs" />
+    <Compile Include="Analysis\OnShape\GeometryCheckInfo.cs" />
     <Compile Include="Analysis\OnShape\RelationalOpt.cs" />
     <Compile Include="Analysis\OnClass\SpatialAnalysisOpt.cs" />
     <Compile Include="Analysis\OnClass\SpatialEfficiencyOpt.cs" />
@@ -188,9 +193,12 @@
     <Compile Include="Carto\MapExport\MapExportInfo.cs" />
     <Compile Include="Carto\MapExport\MapExportHelper.cs" />
     <Compile Include="Carto\MapExport\MapExportToPic.cs" />
+    <Compile Include="ComObjManager.cs" />
     <Compile Include="Control\AttributeCtrl\AttributeQuery.cs" />
+    <Compile Include="Control\AttributeCtrl\IAttributeForm.cs" />
     <Compile Include="Control\IMapNavigationTools.cs" />
     <Compile Include="Control\IPageNavigationTools.cs" />
+    <Compile Include="Control\MapAssociation\CmdCreator.cs" />
     <Compile Include="Control\MapAssociation\EMapTools.cs" />
     <Compile Include="Control\MapAssociation\EMeasureType.cs" />
     <Compile Include="Control\MapAssociation\EPageTools.cs" />
@@ -206,16 +214,27 @@
     <Compile Include="Control\MapAssociation\MapCtrlMenu.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlPageLayoutSyn.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlToc.cs" />
+    <Compile Include="DataCheck\Compare\Item\AreasCompare.cs" />
+    <Compile Include="DataCheck\Compare\Item\FieldsCompare.cs" />
+    <Compile Include="DataCheck\Compare\Item\CompareItem.cs" />
+    <Compile Include="DataCheck\Compare\ComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Enum\EMatchRuleType.cs" />
+    <Compile Include="DataCheck\Compare\Enum\ENoneMatchErrorType.cs" />
+    <Compile Include="DataCheck\Compare\Enum\ENoneMatchType.cs" />
+    <Compile Include="DataCheck\Compare\EachComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\SelfComparePlan.cs" />
     <Compile Include="Data\EStatisticsType.cs" />
     <Compile Include="Data\TypeConvert.cs" />
     <Compile Include="Display\ColorCreate.cs" />
     <Compile Include="Display\SymbolCreate.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToTreeNodes.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToTree.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToPath.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.FromPath.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.Copy.cs" />
+    <Compile Include="GeoDatabase\Fields\FieldItemEx.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Create.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.cs" />
+    <Compile Include="Geometry\ProjectionInfo.cs" />
     <Compile Include="Geometry\SpatialRefOpt.cs" />
     <Compile Include="Data\DataTableConvert.cs" />
     <Compile Include="Geometry\ESrType.cs" />
@@ -239,7 +258,7 @@
       <DependentUpon>LicenseInitializer.cs</DependentUpon>
     </Compile>
     <Compile Include="Geometry\EnvelopeOpt.cs" />
-    <Compile Include="Carto\Map\FeatureSelection.cs" />
+    <Compile Include="Carto\Map\MapFeatureSelection.cs" />
     <Compile Include="Carto\LabelAnno\LabelAnnoConvert.cs" />
     <Compile Include="Carto\Layer\LayerOpt.cs" />
     <Compile Include="Control\MapCtrlLayers.cs" />

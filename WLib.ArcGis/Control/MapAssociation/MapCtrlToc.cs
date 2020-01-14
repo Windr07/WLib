@@ -24,18 +24,23 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// </summary>
     public class MapCtrlToc : IMapCtrlAssociation
     {
+        private Form _attributeForm;
         /// <summary>
         /// 属性表控件的类型
         /// </summary>
-        private readonly Type _attributeCtrlType;
+        private readonly Type _attributeFormType;
         /// <summary>
         /// 在TOC控件选择的图层
         /// </summary>
         public ILayer SelectedLayer;
         /// <summary>
+        /// 在TOC控件选择的图层的索引
+        /// </summary>
+        public int LayerIndex;
+        /// <summary>
         /// 属性表窗口
         /// </summary>
-        public IAttributeCtrl AttributeCtrl;
+        public IAttributeForm AttributeForm;
         /// <summary>
         /// TOC控件
         /// </summary>
@@ -50,26 +55,27 @@ namespace WLib.ArcGis.Control.MapAssociation
         public readonly Action<EViewActionType[]> SwitchView;
         /// <summary>
         /// 图层和对应的字段菜单列表
+        /// 
         /// </summary>
         public readonly Dictionary<string, ToolStripMenuItem[]> Layer2FieldsMenuItems;
-       
+
 
         /// <summary>
         /// 地图控件与TOC控件的关联操作
         /// </summary>
         /// <param name="tocCtrl">TOC控件</param>
         /// <param name="mapCtrl">地图控件</param>
-        /// <param name="attributeCtrl">显示属性表的控件/窗体</param>
+        /// <param name="attributeForm">显示属性表的窗体</param>
         /// <param name="switchView">将当前标签页设为地图页面</param>
-        public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, IAttributeCtrl attributeCtrl, Action<EViewActionType[]> switchView = null)
+        public MapCtrlToc(AxTOCControl tocCtrl, AxMapControl mapCtrl, IAttributeForm attributeForm, Action<EViewActionType[]> switchView = null)
         {
             MapControl = mapCtrl;
             TocControl = tocCtrl;
             TocControl.SetBuddyControl(MapControl);
             TocControl.OnMouseDown += tocCtrl_OnMouseDown;
             SwitchView = switchView;
-            AttributeCtrl = attributeCtrl;
-            _attributeCtrlType = AttributeCtrl.GetType();
+            AttributeForm = attributeForm;
+            _attributeFormType = AttributeForm.GetType();
 
             Layer2FieldsMenuItems = new Dictionary<string, ToolStripMenuItem[]>();
             InintMenuStrip();
@@ -90,7 +96,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                 ILegendInfo legendInfo = (ILegendInfo)layer;
                 for (int i = 0; i < legendInfo.LegendGroupCount; i++)
                 {
-                    legendInfo.LegendGroup[i].Visible = true;
+                    legendInfo.LegendGroup[i].Visible = isExpand;
                 }
             }
             TocControl.Update();
@@ -179,6 +185,7 @@ namespace WLib.ArcGis.Control.MapAssociation
                 if (item == esriTOCControlItem.esriTOCControlItemLayer)
                 {
                     ToccMenuStrip.Show(TocControl, new System.Drawing.Point(e.x, e.y));
+                    LayerIndex = MapControl.GetLayerIndex(SelectedLayer);
                     ShowFieldLabelMenuItems(SelectedLayer);
                 }
             }
@@ -191,7 +198,12 @@ namespace WLib.ArcGis.Control.MapAssociation
         private void _attributeForm_FeatureLocation(object sender, FeatureLocationEventArgs e)
         {
             SwitchView?.Invoke(new[] { EViewActionType.MainMap });
-            MapControl.MapZoomToAndSelectFirst(e.LocationLayer, e.WhereClause);
+            if (e.LayerIndex < MapControl.LayerCount && e.LayerIndex > -1)
+            {
+                var layer = MapControl.get_Layer(e.LayerIndex);
+                if (layer is IFeatureLayer featureLayer && featureLayer.Name == e.LayerName)
+                    MapControl.MapZoomToAndSelectFirst(featureLayer, e.WhereClause);
+            }
         }
 
 
@@ -256,25 +268,26 @@ namespace WLib.ArcGis.Control.MapAssociation
         }
         protected virtual void 打开属性表ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SelectedLayer is ITable table)
+            if (SelectedLayer is IFeatureLayer featureLayer && featureLayer.FeatureClass != null)
             {
-                if (AttributeCtrl == null || AttributeCtrl.IsDisposed)
-                    AttributeCtrl = (IAttributeCtrl)Activator.CreateInstance(_attributeCtrlType);
-                AttributeCtrl.FeatureLocation -= _attributeForm_FeatureLocation;
-                AttributeCtrl.FeatureLocation += _attributeForm_FeatureLocation;
-                AttributeCtrl.Show(MapControl);
-                AttributeCtrl.Activate();//之前已打开，则给予焦点，置顶。
-                AttributeCtrl.LoadAttribute((IFeatureLayer)SelectedLayer, ((IFeatureLayerDefinition)SelectedLayer).DefinitionExpression);
+                if (AttributeForm == null || AttributeForm.IsDisposed)
+                    AttributeForm = (IAttributeForm)Activator.CreateInstance(_attributeFormType);
+                AttributeForm.Show(MapControl);
+                AttributeForm.Activate();//之前已打开，则给予焦点，置顶。
+                AttributeForm.AttributeCtrl.LoadAttribute(featureLayer as ITable, ((IFeatureLayerDefinition)featureLayer).DefinitionExpression, LayerIndex, _attributeForm_FeatureLocation);
             }
         }
         protected virtual void 定义查询IToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!(SelectedLayer is IFeatureLayer featureLayer)) return;
 
-            AttributeCtrl.AtrributeQueryCtrl.Query -= _queryForm_Query;
-            AttributeCtrl.AtrributeQueryCtrl.Query += _queryForm_Query;
-            AttributeCtrl.AtrributeQueryCtrl.LoadQueryInfo(featureLayer.FeatureClass as ITable);
-            AttributeCtrl.AtrributeQueryCtrl.Show(MapControl);
+            var queryCtrl = AttributeForm.AttributeCtrl.AtrributeQueryCtrl;
+            if (queryCtrl == null || queryCtrl.IsDisposed)
+                queryCtrl = (IAttributeQueryCtrl)Activator.CreateInstance(_attributeFormType);
+            queryCtrl.Query -= _queryForm_Query;
+            queryCtrl.Query += _queryForm_Query;
+            queryCtrl.LoadQueryInfo(featureLayer.FeatureClass as ITable);
+            queryCtrl.Show(MapControl);
         }
         protected virtual void 移除定义查询CToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -295,7 +308,8 @@ namespace WLib.ArcGis.Control.MapAssociation
         {
             if (SelectedLayer is IFeatureLayer featureLayer && featureLayer is IFeatureLayerDefinition featureLyrDef)
             {
-                featureLyrDef.DefinitionExpression = AttributeCtrl.AtrributeQueryCtrl.WhereClause;
+                var queryCtrl = AttributeForm.AttributeCtrl.AtrributeQueryCtrl;
+                featureLyrDef.DefinitionExpression = queryCtrl.WhereClause;
                 RemoveDefinitionMenuItem.Visible = true;
             }
         }

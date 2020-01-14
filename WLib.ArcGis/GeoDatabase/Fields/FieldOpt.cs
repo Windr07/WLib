@@ -31,53 +31,49 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             return CreateField(fieldItem.Name, fieldItem.AliasName, fieldItem.FieldType);
         }
         /// <summary>
-        /// 将ArcGIS表格的指定字段转为自定义类FieldItem集
+        /// 将ArcGIS表格的字段转为自定义类FieldItem集
         /// </summary>
         /// <param name="fields"></param>
         /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
         /// <returns></returns>
-        public static List<FieldItem> GetFieldItems(this IFields fields, string[] fieldNames = null)
+        public static IEnumerable<FieldItem> ToFieldItems(this IFields fields, string[] fieldNames = null)
         {
-            List<FieldItem> fieldItems = new List<FieldItem>();
-            List<IField> fieldList = FieldsToList(fields);
-            if (fieldNames == null)
-            {
-                fieldItems = fieldList.Select(v => new FieldItem(v.Name, v.AliasName, v.Type)).ToList();
-            }
-            else
-            {
-                foreach (var field in fieldList)
-                {
-                    if (fieldNames.Contains(field.Name) || fieldNames.Contains(field.AliasName))
-                        fieldItems.Add(new FieldItem(field.Name, field.AliasName, field.Type));
-                }
-            }
-            return fieldItems;
+            var eFields = ToEnumerable(fields);
+            if (fieldNames == null || fieldNames.Length == 0)
+                return eFields.Select(v => new FieldItem(v.Name, v.AliasName, v.Type));
+
+            var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
+            return filterFields.Select(v => new FieldItem(v.Name, v.AliasName, v.Type));
         }
         /// <summary>
-        /// 将IFields转成IField列表
+        /// 将ArcGIS表格的字段转为自定义类FieldItemEx集
         /// </summary>
         /// <param name="fields"></param>
+        /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
         /// <returns></returns>
-        public static List<IField> FieldsToList(this IFields fields)
+        public static IEnumerable<FieldItemEx> ToFieldItemExs(this IFields fields, string[] fieldNames = null)
         {
-            List<IField> fieldList = new List<IField>();
-            for (int i = 0; i < fields.FieldCount; i++)
-            {
-                fieldList.Add(fields.get_Field(i));
-            }
-            return fieldList;
-        }
-        /// <summary>
-        /// 将IFields转成字段数组
-        /// </summary>
-        /// <param name="fields"></param>
-        /// <returns></returns>
-        public static IField[] FieldsToArray(this IFields fields)
-        {
-            return FieldsToList(fields).ToArray();
+            var eFields = ToEnumerable(fields);
+            if (fieldNames == null || fieldNames.Length == 0)
+                return eFields.Select(v => new FieldItemEx(
+                    v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
+
+            var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
+            return filterFields.Select(v => new FieldItemEx(
+                v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
         }
 
+
+        /// <summary>
+        /// 将IFields转成可枚举类型IEnumerable
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static IEnumerable<IField> ToEnumerable(this IFields fields)
+        {
+            for (int i = 0; i < fields.FieldCount; i++)
+                yield return fields.get_Field(i);
+        }
 
         #region 重设字段
         /// <summary>
@@ -398,38 +394,49 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="fieldType">字段类型</param>
         /// <param name="length">字段长度，若为0则不设置长度（使用默认长度）</param>
         /// <returns>添加的字段的索引</returns>
-        public static int AddField(this IFeatureClass featureClass, string name, string aliasName, esriFieldType fieldType, int length = 0)
+        public static int AddField(this IFeatureClass featureClass, string name, string aliasName, esriFieldType fieldType, int length = 0, int precision = 0, int scale = 0)
         {
-            return AddField(featureClass as ITable, name, aliasName, fieldType, length);
+            return AddField(featureClass as ITable, name, aliasName, fieldType, length, precision, scale);
         }
         /// <summary>
         /// 向已有表格添加新字段，若字段存在则不添加，并返回字段索引
-        /// （注意，向已有表格添加字段使用IClass.AddFiled，而在创建表格时设置字段使用IFieldsEdit.AddField）
+        /// <para>注意：若数据源为shp，字段名长度不能超过10，否则报错</para>
+        /// <para>注意：向已有表格添加字段使用IClass.AddFiled，而在创建表格时设置字段使用IFieldsEdit.AddField</para>
         /// </summary>
         /// <param name="table">操作的表格</param>
         /// <param name="name">字段名</param>
         /// <param name="aliasName">字段别名</param>
         /// <param name="fieldType">字段类型</param>
         /// <param name="length">字段长度，若为0则不设置长度（使用默认长度）</param>
+        /// <param name="precision">字段精度，表示数值类型字段除小数点外的总长度，即整数位数加上小数位数</param>
+        /// <param name="scale">小数位数</param>
         /// <returns>添加的字段的索引</returns>
-        public static int AddField(this ITable table, string name, string aliasName, esriFieldType fieldType, int length = 0)
+        public static int AddField(this ITable table, string name, string aliasName, esriFieldType fieldType, int length = 0, int precision = 0, int scale = 0)
         {
             //若存在，则不需添加
-            int index = -1;
+            int index;
             if ((index = table.Fields.FindField(name)) > -1)
                 return index;
 
             IField field = new FieldClass();
-            IFieldEdit fieldEdit = field as IFieldEdit;
-            fieldEdit.Name_2 = name;
-            fieldEdit.AliasName_2 = aliasName;
-            fieldEdit.Type_2 = fieldType;
-            if (length > 0)
-                fieldEdit.Length_2 = length;
-            IClass cls = table as IClass;
-            cls.AddField(fieldEdit); //此处使用IClass.AddFiled方法，不使用IFieldsEdit.AddField方法
+            try
+            {
+                IFieldEdit fieldEdit = field as IFieldEdit;
+                fieldEdit.Name_2 = name;
+                fieldEdit.AliasName_2 = aliasName;
+                fieldEdit.Type_2 = fieldType;
+                if (length > 0)
+                    fieldEdit.Length_2 = length;
+                if (precision > 0)
+                    fieldEdit.Precision_2 = precision;
+                if (scale > 0)
+                    fieldEdit.Scale_2 = scale;
 
-            return cls.FindField(name);
+                IClass cls = table as IClass;
+                cls.AddField(fieldEdit); //此处使用IClass.AddFiled方法，不使用IFieldsEdit.AddField方法
+                return cls.FindField(name);
+            }
+            catch (Exception ex) { throw new Exception($"添加字段{name}({aliasName})失败：{ex.Message}", ex); }
         }
         /// <summary>
         /// 向已有表格添加字符串类型的字段，若字段存在则不添加
@@ -627,17 +634,28 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             return names;
         }
         /// <summary>
-        ///  获取表格的所有字段名称与别名键值对
+        /// 获取表格的字段名称与别名键值对
         /// </summary>
+        /// <param name="table"></param>
+        /// <param name="fieldNames">要获取的字段，值为null时获取全部字段</param>
+        /// <param name="getSystemFields">是否获取系统字段(OID, SHAPE, SHAPE_LENGTH, SHAPE_AREA)</param>
         /// <returns></returns>
-        public static Dictionary<string, string> GetFieldNameAndAliasName(this ITable table)
+        public static Dictionary<string, string> GetFieldNameAndAliasName(this ITable table, IEnumerable<string> fieldNames = null, bool getSystemFields = true)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            int cnt = table.Fields.FieldCount;
+            var dict = new Dictionary<string, string>();
+            var cnt = table.Fields.FieldCount;
             for (int i = 0; i < cnt; i++)
             {
                 var field = table.Fields.get_Field(i);
+                if (fieldNames != null && !fieldNames.Contains(field.Name))
+                    continue;
                 dict.Add(field.Name, field.AliasName);
+            }
+
+            if (!getSystemFields)
+            {
+                foreach (var fieldName in GetSystemFieldNames(table))
+                    dict.Remove(fieldName);
             }
             return dict;
         }
@@ -738,12 +756,13 @@ namespace WLib.ArcGis.GeoDatabase.Fields
 
 
         #region 字段类型、中英文描述、.NET类型
+
         /// <summary>
-        /// 字段类型(esriFieldType)和对应的中文文字描述的键值对
+        /// 字段类型<see cref="esriFieldType"/>和对应的中文文字描述的键值对
         /// </summary>
         private static Dictionary<esriFieldType, string> _fieldTypeAndCnDesriptions;
         /// <summary>
-        /// 字段类型(esriFieldType)和对应的中文文字描述的键值对
+        /// 字段类型<see cref="esriFieldType"/>和对应的中文文字描述的键值对
         /// </summary>
         public static Dictionary<esriFieldType, string> FieldTypeAndCnDesriptions =>
             _fieldTypeAndCnDesriptions ?? (_fieldTypeAndCnDesriptions = new Dictionary<esriFieldType, string>
@@ -762,6 +781,52 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             {esriFieldType.esriFieldTypeBlob, "Blob"},
             {esriFieldType.esriFieldTypeGlobalID, "GlobalID"}
         });
+
+        /// <summary>
+        /// 字段类型<see cref="esriFieldType"/>和对应的英文文字描述的键值对
+        /// </summary>
+        private static Dictionary<esriFieldType, string> _fieldTypeAndDesriptions;
+        /// <summary>
+        /// 字段类型<see cref="esriFieldType"/>和对应的英文文字描述的键值对
+        /// </summary>
+        public static Dictionary<esriFieldType, string> FieldTypeAndDesriptions
+        {
+            get
+            {
+                if (_fieldTypeAndDesriptions == null)
+                {
+                    _fieldTypeAndDesriptions = new Dictionary<esriFieldType, string>();
+                    var eTypes = GetAllFieldTypes();
+                    foreach (var eType in eTypes)
+                        _fieldTypeAndDesriptions.Add(eType, eType.ToString().Replace("esriFieldType", ""));
+                }
+                return _fieldTypeAndDesriptions;
+            }
+        }
+        /// <summary>
+        /// 获取全部字段类型<see cref="esriFieldType"/>
+        /// </summary>
+        /// <returns></returns>
+        public static esriFieldType[] GetAllFieldTypes()
+        {
+            return new[]
+            {
+                esriFieldType.esriFieldTypeDouble,
+                esriFieldType.esriFieldTypeSingle,
+                esriFieldType.esriFieldTypeInteger,
+                esriFieldType.esriFieldTypeSmallInteger,
+                esriFieldType.esriFieldTypeGeometry,
+                esriFieldType.esriFieldTypeOID,
+                esriFieldType.esriFieldTypeDate,
+                esriFieldType.esriFieldTypeGUID,
+                esriFieldType.esriFieldTypeString,
+                esriFieldType.esriFieldTypeXML,
+                esriFieldType.esriFieldTypeRaster,
+                esriFieldType.esriFieldTypeBlob,
+                esriFieldType.esriFieldTypeGlobalID,
+            };
+        }
+
         /// <summary>
         /// 获得字段类型的英文文字描述
         /// </summary>
@@ -779,49 +844,68 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             return FieldTypeAndCnDesriptions[eFieldType];
         }
         /// <summary>
+        /// 将esriFieldType类型转成.NET的基本类型（数值类型、字符串、日期）
+        /// </summary>
+        /// <returns></returns>
+        public static Type FieldTypeToDotNetType(this esriFieldType eFieldType)
+        {
+            switch (eFieldType)
+            {
+                case esriFieldType.esriFieldTypeDouble: return typeof(double);
+                case esriFieldType.esriFieldTypeSingle: return typeof(float);
+                case esriFieldType.esriFieldTypeInteger: return typeof(int);
+                case esriFieldType.esriFieldTypeSmallInteger: return typeof(short);
+                case esriFieldType.esriFieldTypeOID: return typeof(int);
+                case esriFieldType.esriFieldTypeDate: return typeof(DateTime);
+                case esriFieldType.esriFieldTypeString: return typeof(string);
+                default: throw new Exception($"无法将类型{eFieldType.GetType()}转换为.NET基本类型（数值类型、字符串、日期），请单独处理类型{eFieldType.GetType()}！");
+            }
+        }
+        /// <summary>
         /// 根据字段类型的中文文字描述，获取字段类型
         /// </summary>
         /// <param name="fieldTypeDescriptionCn">字段类型的中文文字描述，来自<see cref="FieldTypeAndCnDesriptions"/></param>
         /// <returns></returns>
         public static esriFieldType GetFieldTypeByDesciptionCn(string fieldTypeDescriptionCn)
         {
-            return FieldTypeAndCnDesriptions.FirstOrDefault(v =>
+            return FieldTypeAndCnDesriptions.First(v =>
                 v.Value.Contains(fieldTypeDescriptionCn) || fieldTypeDescriptionCn.Contains(v.Value)).Key;
         }
         /// <summary>
-        /// 将esriFieldType类型转成.NET的基本类型（数值类型、字符串、日期）
+        /// 根据字段类型的文字描述，获取字段类型。文字描述支持以下类型：
+        /// <para>中文描述，参考<see cref="FieldTypeAndCnDesriptions"/>，例如："双精度"</para>
+        /// <para>英文描述，不区分字母大小写，例如："Double"或"double"</para>
+        /// <para>枚举描述，不区分字母大小写，例如："esriFieldTypeDouble"或"esrifieldtypedouble"</para>
         /// </summary>
         /// <returns></returns>
-        public static Type FieldTypeToDoNetType(esriFieldType eFieldType)
+        public static esriFieldType GetFieldTypeByDesciption(string description)
         {
-            Type type;
-            switch (eFieldType)
+            //英文描述或枚举描述
+            description = description.ToLower();
+            foreach (var eType in GetAllFieldTypes())
             {
-                case esriFieldType.esriFieldTypeDouble:
-                    type = typeof(double);
-                    break;
-                case esriFieldType.esriFieldTypeSingle:
-                    type = typeof(float);
-                    break;
-                case esriFieldType.esriFieldTypeInteger:
-                    type = typeof(int);
-                    break;
-                case esriFieldType.esriFieldTypeSmallInteger:
-                    type = typeof(short);
-                    break;
-                case esriFieldType.esriFieldTypeOID:
-                    type = typeof(int);
-                    break;
-                case esriFieldType.esriFieldTypeDate:
-                    type = typeof(DateTime);
-                    break;
-                case esriFieldType.esriFieldTypeString:
-                    type = typeof(string);
-                    break;
-                default:
-                    throw new Exception($"无法将类型{eFieldType.GetType()}转换为.NET基本类型（数值类型、字符串、日期），请单独处理类型{eFieldType.GetType()}！");
+                var enDescription = eType.ToString().ToLower();
+                if (enDescription == description || enDescription.Replace("esrifieldtype", "") == description)
+                    return eType;
             }
-            return type;
+
+            //英文描述特例
+            if (description == "int")
+                return esriFieldType.esriFieldTypeInteger;
+            else if (description == "short")
+                return esriFieldType.esriFieldTypeSmallInteger;
+            else if (description == "float")
+                return esriFieldType.esriFieldTypeSingle;
+            else if (description == "datetime" || description == "time")
+                return esriFieldType.esriFieldTypeDate;
+
+            //中文描述
+            foreach (var pair in FieldTypeAndCnDesriptions)
+            {
+                if (pair.Value.ToLower() == description)
+                    return pair.Key;
+            }
+            throw new Exception($"无法根据描述“{description}”找到对应的{nameof(esriFieldType)}枚举类型");
         }
         #endregion
 
