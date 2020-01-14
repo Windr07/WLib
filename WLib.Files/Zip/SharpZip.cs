@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace WLib.Zip
+namespace WLib.Files.Zip
 {
     /// <summary>
     /// 提供压缩与解压缩的方法

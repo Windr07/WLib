@@ -50,16 +50,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="oracle.dataaccess">
-      <HintPath>..\DLL\oracle.dataaccess.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -195,7 +188,6 @@
     <Compile Include="Xml\XmlConfig.cs" />
     <Compile Include="Xml\XmlSaveAttrParams.cs" />
     <Compile Include="Xml\XmlConvert.cs" />
-    <Compile Include="Zip\SharpZip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DbHelper.Creator.cs" />
