@@ -11,3 +11,10 @@ obj/
 .vs/WLib/v15/.suo
 .vs/WLib/v15/Server/sqlite3/storage.ide-shm
 .vs/WLib/v15/Server/sqlite3/storage.ide-wal
+/WLib.ArcGis/*.nupkg
+/WLib.Envir/*.nupkg
+/WLib.Files/*.nupkg
+/WLib.Gdal/*.nupkg
+/WLib.WinCtrls.Dev/*.nupkg
+/WLib.WinCtrls/*.nupkg
+/WLib/*.nupkg
