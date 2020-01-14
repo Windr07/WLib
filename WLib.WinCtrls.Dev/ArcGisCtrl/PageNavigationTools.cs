@@ -24,7 +24,7 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
         /// <summary>
         /// 页面布局导航工具类别
         /// </summary>
-        public EPageTools CurrentTool { get; private set; } = EPageTools.None;
+        public EPageTools CurrentTool { get; set; } = EPageTools.None;
         /// <summary>
         /// 页面导航工具条所绑定的页面布局控件
         /// </summary>

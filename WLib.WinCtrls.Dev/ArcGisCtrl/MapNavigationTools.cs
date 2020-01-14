@@ -39,7 +39,7 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
         /// <summary>
         /// 当前使用的地图导航工具
         /// </summary>
-        public EMapTools CurrentTool { get; private set; }
+        public EMapTools CurrentTool { get; set; }
         /// <summary>
         /// 地图导航工具条所绑定的地图控件
         /// </summary>

@@ -190,28 +190,6 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 return null;
         }
         /// <summary>
-        /// 根据要素类的名称/别名的关键字，查找工作空间中的数据要素类
-        /// </summary>
-        /// <param name="workspace">工作空间</param>
-        /// <param name="keyName">要素类名称或别名</param>
-        /// <returns></returns>
-        public static List<IFeatureClass> GetFeatureClassesByKeyName(this IWorkspace workspace, string keyName)
-        {
-            var featureClassList = new List<IFeatureClass>();
-            if (workspace == null)
-                throw new Exception("工作空间为空，检查连接信息。");
-            if (keyName == null)
-                throw new Exception("查找的数据类名称为空。");
-
-            keyName = keyName.ToLower();
-            foreach (IFeatureClass featureClass in GetDataset(workspace))
-            {
-                if (featureClass.AliasName.ToLower().Contains(keyName) || ((IDataset)featureClass).Name.Contains(keyName))
-                    featureClassList.Add(featureClass);
-            }
-            return featureClassList;
-        }
-        /// <summary>
         /// 根据要素类的名称或别名，查找工作空间中的数据要素类
         /// </summary>
         /// <param name="workspace">工作空间</param>

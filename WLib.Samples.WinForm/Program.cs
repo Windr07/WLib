@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using ESRI.ArcGIS.esriSystem;
 using WLib.ArcGis;
 
 namespace WLib.Samples.WinForm

@@ -9,6 +9,7 @@ using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Database;
+using WLib.Database.DbBase;
 using WLib.WinCtrls.ArcGisCtrl;
 using FolderBrowserDialog = WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
 
