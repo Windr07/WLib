@@ -12,15 +12,15 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using WLib.Files;
-using WLib.WinForm;
+using WLib.WinCtrls.Extension;
 
 namespace WLib.WinCtrls.PathCtrl
 {
     /// <summary>
     /// 表示一个路径选择与显示的组合框
     /// </summary>
-    [DefaultEvent("AfeterSelectPath")]
-    [DefaultProperty("ShowButtonOption")]
+    [DefaultEvent(nameof(AfeterSelectPath))]
+    [DefaultProperty(nameof(ShowButtonOption))]
     public partial class PathBoxSimple : UserControl
     {
         /// <summary>
@@ -53,7 +53,7 @@ namespace WLib.WinCtrls.PathCtrl
                 if (string.IsNullOrEmpty(txtPath.Text.Trim()) || txtPath.Text == _defultTips)
                     txtPath.Text = value;
                 _defultTips = value;
-                if (!ReadOnly)
+                if (ReadOnly)
                     txtPath.ForeColor = Color.Gray;
             }
         }
@@ -88,7 +88,7 @@ namespace WLib.WinCtrls.PathCtrl
         /// <summary>
         /// 文件筛选，等同于OpenFileDialog或SaveFileDialog控件的Filter属性
         /// </summary>
-        public String FileFilter { get => _fileFilter; set => _fileFilter = (value != null && !value.Contains("|")) ? value + "|" + value : value; }
+        public string FileFilter { get => _fileFilter; set => _fileFilter = value == null || value.Contains("|") ? value : value + "|" + value; }
         /// <summary>
         /// 选择文件或目录的标题或提示信息
         /// </summary>
@@ -126,14 +126,11 @@ namespace WLib.WinCtrls.PathCtrl
             {
                 switch (SelectPathType)
                 {
-                    case ESelectPathType.Folder:
-                        return Directory.Exists(Text);
-                    case ESelectPathType.OpenFile:
-                        return File.Exists(Text);
+                    case ESelectPathType.Folder: return Directory.Exists(Text);
+                    case ESelectPathType.OpenFile: return File.Exists(Text);
                     case ESelectPathType.SaveFile:
                         return Directory.Exists(System.IO.Path.GetDirectoryName(Text)) && FileOpt.ValidFileName(System.IO.Path.GetFileNameWithoutExtension(Text));
-                    default:
-                        return false;
+                    default: return false;
                 }
             }
         }
@@ -162,6 +159,10 @@ namespace WLib.WinCtrls.PathCtrl
 
         #region 事件
         /// <summary>
+        /// 当输入的路径文本改变时发生
+        /// </summary>
+        public event EventHandler OnPathTextChanged;
+        /// <summary>
         /// 点击操作按钮事件
         /// </summary>
         public event EventHandler OperateButtonClick;
@@ -173,28 +174,8 @@ namespace WLib.WinCtrls.PathCtrl
         /// 自定义路径选择事件
         /// </summary>
         public event EventHandler CustomizeSelectPath;
-        /// <summary>
-        /// 触发选择或设置路径后的事件
-        /// </summary>
-        protected void OnAfeterSelectPath()
-        {
-            AfeterSelectPath?.Invoke(this, new EventArgs());
-        }
-        /// <summary>
-        /// 触发点击操作按钮事件
-        /// </summary>
-        protected void OnOperateButtonClick()
-        {
-            OperateButtonClick?.Invoke(this, new EventArgs());
-        }
-        /// <summary>
-        /// 触发自定义路径选择事件
-        /// </summary>
-        protected void OnCustomizeSelectPath()
-        {
-            CustomizeSelectPath?.Invoke(this, new EventArgs());
-        }
         #endregion
+
 
         /// <summary>
         /// 表示一个路径选择与显示的组合框
@@ -202,9 +183,10 @@ namespace WLib.WinCtrls.PathCtrl
         public PathBoxSimple()
         {
             InitializeComponent();
+            BindingControlEvents();
 
-            txtPath.GotFocus += txtPath_GotFocus;
-            txtPath.LostFocus += txtPath_LostFocus;
+            ShowButtonOption = EShowButtonOption.ViewSelect;
+            FileFilter = "全部文件(*.*)|*.*";
             DefaultTips = "粘贴路径于此并按下回车，或点击选择按钮以选择路径";
         }
         /// <summary>
@@ -234,124 +216,70 @@ namespace WLib.WinCtrls.PathCtrl
         /// <summary>
         /// 清理路径
         /// </summary>
-        public void Clear()
-        {
-            txtPath.Clear();
-        }
+        public void Clear() => txtPath.Clear();
         /// <summary>
         /// 向路径框中添加路径，并触发AfeterSelectPath事件
         /// </summary>
         public void SelectPath(string path)
         {
             Text = path;
-            OnAfeterSelectPath();
+            AfeterSelectPath?.Invoke(this, new EventArgs());
+        }
+        /// <summary>
+        /// 绑定控件事件处理
+        /// </summary>
+        private void BindingControlEvents()
+        {
+            txtPath.KeyDown += (sender, e) => { if (e.KeyCode == Keys.Enter) AfeterSelectPath?.Invoke(this, new EventArgs()); };
+            txtPath.Click += (sender, e) => { if (!ReadOnly && Text == _defultTips) txtPath.Text = string.Empty; };
+            txtPath.TextChanged += (sender, e) => { OnPathTextChanged?.Invoke(this, new EventArgs()); };
+            txtPath.MouseEnter += (sender, e) => { if ((ShowButtonOption & EShowButtonOption.View) == EShowButtonOption.View) btnView.Visible = true; };
+            txtPath.MouseLeave += (sender, e) =>
+            {
+                if ((ShowButtonOption & EShowButtonOption.View) == EShowButtonOption.View)
+                {
+                    if (!txtPath.RectangleToScreen(txtPath.ClientRectangle).Contains(MousePosition))
+                        btnView.Visible = false;
+                }
+            };
+            txtPath.GotFocus += (sender, e) =>
+            {
+                if (txtPath.Text == _defultTips)
+                    txtPath.Text = string.Empty;
+                txtPath.ForeColor = SystemColors.WindowText;
+            };
+            txtPath.GotFocus += (sender, e) =>
+            {
+                if (txtPath.Text == string.Empty)
+                {
+                    txtPath.ForeColor = Color.Gray;
+                    txtPath.Text = _defultTips;
+                }
+            };
         }
 
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            string selectedPath;
-            string path = txtPath.Text.Trim();
-            if (SelectPathType == ESelectPathType.Folder &&
-               (selectedPath = DialogOpt.ShowFolderBrowserDialog(path, SelectTips)) != null)
+            var path = txtPath.Text.Trim();
+            if (SelectPathType == ESelectPathType.Customize)
+                CustomizeSelectPath?.Invoke(this, new EventArgs());
+            else
             {
-                txtPath.Text = selectedPath;
-                OnAfeterSelectPath();
-            }
-            else if (SelectPathType == ESelectPathType.OpenFile &&
-               (selectedPath = DialogOpt.ShowOpenFileDialog(FileFilter, SelectTips, null, path)) != null)
-            {
-                txtPath.Text = selectedPath;
-                OnAfeterSelectPath();
-            }
-            else if (SelectPathType == ESelectPathType.SaveFile &&
-               (selectedPath = DialogOpt.ShowSaveFileDialog(FileFilter, SelectTips, null, path)) != null)
-            {
-                txtPath.Text = selectedPath;
-                OnAfeterSelectPath();
-            }
-            else if (SelectPathType == ESelectPathType.Customize)
-            {
-                OnCustomizeSelectPath();
+                txtPath.Text = DialogOpt.ShowDialog(SelectPathType, path, SelectTips, FileFilter, path);
+                AfeterSelectPath?.Invoke(this, new EventArgs());
             }
             if (txtPath.Text != string.Empty && txtPath.Text != _defultTips)
                 txtPath.ForeColor = SystemColors.WindowText;
         }
 
-        private void btnOperate_Click(object sender, EventArgs e)
-        {
-            OnOperateButtonClick();
-        }
+        private void btnOperate_Click(object sender, EventArgs e) => OperateButtonClick?.Invoke(this, new EventArgs());
 
-        private void txtPath_KeyDown(object sender, KeyEventArgs e)
+        private void btnView_Click(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-                OnAfeterSelectPath();
-        }
-
-        private void txtPath_Click(object sender, EventArgs e)
-        {
-            if (!ReadOnly && Text == _defultTips)
-                txtPath.Text = string.Empty;
-        }
-
-        private void txtPath_GotFocus(object sender, EventArgs e)
-        {
-            if (txtPath.Text == _defultTips)
-                txtPath.Text = string.Empty;
-
-            txtPath.ForeColor = SystemColors.WindowText;
-        }
-
-        private void txtPath_LostFocus(object sender, EventArgs e)
-        {
-            if (txtPath.Text == string.Empty)
-            {
-                txtPath.ForeColor = Color.Gray;
-                txtPath.Text = _defultTips;
-            }
-        }
-
-        private void picBoxViewFile_MouseEnter(object sender, EventArgs e)
-        {
-            picBoxViewFile.BackColor = SystemColors.ControlDark;
-        }
-
-        private void picBoxViewFile_MouseLeave(object sender, EventArgs e)
-        {
-            picBoxViewFile.BackColor = SystemColors.Control;
-            txtPath_MouseLeave(null, null);
-        }
-
-        private void picBoxViewFile_Click(object sender, EventArgs e)
-        {
-            string path = txtPath.Text.Trim();
-            if (Directory.Exists(path))
-                Process.Start("explorer.exe", path);
-            else if (File.Exists(path))
-                Process.Start("explorer.exe", "/select," + path);
-        }
-
-        private void txtPath_MouseEnter(object sender, EventArgs e)
-        {
-            if (_showButtonOption == EShowButtonOption.All ||
-                _showButtonOption == EShowButtonOption.View ||
-                _showButtonOption == EShowButtonOption.ViewOpt ||
-                _showButtonOption == EShowButtonOption.ViewSelect)
-                picBoxViewFile.Visible = true;
-        }
-
-        private void txtPath_MouseLeave(object sender, EventArgs e)
-        {
-            if (_showButtonOption == EShowButtonOption.All ||
-                _showButtonOption == EShowButtonOption.View ||
-                _showButtonOption == EShowButtonOption.ViewOpt ||
-                _showButtonOption == EShowButtonOption.ViewSelect)
-            {
-                Rectangle rectangle = txtPath.RectangleToScreen(txtPath.ClientRectangle);
-                if (!rectangle.Contains(MousePosition))
-                    picBoxViewFile.Visible = false;
-            }
+            var path = txtPath.Text.Trim();
+            if (Directory.Exists(path)) Process.Start("explorer.exe", path);
+            else if (File.Exists(path)) Process.Start("explorer.exe", "/select," + path);
         }
     }
 }

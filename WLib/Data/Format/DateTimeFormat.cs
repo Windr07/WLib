@@ -29,5 +29,26 @@ namespace WLib.Data.Format
 
             return $"{strYear}年{strMonth}月{strDay}日";
         }
+
+        /// <summary>
+        /// 将<see cref="DateTime"/>对象转为Unix系统的时间戳（以1970/01/01为初始值的毫秒为单位的时间计数）
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static long ToUnixTimeStamp(this DateTime dateTime)
+        {
+            var startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)); // 当地时区
+            return (long)(dateTime - startTime).TotalMilliseconds; // 相差秒数
+        }
+        /// <summary>
+        /// 将Unix系统的时间戳（以毫秒为单位的时间计数）转为<see cref="DateTime"/>对象
+        /// </summary>
+        /// <param name="timeStamp"></param>
+        /// <returns></returns>
+        public static DateTime UnixTimeToDateTime(this long timeStamp)
+        {
+            var startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)); // 当地时区
+            return startTime.AddMilliseconds(timeStamp);
+        }
     }
 }

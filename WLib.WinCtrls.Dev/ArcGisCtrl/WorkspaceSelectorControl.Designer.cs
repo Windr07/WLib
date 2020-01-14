@@ -35,7 +35,7 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
             this.cmbADBType = new DevExpress.XtraEditors.ComboBoxEdit();
             this.lblWorkspaceDesc = new DevExpress.XtraEditors.LabelControl();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
-            this.SourcePathBox = new PathBoxControl();
+            this.SourcePathBox = new WLib.WinCtrls.Dev.PathCtrl.PathBoxControl();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cmbADBType.Properties)).BeginInit();
@@ -85,7 +85,6 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
             // 
             // SourcePathBox
             // 
-            this.SourcePathBox.CanTextEdit = true;
             this.SourcePathBox.DefaultTips = "粘贴路径于此并按下回车，或点击选择按钮";
             this.SourcePathBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SourcePathBox.FileFilter = null;
@@ -94,22 +93,25 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
             this.SourcePathBox.MultiSelect = true;
             this.SourcePathBox.Name = "SourcePathBox";
             this.SourcePathBox.OptEnable = true;
+            this.SourcePathBox.Path = "粘贴路径于此并按下回车，或点击选择按钮";
             this.SourcePathBox.Paths = new string[0];
-            this.SourcePathBox.SelectPathType = ESelectPathType.Folder;
+            this.SourcePathBox.SelectPathType = WLib.WinCtrls.Extension.ESelectPathType.Folder;
             this.SourcePathBox.SelectTips = null;
-            this.SourcePathBox.ShowButtonOption = EShowButtonOption.ViewSelect;
+            this.SourcePathBox.ShowButtonOption = WLib.WinCtrls.PathCtrl.EShowButtonOption.ViewSelect;
             this.SourcePathBox.Size = new System.Drawing.Size(468, 23);
             this.SourcePathBox.TabIndex = 0;
+            this.SourcePathBox.AfeterSelectPath += new System.EventHandler(this.txtASourcePath_AfeterSelectPath);
             // 
-            // WorkspaceSelector
+            // WorkspaceSelectorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelControl2);
             this.Controls.Add(this.panelControl1);
             this.MaximumSize = new System.Drawing.Size(7000, 23);
-            this.Name = "WorkspaceSelector";
+            this.Name = "WorkspaceSelectorControl";
             this.Size = new System.Drawing.Size(683, 23);
+            this.Load += new System.EventHandler(this.WorkspaceSelector_Load);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();

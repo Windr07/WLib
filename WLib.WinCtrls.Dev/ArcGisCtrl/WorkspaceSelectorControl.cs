@@ -5,13 +5,16 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.GeoDatabase.Table;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
-using WLib.Attributes;
+using WLib.Attributes.Description;
+using WLib.WinCtrls.Extension;
 using WLib.WinCtrls.PathCtrl;
 
 namespace WLib.WinCtrls.Dev.ArcGisCtrl
@@ -96,17 +99,11 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
         /// <summary>
         /// 触发AfterSelectPath事件
         /// </summary>
-        internal void OnAfterSelectPath()
-        {
-            AfterSelectPath?.Invoke(this, new EventArgs());
-        }
+        internal void OnAfterSelectPath() => AfterSelectPath?.Invoke(this, new EventArgs());
         /// <summary>
         /// 触发AfterSelectPath事件
         /// </summary>
-        internal void OnWorkspaceTypeChanged()
-        {
-            WorkspaceTypeChanged?.Invoke(this, new EventArgs());
-        }
+        internal void OnWorkspaceTypeChanged() => WorkspaceTypeChanged?.Invoke(this, new EventArgs());
         #endregion
 
 
@@ -135,28 +132,25 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
         /// 返回指定名称或别名的要素类（未连接工作空间或找不到时返回null）
         /// </summary>
         /// <param name="name">要素类名称或要素类别名</param>
+        /// <param name="searchKeyword">是否模糊匹配要素类名称或要素类别名，默认否</param>
         /// <returns></returns>
-        public IFeatureClass GetFeatureClassByName(string name)
+        public IFeatureClass GetFeatureClassByName(string name, bool searchKeyword = false)
         {
-            return FeatureClasses?.FirstOrDefault(cls => cls.AliasName == name || ((IDataset)cls).Name == name);
-        }
-        /// <summary>
-        /// 返回指定名称或别名关键字的要素类（模糊匹配）（未连接工作空间或找不到时返回null）
-        /// </summary>
-        /// <param name="name">要素类名称或要素类别名</param>
-        /// <returns></returns>
-        public IFeatureClass GetFeatureClassByKeyName(string name)
-        {
-            return FeatureClasses?.FirstOrDefault(cls => cls.AliasName.Contains(name) || ((IDataset)cls).Name.Contains(name));
+            return searchKeyword
+                ? FeatureClasses?.FirstOrDefault(v => v.AliasName.Contains(name) || v.GetName().Contains(name))
+                : FeatureClasses?.FirstOrDefault(v => v.AliasName == name || v.GetName() == name);
         }
         /// <summary>
         /// 返回指定名称或别名的表格（未连接工作空间或找不到时返回null）
         /// </summary>
         /// <param name="name">表名或表的别名</param>
+        /// <param name="searchKeyword">是否模糊匹配表名或表的别名，默认否</param>
         /// <returns></returns>
-        public ITable GetTableByName(string name)
+        public ITable GetTableByName(string name, bool searchKeyword = false)
         {
-            return Tables?.FirstOrDefault(tbl => ((IObjectClass)tbl).AliasName == name || ((IDataset)tbl).Name == name);
+            return searchKeyword
+               ? Tables?.FirstOrDefault(v => v.GetAliasName().Contains(name) || v.GetName().Contains(name))
+               : Tables?.FirstOrDefault(v => v.GetAliasName() == name || v.GetName() == name);
         }
         #endregion
 
@@ -168,7 +162,23 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
         {
             InitializeComponent();
 
-            this.SourcePathBox.AfeterSelectPath += txtASourcePath_AfeterSelectPath;
+            this.SourcePathBox.OnPathTextChanged += (sender, e) =>
+            {
+                var path = this.SourcePathBox.Text?.Trim();
+                if (string.IsNullOrWhiteSpace(path))
+                    return;
+                var wsType = WorkspaceEx.GetDefaultWorkspaceType(path);
+                if (wsType != EWorkspaceType.Default && wsType != WorkspaceType)
+                {
+                    var index = this.cmbADBType.Properties.Items.IndexOf(wsType.GetDescription());
+                    if (index > 0)
+                    {
+                        WorkspaceIndex = index;
+                        this.SourcePathBox.SelectPath(path);
+                    }
+                }
+            };
+
             AfterSelectPath = (sender, e) => { };
             WorkspaceTypeChanged = (sender, e) => { this.SourcePathBox.Text = ""; };
             WorkspaceTypeFilter = "shp|gdb|mdb|sde";
@@ -230,6 +240,8 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
                 Workspace = null;
 
                 var eType = this.cmbADBType.SelectedItem.ToString().GetEnum<EWorkspaceType>();
+                if (string.IsNullOrWhiteSpace(this.SourcePathBox.Path))
+                    return;
                 Workspace = WorkspaceEx.GetWorkSpace(this.SourcePathBox.Path, eType);
                 if (Workspace != null)
                 {

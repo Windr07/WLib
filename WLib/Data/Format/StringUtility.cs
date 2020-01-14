@@ -18,6 +18,19 @@ namespace WLib.Data.Format
     public static class StringUtility
     {
         /// <summary>
+        /// 将一个中文字符长度当成2，获取字符串的长度
+        /// </summary>
+        /// <returns></returns>
+        public static int GetLengthEx(this string str)
+        {
+            int length = 0;
+            for (int i = 1; i < str.Length; i++)
+                length += IsChinese(str[i]) || IsChinesePunctuation(str[i]) ? 2 : 1;
+
+            return length;
+        }
+
+        /// <summary>
         /// 将字符串按固定显示长度换行（英文和数字字符长度为1，中文字符与中文符号长度为2）
         /// </summary>
         /// <param name="subjectString">需要按固定长度换行的字符串</param>

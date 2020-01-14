@@ -8,8 +8,6 @@
 using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.ArcGis.Control.AttributeCtrl;
@@ -48,7 +46,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// <summary>
         /// 属性表窗口
         /// </summary>
-        public IAttributeCtrl AttributeForm { get; set; }
+        public IAttributeForm AttributeForm { get; set; }
 
         /// <summary>
         /// 初始化控件
@@ -76,7 +74,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// </summary>
         /// <param name="attributeForm">属性表窗口</param>
         /// <param name="listControl"></param>
-        public TableListBox(IAttributeCtrl attributeForm, IListControl listControl)
+        public TableListBox(IAttributeForm attributeForm, IListControl listControl)
         {
             InitializeComponent();
             InitControl();
@@ -144,7 +142,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
             {
                 AttributeForm.Activate();//之前已打开，则给予焦点，置顶。
                 AttributeForm.Show(this);
-                AttributeForm.LoadAttribute(table);
+                AttributeForm.AttributeCtrl.LoadAttribute(table);
             }
         }
 

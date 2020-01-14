@@ -54,13 +54,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Utils.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraBars.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraEditors.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraLayout.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraTreeList.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="ESRI.ArcGIS.ADF, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
@@ -125,22 +118,30 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.Office.Interop.Excel">
+      <HintPath>..\DLL\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.Office.Interop.Word">
+      <HintPath>..\DLL\Microsoft.Office.Interop.Word.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="office" />
+    <Reference Include="Office, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\DLL\Office.dll</HintPath>
+    </Reference>
+    <Reference Include="SplitButton">
+      <HintPath>..\DLL\SplitButton.dll</HintPath>
+    </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\DLL\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -179,11 +180,23 @@
     <Compile Include="AddItemCtrl\Base\IConcatStrConfig.cs" />
     <Compile Include="AddItemCtrl\Base\IMatchModeConfig.cs" />
     <Compile Include="AddItemCtrl\Base\SplitStrDef.cs" />
+    <Compile Include="ArcGisCtrl\AttributeCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\AttributeCtrl.Designer.cs">
+      <DependentUpon>AttributeCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArcGisCtrl\AttributeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
       <DependentUpon>AttributeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\FieldInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\FieldInfoForm.Designer.cs">
+      <DependentUpon>FieldInfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
       <SubType>UserControl</SubType>
@@ -219,6 +232,12 @@
     <Compile Include="ExplorerCtrl\ExplorerTreeCtrl\ExplorerTreeViewWnd.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ExplorerCtrl\FileExplorer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\FileExplorer.designer.cs">
+      <DependentUpon>FileExplorer.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExplorerCtrl\FileFolderCtrl\FileOpenDialog.cs" />
     <Compile Include="ExplorerCtrl\FileFolderCtrl\FolderBrowserDialog.cs">
       <SubType>Component</SubType>
@@ -228,6 +247,13 @@
     <Compile Include="ExplorerCtrl\FileFolderCtrl\IFileOpenDialog.cs" />
     <Compile Include="ExplorerCtrl\FileFolderCtrl\IShellItem.cs" />
     <Compile Include="ExplorerCtrl\FileFolderCtrl\SIGDN.cs" />
+    <Compile Include="ExplorerCtrl\FileTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExplorerCtrl\FileTreeView.designer.cs">
+      <DependentUpon>FileTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExplorerCtrl\GetSystemIcon.cs" />
     <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -243,6 +269,16 @@
     <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.Designer.cs">
       <DependentUpon>PathFolderBrowser.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressViewCtrl\IProgressView.cs" />
+    <Compile Include="ProgressViewCtrl\ProgressViewManager.cs" />
+    <Compile Include="GridViewCtrl\DataGridViewProgressColumn.cs" />
+    <Compile Include="GridViewCtrl\GridViewOpt.cs" />
+    <Compile Include="GridViewCtrl\PaginationBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GridViewCtrl\PaginationBar.Designer.cs">
+      <DependentUpon>PaginationBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListCtrl\IListControl.cs" />
     <Compile Include="ListCtrl\ImageListBox.cs">
       <SubType>Component</SubType>
@@ -250,24 +286,63 @@
     <Compile Include="ListCtrl\ImageListBox.Designer.cs">
       <DependentUpon>ImageListBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="OleDbQueryForm.cs">
+    <Compile Include="ListCtrl\ItemInfo.cs" />
+    <Compile Include="ListCtrl\ListBoxItem.cs" />
+    <Compile Include="ListCtrl\ListBoxItemCollection.cs" />
+    <Compile Include="ListCtrl\ImageListBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MessageCtrl\ErrorHandlerBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OleDbQueryForm.Designer.cs">
+    <Compile Include="MessageCtrl\ErrorHandlerBox.Designer.cs">
+      <DependentUpon>ErrorHandlerBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageCtrl\InfoTipBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MessageCtrl\InfoTipBox.Designer.cs">
+      <DependentUpon>InfoTipBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageCtrl\MessageBoxEx.cs" />
+    <Compile Include="PluginCtrl\PluginContainerInfoCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginContainerInfoCtrl.Designer.cs">
+      <DependentUpon>PluginContainerInfoCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginInfoCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginInfoCtrl.Designer.cs">
+      <DependentUpon>PluginInfoCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginManagerForm.Designer.cs">
+      <DependentUpon>PluginManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginCtrl\PluginFormHelper.cs" />
+    <Compile Include="PluginCtrl\PluginManagerFormHelper.cs" />
+    <Compile Include="SqlCtrl\OleDbQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlCtrl\OleDbQueryForm.Designer.cs">
       <DependentUpon>OleDbQueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PathCtrl\EObjectFilter.cs" />
-    <Compile Include="PathCtrl\ESelectPathType.cs" />
+    <Compile Include="`Extension\ESelectPathType.cs" />
     <Compile Include="PathCtrl\EShowButtonOption.cs" />
-    <Compile Include="FileViewer\Office\ExcelBase.cs" />
-    <Compile Include="FileViewer\Office\IOfficeBase.cs" />
-    <Compile Include="FileViewer\Office\OfficeEmbed.cs">
+    <Compile Include="FileCtrl\Office\ExcelBase.cs" />
+    <Compile Include="FileCtrl\Office\IOfficeBase.cs" />
+    <Compile Include="FileCtrl\Office\OfficeEmbed.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FileViewer\Office\OfficeEmbed.designer.cs">
+    <Compile Include="FileCtrl\Office\OfficeEmbed.designer.cs">
       <DependentUpon>OfficeEmbed.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileViewer\Office\WordBase.cs" />
+    <Compile Include="FileCtrl\Office\WordBase.cs" />
     <Compile Include="PathCtrl\DataSelectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -280,10 +355,10 @@
     <Compile Include="PathCtrl\PathBoxSimple.Designer.cs">
       <DependentUpon>PathBoxSimple.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathCtrl\WorkspaceSelector.cs">
+    <Compile Include="ArcGisCtrl\WorkspaceSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathCtrl\WorkspaceSelector.Designer.cs">
+    <Compile Include="ArcGisCtrl\WorkspaceSelector.Designer.cs">
       <DependentUpon>WorkspaceSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -311,12 +386,12 @@
     <Compile Include="ArcGisCtrl\AttributeQueryForm.Designer.cs">
       <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileViewer\Picture\EPicViewerAction.cs" />
-    <Compile Include="FileViewer\IFileViewer.cs" />
-    <Compile Include="FileViewer\Picture\PicViewer.cs">
+    <Compile Include="FileCtrl\Picture\EPicViewerAction.cs" />
+    <Compile Include="FileCtrl\IFileViewer.cs" />
+    <Compile Include="FileCtrl\Picture\PicViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FileViewer\Picture\PicViewer.designer.cs">
+    <Compile Include="FileCtrl\Picture\PicViewer.designer.cs">
       <DependentUpon>PicViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="RowMergeView.cs">
@@ -325,12 +400,18 @@
     <Compile Include="RowMergeView.designer.cs">
       <DependentUpon>RowMergeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileViewer\TxtViewer.cs">
+    <Compile Include="FileCtrl\TxtViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FileViewer\TxtViewer.Designer.cs">
+    <Compile Include="FileCtrl\TxtViewer.Designer.cs">
       <DependentUpon>TxtViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="`Extension\AppExceptionOpt.cs" />
+    <Compile Include="`Extension\DialogOpt.cs" />
+    <Compile Include="`Extension\EResize.cs" />
+    <Compile Include="`Extension\MenuOpt.cs" />
+    <Compile Include="`Extension\TreeNodeOpt.cs" />
+    <Compile Include="`Extension\WinFormOpt.cs" />
     <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
       <DependentUpon>AddItemConfigForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -343,8 +424,14 @@
     <EmbeddedResource Include="AddItemCtrl\ConcatPathForm.resx">
       <DependentUpon>ConcatPathForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\AttributeCtrl.resx">
+      <DependentUpon>AttributeCtrl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
       <DependentUpon>AttributeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\FieldInfoForm.resx">
+      <DependentUpon>FieldInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\MapNavigationTools.resx">
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
@@ -360,13 +447,37 @@
     <EmbeddedResource Include="ExplorerCtrl\ExplorerTreeCtrl\ExplorerTreeView.resx">
       <DependentUpon>ExplorerTreeView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExplorerCtrl\FileExplorer.resx">
+      <DependentUpon>FileExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExplorerCtrl\FileTreeView.resx">
+      <DependentUpon>FileTreeView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.resx">
       <DependentUpon>PathFolderBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.resx">
       <DependentUpon>PathFolderBrowserDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OleDbQueryForm.resx">
+    <EmbeddedResource Include="GridViewCtrl\PaginationBar.resx">
+      <DependentUpon>PaginationBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageCtrl\ErrorHandlerBox.resx">
+      <DependentUpon>ErrorHandlerBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageCtrl\InfoTipBox.resx">
+      <DependentUpon>InfoTipBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginCtrl\PluginContainerInfoCtrl.resx">
+      <DependentUpon>PluginContainerInfoCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginCtrl\PluginInfoCtrl.resx">
+      <DependentUpon>PluginInfoCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginCtrl\PluginManagerForm.resx">
+      <DependentUpon>PluginManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlCtrl\OleDbQueryForm.resx">
       <DependentUpon>OleDbQueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathCtrl\DataSelectorForm.resx">
@@ -375,7 +486,7 @@
     <EmbeddedResource Include="PathCtrl\PathBoxSimple.resx">
       <DependentUpon>PathBoxSimple.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathCtrl\WorkspaceSelector.resx">
+    <EmbeddedResource Include="ArcGisCtrl\WorkspaceSelector.resx">
       <DependentUpon>WorkspaceSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -400,13 +511,13 @@
     <EmbeddedResource Include="ArcGisCtrl\AttributeQueryForm.resx">
       <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileViewer\Picture\PicViewer.resx">
+    <EmbeddedResource Include="FileCtrl\Picture\PicViewer.resx">
       <DependentUpon>PicViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RowMergeView.resx">
       <DependentUpon>RowMergeView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileViewer\TxtViewer.resx">
+    <EmbeddedResource Include="FileCtrl\TxtViewer.resx">
       <DependentUpon>TxtViewer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -439,6 +550,67 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\table.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\gongju.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\guanbi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yuanxing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\错误.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\错误1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\log.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rizhi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\suggestion16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\email.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\homePage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\phone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\qq.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\QQqun.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wechat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\log16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

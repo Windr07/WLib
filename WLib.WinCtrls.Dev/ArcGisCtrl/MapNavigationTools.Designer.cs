@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
             DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
             DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
@@ -57,7 +58,7 @@
             DevExpress.Utils.ToolTipTitleItem toolTipTitleItem11 = new DevExpress.Utils.ToolTipTitleItem();
             this.grpMapNav = new DevExpress.XtraEditors.GroupControl();
             this.btnSelection = new DevExpress.XtraEditors.SimpleButton();
-            this.imageCollection_Nav = new DevExpress.Utils.ImageCollection();
+            this.imageCollection_Nav = new DevExpress.Utils.ImageCollection(this.components);
             this.btnSwipe = new DevExpress.XtraEditors.SimpleButton();
             this.btnIdentify = new DevExpress.XtraEditors.SimpleButton();
             this.btnAreaMeasure = new DevExpress.XtraEditors.SimpleButton();
@@ -100,9 +101,9 @@
             // 
             // btnSelection
             // 
-            this.btnSelection.ImageIndex = 21;
-            this.btnSelection.ImageList = this.imageCollection_Nav;
-            this.btnSelection.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnSelection.ImageOptions.ImageIndex = 10;
+            this.btnSelection.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnSelection.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnSelection.Location = new System.Drawing.Point(242, 23);
             this.btnSelection.Margin = new System.Windows.Forms.Padding(0);
             this.btnSelection.Name = "btnSelection";
@@ -120,34 +121,24 @@
             // imageCollection_Nav
             // 
             this.imageCollection_Nav.ImageStream = ((DevExpress.Utils.ImageCollectionStreamer)(resources.GetObject("imageCollection_Nav.ImageStream")));
-            this.imageCollection_Nav.Images.SetKeyName(0, "Nav_Area_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(1, "Nav_Identify_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(2, "Nav_Identify_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(3, "Nav_Left_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(4, "Nav_Left_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(5, "Nav_Length_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(6, "Nav_Pan_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(7, "Nav_Pan_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(8, "Nav_Right_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(9, "Nav_Right_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(10, "Nav_ZoomFull_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(11, "Nav_ZoomFull_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(12, "Nav_ZoomIn_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(13, "Nav_ZoomIn_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(14, "Nav_ZoomOut_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(15, "Nav_ZoomOut_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(16, "Nav_Close_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(17, "table2.png");
-            this.imageCollection_Nav.Images.SetKeyName(18, "EffectsSwipe16.png");
-            this.imageCollection_Nav.Images.SetKeyName(19, "EffectsSwipe32.png");
-            this.imageCollection_Nav.Images.SetKeyName(20, "SelectionSelectPolygonTool16.png");
-            this.imageCollection_Nav.Images.SetKeyName(21, "SelectionSelectTool16.png");
+            this.imageCollection_Nav.Images.SetKeyName(0, "fullExtent.png");
+            this.imageCollection_Nav.Images.SetKeyName(1, "zooIn.png");
+            this.imageCollection_Nav.Images.SetKeyName(2, "suoxiao.png");
+            this.imageCollection_Nav.Images.SetKeyName(3, "pan.png");
+            this.imageCollection_Nav.Images.SetKeyName(4, "left.png");
+            this.imageCollection_Nav.Images.SetKeyName(5, "right.png");
+            this.imageCollection_Nav.Images.SetKeyName(6, "icon-ceju.png");
+            this.imageCollection_Nav.Images.SetKeyName(7, "cemian.png");
+            this.imageCollection_Nav.Images.SetKeyName(8, "juanlian1.png");
+            this.imageCollection_Nav.Images.SetKeyName(9, "identify.png");
+            this.imageCollection_Nav.Images.SetKeyName(10, "xuanze1.png");
+            this.imageCollection_Nav.Images.SetKeyName(11, "close.png");
             // 
             // btnSwipe
             // 
-            this.btnSwipe.ImageIndex = 18;
-            this.btnSwipe.ImageList = this.imageCollection_Nav;
-            this.btnSwipe.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnSwipe.ImageOptions.ImageIndex = 8;
+            this.btnSwipe.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnSwipe.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnSwipe.Location = new System.Drawing.Point(194, 23);
             this.btnSwipe.Margin = new System.Windows.Forms.Padding(0);
             this.btnSwipe.Name = "btnSwipe";
@@ -164,44 +155,44 @@
             // 
             // btnIdentify
             // 
-            this.btnIdentify.ImageIndex = 1;
-            this.btnIdentify.ImageList = this.imageCollection_Nav;
-            this.btnIdentify.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnIdentify.ImageOptions.ImageIndex = 9;
+            this.btnIdentify.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnIdentify.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnIdentify.Location = new System.Drawing.Point(218, 23);
             this.btnIdentify.Margin = new System.Windows.Forms.Padding(0);
             this.btnIdentify.Name = "btnIdentify";
             this.btnIdentify.Size = new System.Drawing.Size(24, 24);
-            toolTipTitleItem3.Text = "信息查看";
+            toolTipTitleItem3.Text = "识别";
             superToolTip3.Items.Add(toolTipTitleItem3);
             this.btnIdentify.SuperTip = superToolTip3;
             this.btnIdentify.TabIndex = 0;
-            this.btnIdentify.ToolTip = "信息查看";
+            this.btnIdentify.ToolTip = "识别";
             this.btnIdentify.Click += new System.EventHandler(this.navigationButton_Click);
             // 
             // btnAreaMeasure
             // 
-            this.btnAreaMeasure.ImageIndex = 0;
-            this.btnAreaMeasure.ImageList = this.imageCollection_Nav;
-            this.btnAreaMeasure.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnAreaMeasure.ImageOptions.ImageIndex = 7;
+            this.btnAreaMeasure.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnAreaMeasure.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnAreaMeasure.Location = new System.Drawing.Point(170, 23);
             this.btnAreaMeasure.Margin = new System.Windows.Forms.Padding(0);
             this.btnAreaMeasure.Name = "btnAreaMeasure";
             this.btnAreaMeasure.Size = new System.Drawing.Size(24, 24);
-            toolTipTitleItem4.Text = "面积测量";
+            toolTipTitleItem4.Text = "测量面积";
             toolTipItem3.LeftIndent = 6;
             toolTipItem3.Text = "提示：请点击地图，左键量算，右键结束";
             superToolTip4.Items.Add(toolTipTitleItem4);
             superToolTip4.Items.Add(toolTipItem3);
             this.btnAreaMeasure.SuperTip = superToolTip4;
             this.btnAreaMeasure.TabIndex = 0;
-            this.btnAreaMeasure.ToolTip = "面积测量";
+            this.btnAreaMeasure.ToolTip = "测量面积";
             this.btnAreaMeasure.Click += new System.EventHandler(this.navigationButton_Click);
             // 
             // btnPan
             // 
-            this.btnPan.ImageIndex = 6;
-            this.btnPan.ImageList = this.imageCollection_Nav;
-            this.btnPan.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnPan.ImageOptions.ImageIndex = 3;
+            this.btnPan.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnPan.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnPan.Location = new System.Drawing.Point(74, 23);
             this.btnPan.Margin = new System.Windows.Forms.Padding(0);
             this.btnPan.Name = "btnPan";
@@ -215,28 +206,28 @@
             // 
             // btnLenMeasure
             // 
-            this.btnLenMeasure.ImageIndex = 5;
-            this.btnLenMeasure.ImageList = this.imageCollection_Nav;
-            this.btnLenMeasure.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnLenMeasure.ImageOptions.ImageIndex = 6;
+            this.btnLenMeasure.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnLenMeasure.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnLenMeasure.Location = new System.Drawing.Point(146, 23);
             this.btnLenMeasure.Margin = new System.Windows.Forms.Padding(0);
             this.btnLenMeasure.Name = "btnLenMeasure";
             this.btnLenMeasure.Size = new System.Drawing.Size(24, 24);
-            toolTipTitleItem6.Text = "距离测量";
+            toolTipTitleItem6.Text = "测量距离";
             toolTipItem4.LeftIndent = 6;
             toolTipItem4.Text = "请点击地图，左键量算，右键结束。";
             superToolTip6.Items.Add(toolTipTitleItem6);
             superToolTip6.Items.Add(toolTipItem4);
             this.btnLenMeasure.SuperTip = superToolTip6;
             this.btnLenMeasure.TabIndex = 0;
-            this.btnLenMeasure.ToolTip = "距离测量";
+            this.btnLenMeasure.ToolTip = "测量距离";
             this.btnLenMeasure.Click += new System.EventHandler(this.navigationButton_Click);
             // 
             // btnZoomOut
             // 
-            this.btnZoomOut.ImageIndex = 14;
-            this.btnZoomOut.ImageList = this.imageCollection_Nav;
-            this.btnZoomOut.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnZoomOut.ImageOptions.ImageIndex = 2;
+            this.btnZoomOut.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnZoomOut.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnZoomOut.Location = new System.Drawing.Point(50, 23);
             this.btnZoomOut.Margin = new System.Windows.Forms.Padding(0);
             this.btnZoomOut.Name = "btnZoomOut";
@@ -250,9 +241,9 @@
             // 
             // btnNextView
             // 
-            this.btnNextView.ImageIndex = 8;
-            this.btnNextView.ImageList = this.imageCollection_Nav;
-            this.btnNextView.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnNextView.ImageOptions.ImageIndex = 5;
+            this.btnNextView.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnNextView.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnNextView.Location = new System.Drawing.Point(122, 23);
             this.btnNextView.Margin = new System.Windows.Forms.Padding(0);
             this.btnNextView.Name = "btnNextView";
@@ -266,9 +257,9 @@
             // 
             // btnPreView
             // 
-            this.btnPreView.ImageIndex = 3;
-            this.btnPreView.ImageList = this.imageCollection_Nav;
-            this.btnPreView.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnPreView.ImageOptions.ImageIndex = 4;
+            this.btnPreView.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnPreView.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnPreView.Location = new System.Drawing.Point(98, 23);
             this.btnPreView.Margin = new System.Windows.Forms.Padding(0);
             this.btnPreView.Name = "btnPreView";
@@ -282,9 +273,9 @@
             // 
             // btnZoomIn
             // 
-            this.btnZoomIn.ImageIndex = 12;
-            this.btnZoomIn.ImageList = this.imageCollection_Nav;
-            this.btnZoomIn.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnZoomIn.ImageOptions.ImageIndex = 1;
+            this.btnZoomIn.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnZoomIn.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnZoomIn.Location = new System.Drawing.Point(26, 23);
             this.btnZoomIn.Margin = new System.Windows.Forms.Padding(0);
             this.btnZoomIn.Name = "btnZoomIn";
@@ -298,9 +289,9 @@
             // 
             // btnFullExtent
             // 
-            this.btnFullExtent.ImageIndex = 10;
-            this.btnFullExtent.ImageList = this.imageCollection_Nav;
-            this.btnFullExtent.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnFullExtent.ImageOptions.ImageIndex = 0;
+            this.btnFullExtent.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnFullExtent.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.btnFullExtent.Location = new System.Drawing.Point(2, 23);
             this.btnFullExtent.Margin = new System.Windows.Forms.Padding(0);
             this.btnFullExtent.Name = "btnFullExtent";
@@ -316,7 +307,7 @@
             // 
             this.lblMeasureInfo.AutoSize = true;
             this.lblMeasureInfo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.lblMeasureInfo.ForeColor = System.Drawing.Color.Fuchsia;
+            this.lblMeasureInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.lblMeasureInfo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.lblMeasureInfo.Location = new System.Drawing.Point(5, 71);
             this.lblMeasureInfo.Name = "lblMeasureInfo";
@@ -324,6 +315,7 @@
             this.lblMeasureInfo.TabIndex = 9;
             this.lblMeasureInfo.Text = "量算结果：";
             this.lblMeasureInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMeasureInfo.Visible = false;
             // 
             // lblSwipe
             // 
@@ -340,25 +332,26 @@
             // 
             this.cmbLayers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbLayers.Location = new System.Drawing.Point(68, 50);
+            this.cmbLayers.Location = new System.Drawing.Point(69, 50);
             this.cmbLayers.Name = "cmbLayers";
             this.cmbLayers.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cmbLayers.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.cmbLayers.Size = new System.Drawing.Size(200, 21);
+            this.cmbLayers.Size = new System.Drawing.Size(200, 20);
             this.cmbLayers.TabIndex = 12;
             this.cmbLayers.Visible = false;
             this.cmbLayers.SelectedIndexChanged += new System.EventHandler(this.cmbLayers_SelectedIndexChanged);
             // 
             // btnMeasureClose
             // 
-            this.btnMeasureClose.ImageIndex = 16;
-            this.btnMeasureClose.ImageList = this.imageCollection_Nav;
-            this.btnMeasureClose.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
-            this.btnMeasureClose.Location = new System.Drawing.Point(224, 51);
+            this.btnMeasureClose.ImageOptions.ImageIndex = 11;
+            this.btnMeasureClose.ImageOptions.ImageList = this.imageCollection_Nav;
+            this.btnMeasureClose.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btnMeasureClose.Location = new System.Drawing.Point(252, 52);
             this.btnMeasureClose.Name = "btnMeasureClose";
             this.btnMeasureClose.Size = new System.Drawing.Size(16, 16);
             this.btnMeasureClose.TabIndex = 13;
+            this.btnMeasureClose.Visible = false;
             this.btnMeasureClose.Click += new System.EventHandler(this.btnMeasureClose_Click);
             // 
             // lblMeasureTips
@@ -371,12 +364,13 @@
             this.lblMeasureTips.Size = new System.Drawing.Size(221, 12);
             this.lblMeasureTips.TabIndex = 10;
             this.lblMeasureTips.Text = "提示：请点击地图，左键量算，右键结束";
+            this.lblMeasureTips.Visible = false;
             // 
             // MapNavigationTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Transparent;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(245)))), ((int)(((byte)(241)))));
             this.Controls.Add(this.btnMeasureClose);
             this.Controls.Add(this.lblMeasureInfo);
             this.Controls.Add(this.lblMeasureTips);
@@ -384,7 +378,7 @@
             this.Controls.Add(this.cmbLayers);
             this.Controls.Add(this.lblSwipe);
             this.Name = "MapNavigationTools";
-            this.Size = new System.Drawing.Size(270, 92);
+            this.Size = new System.Drawing.Size(270, 90);
             ((System.ComponentModel.ISupportInitialize)(this.grpMapNav)).EndInit();
             this.grpMapNav.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection_Nav)).EndInit();

@@ -9,7 +9,6 @@ using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Database;
-using WLib.Database.DbBase;
 using WLib.WinCtrls.ArcGisCtrl;
 using FolderBrowserDialog = WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
 
@@ -86,7 +85,7 @@ namespace WLib.Samples.WinForm
         {
             if (this.mapViewer1.MainMapControl.LayerCount == 0) return;
             var form = new AttributeForm();
-            form.LoadAttribute(this.mapViewer1.MainMapControl.GetLayers().First() as ITable);
+            form.AttributeCtrl.LoadAttribute(this.mapViewer1.MainMapControl.GetLayers().First() as ITable);
             form.Show(this);
         }
 
@@ -109,11 +108,10 @@ namespace WLib.Samples.WinForm
             var workspace = WorkspaceEx.GetWorkSpace(@"c:\World.mdb");
             FeatureClassEx.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, "NewRiver", "河流");
 
-            var connString = ConnStringHelper.Dbf_OleDb4(@"c:\River.dbf");
+            var dbHelper1 = DbHelper.GetShpMdbGdbHelper(@"c:\River.dbf");
+            dbHelper1.ExcNonQuery(@"update River set Name = 'Pearl River' where RiverCode ='003'");
 
-            new DbHelper(connString, EDbProviderType.OleDb).ExcNonQuery(@"update River set Name = 'Pearl River' where RiverCode ='003'");
-
-            var connString2 = ConnStringHelper.Access_OleDb4(@"c:\World.mdb");
+            var dbHelper2 = DbHelper.GetShpMdbGdbHelper(@"c:\World.mdb");
         }
 
         private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)

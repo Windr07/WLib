@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WLib.WinCtrls.Dev</RootNamespace>
     <AssemblyName>WLib.WinCtrls.Dev</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,18 +30,25 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChineseLanguage">
       <HintPath>..\DLL\ChineseLanguage.dll</HintPath>
+    </Reference>
+    <Reference Include="Office">
+      <HintPath>..\DLL\Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,129 +58,144 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="DevExpress.BonusSkins.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=95fc6c5621878f0a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.BonusSkins.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.BonusSkins.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Charts.v10.1.Core, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Charts.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.Charts.v10.1.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Data.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Pdf.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.Data.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.RichEdit.v18.2.Export, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.ExpressApp.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.Win.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Printing.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.ExpressApp.Win.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.OfficeSkins.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=95fc6c5621878f0a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Data.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.OfficeSkins.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.RichEdit.v10.1.Core, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.ExpressApp.Xpo.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.RichEdit.v10.1.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Utils.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.ExpressApp.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.Utils.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Xpo.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.ExpressApp.Win.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.Xpo.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraBars.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Office.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraBars.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraCharts.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.RichEdit.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraCharts.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraCharts.v10.1.UI, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Utils.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraCharts.v10.1.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraEditors.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Xpo.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraEditors.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraBars.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraGrid.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraLayout.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraCharts.v18.2.Wizard, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraLayout.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraNavBar.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraCharts.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraNavBar.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraPivotGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraCharts.v18.2.UI, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraPivotGrid.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraPivotGrid.v10.1.Core, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraEditors.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraPivotGrid.v10.1.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraPrinting.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraPrinting.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraLayout.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraReports.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraRichEdit.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraNavBar.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraRichEdit.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraScheduler.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraPivotGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraScheduler.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraScheduler.v10.1.Core, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.PivotGrid.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraScheduler.v10.1.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraTreeList.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.XtraPrinting.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraTreeList.v10.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraVerticalGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Sparkline.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\YYGISLib.StartUp\DLL\DevExpress.XtraVerticalGrid.v10.1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v18.2.UI, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v18.2.Extensions, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Images.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.ADF, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
@@ -272,10 +295,41 @@
     <Compile Include="AddItemCtrl\ConcatItemForm.Designer.cs">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\ImageListBoxControlEx.cs">
+    <Compile Include="ArcGisCtrl\AttributeCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\AttributeCtrl.Designer.cs">
+      <DependentUpon>AttributeCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\AttributeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
+      <DependentUpon>AttributeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\FieldInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\FieldInfoForm.Designer.cs">
+      <DependentUpon>FieldInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ArcGisCtrl\MapViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
+      <DependentUpon>MapViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathCtrl\LabelPathBoxControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PathCtrl\LabelPathBoxControl.Designer.cs">
+      <DependentUpon>LabelPathBoxControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressViewCtrl\IDevProgressView.cs" />
+    <Compile Include="ListCtrl\ImageListBoxControlEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\ImageListBoxControlEx.Designer.cs">
+    <Compile Include="ListCtrl\ImageListBoxControlEx.Designer.cs">
       <DependentUpon>ImageListBoxControlEx.cs</DependentUpon>
     </Compile>
     <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
@@ -284,55 +338,68 @@
     <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
-      <DependentUpon>MapViewer.cs</DependentUpon>
-    </Compile>
     <Compile Include="ArcGisCtrl\PageNavigationTools.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ArcGisCtrl\PageNavigationTools.Designer.cs">
       <DependentUpon>PageNavigationTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeForm.cs">
+    <Compile Include="ChildCtrl\ChildFormHelper.cs" />
+    <Compile Include="ChildCtrl\ChildSizableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeForm.designer.cs">
-      <DependentUpon>AttributeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ChildForm\ChildFormHelper.cs" />
-    <Compile Include="ChildForm\ChildSizableForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChildForm\ChildSizableForm.Designer.cs">
+    <Compile Include="ChildCtrl\ChildSizableForm.Designer.cs">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChildForm\DockFormControl.cs">
+    <Compile Include="ChildCtrl\DockFormControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ChildForm\DockFormControl.Designer.cs">
+    <Compile Include="ChildCtrl\DockFormControl.Designer.cs">
       <DependentUpon>DockFormControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ChildForm\EMouseDirection.cs" />
-    <Compile Include="CtrlExtension\ChartControlEx.cs" />
-    <Compile Include="EditForm\EditItem.cs" />
-    <Compile Include="EditForm\ESaveState.cs" />
-    <Compile Include="EditForm\RowDataEditForm.cs">
+    <Compile Include="ChildCtrl\EMouseDirection.cs" />
+    <Compile Include="PluginCtrl\PluginRibbonFormHelper.cs" />
+    <Compile Include="StyleCtrl\ImageColorful\IamgeColorfulControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StyleCtrl\ImageColorful\IamgeColorfulControl.Designer.cs">
+      <DependentUpon>IamgeColorfulControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StyleCtrl\ImageColorful\ImageColorfulManager.cs" />
+    <Compile Include="StyleCtrl\ImageColorful\ImageStyleChangedEventArgs.cs" />
+    <Compile Include="StyleCtrl\ImageColorful\ImageStyleItemChangedEventArgs.cs" />
+    <Compile Include="StyleCtrl\Thematic\ThematicStyleChangedEventArgs.cs" />
+    <Compile Include="StyleCtrl\Thematic\ThematicSettingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StyleCtrl\Thematic\ThematicSettingControl.Designer.cs">
+      <DependentUpon>ThematicSettingControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StyleCtrl\StyleSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditForm\RowDataEditForm.Designer.cs">
+    <Compile Include="StyleCtrl\StyleSettingForm.Designer.cs">
+      <DependentUpon>StyleSettingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="`Extension\ChartControlEx.cs" />
+    <Compile Include="EditCtrl\EditItem.cs" />
+    <Compile Include="EditCtrl\ESaveState.cs" />
+    <Compile Include="EditCtrl\RowDataEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCtrl\RowDataEditForm.Designer.cs">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditForm\SaveEditEventArgs.cs" />
-    <Compile Include="CtrlExtension\ImageCollectionEx.cs" />
+    <Compile Include="EditCtrl\SaveEditEventArgs.cs" />
+    <Compile Include="`Extension\GridViewOpt.cs" />
+    <Compile Include="`Extension\ImageCollectionEx.cs" />
     <Compile Include="InputCtrl\InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InputCtrl\InputForm.Designer.cs">
       <DependentUpon>InputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressViewCtrl\DevProgressViewManager.cs" />
     <Compile Include="ListCtrl\ListBoxPlusControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -381,6 +448,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StyleCtrl\Thematic\ThematicManager.cs" />
+    <Compile Include="`Extension\SuperTipsEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
@@ -392,6 +461,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddItemCtrl\ConcatItemForm.resx">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\AttributeCtrl.resx">
+      <DependentUpon>AttributeCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
+      <DependentUpon>AttributeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\FieldInfoForm.resx">
+      <DependentUpon>FieldInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\MapNavigationTools.resx">
       <DependentUpon>MapNavigationTools.cs</DependentUpon>
@@ -405,16 +483,13 @@
       <DependentUpon>PageNavigationTools.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
-      <DependentUpon>AttributeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ChildForm\ChildSizableForm.resx">
+    <EmbeddedResource Include="ChildCtrl\ChildSizableForm.resx">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ChildForm\DockFormControl.resx">
+    <EmbeddedResource Include="ChildCtrl\DockFormControl.resx">
       <DependentUpon>DockFormControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditForm\RowDataEditForm.resx">
+    <EmbeddedResource Include="EditCtrl\RowDataEditForm.resx">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputCtrl\InputForm.resx">
@@ -422,6 +497,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ListCtrl\ListBoxPlusControl.resx">
       <DependentUpon>ListBoxPlusControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathCtrl\LabelPathBoxControl.resx">
+      <DependentUpon>LabelPathBoxControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathCtrl\PathBoxControl.resx">
       <DependentUpon>PathBoxControl.cs</DependentUpon>
@@ -435,16 +513,25 @@
     <EmbeddedResource Include="ProbarCtrl\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="ArcGisCtrl\AttributeQueryForm.resx">
       <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\SymbolSelectorForm.resx">
       <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="StyleCtrl\ImageColorful\IamgeColorfulControl.resx">
+      <DependentUpon>IamgeColorfulControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StyleCtrl\StyleSettingForm.resx">
+      <DependentUpon>StyleSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StyleCtrl\Thematic\ThematicSettingControl.resx">
+      <DependentUpon>ThematicSettingControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -469,7 +556,6 @@
       <Name>WLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

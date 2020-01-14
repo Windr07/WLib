@@ -12,7 +12,7 @@ using System.Text;
 namespace WLib.Data
 {
     /// <summary>
-    /// DataTable的操作
+    /// DataTable的创建、转置、转换等操作
     /// </summary>
     public static class DataTableOpt
     {

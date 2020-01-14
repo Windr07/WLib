@@ -17,11 +17,11 @@ namespace WLib.Data.Format
         /// <summary>
         /// "〇一二三四五六七八九"
         /// </summary>
-        public static string ChnNum = "〇一二三四五六七八九";
+        private static readonly string ChnNum = "〇一二三四五六七八九";
         /// <summary>
         /// "十百千万十百千亿"
         /// </summary>
-        public static string ChnUnit = "十百千万十百千亿";
+        private static readonly string ChnUnit = "十百千万十百千亿";
         /// <summary>
         /// 被替换的字符串
         /// </summary>

@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------- 
 // auth： Source by WilsonProgramming
 // date： 2019/3
-// desc： None
+// desc： 目录树控件，用于方便加入窗体中显示，而不必使用FolderBrowserDialog弹框显示
 // mdfy:  Windragon
 //----------------------------------------------------------------*/
 
@@ -22,7 +22,7 @@ namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
         /// </summary>
         private TreeNode _currentNode;
         /// <summary>
-        /// 
+        /// 代表目录树节点的信息，即文件夹（或磁盘等）相关信息
         /// </summary>
         internal ShellItem SelectShellItem => (ShellItem)TreeViewWnd.SelectedNode?.Tag;
 
@@ -99,7 +99,7 @@ namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
             return treeNode;
         }
         /// <summary>
-        /// 刷新控件，重新整个目录结构（加载根节点 Loads the root TreeView nodes）
+        /// 刷新控件，重新显示整个目录结构（加载根节点 Loads the root TreeView nodes）
         /// </summary>
         private void LoadRootNodes()
         {
@@ -162,7 +162,7 @@ namespace WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl
                         if (shellItem.IsFolder)
                         {
                             var dir = Path.GetDirectoryName(shellItem.Path);
-                            FileOpt.ReNameFolder(shellItem.Path, e.Label);
+                            DirectoryOpt.ReNameFolder(shellItem.Path, e.Label);
                             shellItem.DisplayName = e.Label;
                             shellItem.Path = Path.Combine(dir, e.Label);
                             e.Node.Text = e.Label;

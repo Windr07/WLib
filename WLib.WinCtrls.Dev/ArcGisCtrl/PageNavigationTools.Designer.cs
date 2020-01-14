@@ -60,8 +60,8 @@
             // 
             // panPageLayout
             // 
+            this.panPageLayout.ImageIndex = 3;
             this.panPageLayout.ImageList = this.imageCollection_Nav;
-            this.panPageLayout.ImageIndex = 6;
             this.panPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.panPageLayout.Location = new System.Drawing.Point(74, 23);
             this.panPageLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -73,8 +73,8 @@
             // 
             // zoomOutPageLayout
             // 
+            this.zoomOutPageLayout.ImageIndex = 2;
             this.zoomOutPageLayout.ImageList = this.imageCollection_Nav;
-            this.zoomOutPageLayout.ImageIndex = 14;
             this.zoomOutPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.zoomOutPageLayout.Location = new System.Drawing.Point(50, 23);
             this.zoomOutPageLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -86,8 +86,8 @@
             // 
             // nextViewPageLayout
             // 
+            this.nextViewPageLayout.ImageIndex = 5;
             this.nextViewPageLayout.ImageList = this.imageCollection_Nav;
-            this.nextViewPageLayout.ImageIndex = 8;
             this.nextViewPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.nextViewPageLayout.Location = new System.Drawing.Point(122, 23);
             this.nextViewPageLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -99,8 +99,8 @@
             // 
             // preViewPageLayout
             // 
+            this.preViewPageLayout.ImageIndex = 4;
             this.preViewPageLayout.ImageList = this.imageCollection_Nav;
-            this.preViewPageLayout.ImageIndex = 3;
             this.preViewPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.preViewPageLayout.Location = new System.Drawing.Point(98, 23);
             this.preViewPageLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -112,8 +112,8 @@
             // 
             // zoomInPageLayout
             // 
+            this.zoomInPageLayout.ImageIndex = 1;
             this.zoomInPageLayout.ImageList = this.imageCollection_Nav;
-            this.zoomInPageLayout.ImageIndex = 12;
             this.zoomInPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.zoomInPageLayout.Location = new System.Drawing.Point(26, 23);
             this.zoomInPageLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -125,8 +125,8 @@
             // 
             // fullExtentPageLayout
             // 
+            this.fullExtentPageLayout.ImageIndex = 0;
             this.fullExtentPageLayout.ImageList = this.imageCollection_Nav;
-            this.fullExtentPageLayout.ImageIndex = 10;
             this.fullExtentPageLayout.ImageLocation = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
             this.fullExtentPageLayout.Location = new System.Drawing.Point(2, 23);
             this.fullExtentPageLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -139,28 +139,18 @@
             // imageCollection_Nav
             // 
             this.imageCollection_Nav.ImageStream = ((DevExpress.Utils.ImageCollectionStreamer)(resources.GetObject("imageCollection_Nav.ImageStream")));
-            this.imageCollection_Nav.Images.SetKeyName(0, "Nav_Area_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(1, "Nav_Identify_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(2, "Nav_Identify_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(3, "Nav_Left_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(4, "Nav_Left_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(5, "Nav_Length_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(6, "Nav_Pan_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(7, "Nav_Pan_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(8, "Nav_Right_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(9, "Nav_Right_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(10, "Nav_ZoomFull_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(11, "Nav_ZoomFull_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(12, "Nav_ZoomIn_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(13, "Nav_ZoomIn_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(14, "Nav_ZoomOut_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(15, "Nav_ZoomOut_32.png");
-            this.imageCollection_Nav.Images.SetKeyName(16, "Nav_Close_16.png");
-            this.imageCollection_Nav.Images.SetKeyName(17, "table2.png");
-            this.imageCollection_Nav.Images.SetKeyName(18, "EffectsSwipe16.png");
-            this.imageCollection_Nav.Images.SetKeyName(19, "EffectsSwipe32.png");
-            this.imageCollection_Nav.Images.SetKeyName(20, "SelectionSelectPolygonTool16.png");
-            this.imageCollection_Nav.Images.SetKeyName(21, "SelectionSelectTool16.png");
+            this.imageCollection_Nav.Images.SetKeyName(0, "fullExtent.png");
+            this.imageCollection_Nav.Images.SetKeyName(1, "fangda.png");
+            this.imageCollection_Nav.Images.SetKeyName(2, "suoxiao.png");
+            this.imageCollection_Nav.Images.SetKeyName(3, "iconpingyi.png");
+            this.imageCollection_Nav.Images.SetKeyName(4, "icon07.png");
+            this.imageCollection_Nav.Images.SetKeyName(5, "right.png");
+            this.imageCollection_Nav.Images.SetKeyName(6, "icon-ceju.png");
+            this.imageCollection_Nav.Images.SetKeyName(7, "cemian.png");
+            this.imageCollection_Nav.Images.SetKeyName(8, "juanlian.png");
+            this.imageCollection_Nav.Images.SetKeyName(9, "identify.png");
+            this.imageCollection_Nav.Images.SetKeyName(10, "selectFeature.png");
+            this.imageCollection_Nav.Images.SetKeyName(11, "关闭.png");
             // 
             // PageNavigationTools
             // 
