@@ -15,23 +15,17 @@ namespace WLib.ExtProgress
         /// <summary>
         /// 日志时间（字符串）
         /// </summary>
-        public string TimeString;
+        public string TimeString { get; set; }
         /// <summary>
         /// 日志标题
         /// </summary>
-        public string Title;
+        public string Title { get; set; }
         /// <summary>
         /// 日志文件路径
         /// </summary>
-        public string Path;
-        /// <summary>
-        /// 输出："日志时间\t日志标题"
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{TimeString}\t{Title}";
-        }
+        public string Path { get; set; }
+
+
         /// <summary>
         /// 日志关键信息及所在路径
         /// </summary>
@@ -40,9 +34,14 @@ namespace WLib.ExtProgress
         /// <param name="path">日志文件路径</param>
         public ProLogFileInfo(string timeString, string title, string path)
         {
-            this.TimeString = timeString;
-            this.Title = title;
-            this.Path = path;
+            TimeString = timeString;
+            Title = title;
+            Path = path;
         }
+        /// <summary>
+        /// 输出："日志时间\t日志标题"
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"{TimeString}\t{Title}";
     }
 }
