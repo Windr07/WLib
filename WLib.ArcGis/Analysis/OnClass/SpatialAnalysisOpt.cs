@@ -5,16 +5,16 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.ArcGis.Geometry;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.Analysis.OnClass
 {
@@ -35,7 +35,7 @@ namespace WLib.ArcGis.Analysis.OnClass
         {
             var workspaceType = WorkspaceEx.GetDefaultWorkspaceType(outPath);
             if (workspaceType == EWorkspaceType.Default)
-                throw new Exception($"工作空间路径(outPath)不存在！{outPath} 该路径必须是已存在的mdb文件路径，或shp所在文件夹路径，或gdb文件夹路径");
+                throw new Exception($"工作空间路径(outPath)不存在！{outPath} 该路径必须是已存在的mdb文件路径，或shp所在文件夹路径，或gdb文件夹路径，或sde连接字符串");
 
             IFeatureClassName outClassName = new FeatureClassNameClass
             {

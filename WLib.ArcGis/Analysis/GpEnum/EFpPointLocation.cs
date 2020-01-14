@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace WLib.ArcGis.Analysis.GpEnum
+﻿namespace WLib.ArcGis.Analysis.GpEnum
 {
     /// <summary>
     /// 要素转点工具中，指示输出点的位置

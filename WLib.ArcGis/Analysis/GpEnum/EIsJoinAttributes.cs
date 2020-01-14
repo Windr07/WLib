@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace WLib.ArcGis.Analysis.GpEnum
+﻿namespace WLib.ArcGis.Analysis.GpEnum
 {
     /// <summary>
     /// 相交工具中，确定输入要素的哪些属性将传递到输出要素类
