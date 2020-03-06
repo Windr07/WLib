@@ -43,5 +43,9 @@ namespace WLib.ExtProgress.Core
         /// 执行进度+1的事件
         /// </summary>
         event EventHandler ProgressAdd;
+        /// <summary>
+        /// 操作执行过程向外部输出实时数据的事件
+        /// </summary>
+        event EventHandler<ProDataOutputEventArgs> DataOutput;
     }
 }

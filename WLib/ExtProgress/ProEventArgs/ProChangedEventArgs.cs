@@ -6,7 +6,6 @@
 //----------------------------------------------------------------*/
 
 using System;
-using WLib.ExtProgress.Core;
 
 namespace WLib.ExtProgress.ProEventArgs
 {

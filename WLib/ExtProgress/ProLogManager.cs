@@ -1,124 +1,102 @@
 ﻿/*---------------------------------------------------------------- 
 // auth： Windragon
-// date： 2017/2/23 10:35:03
+// date： 2019/10
 // desc： None
 // mdfy:  None
 //----------------------------------------------------------------*/
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
+using WLib.Database;
 using WLib.ExtProgress.Core;
 
 namespace WLib.ExtProgress
 {
     /// <summary>
-    /// 进度信息的日志管理
+    /// 日志信息管理，提供将<see cref="IProgressOperation"/>记录的进度信息写入日志文件等方法
     /// </summary>
-    public class ProLogManager
+    public static class ProLogManager
     {
         /// <summary>
-        /// 日志文件名的前缀（默认为"Log"）
+        /// 生成日志文件，将处理信息写入日志文件
+        /// <para>日志文件格式示例：Log2019-10-11 10：01：21.txt</para>
         /// </summary>
-        public string LogPrefix { get; set; }
-        /// <summary>
-        /// 日志保存目录
-        /// </summary>
-        public string LogDirctory { get; set; }
-        /// <summary>
-        /// 进度信息的日志管理，日志默认存放在“程序目录\Log”目录下
-        /// </summary>
-        /// <param name="logDirctory">日志保存目录，值为null时使用“程序所在目录\\Log”</param>
+        /// <param name="logDirectory">日志保存目录，值为null或空白时自动赋值为：[软件生成目录]\Log</param>
         /// <param name="logPrefix">日志文件名的前缀</param>
-        public ProLogManager(string logDirctory = null, string logPrefix = "Log")
+        public static void WriteLogFile(this IProgressOperation opt, string logDirectory = null, string logPrefix = "Log")
         {
-            LogDirctory = string.IsNullOrEmpty(logDirctory) ? AppDomain.CurrentDomain.BaseDirectory + "Log" : logDirctory;
-            LogPrefix = logPrefix;
-        }
+            var Msgs = opt.Msgs;
+            var sb = new StringBuilder();
+            sb.AppendLine("操作ID：" + Msgs.Id);
+            sb.AppendLine("功能名称：" + Msgs.Name);
+            sb.AppendLine("功能描述：" + Msgs.Description);
+            sb.AppendLine("模块代码：" + Msgs.Code);
+            sb.AppendLine("开始时间：" + Msgs.StartTime);
+            sb.AppendLine("完成时间：" + Msgs.EndTime);
+            sb.AppendLine("程序名称：" + Msgs.AssemblyName);
+            sb.AppendLine("程序版本：" + Msgs.AssemblyVersion);
+            sb.AppendLine("操作异常：" + Msgs.Error);
+            sb.AppendLine("\r\n---------------------------------------进程信息---------------------------------------");
+            GetOptMessages(sb, opt);
 
-
-        /// <summary>
-        /// 生成日志文件，将处理信息写入日志文件
-        /// </summary>
-        /// <param name="opt">进度信息</param>
-        /// <param name="errMsg">异常信息</param>
-        public void WriteLog(IProgressOperation opt, string errMsg = "")
-        {
-            StringBuilder sb = new StringBuilder();
-            AssemblyName assemblyName = Assembly.GetEntryAssembly().GetName();
-            sb.AppendLine("功能名称：" + opt.Name);
-            sb.AppendLine("功能描述：" + opt.Description);
-            sb.AppendLine("模块代码：" + opt.GetType().Name);
-            sb.AppendLine("开始时间：" + opt.StartTime);
-            sb.AppendLine("完成时间：" + opt.EndTime);
-            sb.AppendLine("程序名称：" + assemblyName.Name);
-            sb.AppendLine("程序版本：" + assemblyName.Version);
-            sb.AppendLine("操作异常：" + errMsg);
-            sb.AppendLine("\r\n\r\n\r\n---------------------------------------进程信息---------------------------------------");
-            sb.AppendLine(opt.Msgs.AllMessage);
-
-            WriteLog(sb.ToString());
+            logDirectory = string.IsNullOrWhiteSpace(logDirectory) ? AppDomain.CurrentDomain.BaseDirectory + "Log" : logDirectory;
+            Directory.CreateDirectory(logDirectory);
+            string logFilePath = Path.Combine(logDirectory, logPrefix + DateTime.Now.ToString("yyyy-MM-dd HH：mm：ss") + ".txt");
+            File.WriteAllText(logFilePath, sb.ToString());
         }
         /// <summary>
-        /// 生成日志文件，将处理信息写入日志文件
+        /// 
         /// </summary>
-        /// <param name="message">处理信息</param>
-        public void WriteLog(string message)
+        /// <param name="sbMessage"></param>
+        /// <param name="opt"></param>
+        private static void GetOptMessages(StringBuilder sbMessage, IProgressOperation opt)
         {
-            Directory.CreateDirectory(LogDirctory);
-
-            string logFilePath = Path.Combine(LogDirctory, LogPrefix + DateTime.Now.ToString("yyyy-MM-dd HH：mm：ss") + ".txt");
-            File.WriteAllText(logFilePath, message);
+            sbMessage.AppendLine($"【{opt.Name}】");
+            sbMessage.AppendLine(opt.Msgs.GetAllMessage());
+            foreach (var subOpt in opt.SubProgressOperations)
+                GetOptMessages(sbMessage, subOpt);
         }
         /// <summary>
-        /// 获取所有日志的关键信息及所在路径
+        /// 将进度信息写入数据库中
         /// </summary>
-        /// <returns></returns>
-        public ProLogFileInfo[] GetAllLogFilesInfo()
+        /// <param name="dbConnection"></param>
+        /// <param name="tableName"></param>
+        public static void WriteLogDb(this IProgressOperation opt, DbHelper dbHelper, string tableName)
         {
-            var logFileInfos = new List<ProLogFileInfo>();
-            if (Directory.Exists(LogDirctory))
-            {
-                var logPaths = Directory.GetFiles(LogDirctory, LogPrefix + "*.txt");
-                foreach (var path in logPaths)
-                {
-                    var strTime = Path.GetFileNameWithoutExtension(path).Replace(LogPrefix, "");
-                    var streamReader = new StreamReader(path);
-                    var firstLine = streamReader.ReadLine();
-                    firstLine = firstLine.Replace("功能描述：", "").Replace("功能名称：", "");
-                    streamReader.Close();
-
-                    logFileInfos.Add(new ProLogFileInfo(strTime, firstLine, path));
-                }
-            }
-            logFileInfos = logFileInfos.OrderByDescending(v => v.TimeString).ToList();
-            return logFileInfos.ToArray();
+            //var properties = opt.Msgs.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(v => v.CanWrite && v.CanWrite).ToArray();
+            //var propertyName = properties.Select(v => v.Name);
+            //var fields = propertyName.Aggregate((a, b) => a + "," + b);
+            //var values = properties.Select(v => v.GetValue(opt, null).ToString());
+            var m = opt.Msgs;
+            var fields = $"{nameof(m.Id)},{nameof(m.Name)},{nameof(m.Description)},{nameof(m.Code)},{nameof(m.StartTime)},{nameof(m.EndTime)},{nameof(m.AssemblyName)},{nameof(m.AssemblyVersion)},{nameof(m.Error)},{nameof(m.AllMessage)}";
+            var values = $"{m.Id},'{m.Name}','{m.Description}','{m.Code}','{m.StartTime}','{m.EndTime}','{m.AssemblyName}','{m.AssemblyVersion}','{m.Error}','{m.AllMessage}'";
+            var sql = $"insert into {tableName} ({fields}) values ({values})";
+            dbHelper.ExcNonQuery(sql);
         }
         /// <summary>
         /// 获取最近生成的日志文件
         /// （日志目录或文件不存在则返回null）
         /// </summary>
-        public string GetRecentlyLogFilePath()
+        public static string GetRecentlyLogFilePath(string logDirctory, string logPrefix = "Log")
         {
             string resultPath = null;
-            if (Directory.Exists(LogDirctory))
+            if (Directory.Exists(logDirctory))
             {
                 List<DateTime> times = new List<DateTime>();
-                var logPaths = Directory.GetFiles(LogDirctory, LogPrefix + "*.txt");
+                var logPaths = Directory.GetFiles(logDirctory, logPrefix + "*.txt");
                 foreach (var path in logPaths)
                 {
-                    var strTime = Path.GetFileNameWithoutExtension(path).Replace(LogPrefix, "").Replace("：", ":");
+                    var strTime = Path.GetFileNameWithoutExtension(path).Replace(logPrefix, "").Replace("：", ":");
                     if (DateTime.TryParse(strTime, out var dateTime))
                         times.Add(dateTime);
                 }
                 if (times.Count > 0)
                 {
                     var lastTime = times.Max();
-                    resultPath = Path.Combine(LogDirctory, LogPrefix + lastTime.ToString("yyyy-MM-dd HH：mm：ss") + ".txt");
+                    resultPath = Path.Combine(logDirctory, logPrefix + lastTime.ToString("yyyy-MM-dd HH：mm：ss") + ".txt");
                 }
             }
             return resultPath;
@@ -128,30 +106,20 @@ namespace WLib.ExtProgress
         ///  （日志目录或文件不存在则不进行任何操作）
         /// </summary>
         /// <returns></returns>
-        public string LocateRecentlyLogFile()
+        public static string LocateRecentlyLogFile(string logDirctory, string logPrefix = "Log")
         {
-            string logPath = GetRecentlyLogFilePath();
+            string logPath = GetRecentlyLogFilePath(logDirctory, logPrefix);
             if (logPath != null && File.Exists(logPath))
                 System.Diagnostics.Process.Start("Explorer.exe", "/select,\"" + logPath + "\"");
             return logPath;
         }
         /// <summary>
-        /// 打开日志目录
-        /// </summary>
-        /// <returns></returns>
-        public string OpenLogDirectory()
-        {
-            if (Directory.Exists(LogDirctory))
-                Process.Start(LogDirctory);
-            return LogDirctory;
-        }
-        /// <summary>
         /// 清空日志文件
         /// </summary>
-        public void ClearLogFiles()
+        public static void ClearLogFiles(string logDirctory)
         {
-            Directory.Delete(LogDirctory, true);
-            Directory.CreateDirectory(LogDirctory);
+            Directory.Delete(logDirctory, true);
+            Directory.CreateDirectory(logDirctory);
         }
     }
 }

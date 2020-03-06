@@ -17,10 +17,6 @@ namespace WLib.ExtProgress.Core
     {
         #region 属性
         /// <summary>
-        /// 进行操作的输入数据
-        /// </summary>
-        object InputData { get; set; }
-        /// <summary>
         /// 操作的名称，用于标识操作
         /// </summary>
         string Name { get; set; }
@@ -28,6 +24,15 @@ namespace WLib.ExtProgress.Core
         /// 对操作的描述
         /// </summary>
         string Description { get; set; }
+
+        /// <summary>
+        /// 进度操作的输入数据
+        /// </summary>
+        object InputData { get; set; }
+        /// <summary>
+        /// 进度操作的结果数据
+        /// </summary>
+        object ResultData { get; }
 
         /// <summary>
         /// 是否中止执行操作
@@ -45,7 +50,6 @@ namespace WLib.ExtProgress.Core
         /// 是否已启用子线程且在运行阶段
         /// </summary>
         bool IsOnSubThread { get; }
-
         /// <summary>
         /// 操作开始时间
         /// </summary>
@@ -54,11 +58,11 @@ namespace WLib.ExtProgress.Core
         /// 操作结束时间
         /// </summary>
         DateTime EndTime { get; }
-
         /// <summary>
         /// 进度信息
         /// </summary>
         IProgressMsgs Msgs { get; }
+
         /// <summary>
         /// 当前操作包含的子操作
         /// <para>这些子操作应在MainOperation中进行处理</para>
