@@ -5,6 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace WLib.Model
     /// <summary>
     /// 放入列表中的对象集合，提供排序方法
     /// </summary>
+    [Serializable]
     public class ItemObjectCollection : List<ItemObject>
     {
         /// <summary>

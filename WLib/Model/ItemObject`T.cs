@@ -5,12 +5,15 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
+
 namespace WLib.Model
 {
     /// <summary>
     /// 放入列表中的对象
     /// </summary>
     /// <typeparam name="T">与对象关联的用户定义数据</typeparam>
+    [Serializable]
     public class ItemObject<T> : ItemObject
     {
         /// <summary>

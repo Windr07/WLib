@@ -20,7 +20,7 @@ namespace WLib.Model
     {
         /// <summary>
         /// 通过将对象序列化、反序列二进制流的方式深拷贝对象
-        /// （注意对象必须可序列化[Serializable]）
+        /// <para>注意对象必须可序列化（即包含<see cref="SerializableAttribute"/>特性），对象的非基本类型属性也必需可序列化（包含<see cref="SerializableAttribute"/>特性）</para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -28,7 +28,7 @@ namespace WLib.Model
         public static T CopyBySerialize<T>(this T obj)
         {
             if (!typeof(T).IsSerializable)
-                throw new ArgumentException( $"指定类型{typeof(T).FullName}不能序列化，"+
+                throw new ArgumentException($"指定类型{typeof(T).FullName}不能序列化，" +
                     $"不能通过{nameof(CopyBySerialize)}方法深拷贝对象，请改用{nameof(CopyByReflect)}或其他方法！", nameof(obj));
 
             if (Object.ReferenceEquals(obj, null))
@@ -51,15 +51,34 @@ namespace WLib.Model
         /// <returns></returns>
         public static T CopyByReflect<T>(this T obj)
         {
-            if (obj is string || obj.GetType().IsValueType)//如果是字符串或值类型则直接返回
+            //1、如果是字符串或值类型则直接返回
+            if (obj is string || obj.GetType().IsValueType)
                 return obj;
 
-            object newObject = Activator.CreateInstance(obj.GetType());
-            FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            //2、如果是数组类型，使用Array.Copy
+            var objType = obj.GetType();
+            object newObject;
+            if (objType.IsArray)
+            {
+                newObject = Activator.CreateInstance(objType, (obj as Array).Length);
+                Array.Copy(obj as Array, newObject as Array, (obj as Array).Length);
+                return (T)newObject;
+            }
+
+            //3、其他引用类型则递归对象字段进行拷贝
+            newObject = Activator.CreateInstance(objType);
+            FieldInfo[] fields = objType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
             foreach (FieldInfo field in fields)
             {
-                try { field.SetValue(newObject, CopyByReflect(field.GetValue(obj))); }
-                catch { }
+                try
+                {
+                    var fieldValue = field.GetValue(obj);
+                    if (fieldValue == null || field.IsLiteral) continue;
+
+                    var newFieldValue = CopyByReflect(fieldValue);
+                    field.SetValue(newObject, newFieldValue);
+                }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
             }
             return (T)newObject;
         }

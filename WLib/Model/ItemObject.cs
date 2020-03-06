@@ -12,6 +12,7 @@ namespace WLib.Model
     /// <summary>
     /// 放入列表中的对象
     /// </summary>
+    [Serializable]
     public class ItemObject : IComparable<ItemObject>
     {
         /// <summary>
