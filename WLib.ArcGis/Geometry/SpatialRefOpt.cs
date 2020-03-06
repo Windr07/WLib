@@ -15,8 +15,6 @@ using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Carto.Map;
 using WLib.ArcGis.GeoDatabase.Fields;
 
-// ReSharper disable PossibleMultipleEnumeration
-
 namespace WLib.ArcGis.Geometry
 {
     //关于坐标系、坐标系代码(WKID/SRID/EPSG Code)：
@@ -58,6 +56,8 @@ namespace WLib.ArcGis.Geometry
         /// <returns></returns>
         public static ISpatialReference GetSpatialRef(this IFeatureLayer featureLayer)
         {
+            if ( featureLayer?.FeatureClass == null)
+                throw new Exception($"无法获取{featureLayer?.Name}图层的坐标系，该图层为空或者图层没有绑定要素类！");
             IGeoDataset geoDataset = (IGeoDataset)featureLayer.FeatureClass;
             return geoDataset.SpatialReference;
         }
@@ -330,6 +330,15 @@ namespace WLib.ArcGis.Geometry
 
         #region 对比坐标系是否一致
         /// <summary>
+        /// "坐标系不一致"
+        /// </summary>
+        public static string CheckSpatialRef_Message = "✘坐标系不一致";
+        /// <summary>
+        /// "✘坐标系具体参数有所差异，请注意调整坐标系！"
+        /// </summary>
+        public static string CheckSpatialRef_Message_Detail = "✘坐标系不是完全一致的，请注意调整坐标系！";
+
+        /// <summary>
         /// 简单地根据名称和FactoryCode，判断两个坐标系是否一致
         /// </summary>
         /// <param name="spatialRef1"></param>
@@ -351,7 +360,6 @@ namespace WLib.ArcGis.Geometry
             string str2 = GetSpatialRefDetail(spatialRef2);
             return str1.Trim() == str2.Trim();
         }
-
         /// <summary>
         /// 判断两个坐标系是否一致
         /// </summary>
@@ -367,11 +375,11 @@ namespace WLib.ArcGis.Geometry
                 var str1 = GetSpatialRefDetail(spatialRef1);
                 var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
-                message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
+                message = result ? str1 : $"{CheckSpatialRef_Message_Detail}\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
             }
             else
             {
-                message = $"✘坐标系不一致！\r\n\t坐标系1：{spatialRef1.Name}\r\n\t坐标系2：{spatialRef2.Name}";
+                message = $"{CheckSpatialRef_Message}\r\n\t坐标系1：{spatialRef1.Name}\r\n\t坐标系2：{spatialRef2.Name}";
             }
             return result;
         }
@@ -392,12 +400,12 @@ namespace WLib.ArcGis.Geometry
                 var str1 = GetSpatialRefDetail(spatialRef1);
                 var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
-                message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
+                message = result ? str1 : $"{CheckSpatialRef_Message_Detail}\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
             }
             else
             {
                 message =
-                    $"✘坐标系不一致！\r\n\t{featureClass1.AliasName}-坐标系：{spatialRef1.Name}\r\n\t{featureClass2.AliasName}-坐标系：{spatialRef2.Name}";
+                    $"{CheckSpatialRef_Message}\r\n\t{featureClass1.AliasName}-坐标系：{spatialRef1.Name}\r\n\t{featureClass2.AliasName}-坐标系：{spatialRef2.Name}";
             }
             return result;
         }
@@ -424,7 +432,39 @@ namespace WLib.ArcGis.Geometry
 
             if (result == false)
             {
-                sb.Insert(0, "各图层坐标系不是完全一致的，请先调整坐标系！\r\n");
+                sb.Insert(0, $"{CheckSpatialRef_Message_Detail}\r\n");
+                message = sb.ToString();
+            }
+            else
+            {
+                message = null;
+            }
+            return result;
+        }
+        /// <summary>
+        /// 检查多个要素类的坐标系是否完全一致
+        /// </summary>
+        /// <param name="spatialRefs"></param>
+        /// <param name="message">判断结果信息，若要素类坐标系一致，此值为坐标系详细参数，否则提示坐标不一致并列出各坐标系详细参数</param>
+        /// <returns></returns>
+        public static bool CheckSpatialRef(this IEnumerable<ISpatialReference> spatialRefs, out string message)
+        {
+            bool result = true;
+            StringBuilder sb = new StringBuilder();
+            string str1 = GetSpatialRefDetail(spatialRefs.ElementAt(0));
+            sb.AppendFormat("坐标系1:\r\n{0}\r\n", str1);
+
+            for (int i = 1; i < spatialRefs.Count(); i++)
+            {
+                string str2 = GetSpatialRefDetail(spatialRefs.ElementAt(i));
+                if (str1.Trim() != str2.Trim())
+                    result = false;
+                sb.AppendFormat("\r\n坐标系{0}:\r\n{1}\r\n", i + 1, str2);
+            }
+
+            if (result == false)
+            {
+                sb.Insert(0, $"{CheckSpatialRef_Message_Detail}\r\n");
                 message = sb.ToString();
             }
             else
@@ -638,7 +678,16 @@ namespace WLib.ArcGis.Geometry
             int minBelt = 25, maxBelt = 45, minWkid = 4513;
             if (belt < minBelt || belt > maxBelt)
                 throw new Exception($"带号超出范围，GCGS2000 3度分带的带号范围为{minBelt}至{maxBelt}");
-            return belt + minWkid;
+            return belt + minWkid - 25;
+        }
+        /// <summary>
+        ///  获取“国家2000高斯克吕格3度分带含带号”的全部坐标系的WKID
+        ///  <para>范围[4513,4533]</para>
+        /// </summary>
+        /// <returns></returns>
+        public static int[] GetWkid_Gauss3_GCGS2000()
+        {
+            return Enumerable.Range(4513, 21).ToArray();//4513至4533
         }
         #endregion
 

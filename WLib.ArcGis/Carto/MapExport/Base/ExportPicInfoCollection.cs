@@ -42,9 +42,7 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         public void Add(double dpi, bool overwrite, params string[] extensions)
         {
             foreach (var extension in extensions) 
-            {
                 base.Add(new ExportPicInfo(extension, dpi, overwrite));
-            }
         }
     }
 }

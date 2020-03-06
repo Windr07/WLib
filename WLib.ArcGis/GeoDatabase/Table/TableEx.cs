@@ -607,6 +607,18 @@ namespace WLib.ArcGis.GeoDatabase.Table
         }
         #endregion
 
+        /// <summary>
+        /// 获取表格名称
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string GetName(this ITable table) => ((IDataset)table).Name;
+        /// <summary>
+        /// 获取表格别名
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string GetAliasName(this ITable table) => ((IObjectClass)table).AliasName;
 
         /// <summary>
         /// 创建查询要素的游标

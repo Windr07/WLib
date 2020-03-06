@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using WLib.ArcGis.GeoDatabase.Table;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 
@@ -25,8 +26,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
      *
      * 2、关于IQueryFilter的WhereClause详解：http://www.cnblogs.com/GISRSMAN/articles/4618188.html
      *    （1）在mdb中，where field = 'fieldValue'中，fieldValue不区分大小写，其他数据库区分大小写，应使用UPPER("Field") = 'FIELDVALUE' 
-     *    （2）关于通配符：在coverage, shp, INFO table, dBASE table, or shared geodatabase查询，'_' 表示任何一个字符， '%' 表示0到任意个字符.
-     *         在mdb查询，'?' 表示任何一个字符，'*' 表示0到任意个字符.
+     *    （2）关于通配符：
+     *          在coverage, shp, INFO table, dBASE table, or shared geodatabase查询，'_' 表示任何一个字符， '%' 表示0到任意个字符.
+     *          在mdb查询，'?' 表示任何一个字符，'*' 表示0到任意个字符.
      */
 
     /// <summary>
@@ -400,10 +402,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
             if (nullRecordException && feature == null)//找不到记录时，抛出异常
             {
-                if (string.IsNullOrEmpty(whereClause))
-                    throw new Exception($"在{featureClass.AliasName}图层中，找不到记录");
-                else
-                    throw new Exception($"在{featureClass.AliasName}图层中，找不到“{whereClause}”的记录！");
+                var msg = string.IsNullOrEmpty(whereClause) ? null : $"“{whereClause}”的";
+                throw new Exception($"在{featureClass.AliasName}图层中，找不到{msg}记录");
             }
 
             while (feature != null)
@@ -412,6 +412,24 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 feature = featureCursor.NextFeature();
             }
             Marshal.ReleaseComObject(featureCursor);
+        }
+        /// <summary>
+        ///  根据查询条件查询要素，对查询获取的要素执行指定操作
+        /// </summary>
+        /// <param name="featureClass">查询的要素类</param>
+        /// <param name="whereClause">查询条件，此值为null时查询所有要素</param>
+        /// <param name="doActionByFeatures">针对要素执行的操作</param>
+        /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
+        public static Dictionary<TKey,TValue> QueryFeatures<TKey,TValue>(this IFeatureClass featureClass, string whereClause,
+            Func<IFeature, TKey> keyFunc, Func<IFeature, TValue> valueFunc, bool nullRecordException = false)
+        {
+            var pairs = new Dictionary<TKey, TValue>();
+            QueryFeatures(featureClass, whereClause, feature =>
+            {
+                pairs.Add(keyFunc(feature), valueFunc(feature));
+            }, nullRecordException);
+
+            return pairs;
         }
         #endregion
 
@@ -835,23 +853,16 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClass">执行条件查询的要素类</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
-        public static string ValidateWhereClause(this IFeatureClass featureClass, string whereClause)
-        {
-            var workspacePath = GetWorkspacePathName(featureClass);
-            if (System.IO.Path.GetExtension(workspacePath) == ".mdb" && whereClause.Contains("like"))
-                return whereClause.Replace('_', '?').Replace('%', '*');
-            return whereClause;
-        }
+        public static string ValidateWhereClause(this IFeatureClass featureClass, string whereClause) => 
+            TableEx.ValidateWhereClause(featureClass as ITable, whereClause);
         /// <summary>
         /// 校验并返回与数据源一致的条件查询语句
         /// <para>例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'</para>
         /// </summary>
         /// <param name="eType">数据源类型</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
-        public static string ValidateWhereClause(EWorkspaceType eType, string whereClause)
-        {
-            return TableEx.ValidateWhereClause(eType, whereClause);
-        }
+        public static string ValidateWhereClause(EWorkspaceType eType, string whereClause) => 
+            TableEx.ValidateWhereClause(eType, whereClause);
         #endregion
 
 
@@ -869,7 +880,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="subFields">查询所返回的字段，多个字段用逗号隔开：e.g. "OBJECTID，NAME"</param>
         /// <param name="recyling"></param>
         /// <returns></returns>
-        public static IFeatureCursor GetSearchCursor(this IFeatureClass featureClass, string whereClause = null, string subFields = null, bool recyling = false)
+        public static IFeatureCursor GetSearchCursor(this IFeatureClass featureClass,
+            string whereClause = null, string subFields = null, bool recyling = false)
         {
             IQueryFilter filter = new QueryFilterClass();
             filter.WhereClause = whereClause;
@@ -935,5 +947,37 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClass"></param>
         public static IEnvelope GetExtent(this IFeatureClass featureClass) => ((IGeoDataset)featureClass).Extent;
+
+
+        /// <summary>
+        /// 判断要素类是否被占用
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="message">被占用情况信息，未被占用则值为null</param>
+        /// <returns>对象被占用返回True，未被占用返回False</returns>
+        public static bool CheckClassLock(this IFeatureClass featureClass, out string message)
+        {
+            return CheckClassLock(featureClass as IObjectClass, out message);
+        }
+        /// <summary>
+        /// 判断对象是否被占用
+        /// </summary>
+        /// <param name="objectClass"></param>
+        /// <param name="message">被占用情况信息，未被占用则值为null</param>
+        /// <returns>对象被占用返回True，未被占用返回False</returns>
+        public static bool CheckClassLock(this IObjectClass objectClass, out string message)
+        {
+            var sb = new StringBuilder();
+            ISchemaLock schemaLock = (ISchemaLock)objectClass;
+            schemaLock.GetCurrentSchemaLocks(out var enumSchemaLockInfo);
+            ISchemaLockInfo schemaLockInfo;
+            while ((schemaLockInfo = enumSchemaLockInfo.Next()) != null)
+            {
+                sb.AppendFormat("{0} : {1} : {2}\r\n", schemaLockInfo.TableName, schemaLockInfo.UserName, schemaLockInfo.SchemaLockType);
+            }
+
+            message = sb.Length > 0 ? sb.ToString() : null;
+            return sb.Length > 0;
+        }
     }
 }

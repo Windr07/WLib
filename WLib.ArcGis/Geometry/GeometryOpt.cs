@@ -11,6 +11,7 @@ using System.Linq;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.Analysis.OnShape;
 
 namespace WLib.ArcGis.Geometry
 {
@@ -59,17 +60,17 @@ namespace WLib.ArcGis.Geometry
             };
         }
         /// <summary>
-        /// 获取几何类型(esriGeometryType)的中文描述
+        /// 获取几何类型<see cref="esriGeometryType"/>的中文描述
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string GetGeometryTypeCnName(esriGeometryType type)
+        public static string GetGeometryTypeCnName(this esriGeometryType type)
         {
             string typeName;
             switch (type)
             {
                 case esriGeometryType.esriGeometryPoint: typeName = "点"; break;
-                case esriGeometryType.esriGeometryPolyline: typeName = "折线"; break;
+                case esriGeometryType.esriGeometryPolyline: typeName = "线"; break;
                 case esriGeometryType.esriGeometryPolygon: typeName = "面"; break;
                 case esriGeometryType.esriGeometryMultipoint: typeName = "多点"; break;
                 default: typeName = type.ToString().Replace("esriGeometry", ""); break;
@@ -169,7 +170,7 @@ namespace WLib.ArcGis.Geometry
 
         #region 多边形的多部分
         /// <summary>
-        /// 多边形是否由多部分组成（即是否多个外环）
+        /// 多边形是否由多部分组成(即是否多个外环)
         /// </summary>
         /// <param name="polygon"></param>
         /// <returns></returns>
@@ -240,7 +241,7 @@ namespace WLib.ArcGis.Geometry
 
         #region 构造线
         /// <summary>
-        /// 通过起点坐标和终点坐标创建线段（IPolyline对象）
+        /// 通过起点坐标和终点坐标创建线段(IPolyline对象)
         /// </summary>
         /// <param name="x1">起点x坐标</param>
         /// <param name="y1">起点y坐标</param>
@@ -261,14 +262,14 @@ namespace WLib.ArcGis.Geometry
             return CreatePolyline(pt1, pt2);
         }
         /// <summary>
-        /// 通过起点和终点创建线段（IPolyline对象）
+        /// 通过起点和终点创建线段(IPolyline对象)
         /// </summary>
         /// <param name="pt1">起点</param>
         /// <param name="pt2">终点</param>
         /// <returns></returns>
         public static IPolyline CreatePolyline(IPoint pt1, IPoint pt2)
         {
-            //a. 创建Line对象（也可是其他Segment对象），
+            //a. 创建Line对象(也可是其他Segment对象)，
             //b. QI到Segment对象
             //c. 创建Path对象，通过Path的addSegment，将最初的Line添加进Path中
             //d. 创建GeometryCollection对象，通过AddGeometry，将path添加进GeometryCollection中
@@ -291,7 +292,7 @@ namespace WLib.ArcGis.Geometry
             return resultPolyline;
         }
         /// <summary>
-        /// 通过点集创建线段（IPolyline对象）
+        /// 通过点集创建线段(IPolyline对象)
         /// </summary>
         /// <param name="pts"></param>
         /// <returns></returns>
@@ -318,7 +319,7 @@ namespace WLib.ArcGis.Geometry
 
         #region 构造面
         /// <summary>
-        /// 通过点集构成多边形（只适用单环多边形）
+        /// 通过点集构成多边形(只适用单环多边形)
         /// </summary>
         /// <param name="points">按顺序构成一个环的点集</param>
         /// <returns></returns>
@@ -331,7 +332,7 @@ namespace WLib.ArcGis.Geometry
             return CreatePolygon(iPoints);
         }
         /// <summary>
-        /// 通过点集构成多边形（只适用单环多边形）
+        /// 通过点集构成多边形(只适用单环多边形)
         /// </summary>
         /// <param name="pointList">按顺序构成一个环的点集</param>
         /// <returns></returns>
@@ -354,6 +355,16 @@ namespace WLib.ArcGis.Geometry
 
             return polygon;
         }
+        #endregion
+
+
+        #region 合并图斑
+        /// <summary>
+        /// 将多个图形合并(Union)成一个图形
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("请直接使用 WLib.ArcGis.Analysis.OnShape.TopologicalOpt.UnionGeometryEx 等方法")]
+        public static IGeometry UnionGeometry(this IEnumerable<IGeometry> geometries) => TopologicalOpt.UnionGeometryEx(geometries);
         #endregion
     }
 }

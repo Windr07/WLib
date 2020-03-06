@@ -172,8 +172,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="fields">要创建的字段集（可以为null，该方法自动修改或加入OID和SHAPE字段以确保几何类型、坐标系与参数一致）</param>
         /// <param name="strWorkspaceName">内存工作空间的名称</param>
         /// <returns></returns>
-        public static IFeatureClass CreateInMemory(string name, ISpatialReference spatialRef,
-            esriGeometryType geometryType, IFields fields = null, string strWorkspaceName = "InMemoryWorkspace")
+        public static IFeatureClass CreateInMemory(string name, ISpatialReference spatialRef, esriGeometryType geometryType, IFields fields = null, string strWorkspaceName = "InMemoryWorkspace")
         {
             if (fields == null)
                 fields = new FieldsClass();

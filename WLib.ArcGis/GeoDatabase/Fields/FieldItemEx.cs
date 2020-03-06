@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.Geodatabase;
+using System.ComponentModel;
 
 namespace WLib.ArcGis.GeoDatabase.Fields
 {
@@ -19,6 +20,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <summary>
         /// 字段长度
         /// </summary>
+        [Description("长度")]
         public int Length { get; set; }
         /// <summary>
         /// 字段精度
@@ -26,23 +28,28 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <para>例如精度为10，小数位数为5，则整数位数最多可填5位，即使小数位数没有写，整数位数也最多可填5位</para>
         /// <para>注意：个人地理数据库(mdb)可能无法获取精度、小数位数等信息，可能需要从获取Number Format中获取</para>
         /// </summary>
+        [Description("精度")]
         public int Precision { get; set; }
         /// <summary>
         /// 小数位数
         /// <para>注意：个人地理数据库(mdb)可能无法获取精度、小数位数等信息，可能需要从获取Number Format中获取</para>
         /// </summary>
+        [Description("小数位数")]
         public int Scale { get; set; }
         /// <summary>
         /// 是否允许为空
         /// </summary>
+        [Description("允许为空")]
         public bool IsNullable { get; set; }
         /// <summary>
         /// 字段是否必需，例如ID字段是必需的
         /// </summary>
+        [Description("字段必需")]
         public bool Required { get; set; }
         /// <summary>
         /// 字段是否可编辑
         /// </summary>
+        [Description("字段可编辑")]
         public bool Editable { get; set; }
 
 

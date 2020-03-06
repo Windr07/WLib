@@ -9,8 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDatabase.Fields;
 
 namespace WLib.ArcGis.Data
@@ -93,37 +93,18 @@ namespace WLib.ArcGis.Data
         /// <summary>
         /// 将ITable数据转成DataTable
         /// </summary>
-        /// <param name="iTable"></param>
-        /// <param name="tableName"></param>
-        /// <param name="whereClause">查询条件，根据此条件从ITable筛选数据到DataTable</param>
-        /// <returns></returns>
-        public static DataTable CreateDataTable(this ITable iTable, string tableName = null, string whereClause = null)
-        {
-            tableName = tableName ?? (iTable as IDataset)?.Name;
-            var dataTable = CreateDataTableScheme(iTable, tableName);
-            var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, true);
-            IRow row;
-            while ((row = cursor.NextRow()) != null)
-            {
-                AddDataToTable(dataTable, row);
-            }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
-            return dataTable;
-        }
-        /// <summary>
-        /// 将ITable数据转成DataTable
-        /// </summary>
         /// <param name="iTable">ArcGIS ITable对象</param>
-        /// <param name="fieldNames">指定DataTable包含的字段</param>
-        /// <param name="tableName"></param>
+        /// <param name="fieldNames">指定DataTable包含的字段，如果为null则获取全部字段</param>
+        /// <param name="tableName">DataTable表名称，如果为null则获取iTable表名称</param>
         /// <param name="whereClause">查询条件，根据此条件从ITable筛选数据到DataTable</param>
+        /// <param name="startRow">分页查询的起始记录行，即从表中的第startRow条记录开始到第endRow记录作为当前分页的记录</param>
+        /// <param name="endRow">分页查询的结束记录行</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this ITable iTable, IEnumerable<string> fieldNames, string tableName = null, string whereClause = null)
+        public static DataTable CreateDataTable(this ITable iTable,
+            IEnumerable<string> fieldNames = null, string tableName = null, string whereClause = null, int startRow = 1, int endRow = int.MaxValue)
         {
-            tableName = tableName ?? (iTable as IDataset)?.Name;
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            fieldNames.ToList().ForEach(v => dict.Add(v, v));
-            return CreateDataTable(iTable, dict, tableName, whereClause);
+            var dict = iTable.GetFieldNameAndAliasName(fieldNames);
+            return CreateDataTableEx(iTable, dict, tableName, whereClause, startRow, endRow);
         }
         /// <summary>
         /// 将ITable数据转成DataTable
@@ -132,18 +113,26 @@ namespace WLib.ArcGis.Data
         /// <param name="nameToAliasNamesDict">字段名(作为DataTable列的columnName)及别名(作为DataTable列的Caption)的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
         /// <param name="tableName"></param>
         /// <param name="whereClause">查询条件，根据此条件从ITable筛选数据到DataTable</param>
+        /// <param name="startRow">分页查询的起始记录行，即从表中的第startRow条记录开始到第endRow记录作为当前分页的记录</param>
+        /// <param name="endRow">分页查询的结束记录行</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this ITable iTable, Dictionary<string, string> nameToAliasNamesDict, string tableName = null, string whereClause = null)
+        public static DataTable CreateDataTableEx(this ITable iTable,
+            Dictionary<string, string> nameToAliasNamesDict, string tableName = null, string whereClause = null, int startRow = 1, int endRow = int.MaxValue)
         {
             tableName = tableName ?? (iTable as IDataset)?.Name;
-            var dataTable = CreateDataTableScheme(iTable, (iTable as IDataset)?.Name, nameToAliasNamesDict);
+            var dataTable = CreateDataTableScheme(iTable, tableName, nameToAliasNamesDict);
             var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, true);
+
+            int curRow = 0;
             IRow row;
             while ((row = cursor.NextRow()) != null)
             {
+                curRow++;
+                if (curRow < startRow) continue;
+                if (curRow > endRow) break;
                 AddDataToTable(dataTable, row);
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
+            Marshal.ReleaseComObject(cursor);
             return dataTable;
         }
         #endregion
@@ -154,150 +143,84 @@ namespace WLib.ArcGis.Data
         /// 将IFeatureClass指定字段数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
-        /// <param name="fieldNames">指定字段列表</param>
-        /// <param name="whereClause"></param>
+        /// <param name="fieldNames">指定字段列表，若值为null则查询全部字段</param>
+        /// <param name="whereClause">查询条件，根据此条件从IFeatureClass筛选数据到DataTable</param>
+        /// <param name="startRow">分页查询的起始记录行，即从IFeatureClass中的第startRow条记录开始到第endRow记录作为当前分页的记录</param>
+        /// <param name="endRow">分页查询的结束记录行</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this IFeatureClass featureClass, IEnumerable<string> fieldNames, string whereClause = null)
+        public static DataTable CreateDataTable(this IFeatureClass featureClass,
+            IEnumerable<string> fieldNames, string whereClause = null, string tableName = null, int startRow = 1, int endRow = int.MaxValue)
         {
-            ITable iTable = (ITable)featureClass;
-            string geoTypeString = TypeConvert.GetGeoTypeStr(featureClass.ShapeType);
-            DataTable dataTable = CreateDataTableScheme(iTable, featureClass.AliasName, fieldNames);
-
-            IFeatureCursor featureCursor = featureClass.Search(new QueryFilterClass { WhereClause = whereClause }, false);
-            IFeature feature;
-            while ((feature = featureCursor.NextFeature()) != null)
-            {
-                object[] values = new object[fieldNames.Count()];
-                for (int i = 0; i < fieldNames.Count(); i++)
-                {
-                    int idex = feature.Fields.FindField(fieldNames.ElementAt(i));
-                    if (idex == -1)
-                        continue;
-                    IField field = feature.Fields.get_Field(idex);
-                    string value;
-                    //当图层类型为Anotation时，要素类中会有esriFieldTypeBlob类型的数据，
-                    //其存储的是标注内容，如此情况需将对应的字段值设置为Element
-                    if (field.Type == esriFieldType.esriFieldTypeBlob)
-                        value = "Element";
-                    else if (field.Type == esriFieldType.esriFieldTypeGeometry)
-                        value = geoTypeString;
-                    else
-                        value = feature.get_Value(idex).ToString().Trim();
-                    values[i] = value;
-                }
-                dataTable.Rows.Add(values);
-            }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
-            return dataTable;
+            var dict = (featureClass as ITable).GetFieldNameAndAliasName(fieldNames);
+            return CreateDataTableEx(featureClass, dict, whereClause, tableName, startRow, endRow);
         }
         /// <summary>
         /// 将IFeatureClass指定字段数据转成DataTable
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="nameToAliasNamesDict">字段名及别名（作为DataTable列标题）的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
-        /// <param name="whereClause"></param>
+        /// <param name="whereClause">查询条件，根据此条件从IFeatureClass筛选数据到DataTable</param>
+        /// <param name="startRow">分页查询的起始记录行，即从IFeatureClass中的第startRow条记录开始到第endRow记录作为当前分页的记录</param>
+        /// <param name="endRow">分页查询的结束记录行</param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this IFeatureClass featureClass, Dictionary<string, string> nameToAliasNamesDict, string whereClause = null)
+        public static DataTable CreateDataTableEx(this IFeatureClass featureClass,
+            Dictionary<string, string> nameToAliasNamesDict, string whereClause = null, string tableName = null, int startRow = 1, int endRow = int.MaxValue)
         {
-            ITable iTable = featureClass as ITable;
-            string geoTypeString = TypeConvert.GetGeoTypeStr(featureClass.ShapeType);
-            DataTable result = CreateDataTableScheme(iTable, featureClass.AliasName, nameToAliasNamesDict);
+            var iTable = featureClass as ITable;
+            tableName = tableName ?? featureClass.AliasName;
+            var dataTable = CreateDataTableScheme(iTable, tableName, nameToAliasNamesDict).ChangedFieldToString(featureClass.ShapeFieldName);
+            var fieldNames = nameToAliasNamesDict.Keys;
+            var geoTypeString = TypeConvert.GetGeoTypeStr(featureClass.ShapeType);
 
-            IFeatureCursor featureCursor = featureClass.Search(new QueryFilterClass { WhereClause = whereClause }, false);
+            int curRow = 0;
             IFeature feature;
+            var featureCursor = featureClass.Search(new QueryFilterClass { WhereClause = whereClause }, false);
             while ((feature = featureCursor.NextFeature()) != null)
             {
-                object[] values = new object[nameToAliasNamesDict.Count];
-                int i = 0;
-                foreach (var pair in nameToAliasNamesDict)
-                {
-                    int idex = feature.Fields.FindField(pair.Key);
-                    if (idex == -1)
-                        continue;
-                    IField field = feature.Fields.get_Field(idex);
-                    string value = "";
-                    //当图层类型为Anotation时，要素类中会有esriFieldTypeBlob类型的数据，
-                    //其存储的是标注内容，如此情况需将对应的字段值设置为Element
-                    if (field.Type == esriFieldType.esriFieldTypeBlob)
-                        value = "Element";
-                    else if (field.Type == esriFieldType.esriFieldTypeGeometry)
-                        value = geoTypeString;
-                    else
-                        value = feature.get_Value(idex).ToString().Trim();
-                    values[i++] = value;
-                }
-                result.Rows.Add(values);
+                curRow++;
+                if (curRow < startRow) continue;
+                if (curRow > endRow) break;
+                var values = GetFeatureValues(feature, fieldNames, geoTypeString).ToArray();
+                dataTable.Rows.Add(values);
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
-            return result;
+            Marshal.ReleaseComObject(featureCursor);
+            return dataTable;
         }
         /// <summary>
-        /// 将IFeatureClass指定条件、指定行数的数据转成DataTable
+        /// 获取要素的指定字段的值，特殊字段值将转为字符串（Blob和Geometry转为字符串）
         /// </summary>
-        /// <param name="featureClass"></param>
-        /// <param name="tableName"></param>
-        /// <param name="whereClause"></param>
-        /// <param name="maxRow">数据数量</param>
+        /// <param name="feature"></param>
+        /// <param name="fieldNames"></param>
+        /// <param name="geoTypeString"></param>
         /// <returns></returns>
-        public static DataTable CreateDataTable(this IFeatureClass featureClass, string tableName = "", string whereClause = null, int maxRow = int.MaxValue)
+        private static IEnumerable<object> GetFeatureValues(this IFeature feature, IEnumerable<string> fieldNames, string geoTypeString)
         {
-            ITable table = (ITable)featureClass;
-            string geoTypeString = TypeConvert.GetGeoTypeStr(featureClass.ShapeType);
-            DataTable result = CreateDataTableScheme(table, tableName);
-            ICursor featureCursor = table.Search(new QueryFilterClass { WhereClause = whereClause }, false);
-            int rownum = 0;
-            IRow iRow = featureCursor.NextRow();
-            while (iRow != null)
+            foreach (var fieldName in fieldNames)
             {
-                object[] values = new object[iRow.Fields.FieldCount];
-                for (int i = 0; i < iRow.Fields.FieldCount; i++)
+                int index = feature.Fields.FindField(fieldName);
+                if (index == -1) continue;
+                var fieldType = feature.Fields.get_Field(index).Type;
+                switch (fieldType)
                 {
-                    object value;
-                    //当图层类型为Anotation时，要素类中会有esriFieldTypeBlob类型的数据，
-                    //其存储的是标注内容，如此情况需将对应的字段值设置为Element
-                    if (iRow.Fields.get_Field(i).Type == esriFieldType.esriFieldTypeBlob)
-                        value = "Element";
-                    else if (iRow.Fields.get_Field(i).Type == esriFieldType.esriFieldTypeGeometry)
-                        value = geoTypeString;
-                    else
-                        value = iRow.get_Value(i);
-                    values[i] = value;
+                    //当图层类型为Anotation时，要素类中会有esriFieldTypeBlob类型的数据，其存储的是标注内容，如此情况需将对应的字段值设置为Element
+                    case esriFieldType.esriFieldTypeBlob: yield return "Element"; break;
+                    case esriFieldType.esriFieldTypeGeometry: yield return geoTypeString; break;
+                    default: yield return feature.get_Value(index); break;
                 }
-                result.Rows.Add(values);
-                rownum++;
-                if (rownum > maxRow) break;
-                iRow = featureCursor.NextRow();
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
-            return result;
         }
         /// <summary>
-        /// 将IFeatureClass数据转成DataTable，在最后增加面积列并列出面积
+        /// 将指定列转为字符串类型
         /// </summary>
-        /// <param name="featureClass">要素集</param>
-        /// <param name="areaColumnName">在DataTable加上面积列并计算面积，此为面积列的列名</param>
-        /// <returns></returns>
-        public static DataTable CreateDataTableCalArea(this IFeatureClass featureClass, string areaColumnName)
+        /// <param name="dataTable"></param>
+        /// <param name="fieldName"></param>
+        private static DataTable ChangedFieldToString(this DataTable dataTable, params string[] fieldNames)
         {
-            ITable table = featureClass as ITable;
-            DataTable dataTable = CreateDataTableScheme(table, "");
-            
-            DataColumn areaDc = new DataColumn(areaColumnName, typeof(double));//图斑面积
-            dataTable.Columns.Add(areaDc);
-            IFeatureCursor featureCursor = featureClass.Search(null, false);
-            IFeature feature;
-            while ((feature = featureCursor.NextFeature()) != null)
+            foreach (DataColumn column in dataTable.Columns)
             {
-                DataRow tempRow = dataTable.NewRow();
-                for (int i = 0; i < table.Fields.FieldCount; i++)
-                {
-                    tempRow[i] = feature.get_Value(i).ToString();
-                }
-                tempRow[areaColumnName] = ((IArea)((IPolygon)feature.Shape)).Area.ToString();//图斑面积 
-                dataTable.Rows.Add(tempRow);
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(feature);
+                if (fieldNames.Contains(column.ColumnName) || fieldNames.Contains(column.Caption))
+                    column.DataType = typeof(string);
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(featureCursor);
             return dataTable;
         }
         #endregion
@@ -313,12 +236,11 @@ namespace WLib.ArcGis.Data
         {
             for (int j = 0; j < rows.Count(); j++)
             {
-                IRow row = rows.ElementAt(j);
+                var row = rows.ElementAt(j);
                 object[] values = new object[row.Fields.FieldCount];
                 for (int i = 0; i < row.Fields.FieldCount; i++)
-                {
                     values[i] = row.get_Value(i).ToString();
-                }
+
                 dataTable.Rows.Add(values);
             }
         }
@@ -332,9 +254,8 @@ namespace WLib.ArcGis.Data
             if (row == null) return;
             object[] values = new object[row.Fields.FieldCount];
             for (int i = 0; i < row.Fields.FieldCount; i++)
-            {
                 values[i] = row.get_Value(i);
-            }
+
             dataTable.Rows.Add(values);
         }
         /// <summary>
@@ -364,8 +285,8 @@ namespace WLib.ArcGis.Data
         public static void DataTable2ITable(DataTable dataTable, ITable table)
         {
             //获取在ITable和System.Data.DataTable共有的字段
-            List<string> exsitFields = new List<string>();//共有字段的名称
-            List<int> exsitFieldsIndex = new List<int>();//共有字段的索引
+            var exsitFields = new List<string>();//共有字段的名称
+            var exsitFieldsIndex = new List<int>();//共有字段的索引
             for (int i = 0; i < table.Fields.FieldCount; i++)
             {
                 var field = table.Fields.get_Field(i);
@@ -408,8 +329,7 @@ namespace WLib.ArcGis.Data
             {
                 throw new Exception($"将DataTable的第{rowIndex}行写入“{(table as IDataset)?.Name}”表中时出现错误：{ex.Message}");
             }
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cursor);
+            Marshal.ReleaseComObject(cursor);
         }
-     
     }
 }

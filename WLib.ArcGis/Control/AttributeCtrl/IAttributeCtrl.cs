@@ -5,11 +5,8 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Data;
-using System.Windows.Forms;
-using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
+using System;
 
 namespace WLib.ArcGis.Control.AttributeCtrl
 {
@@ -22,10 +19,6 @@ namespace WLib.ArcGis.Control.AttributeCtrl
         /// 属性查询控件
         /// </summary>
         IAttributeQueryCtrl AtrributeQueryCtrl { get; set; }
-        /// <summary>
-        /// 要获取属性表的图层
-        /// </summary>
-        IFeatureLayer FeatLayer { get; }
         /// <summary>
         /// 要获取属性表的表格
         /// </summary>
@@ -51,42 +44,10 @@ namespace WLib.ArcGis.Control.AttributeCtrl
         /// <param name="whereClause">筛选条件，表示从表加载的数据范围</param>
         /// <param name="fieldNames">加载和显示的字段</param>
         /// <returns></returns>
-        DataTable LoadAttribute(ITable table, string whereClause = null, string[] fieldNames = null);
-        /// <summary>
-        /// 载入属性表
-        /// </summary>
-        /// <param name="featureLayer">要获取属性表的图层</param>
-        /// <param name="whereClause">筛选条件，表示从图层加载的数据范围</param>
-        /// <param name="fieldNames">加载和显示的字段</param>
-        /// <param name="featureLocation">定位到要素图斑的事件</param>
-        DataTable LoadAttribute(IFeatureLayer featureLayer, string whereClause = null, string[] fieldNames = null, EventHandler<FeatureLocationEventArgs> featureLocation = null);
+        void LoadAttribute(ITable table, string whereClause = null, int layerIndex = -1, EventHandler<FeatureLocationEventArgs> featureLocation = null);
         /// <summary>
         /// 移除图层，清空属性表
         /// </summary>
         void Clear();
-
-
-        #region 控件本身的属性和方法
-        /// <summary>
-        /// 
-        /// </summary>
-        bool IsDisposed { get; }
-        /// <summary>
-        /// 
-        /// </summary>
-        bool Visible { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        void Activate();
-        /// <summary>
-        /// 
-        /// </summary>
-        void Show(IWin32Window win32Window);
-        /// <summary>
-        /// 
-        /// </summary>
-        event FormClosingEventHandler FormClosing;
-        #endregion
     }
 }

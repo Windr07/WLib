@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.Geodatabase;
+using System.ComponentModel;
 
 namespace WLib.ArcGis.GeoDatabase.Fields
 {
@@ -18,19 +19,23 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <summary>
         /// 字段名
         /// </summary>
+        [Description("名称")]
         public string Name { get; set; }
         /// <summary>
         /// 字段别名
         /// </summary>
+        [Description("别名")]
         public string AliasName { get; set; }
         /// <summary>
         /// 字段类型
         /// </summary>
+        [Description("类型")]
         public esriFieldType FieldType { get; set; }
         /// <summary>
         /// 确定ToString方法输出的内容
-        /// （N-字段名，A-字段别名，F-字段类型，例如Format="N,A,(F)"，则ToString()结果为"字段名,字段别名,(字段类型)"）
+        /// <para>N-字段名，A-字段别名，F-字段类型，例如Format="N,A,(F)"，则ToString()结果为"字段名,字段别名,(字段类型)"</para>
         /// </summary>
+        [Description("输出格式")]
         public string Format { get; set; } = "A";
         /// <summary>
         /// 获得字段类型的文字描述

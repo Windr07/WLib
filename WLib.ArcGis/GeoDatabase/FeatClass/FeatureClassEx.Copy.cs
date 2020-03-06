@@ -120,24 +120,39 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static IFeatureClass CopyDataToNewMemory(this IFeatureClass sourceClass, string whereClause, string memoryClassName = "tempFeatureClass")
         {
-            IFields fields = sourceClass.CloneFeatureClassFields();
-            IFeatureClass memoryClass = CreateInMemory(memoryClassName, fields);
-            IQueryFilter filter = new QueryFilterClass();
-            filter.WhereClause = whereClause;
-            IFeatureCursor cursor = sourceClass.Search(filter, false);
-            IFeature feature;
-            while ((feature = cursor.NextFeature()) != null)
+            var fields = sourceClass.CloneFeatureClassFields();
+            var memoryClass = CreateInMemory(memoryClassName, fields);
+
+            sourceClass.QueryFeatures(whereClause, feature =>
             {
-                IFeature tmpFeature = memoryClass.CreateFeature();
-                tmpFeature.Shape = feature.ShapeCopy;
-                tmpFeature.Store();
-            }
+                IFeature memoryFeature = memoryClass.CreateFeature();
+                memoryFeature.Shape = feature.ShapeCopy;
+                for (int i = 0; i < memoryClass.Fields.FieldCount; i++)
+                    memoryFeature.set_Value(i, feature.get_Value(i));
+
+                memoryFeature.Store();
+            });
             return memoryClass;
         }
         #endregion
 
 
         #region 复制数据，存入已有要素类
+        /// <summary>
+        /// 复制要素类到指定数据源中
+        /// </summary>
+        /// <param name="sourceClass">源要素类</param>
+        /// <param name="targetObject">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建新要素类</param> 
+        /// <param name="targetClassName">新要素类名称，若为null则使用源要素类名称</param>
+        /// <param name="whereClause">筛选条件，从源要素类中筛选指定的要素复制到目标要素，为null或Empty时将复制全部要素</param>
+        /// <param name="aferEachInsert">每复制一条要素之后执行的操作</param>
+        public static IFeatureClass CopyDataTo(this IFeatureClass sourceClass, object targetObject, string targetClassName = null, string whereClause = null, Action<IFeatureBuffer> aferEachInsert = null)
+        {
+            targetClassName = targetClassName ?? sourceClass.GetName();
+            var targetClass = CopyStruct(sourceClass, targetObject, targetClassName, sourceClass.AliasName);
+            CopyDataTo(sourceClass, targetClass, whereClause, aferEachInsert);
+            return targetClass;
+        }
         /// <summary>
         /// 从源要素类中获取数据添加到目标要素类中（复制同名字段的值）
         /// </summary>
@@ -222,7 +237,6 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             //获取源要素类与目标要素类相同的字段的索引
             var tarFeatureCursor = targetClass.Insert(true);
             var tarFeatureBuffer = targetClass.CreateFeatureBuffer();
-            var sourceFields = features.First().Fields;
             foreach (var feature in features)
             {
                 action(feature, tarFeatureBuffer);
