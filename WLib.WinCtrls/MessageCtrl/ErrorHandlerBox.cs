@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using WLib.ExtProgram;
+using WLib.ExtProgram.Contact;
 using WLib.WinCtrls.Properties;
 
 namespace WLib.WinCtrls.MessageCtrl
@@ -57,8 +58,7 @@ namespace WLib.WinCtrls.MessageCtrl
         public ErrorHandlerBox(Exception exception, string suggestion, EContactType contactType, string contact, Action<Exception> helpAction = null)
         {
             var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            var contactInfos = new ContactInfo[] { new ContactInfo(contactType, "联系我们", contact) };
-            LoadViewInfo(exception, suggestionActions, contactInfos, helpAction);
+            LoadViewInfo(exception, suggestionActions, helpAction, new ContactInfo(contactType, "联系我们", contact));
         }
         /// <summary>
         /// 错误显示和意见反馈框
@@ -71,8 +71,7 @@ namespace WLib.WinCtrls.MessageCtrl
         public ErrorHandlerBox(string errorMessage, string suggestion, EContactType contactType, string contact, Action<Exception> helpAction = null)
         {
             var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            var contactInfos = new ContactInfo[] { new ContactInfo(contactType, "联系我们", contact) };
-            LoadViewInfo(new Exception(errorMessage), suggestionActions, contactInfos, helpAction);
+            LoadViewInfo(new Exception(errorMessage), suggestionActions, helpAction, new ContactInfo(contactType, "联系我们", contact));
         }
         /// <summary>
         /// 错误显示和意见反馈框
@@ -84,7 +83,7 @@ namespace WLib.WinCtrls.MessageCtrl
         public ErrorHandlerBox(Exception exception, string suggestion = null, IEnumerable<ContactInfo> contactInfos = null, Action<Exception> helpAction = null)
         {
             var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            LoadViewInfo(exception, suggestionActions, contactInfos, helpAction);
+            LoadViewInfo(exception, suggestionActions, helpAction, contactInfos.ToArray());
         }
         /// <summary>
         /// 错误显示和意见反馈框
@@ -96,7 +95,7 @@ namespace WLib.WinCtrls.MessageCtrl
         public ErrorHandlerBox(string errorMessage, string suggestion = null, IEnumerable<ContactInfo> contactInfos = null, Action<Exception> helpAction = null)
         {
             var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            LoadViewInfo(new Exception(errorMessage), suggestionActions, contactInfos, helpAction);
+            LoadViewInfo(new Exception(errorMessage), suggestionActions, helpAction, contactInfos.ToArray());
         }
         /// <summary>
         /// 错误显示和意见反馈框
@@ -107,7 +106,7 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="helpAction">帮助按钮执行的操作</param>
         public ErrorHandlerBox(Exception exception, Dictionary<string, Action> suggestionActions, IEnumerable<ContactInfo> contactInfos = null, Action<Exception> helpAction = null)
         {
-            LoadViewInfo(exception, suggestionActions, contactInfos, helpAction);
+            LoadViewInfo(exception, suggestionActions, helpAction, contactInfos.ToArray());
         }
 
 
@@ -118,27 +117,23 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="suggestionActions">处理建议及点击建议对应的跳转操作</param>
         /// <param name="contactInfos">联系信息</param>
         /// <param name="helpAction">帮助按钮执行的操作</param>
-        private void LoadViewInfo(Exception exception, Dictionary<string, Action> suggestionActions, IEnumerable<ContactInfo> contactInfos, Action<Exception> helpAction)
+        private void LoadViewInfo(Exception exception, Dictionary<string, Action> suggestionActions, Action<Exception> helpAction, params ContactInfo[] contactInfos)
         {
             InitializeComponent();
             this.lblMessage.MouseEnter += (sender, e) => this.lblCopyMsg.Visible = true;
             this.lblMessage.MouseLeave += (sender, e) => this.lblCopyMsg.Visible = false;
 
             //错误信息
-            this.Error = exception;
-            ShowExceptionMessage(this.Error);
+            ShowExceptionMessage(this.Error = exception);
 
             //处理建议
-            this.SuggestionActions = suggestionActions ?? new Dictionary<string, Action>();
-            CreateLabelBySuggestions(SuggestionActions);
+            CreateLabelBySuggestions(this.SuggestionActions = suggestionActions ?? new Dictionary<string, Action>());
 
             //联系方式
-            this.ContactInfos = contactInfos;
-            AddContactInfoButtons(ContactInfos);
+            AddContactInfoButtons(this.ContactInfos = contactInfos);
 
             //帮助操作
-            this.HelpAction = helpAction;
-            this.HelpButton = HelpAction != null;
+            this.HelpButton = (this.HelpAction = helpAction) != null;
         }
         /// <summary>
         /// 显示错误基本信息和详细信息
@@ -170,7 +165,7 @@ namespace WLib.WinCtrls.MessageCtrl
             var infos = contactInfos.ToArray();
             this.btnContact.Visible = true;
             this.btnContact.Image = GetImageByContactType(infos[0].ContactType);
-            this.btnContact.Text = infos[0].Name;
+            this.btnContact.Text = "   " + infos[0].Name;
             this.btnContact.Click += (sender, e) => ActionByContactType(infos[0]);
             this.btnContact.SplitMenuStrip = this.contextMenuStrip1;
             foreach (var info in infos)
@@ -281,6 +276,15 @@ namespace WLib.WinCtrls.MessageCtrl
             this.lblExpand.Text = expand ? "隐藏" : "展开";
         }
 
-        private void LblCopyMsg_Click(object sender, EventArgs e) => Clipboard.SetDataObject(this.lblMessage.Text);
+        private void LblCopyMsg_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(this.lblMessage.Text);
+            this.lblCopyMsg.Text = "已复制";
+            new Thread(() =>
+            {
+                Thread.Sleep(3000);
+                if (!this.IsDisposed) Invoke(new Action(() => this.lblCopyMsg.Text = "复制(&C)"));
+            }).Start();
+        }
     }
 }

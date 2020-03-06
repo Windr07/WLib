@@ -42,11 +42,11 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.lblSuggestion = new System.Windows.Forms.Label();
             this.panelErrorInfo = new System.Windows.Forms.Panel();
+            this.lblCopyMsg = new System.Windows.Forms.Label();
+            this.lblMessage = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.txtMessageDetail = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
-            this.lblMessage = new System.Windows.Forms.Label();
-            this.lblCopyMsg = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelOptButtons.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -112,7 +112,7 @@
             // 
             this.lblConcatTips.AutoSize = true;
             this.lblConcatTips.ForeColor = System.Drawing.Color.DarkRed;
-            this.lblConcatTips.Location = new System.Drawing.Point(207, 12);
+            this.lblConcatTips.Location = new System.Drawing.Point(209, 12);
             this.lblConcatTips.Name = "lblConcatTips";
             this.lblConcatTips.Size = new System.Drawing.Size(137, 12);
             this.lblConcatTips.TabIndex = 4;
@@ -127,7 +127,7 @@
             this.btnContact.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnContact.Location = new System.Drawing.Point(94, 0);
             this.btnContact.Name = "btnContact";
-            this.btnContact.Size = new System.Drawing.Size(108, 37);
+            this.btnContact.Size = new System.Drawing.Size(107, 37);
             this.btnContact.TabIndex = 3;
             this.btnContact.Text = "   联系管理员";
             this.btnContact.UseVisualStyleBackColor = true;
@@ -181,6 +181,7 @@
             this.label1.Size = new System.Drawing.Size(76, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "     详细信息";
+            this.label1.Click += new System.EventHandler(this.LblExpand_Click);
             // 
             // lblExpand
             // 
@@ -234,6 +235,32 @@
             this.panelErrorInfo.Size = new System.Drawing.Size(474, 94);
             this.panelErrorInfo.TabIndex = 0;
             // 
+            // lblCopyMsg
+            // 
+            this.lblCopyMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCopyMsg.AutoSize = true;
+            this.lblCopyMsg.BackColor = System.Drawing.Color.Transparent;
+            this.lblCopyMsg.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblCopyMsg.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblCopyMsg.Location = new System.Drawing.Point(431, 82);
+            this.lblCopyMsg.Name = "lblCopyMsg";
+            this.lblCopyMsg.Size = new System.Drawing.Size(47, 12);
+            this.lblCopyMsg.TabIndex = 2;
+            this.lblCopyMsg.Text = "复制(&C)";
+            this.lblCopyMsg.Click += new System.EventHandler(this.LblCopyMsg_Click);
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.AutoEllipsis = true;
+            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMessage.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblMessage.Location = new System.Drawing.Point(91, 0);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(383, 94);
+            this.lblMessage.TabIndex = 1;
+            this.lblMessage.Text = "System.Exception：未将对象引用设置到对象实例";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -266,32 +293,6 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // lblMessage
-            // 
-            this.lblMessage.AutoEllipsis = true;
-            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessage.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblMessage.Location = new System.Drawing.Point(91, 0);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(383, 94);
-            this.lblMessage.TabIndex = 1;
-            this.lblMessage.Text = "System.Exception：未将对象引用设置到对象实例";
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblCopyMsg
-            // 
-            this.lblCopyMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblCopyMsg.AutoSize = true;
-            this.lblCopyMsg.BackColor = System.Drawing.Color.Transparent;
-            this.lblCopyMsg.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblCopyMsg.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblCopyMsg.Location = new System.Drawing.Point(431, 82);
-            this.lblCopyMsg.Name = "lblCopyMsg";
-            this.lblCopyMsg.Size = new System.Drawing.Size(47, 12);
-            this.lblCopyMsg.TabIndex = 2;
-            this.lblCopyMsg.Text = "复制(&C)";
-            this.lblCopyMsg.Click += new System.EventHandler(this.LblCopyMsg_Click);
-            // 
             // ErrorHandlerBox
             // 
             this.AcceptButton = this.btnOK;
@@ -301,6 +302,7 @@
             this.ClientSize = new System.Drawing.Size(501, 307);
             this.Controls.Add(this.tableLayoutPanel1);
             this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ErrorHandlerBox";

@@ -180,6 +180,12 @@
     <Compile Include="AddItemCtrl\Base\IConcatStrConfig.cs" />
     <Compile Include="AddItemCtrl\Base\IMatchModeConfig.cs" />
     <Compile Include="AddItemCtrl\Base\SplitStrDef.cs" />
+    <Compile Include="ArcGisCtrl\AttributeCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArcGisCtrl\AttributeCtrl.Designer.cs">
+      <DependentUpon>AttributeCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArcGisCtrl\AttributeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,8 +269,16 @@
     <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.Designer.cs">
       <DependentUpon>PathFolderBrowser.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressViewCtrl\IProgressView.cs" />
+    <Compile Include="ProgressViewCtrl\ProgressViewManager.cs" />
     <Compile Include="GridViewCtrl\DataGridViewProgressColumn.cs" />
     <Compile Include="GridViewCtrl\GridViewOpt.cs" />
+    <Compile Include="GridViewCtrl\PaginationBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GridViewCtrl\PaginationBar.Designer.cs">
+      <DependentUpon>PaginationBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListCtrl\IListControl.cs" />
     <Compile Include="ListCtrl\ImageListBox.cs">
       <SubType>Component</SubType>
@@ -278,8 +292,6 @@
     <Compile Include="ListCtrl\ImageListBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MessageCtrl\ContactInfo.cs" />
-    <Compile Include="MessageCtrl\EContactType.cs" />
     <Compile Include="MessageCtrl\ErrorHandlerBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -293,29 +305,23 @@
       <DependentUpon>InfoTipBox.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageCtrl\MessageBoxEx.cs" />
-    <Compile Include="PluginCtrl\PluginContainerInfoForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="PluginCtrl\PluginContainerInfoCtrl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PluginCtrl\PluginContainerInfoForm.Designer.cs">
-      <DependentUpon>PluginContainerInfoForm.cs</DependentUpon>
+    <Compile Include="PluginCtrl\PluginContainerInfoCtrl.Designer.cs">
+      <DependentUpon>PluginContainerInfoCtrl.cs</DependentUpon>
     </Compile>
-    <Compile Include="PluginCtrl\PluginInfoForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="PluginCtrl\PluginInfoCtrl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PluginCtrl\PluginInfoForm.Designer.cs">
-      <DependentUpon>PluginInfoForm.cs</DependentUpon>
+    <Compile Include="PluginCtrl\PluginInfoCtrl.Designer.cs">
+      <DependentUpon>PluginInfoCtrl.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginCtrl\PluginManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PluginCtrl\PluginManagerForm.Designer.cs">
       <DependentUpon>PluginManagerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PluginCtrl\PluginForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PluginCtrl\PluginForm.Designer.cs">
-      <DependentUpon>PluginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginCtrl\PluginFormHelper.cs" />
     <Compile Include="PluginCtrl\PluginManagerFormHelper.cs" />
@@ -326,7 +332,7 @@
       <DependentUpon>OleDbQueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PathCtrl\EObjectFilter.cs" />
-    <Compile Include="ArcGisCtrl\ESelectPathType.cs" />
+    <Compile Include="`Extension\ESelectPathType.cs" />
     <Compile Include="PathCtrl\EShowButtonOption.cs" />
     <Compile Include="FileCtrl\Office\ExcelBase.cs" />
     <Compile Include="FileCtrl\Office\IOfficeBase.cs" />
@@ -400,6 +406,12 @@
     <Compile Include="FileCtrl\TxtViewer.Designer.cs">
       <DependentUpon>TxtViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="`Extension\AppExceptionOpt.cs" />
+    <Compile Include="`Extension\DialogOpt.cs" />
+    <Compile Include="`Extension\EResize.cs" />
+    <Compile Include="`Extension\MenuOpt.cs" />
+    <Compile Include="`Extension\TreeNodeOpt.cs" />
+    <Compile Include="`Extension\WinFormOpt.cs" />
     <EmbeddedResource Include="AddItemCtrl\AddItemConfigForm.resx">
       <DependentUpon>AddItemConfigForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -411,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddItemCtrl\ConcatPathForm.resx">
       <DependentUpon>ConcatPathForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGisCtrl\AttributeCtrl.resx">
+      <DependentUpon>AttributeCtrl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
       <DependentUpon>AttributeForm.cs</DependentUpon>
@@ -444,23 +459,23 @@
     <EmbeddedResource Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowserDialog.resx">
       <DependentUpon>PathFolderBrowserDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GridViewCtrl\PaginationBar.resx">
+      <DependentUpon>PaginationBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MessageCtrl\ErrorHandlerBox.resx">
       <DependentUpon>ErrorHandlerBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageCtrl\InfoTipBox.resx">
       <DependentUpon>InfoTipBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PluginCtrl\PluginContainerInfoForm.resx">
-      <DependentUpon>PluginContainerInfoForm.cs</DependentUpon>
+    <EmbeddedResource Include="PluginCtrl\PluginContainerInfoCtrl.resx">
+      <DependentUpon>PluginContainerInfoCtrl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PluginCtrl\PluginInfoForm.resx">
-      <DependentUpon>PluginInfoForm.cs</DependentUpon>
+    <EmbeddedResource Include="PluginCtrl\PluginInfoCtrl.resx">
+      <DependentUpon>PluginInfoCtrl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginCtrl\PluginManagerForm.resx">
       <DependentUpon>PluginManagerForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginCtrl\PluginForm.resx">
-      <DependentUpon>PluginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SqlCtrl\OleDbQueryForm.resx">
       <DependentUpon>OleDbQueryForm.cs</DependentUpon>
@@ -536,9 +551,7 @@
   <ItemGroup>
     <None Include="Resources\table.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="`Extension\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\gongju.png" />
   </ItemGroup>

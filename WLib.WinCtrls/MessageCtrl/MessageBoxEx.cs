@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using WLib.ExtProgram.Contact;
 
 namespace WLib.WinCtrls.MessageCtrl
 {
@@ -17,8 +18,15 @@ namespace WLib.WinCtrls.MessageCtrl
         /// 点击帮助按钮时触发的操作
         /// </summary>
         private static Action<Exception> HelpAction { get; set; }
-        
-        
+        /// <summary>
+        /// 在消息框中，添加联系方式
+        /// <para>用于程序发生异常时可以联系管理员、客服或官网反馈等</para>
+        /// </summary>
+        /// <param name="eType">联系方式类型</param>
+        /// <param name="name">联系方式名称</param>
+        /// <param name="content">联系方式内容</param>
+        public static void AddContactInfo(EContactType eType, string name, string content)
+            => Contacts.Add(new ContactInfo(eType, name, content));
 
         /// <summary>
         /// 弹出错误/异常消息框
@@ -26,10 +34,8 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="ex">异常</param>
         /// <param name="suggestionActions">处理建议及点击建议对应的跳转操作</param>
         public static void ShowError(Exception ex, Dictionary<string, Action> suggestionActions)
-        {
-            new ErrorHandlerBox(ex, suggestionActions, Contacts, HelpAction).ShowDialog();
-        }
-        /// <summary>
+            => new ErrorHandlerBox(ex, suggestionActions, Contacts, HelpAction).ShowDialog();
+        /// <summary> 
         /// 弹出错误/异常消息框
         /// </summary>
         /// <param name="ex">异常</param>
@@ -49,9 +55,8 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="owner">消息提示框所属控件/窗体</param>
         /// <param name="info">提示消息</param>
         /// <param name="closeSecond">总共多少秒后自动关闭消息提示框，值小于等于0则不会自动关闭</param>
-        public static void ShowInfo(Control owner, string info, int closeSecond = 3)
-        {
-            new InfoTipBox(info, owner.Text, closeSecond).Show(owner);
-        }
+        /// <param name="afterFormClosed">消息提示框关闭后执行的操作</param>
+        public static void ShowInfo(Control owner, string info, int closeSecond = 3, Action afterFormClosed = null)
+            => new InfoTipBox(info, owner.Text, closeSecond, afterFormClosed).Show(owner);
     }
 }

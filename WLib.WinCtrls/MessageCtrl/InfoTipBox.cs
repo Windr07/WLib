@@ -16,6 +16,10 @@ namespace WLib.WinCtrls.MessageCtrl
         /// 表示还剩多少秒后关闭自动当前窗口
         /// </summary>
         private int _second;
+        /// <summary>
+        /// 信息提示框关闭后执行的操作
+        /// </summary>
+        public Action AfterFormClosed;
 
         /// <summary>
         /// 信息提示框
@@ -24,18 +28,21 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="info">提示信息</param>
         /// <param name="title">提示标题</param>
         /// <param name="sumCloseSecond">总共多少秒后自动关闭当前窗口，值小于等于0则不会自动关闭</param>
-        public InfoTipBox(string info, string title = null, int sumCloseSecond = 3)
+        /// <param name="afterFormClosed">信息提示框关闭后执行的操作</param>
+        public InfoTipBox(string info, string title = null, int sumCloseSecond  = 3, Action afterFormClosed = null)
         {
             InitializeComponent();
-            this.lblInfo.Text = info;
-            this.Text = title;
-            this._second = this._sumSecond = sumCloseSecond;
+            lblInfo.Text = info;
+            Text = title;
+            _second = _sumSecond = sumCloseSecond;
+            AfterFormClosed = afterFormClosed;
         }
 
         private void BtnTopClose_Click(object sender, EventArgs e)
         {
             timer1.Enabled = false;
             Close();
+            AfterFormClosed?.Invoke();
         }
 
         private void InfoTipBox_Load(object sender, EventArgs e) => timer1.Enabled = _sumSecond > 0;
@@ -43,11 +50,12 @@ namespace WLib.WinCtrls.MessageCtrl
         private void Timer1_Tick(object sender, EventArgs e)
         {
             if (_second >= 0)
-                this.btnClose.Text = $"关闭({_second--})";
+                btnClose.Text = $"   关闭({_second--})";
             else
             {
                 timer1.Enabled = false;
-                this.Close();
+                Close();
+                AfterFormClosed?.Invoke();
             }
         }
     }

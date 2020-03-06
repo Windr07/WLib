@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------- 
 // auth： Windragon
 // date： 2019/2/23
-// desc： None
+// desc： 地图显示和操作的组合控件（因外部使用可能出现许可错误，因此还组合了License控件，外部不应该再使用License控件）
 // mdfy:  None
 //----------------------------------------------------------------*/
 
@@ -14,7 +14,7 @@ using WLib.ArcGis.Control.MapAssociation;
 namespace WLib.WinCtrls.ArcGisCtrl
 {
     /// <summary>
-    /// 地图及其图层/表格树、鹰眼图、导航工具、页面布局视图的组合控件
+    /// 地图及其图层/表格树、鹰眼图、导航工具、页面布局和许可控件的组合控件
     /// </summary>
     public partial class MapViewer : UserControl
     {
@@ -23,18 +23,15 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// </summary>
         public readonly MapViewerManager Manger;
         /// <summary>
-        /// 初始化地图及其图层/表格树、鹰眼图、导航工具、页面布局视图的组合控件
+        /// 地图及其图层/表格树、鹰眼图、导航工具、页面布局和许可控件的组合控件
         /// </summary>
         public MapViewer()
         {
             InitializeComponent();
 
             TableListBox.Dock = DockStyle.Fill;
-            MainMapControl.Controls.Add(MapNavigationTools);
-            MapNavigationTools.Parent = MainMapControl;
             MapNavigationTools.MapControl = MainMapControl;
-            Manger = new MapViewerManager(MainMapControl, EagleMapControl, TocControl, PageLayoutControl, SwitchView);
-
+            Manger = new MapViewerManager(MainMapControl, EagleMapControl, TocControl, PageLayoutControl, new AttributeForm(), SwitchView);
             ((IActiveViewEvents_Event)MainMapControl.Map).ItemAdded += item =>
                 { if (item is ITable table) TableListBox.AddTable(table); };
         }
@@ -79,15 +76,15 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// </summary>
         private void layerControlButtons_Click(object sender, EventArgs e)
         {
-            var btnName = ((Button)sender).Name;
-            if (btnName == btnSwitchContent.Name)
+            var ctrlName = ((Control)sender).Name;
+            if (ctrlName == btnSwitchContent.Name)
             {
                 SwitchView(TocControl.Visible ? EViewActionType.TableList : EViewActionType.LayerToc);
                 tocGroupControl.Update();
             }
-            else if (btnName == btnCollapsed.Name) Manger.TocHelper.ExpandLegend(false);
-            else if (btnName == btnExpand.Name) Manger.TocHelper.ExpandLegend(true);
-            else if (btnName == btnAddData.Name) Manger.DocHelper.AddData();
+            else if (ctrlName == btnCollapsed.Name) Manger.TocHelper.ExpandLegend(false);
+            else if (ctrlName == btnExpand.Name) Manger.TocHelper.ExpandLegend(true);
+            else if (ctrlName == btnAddData.Name) Manger.DocHelper.AddData();
         }
     }
 }

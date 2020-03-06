@@ -17,8 +17,9 @@ using WLib.WindowsAPI;
 namespace WLib.WinCtrls.Dev.ChildCtrl
 {
     /// <summary>
-    /// 提供窗体停靠的容器控件，
-    /// 内置DevExpress.XtraBars.Docking.DockManger组件并提供将窗体放入DockPanel内部等方法。
+    /// 提供窗体停靠的容器控件
+    /// <para>内置<see cref="DevExpress.XtraBars.Docking.DockManager"/>组件并提供将窗体放入DockPanel内部等方法</para>
+    /// <para>使用方法：①将该控件拖入窗口 ②设置Dock属性 ③调用该控件的<see cref="AddFormToFloatPanel"/>等方法</para>
     /// </summary>
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design", typeof(IDesigner))]
     public partial class DockFormControl : UserControl
@@ -35,25 +36,21 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
         /// 获取或设置创建面板时，面板出现的位置
         /// </summary>
         public Point FloatLocation { get; set; } = new Point(100, 100);
+
+
         /// <summary>
-        /// 构造窗口停靠容器控件实例
+        /// 提供窗体停靠的容器控件
         /// </summary>
-        public DockFormControl()
-        {
-            InitializeComponent();
-        }
-
-
+        public DockFormControl() => InitializeComponent();
         /// <summary>
         /// 创建、显示停靠面板并放置窗体，面板自动与已有面板组合成标签式面板。
-        /// 不重复打开拥有相同窗体的面板。
+        /// <para>不重复打开拥有相同窗体的面板</para>
         /// </summary>
         /// <param name="form">内置在停靠面板的窗体</param>
-        /// <param name="formTag">窗体标识，值为null则忽略，不为null则面板Tag值相同则认为面板拥有相同窗体</param>
-        /// <param name="width">面板宽度</param>
-        /// <param name="height">面板高度</param>
+        /// <param name="width">面板宽度，若值≤0则等同窗体宽度</param>
+        /// <param name="height">面板高度，若值≤0则等同窗体高度</param>
         /// <param name="visibility">指示面板显示/隐藏/自动隐藏的枚举</param>
-        public void AddFormToTabPanel(Form form, string formTag = null, int width = 600, int height = 600, DockVisibility visibility = DockVisibility.Visible)
+        public void AddFormToTabPanel(Form form, int width = 600, int height = 600, DockVisibility visibility = DockVisibility.Visible)
         {
             // 查找包含指定窗体的DockPanel，通过Tag属性区分面板(窗体)
             var allPanels = dockManager1.Panels.Cast<DockPanel>();
@@ -83,7 +80,8 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
                 {
                     dockPanel = dockManager1.AddPanel(DockingStyle);
                 }
-                dockPanel.Size = new Size(width, height);
+
+                dockPanel.Size = new Size(width > 0 ? width : form.Width, height > 0 ? height : form.Height);
                 dockPanel.Tag = form.Name + form.Text;//标记窗体，以区分不同窗体
                 dockPanel.Text = form.Text;
                 dockPanel.Visibility = visibility;
@@ -101,13 +99,12 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
         }
         /// <summary>
         /// 创建、显示浮动面板并放置窗体
-        /// 不重复打开拥有相同窗体的面板。
+        /// <para>不重复打开拥有相同窗体的面板</para>
         /// </summary>
         /// <param name="form">内置在停靠面板的窗体</param>
-        /// <param name="point">面板显示位置</param>
-        /// <param name="width">面板宽度</param>
-        /// <param name="height">面板高度</param>
-        public void AddFormToFloatPanel(Form form, Point point, int width = 600, int height = 600)
+        /// <param name="width">面板宽度，若值≤0则等同窗体宽度</param>
+        /// <param name="height">面板高度，若值≤0则等同窗体高度</param>
+        public void AddFormToFloatPanel(Form form, int width = 600, int height = 600)
         {
             //查找已是否存在包含指定窗体的DockPanel，通过Tag属性区分面板(窗体)
             var existPanel = dockManager1.Panels.Cast<DockPanel>().FirstOrDefault(v => (v.Tag != null) && v.Tag.Equals(form.Name + form.Text));
@@ -115,7 +112,7 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
             if (existPanel == null)
             {
                 dockPanel = dockManager1.AddPanel(FloatLocation);
-                dockPanel.FloatSize = new Size(width, height);
+                dockPanel.FloatSize = new Size(width > 0 ? width : form.Width, height > 0 ? height : form.Height);
                 dockPanel.Tag = form.Name + form.Text;//标记窗体，以区分不同窗体
                 dockPanel.Text = form.Text;
 
@@ -129,6 +126,28 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
             dockPanel.BringToFront();
             form.Show();
         }
+
+
+        /// <summary>
+        /// 当容器大小发生改变时，窗体自适应外部容器大小
+        /// </summary>
+        /// <param name="handleId">容器控件的句柄</param>
+        /// <param name="innerFormHandle">内部窗体句柄</param>
+        private void OnResize(int handleId, IntPtr innerFormHandle, int borderWidth = 0, int borderHeight = 0)
+        {
+            borderWidth = borderWidth > 0 ? borderWidth : SystemInformation.Border3DSize.Width;
+            borderHeight = borderHeight > 0 ? borderHeight : SystemInformation.Border3DSize.Height;
+            int captionHeight = SystemInformation.CaptionHeight;
+            int statusHeight = 8;
+            WinApi.MoveWindow(
+                innerFormHandle,
+                -2 * borderWidth - 1,
+                -2 * borderHeight - captionHeight - 1,
+                FromHandle((IntPtr)handleId).Bounds.Width + 4 * borderWidth + 1,
+                FromHandle((IntPtr)handleId).Bounds.Height + captionHeight + 4 * borderHeight + statusHeight,
+                false);
+            //true);
+        }
         /// <summary>
         /// 将窗体内置到面板工作区中，设置窗体大小自适应、面板和窗体互相关闭
         /// </summary>
@@ -139,18 +158,24 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
             //将窗体内置到面板工作区中
             int dockPanelWnd = dockPanel.ControlContainer.Handle.ToInt32();
             WinApi.SetParent(form.Handle.ToInt32(), dockPanelWnd);
-            OnResize(dockPanelWnd, form.Handle);
+            OnResize(dockPanelWnd, form.Handle, 4, 3);
 
             //窗体自适应停靠面板大小
-            dockPanel.ControlContainer.SizeChanged += (sender, e) => OnResize(dockPanelWnd, form.Handle);
+            dockPanel.ControlContainer.SizeChanged += (sender, e) => OnResize(dockPanelWnd, form.Handle, 4, 3);
 
             //关闭面板时关闭窗体
             dockPanel.ClosingPanel += (sender, e) =>
             {
+                if (!IsCloseDockPanel)
+                {
+                    dockPanel.Hide();
+                    return;
+                }
                 if (!form.IsDisposed && IsCloseDockPanel)
                     form.Close();
+                if (!form.IsDisposed)
+                    e.Cancel = true;
             };
-            dockPanel.ClosingPanel += dockFormPanel_ClosingPanel;
 
             //关闭窗体时关闭面板
             form.FormClosed += (sender, e) =>
@@ -160,35 +185,15 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
             };
         }
         /// <summary>
-        /// 当容器大小发生改变时，窗体自适应外部容器大小
-        /// </summary>
-        /// <param name="handleId">容器控件的句柄</param>
-        /// <param name="innerFormHandle">内部窗体句柄</param>
-        public void OnResize(int handleId, IntPtr innerFormHandle)
-        {
-            int borderWidth = SystemInformation.Border3DSize.Width;
-            int borderHeight = SystemInformation.Border3DSize.Height;
-            int captionHeight = SystemInformation.CaptionHeight;
-            int statusHeight = 8;
-            WinApi.MoveWindow(
-                innerFormHandle,
-                -2 * borderWidth,
-                -2 * borderHeight - captionHeight,
-                FromHandle((IntPtr)handleId).Bounds.Width + 4 * borderWidth,
-                FromHandle((IntPtr)handleId).Bounds.Height + captionHeight + 4 * borderHeight + statusHeight,
-                false);
-            //true);
-        }
-        /// <summary>
         /// 关闭面板时，根据IsCloseDockPanel确定隐藏面板还是销毁面板
         /// </summary>
         private void dockFormPanel_ClosingPanel(object sender, DockPanelCancelEventArgs e)
         {
-            if (IsCloseDockPanel)
+            if (!IsCloseDockPanel)
             {
                 e.Cancel = true;    //默认情况下，点击面板的关闭按钮面板隐藏但未被销毁，设置此值以重写它的默认行为
                 FloatLocation = e.Panel.FloatLocation;
-                e.Panel.Dispose();
+                //e.Panel.Dispose();
             }
         }
     }

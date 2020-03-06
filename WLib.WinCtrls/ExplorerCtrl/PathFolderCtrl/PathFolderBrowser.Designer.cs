@@ -30,22 +30,12 @@ namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
         /// </summary>
         private void InitializeComponent()
         {
-            this.explorerTreeView1 = new WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl.ExplorerTreeView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.explorerTreeView1 = new WLib.WinCtrls.ExplorerCtrl.ExplorerTreeCtrl.ExplorerTreeView();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // explorerTreeView1
-            // 
-            this.explorerTreeView1.CanRename = false;
-            this.explorerTreeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.explorerTreeView1.Location = new System.Drawing.Point(2, 2);
-            this.explorerTreeView1.Name = "explorerTreeView1";
-            this.explorerTreeView1.SelectedPath = null;
-            this.explorerTreeView1.Size = new System.Drawing.Size(298, 289);
-            this.explorerTreeView1.TabIndex = 2;
             // 
             // tableLayoutPanel1
             // 
@@ -81,6 +71,16 @@ namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "文件夹";
+            // 
+            // explorerTreeView1
+            // 
+            this.explorerTreeView1.CanRename = false;
+            this.explorerTreeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.explorerTreeView1.Location = new System.Drawing.Point(2, 2);
+            this.explorerTreeView1.Name = "explorerTreeView1";
+            this.explorerTreeView1.SelectedPath = null;
+            this.explorerTreeView1.Size = new System.Drawing.Size(298, 289);
+            this.explorerTreeView1.TabIndex = 2;
             // 
             // PathFolderBrowser
             // 

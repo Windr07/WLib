@@ -27,9 +27,7 @@ namespace WLib.WinCtrls.Dev.Extension
             Images images = imgColl.Images;
             InnerImagesList innerImagesList = images.InnerImages;
             foreach (ImageInfo imageInfo in innerImagesList)
-            {
-                imageInfo.Image.Save(saveDirectory + imageInfo.Name, ImageFormat.Png);
-            }
+                imageInfo.Image.Save(Path.Combine(saveDirectory, imageInfo.Name + "." + ImageFormat.Png));
         }
     }
 }

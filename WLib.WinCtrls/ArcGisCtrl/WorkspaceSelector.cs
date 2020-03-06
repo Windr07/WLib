@@ -10,8 +10,11 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.GeoDatabase.Table;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Attributes.Description;
+using WLib.WinCtrls.Extension;
 using WLib.WinCtrls.PathCtrl;
 
 namespace WLib.WinCtrls.ArcGisCtrl
@@ -83,6 +86,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
         }
         #endregion
 
+
         #region 基础事件
         /// <summary>
         /// 选择工作空间并获取要素类名称完成事件
@@ -93,21 +97,8 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// 改变工作空间类型选项完成的事件
         /// </summary>
         public event EventHandler WorkspaceTypeChanged;
-        /// <summary>
-        /// 触发AfterSelectPath事件
-        /// </summary>
-        internal void OnAfterSelectPath()
-        {
-            AfterSelectPath?.Invoke(this, new EventArgs());
-        }
-        /// <summary>
-        /// 触发AfterSelectPath事件
-        /// </summary>
-        internal void OnWorkspaceTypeChanged()
-        {
-            WorkspaceTypeChanged?.Invoke(this, new EventArgs());
-        }
         #endregion
+
 
         #region GIS相关属性、方法
         /// <summary>
@@ -139,17 +130,9 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// <returns></returns>
         public IFeatureClass GetFeatureClassByName(string name, bool searchKeyword = false)
         {
-            if (FeatureClasses == null) return null;
-            foreach (var cls in FeatureClasses)
-            {
-                if (searchKeyword &&
-                    (cls.AliasName.Contains(name) || ((IDataset)cls).Name.Contains(name)))
-                    return cls;
-
-                if (cls.AliasName == name || ((IDataset)cls).Name == name)
-                    return cls;
-            }
-            return null;
+            return searchKeyword
+                ? FeatureClasses?.FirstOrDefault(v => v.AliasName.Contains(name) || v.GetName().Contains(name))
+                : FeatureClasses?.FirstOrDefault(v => v.AliasName == name || v.GetName() == name);
         }
         /// <summary>
         /// 返回指定名称或别名的表格（未连接工作空间或找不到时返回null）
@@ -159,17 +142,9 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// <returns></returns>
         public ITable GetTableByName(string name, bool searchKeyword = false)
         {
-            if (Tables == null) return null;
-            foreach (var table in Tables)
-            {
-                if (searchKeyword &&
-                    (((IObjectClass)table).AliasName.Contains(name) || ((IDataset)table).Name.Contains(name)))
-                    return table;
-
-                if (((IObjectClass)table).AliasName == name || ((IDataset)table).Name == name)
-                    return table;
-            }
-            return null;
+            return searchKeyword
+               ? Tables?.FirstOrDefault(v => v.GetAliasName().Contains(name) || v.GetName().Contains(name))
+               : Tables?.FirstOrDefault(v => v.GetAliasName() == name || v.GetName() == name);
         }
         #endregion
 
@@ -180,8 +155,22 @@ namespace WLib.WinCtrls.ArcGisCtrl
         public WorkspaceSelector()
         {
             InitializeComponent();
-
-            this.SourcePathBox.AfeterSelectPath += txtASourcePath_AfeterSelectPath;
+            this.SourcePathBox.OnPathTextChanged += (sender, e) =>
+            {
+                var path = this.SourcePathBox.Text?.Trim();
+                if (string.IsNullOrWhiteSpace(path))
+                    return;
+                var wsType = WorkspaceEx.GetDefaultWorkspaceType(path);
+                if (wsType != EWorkspaceType.Default && wsType != WorkspaceType)
+                {
+                    var index = this.cmbADBType.Items.IndexOf(wsType.GetDescription());
+                    if (index > 0)
+                    {
+                        WorkspaceIndex = index;
+                        this.SourcePathBox.SelectPath(path);
+                    }
+                }
+            };
             WorkspaceTypeFilter = DEFAULT_WORKSPACE_TYPE;
         }
         /// <summary>
@@ -229,24 +218,24 @@ namespace WLib.WinCtrls.ArcGisCtrl
                     break;
             }
             this.SourcePathBox.SelectTips = item.GetDescription();
-            OnWorkspaceTypeChanged();
+            WorkspaceTypeChanged?.Invoke(this, new EventArgs());
         }
 
-        private void txtASourcePath_AfeterSelectPath(object sender, EventArgs e)//选择工作空间后，获取要素类名称，触发AfterSelectPath
+        private void SourcePathBox_AfeterSelectPath(object sender, EventArgs e)//选择工作空间后，获取要素类名称，触发AfterSelectPath
         {
             this.Cursor = Cursors.WaitCursor;
             Application.DoEvents();
             try
             {
-                Workspace = null;
-
                 var eType = this.cmbADBType.SelectedItem.ToString().GetEnum<EWorkspaceType>();
+                if (string.IsNullOrWhiteSpace(this.SourcePathBox.Path))
+                    return;
                 Workspace = WorkspaceEx.GetWorkSpace(this.SourcePathBox.Path, eType);
                 if (Workspace != null)
                 {
                     Tables = Workspace.GetTables().ToArray();
                     FeatureClasses = Workspace.GetFeatureClasses().ToArray();
-                    OnAfterSelectPath();
+                    AfterSelectPath?.Invoke(this, new EventArgs());
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, this.lblWorkspaceDesc.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }

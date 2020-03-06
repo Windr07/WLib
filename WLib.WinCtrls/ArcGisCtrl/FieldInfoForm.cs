@@ -43,8 +43,8 @@ namespace WLib.WinCtrls.ArcGisCtrl
                     MessageBox.Show("请先选择数据源和图层！", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                var dataTable = this.dataGridView1.DataSource as DataTable;
                 var txtPath = AppDomain.CurrentDomain.BaseDirectory + "fields.txt";
+                var dataTable = this.dataGridView1.DataSource as DataTable;
                 var tableToText = dataTable.DataTableToText("\t", true);
                 File.WriteAllText(txtPath, tableToText, Encoding.Default);
                 Process.Start(txtPath);
@@ -56,11 +56,11 @@ namespace WLib.WinCtrls.ArcGisCtrl
         {
             try
             {
-                if (this.listBoxLayers.SelectedIndex < 0)
+                var index = this.listBoxLayers.SelectedIndex;
+                if (index < 0)
                     return;
-                var featureClass = this.workspaceSelector1.FeatureClasses[this.listBoxLayers.SelectedIndex];
-                var fieldItems = featureClass.Fields.ToFieldItemExs();
-                var dataTable = fieldItems.ConvertToDataTable();
+                var featureClass = this.workspaceSelector1.FeatureClasses[index];
+                var dataTable = featureClass.Fields.ToFieldItemExs().ConvertToDataTable();
                 this.dataGridView1.DataSource = null;
                 this.dataGridView1.DataSource = dataTable;
                 this.dataGridView1.ShowRowNumber();

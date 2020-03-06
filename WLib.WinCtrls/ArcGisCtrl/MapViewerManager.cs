@@ -10,6 +10,7 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geodatabase;
 using System;
 using WLib.ArcGis.Control;
+using WLib.ArcGis.Control.AttributeCtrl;
 using WLib.ArcGis.Control.MapAssociation;
 
 namespace WLib.WinCtrls.ArcGisCtrl
@@ -65,14 +66,15 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// <param name="eagleMapControl">鹰眼图地图控件</param>
         /// <param name="tocControl">图层树控件</param>
         /// <param name="pageLayoutControl">页面布局控件</param>
+        /// <param name="attributeForm"></param>
         /// <param name="switchView">显示指定的界面视图的操作</param>
         public MapViewerManager(AxMapControl mainMapControl, AxMapControl eagleMapControl,
-            AxTOCControl tocControl, AxPageLayoutControl pageLayoutControl, Action<EViewActionType[]> switchView)
+            AxTOCControl tocControl, AxPageLayoutControl pageLayoutControl, IAttributeForm attributeForm, Action<EViewActionType[]> switchView)
         {
             SwitchView = switchView;
             MainMapControl = mainMapControl;
             DocHelper = new MapCtrlDocument(mainMapControl);
-            TocHelper = new MapCtrlToc(tocControl, mainMapControl, new AttributeForm(), switchView);
+            TocHelper = new MapCtrlToc(tocControl, mainMapControl, attributeForm, switchView);
             MenuHelper = new MapCtrlMenu(mainMapControl);
             EagleMapHelper = new MapCtrlEagleMap(mainMapControl, eagleMapControl);
             DrawElementHelper = new MapCtrlDrawElement(mainMapControl);

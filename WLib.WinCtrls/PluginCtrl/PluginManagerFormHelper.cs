@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -31,9 +30,9 @@ namespace WLib.WinCtrls.PluginCtrl
         {
             foreach (var filePath in filePaths)
             {
-                var assembly = Assembly.LoadFrom(filePath);
+                var assemblyName = new AssemblyName() { CodeBase = filePath };
+                var assembly = Assembly.Load(assemblyName);
                 var assemblyNode = new TreeNode { Text = assembly.GetName().Name, Tag = assembly, ImageIndex = 6 };//程序集节点
-
                 var commands = assembly.GetInterfaceAchieveTypes<ICommand>();
                 var cmdGroups = commands.GroupBy(v => v.Category);
                 foreach (var cmdGroup in cmdGroups)
@@ -54,10 +53,11 @@ namespace WLib.WinCtrls.PluginCtrl
         /// <param name="assemblyFileFilter">插件程序集文件过滤条件，只加载满足此文件过滤条件的插件文件</param>
         public static void ReloadPluginLib(this TreeView treeViewCmds, string pluginDir = null, string assemblyFileFilter = null)
         {
-            var filePaths = PluginHelper.GetAssemblyFiles(pluginDir, assemblyFileFilter);//获取全部dll和exe文件路径
-            var treeNodes = CreateCommandAssemblyTreeNodes(filePaths);//获得dll和exe中的插件信息，生成树状节点
+            var filePaths = PluginHelper.GetAssemblyFiles(pluginDir, assemblyFileFilter).ToArray();//获取全部dll和exe文件路径
+            var treeNodes = CreateCommandAssemblyTreeNodes(filePaths).ToArray();//获得dll和exe中的插件信息，生成树状节点
             treeViewCmds.Nodes.Clear();
-            treeViewCmds.Nodes.AddRange(treeNodes.ToArray());
+            treeViewCmds.Nodes.Clear();
+            treeViewCmds.Nodes.AddRange(treeNodes);
             treeViewCmds.ExpandAll();
         }
     }

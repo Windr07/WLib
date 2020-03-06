@@ -6,12 +6,13 @@
 //----------------------------------------------------------------*/
 
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.ArcGis.GeoDatabase.Fields;
+using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.Database;
-using WLib.Database.DbBase;
+using WLib.WinCtrls.MessageCtrl;
 
 namespace WLib.WinCtrls.SqlCtrl
 {
@@ -47,15 +48,21 @@ namespace WLib.WinCtrls.SqlCtrl
             var sql = cmbSql.SelectedItem.ToString();
             var tableName = listBoxTables.SelectedItem?.ToString();
             if (tableName != null)
-                sql = sql.Replace("表名称", tableName);
-
+            {
+                if (cbLayerAsTable.Checked && this.workspaceSelector1.WorkspaceType == EWorkspaceType.ShapeFile)
+                    sql = sql.Replace("表名称", $"{this.workspaceSelector1.PathOrConnStr}\\{tableName}.dbf");
+                else
+                    sql = sql.Replace("表名称", tableName);
+            }
             if (listBoxFields.SelectedItems.Count > 0)
             {
                 var str = listBoxFields.SelectedItems.Cast<string>().Aggregate((a, b) => a + "," + b);
                 sql = sql.Replace("列1, 列2", str).Replace("列1", listBoxFields.SelectedItems[0].ToString());
             }
 
-            richTextBox1.Text += Environment.NewLine + sql;
+            var splitC = this.tabControl1.SelectedTab.Controls.OfType<SplitContainer>().First();
+            var sqlTextBox = splitC.Panel1.Controls.OfType<TextBox>().First();
+            sqlTextBox.Text += Environment.NewLine + sql;
         }
 
         private void listBoxTables_SelectedIndexChanged(object sender, EventArgs e)
@@ -82,32 +89,58 @@ namespace WLib.WinCtrls.SqlCtrl
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            richTextBox1.Clear();
+            var splitC = this.tabControl1.SelectedTab.Controls.OfType<SplitContainer>().First();
+            var sqlTextBox = splitC.Panel1.Controls.OfType<TextBox>().First();
+            sqlTextBox.Clear();
         }
 
         private void btnQuery_Click(object sender, EventArgs e)
         {
+            var splitC = this.tabControl1.SelectedTab.Controls.OfType<SplitContainer>().First();
+            var dataGridView = splitC.Panel2.Controls.OfType<DataGridView>().First();
+            var sqlTextBox = splitC.Panel1.Controls.OfType<TextBox>().First(v => (string)v.Tag == "sql");
+            var conTextBox = splitC.Panel1.Controls.OfType<TextBox>().First(v => (string)v.Tag == "con");
+            dataGridView.Columns.Clear();
+            dataGridView.DataSource = null;
+            Application.DoEvents();
+
             var path = workspaceSelector1.PathOrConnStr;
-            string connString = null;
             DbHelper dbHelper = null;
             try
             {
-                switch (workspaceSelector1.WorkspaceType)
-                {
-                    case EWorkspaceType.ShapeFile: connString = DbHelper.ShpDir(path); break;
-                    case EWorkspaceType.FileGDB: connString = DbHelper.Gdb(path); break;
-                    case EWorkspaceType.Access: connString = DbHelper.Mdb(path); break;
-                }
-                dbHelper = DbHelper.GetDbHelper(connString, EDbProviderType.OleDb);
-                var sql = richTextBox1.Text.Trim();
+                dbHelper = DbHelper.GetShpMdbGdbHelper(path);
+                conTextBox.Text = dbHelper.ConnectionString;
+                var sql = sqlTextBox.Text.Trim();
                 var dataTable = dbHelper.GetDataTable(sql);
                 if (dataTable.Columns.Contains("SHAPE"))
                     dataTable.Columns.Remove("SHAPE");
-                dataGridView1.Columns.Clear();
-                dataGridView1.DataSource = dataTable;
+                dataGridView.Columns.Clear();
+                dataGridView.DataSource = dataTable;
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex) { MessageBoxEx.ShowError(ex); }
             finally { dbHelper?.Close(); }
+        }
+
+        private void 删除查询页ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.tabControl1.TabPages.Remove(this.tabControl1.SelectedTab);
+        }
+
+        private void 新建查询页ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var splitC = new SplitContainer() { Size = new Size(300, 300), Dock = DockStyle.Fill, SplitterDistance = 143, };
+            splitC.Orientation = Orientation.Horizontal;
+            var sqlBox = new TextBox() { Tag = "sql", Dock = DockStyle.Fill, Font = new Font("Arial Narrow", 12), Multiline = true, ForeColor = SystemColors.HotTrack, ScrollBars = ScrollBars.Both };
+            var conBox = new TextBox() { Tag = "con", Dock = DockStyle.Top, Font = new Font("Arial Narrow", 10), ReadOnly = true };
+            conBox.SendToBack();//置于底层
+            splitC.Panel1.Controls.Add(sqlBox);
+            splitC.Panel1.Controls.Add(conBox);
+            splitC.Panel2.Controls.Add(new DataGridView() { Dock = DockStyle.Fill });
+
+            var tabPage = new TabPage("新查询页");
+            tabPage.Controls.Add(splitC);
+            this.tabControl1.TabPages.Add(tabPage);
+            this.tabControl1.SelectedTab = tabPage;
         }
     }
 }

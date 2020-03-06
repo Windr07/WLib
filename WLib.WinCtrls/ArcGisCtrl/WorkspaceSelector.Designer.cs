@@ -30,11 +30,12 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// </summary>
         private void InitializeComponent()
         {
-            this.SourcePathBox = new PathBoxSimple();
+            this.SourcePathBox = new WLib.WinCtrls.PathCtrl.PathBoxSimple();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblWorkspaceDesc = new System.Windows.Forms.Label();
             this.cmbADBType = new System.Windows.Forms.ComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -49,7 +50,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
             this.SourcePathBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SourcePathBox.FileFilter = null;
             this.SourcePathBox.Location = new System.Drawing.Point(0, 0);
-            this.SourcePathBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.SourcePathBox.Margin = new System.Windows.Forms.Padding(4);
             this.SourcePathBox.MaximumSize = new System.Drawing.Size(9999, 100);
             this.SourcePathBox.MinimumSize = new System.Drawing.Size(0, 28);
             this.SourcePathBox.Name = "SourcePathBox";
@@ -60,11 +61,12 @@ namespace WLib.WinCtrls.ArcGisCtrl
             this.SourcePathBox.ReadOnly = false;
             this.SourcePathBox.SelectButtonText = "选择";
             this.SourcePathBox.SelectEnable = true;
-            this.SourcePathBox.SelectPathType = ESelectPathType.Folder;
+            this.SourcePathBox.SelectPathType = WLib.WinCtrls.Extension.ESelectPathType.Folder;
             this.SourcePathBox.SelectTips = null;
-            this.SourcePathBox.ShowButtonOption = EShowButtonOption.ViewSelect;
+            this.SourcePathBox.ShowButtonOption = WLib.WinCtrls.PathCtrl.EShowButtonOption.ViewSelect;
             this.SourcePathBox.Size = new System.Drawing.Size(426, 31);
             this.SourcePathBox.TabIndex = 0;
+            this.SourcePathBox.AfeterSelectPath += new System.EventHandler(this.SourcePathBox_AfeterSelectPath);
             // 
             // splitContainer1
             // 
@@ -136,6 +138,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
             this.Load += new System.EventHandler(this.WorkspaceSelector_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

@@ -12,9 +12,9 @@ using WLib.Plugins;
 using WLib.Plugins.Interface;
 using WLib.Plugins.Model;
 using WLib.WinCtrls.InputCtrl;
-using WLib.WinForm;
+using WLib.WinCtrls.Extension;
 using static WLib.Plugins.PluginHelper;
-
+using WLib.Files;
 
 namespace WLib.WinCtrls.PluginCtrl
 {
@@ -24,18 +24,13 @@ namespace WLib.WinCtrls.PluginCtrl
     public partial class PluginManagerForm : Form
     {
         /// <summary>
-        /// 软件存放图标的目录
-        /// <para>默认为：软件配置目录或软件生成目录\Images</para>
-        /// </summary>
-        private string _appImageDir = null;
-        /// <summary>
         /// 修改插件信息的窗口
         /// </summary>
-        private PluginInfoForm _pluginInfoForm = new PluginInfoForm();
+        private PluginInfoCtrl _pluginInfoForm = new PluginInfoCtrl();
         /// <summary>
         /// 修改插件容器信息的窗口
         /// </summary>
-        private PluginContainerInfoForm _pluginContainerInfoForm = new PluginContainerInfoForm();
+        private PluginContainerInfoCtrl _pluginContainerInfoForm = new PluginContainerInfoCtrl();
 
         /// <summary>
         /// 保存全部方案事件
@@ -54,43 +49,35 @@ namespace WLib.WinCtrls.PluginCtrl
         /// </summary>
         public IPluginPlanSystem PlanSystem { get; private set; }
         /// <summary>
+        /// 应用软件目录
+        /// </summary>
+        public string AppDir { get; private set; }
+        /// <summary>
+        /// 配置文件目录，未指定时为应用软件目录
+        /// </summary>
+        public string CfgDir { get; private set; }
+
+        /// <summary>
         /// 实例化插件管理窗口，对指定程序进行插件管理
         /// </summary>
-        /// <param name="pluginPlanSystem">要管理的应用软件插件方案系统</param>
-        /// <param name="pluginDir">需要管理插件的程序所在的目录</param>
+        /// <param name="pluginPlanSystems">要管理的应用软件插件方案系统</param>
+        /// <param name="appDir">应用软件目录（在后台管理中是应用软件的配置目录）</param>
+        /// <param name="pluginDir">插件命令所在目录</param>
         /// <param name="assemblyFilter">插件程序集文件过滤条件</param>
-        public PluginManagerForm(IPluginPlanSystem pluginPlanSystem = null, string pluginDir = null, string assemblyFilter = null)
+        /// <param name="cfgDir">配置文件所在目录</param>
+        public PluginManagerForm(List<IPluginPlanSystem> pluginPlanSystems = null, string appDir = null, string pluginDir = null, string assemblyFilter = null, string cfgDir = null)
         {
             InitializeComponent();
             InitSubFormEvents();
             InitPluginLibrary(pluginDir, assemblyFilter); //加载dll和exe文件的命令仓库
 
-            pluginPlanSystem = pluginPlanSystem ?? CreatePluginPlanSystem();
-            pluginPlanSystem.SysInfo = pluginPlanSystem.SysInfo ?? CreateAssemblySystemInfo();
-            if (pluginPlanSystem.Plans.Count == 0)
-                pluginPlanSystem.Plans.Add(CreatePluginPlan(pluginPlanSystem.SysInfo.AppDir));
-
-            cmbSubSystem.Items.Add(pluginPlanSystem);
-            cmbSubSystem.SelectedIndex = 0;
-        }
-        /// <summary>
-        /// 实例化插件管理窗口，对指定目录下的程序进行插件管理
-        /// </summary>
-        /// <param name="assemblyDiretory"></param>
-        /// <param name="pluginDir">需要管理插件的程序所在的目录</param>
-        /// <param name="assemblyFilter">插件程序集文件过滤条件</param>
-        public PluginManagerForm(string assemblyDiretory, string pluginDir = null, string assemblyFilter = null)
-        {
-            InitializeComponent();
-            InitSubFormEvents();
-            InitPluginLibrary(pluginDir, assemblyFilter); //加载dll和exe文件的命令仓库
-
-            var pluginPlanSystems = CreatePluginPlanSystems(assemblyDiretory).ToList();
+            AppDir = appDir ?? AppDomain.CurrentDomain.BaseDirectory;
+            CfgDir = cfgDir ?? AppDir;
+            pluginPlanSystems = pluginPlanSystems ?? CreatePluginPlanSystems(AppDir).ToList();
             cmbSubSystem.DataSource = new BindingList<IPluginPlanSystem>(pluginPlanSystems);
             if (cmbSubSystem.Items.Count > 0)
                 cmbSubSystem.SelectedIndex = 0;
         }
-
 
         /// <summary>
         /// 设置子窗体事件处理
@@ -99,6 +86,10 @@ namespace WLib.WinCtrls.PluginCtrl
         {
             _pluginInfoForm.ValueChanged += (sender, e) => treeViewMenus.SelectedNode.Text = _pluginInfoForm.Plugin.Text;
             _pluginContainerInfoForm.ValueChanged += (sender, e) => treeViewMenus.SelectedNode.Text = _pluginContainerInfoForm.PluginContainer.Text;
+            _pluginInfoForm.Dock = DockStyle.Fill;
+            _pluginContainerInfoForm.Dock = DockStyle.Fill;
+            splitContainerMenus.Panel2.Controls.Add(_pluginInfoForm);
+            splitContainerMenus.Panel2.Controls.Add(_pluginContainerInfoForm);
         }
         /// <summary>
         /// 从目录中读取dll和exe中的插件，加载到插件仓库TreeView控件中
@@ -113,16 +104,6 @@ namespace WLib.WinCtrls.PluginCtrl
             toolTip1.SetToolTip(lblCmdLib, pluginDir);
         }
         /// <summary>
-        /// 显示应用软件信息
-        /// </summary>
-        /// <param name="sysInfo"></param>
-        private void ReloadSystemInfo(ISystemInfo sysInfo)
-        {
-            _appImageDir = Path.Combine(Path.GetDirectoryName(sysInfo.AppPath), "Images");
-            Text = "插件管理 - " + (lblSystemName.Text = sysInfo.Text);
-            toolTip1.SetToolTip(lblSystemName, sysInfo.AppPath);
-        }
-        /// <summary>
         /// 显示插件方案列表
         /// </summary>
         /// <param name="plans">插件方案列表</param>
@@ -132,10 +113,11 @@ namespace WLib.WinCtrls.PluginCtrl
             listBoxPlans.DeleteItem += (sender, e) => { plans.Remove(plans[e.Index]); ReBindingPlans(plans); };
             listBoxPlans.ItemPropertyNames.Add(nameof(IPluginPlan.Id));
             listBoxPlans.DefaultImageIndex = 8;
-            listBoxPlans.SetItemInfo(plans.IndexOf(plans.First(v => v.Selected)), 12, false);//设置选用的方案的图标
+
+            var selectedIndex = plans.IndexOf(plans.First(v => v.Selected));
+            listBoxPlans.SetItemInfo(selectedIndex, 12, false);//设置选用的方案的图标
             ReBindingPlans(plans);
-            if (listBoxPlans.Items.Count > 0)
-                listBoxPlans.SelectedIndex = 0;
+            listBoxPlans.SelectedIndex = selectedIndex;
         }
         /// <summary>
         /// 重新绑定listBoxPlans控件的数据源（插件方案）
@@ -164,14 +146,8 @@ namespace WLib.WinCtrls.PluginCtrl
                 SavePlans?.Invoke(this, new EventArgs());
             }
             PlanSystem = (IPluginPlanSystem)cmbSubSystem.SelectedItem;
-            ReloadSystemInfo(PlanSystem.SysInfo); //加载软件信息
+            Text = "插件管理 - " + (lblSystemName.Text = PlanSystem.SysInfo.Text);
             ReloadPluginPlans(PlanSystem.Plans);  //加载插件方案列表
-        }
-
-        private void SplitContainerMenus_Panel2_Resize(object sender, EventArgs e)
-        {
-            splitContainerMenus.Panel2.ResizeForm(_pluginInfoForm, EResize.AutoWidth);
-            splitContainerMenus.Panel2.ResizeForm(_pluginContainerInfoForm, EResize.AutoWidth);
         }
 
         private void BtnSave_Click(object sender, EventArgs e)//保存
@@ -182,6 +158,7 @@ namespace WLib.WinCtrls.PluginCtrl
         }
 
         private void BtnCancel_Click(object sender, EventArgs e) => Close();//取消
+
 
 
         #region ListBoxPlans事件
@@ -232,19 +209,20 @@ namespace WLib.WinCtrls.PluginCtrl
             if (selectedNode.Tag is IPluginItem plugin)
             {
                 _pluginContainerInfoForm.Hide();
-                splitContainerMenus.Panel2.AutoScroll = true;
-                splitContainerMenus.Panel2.ShowSubForm(_pluginInfoForm, EResize.AutoWidth);
-                splitContainerMenus.SplitterDistance -= 1;
-                splitContainerMenus.SplitterDistance += 1;
+                _pluginInfoForm.Show();
+                _pluginInfoForm.CfgDir = CfgDir;
                 _pluginInfoForm.Plugin = plugin;
-                _pluginInfoForm.AppImageDir = _appImageDir;
             }
             else if (selectedNode.Tag is IPluginContainer pluginContainer)
             {
+                _pluginContainerInfoForm.Show();
                 _pluginInfoForm.Hide();
-                splitContainerMenus.Panel2.AutoScroll = false;
-                splitContainerMenus.Panel2.ShowSubForm(_pluginContainerInfoForm);
                 _pluginContainerInfoForm.PluginContainer = pluginContainer;
+            }
+            else if (selectedNode.Tag is IPluginView)
+            {
+                _pluginContainerInfoForm.Hide();
+                _pluginInfoForm.Hide();
             }
         }
 
@@ -270,7 +248,12 @@ namespace WLib.WinCtrls.PluginCtrl
             if (targetNode == null) return;
 
             var tag = sourceNode.Tag;
-            var pluginItem = tag is ICommand cmd ? PluginItem.FromCommand(cmd) : tag as PluginItem;
+            var pluginItem = tag is ICommand cmd ? PluginItem.FromCommand(cmd, PluginDir) : tag as PluginItem;
+            //特殊处理：由于Assembly.LoadFrom方法反射程序集A会被缓存，
+            //随后再反射同名但路径不同的程序集B，因缓存原因实际反射的仍是程序集A的奇葩机制，目前未找到解决方案，此处只能强行替代程序集的路径
+            pluginItem.AssemblyPath = Path.Combine(PluginDir, Path.GetFileName(pluginItem.AssemblyPath));
+            pluginItem.AssemblyPath = FileOpt.GetRelativePath(pluginItem.AssemblyPath, PluginDir);
+
             var insertNode = pluginItem.CreateNode(4);
             AppendToMenu(targetNode, insertNode);
 
@@ -345,13 +328,17 @@ namespace WLib.WinCtrls.PluginCtrl
             sb.AppendLine(e.Node.Tag?.ToString());
             if (e.Node.Tag is ICommand cmd)
             {
-                foreach (var property in cmd.GetType().GetProperties())
+                var cmdType = cmd.GetType();
+                sb.AppendLine($"位置：{cmdType.Assembly.Location}");
+                foreach (var property in cmdType.GetProperties())
                 {
                     var descAttrs = (DescriptionAttribute[])property.GetCustomAttributes(typeof(DescriptionAttribute), true);
                     if (descAttrs.Length > 0)
                         sb.AppendLine($"{descAttrs[0].Description}：{property.GetValue(cmd, null)}");
                 }
             }
+            else if (e.Node.Tag is Assembly assembly)
+                sb.AppendLine($"位置：{assembly.Location}");
             txtPluginInfo.Text = sb.ToString();
         }
         #endregion
@@ -377,7 +364,7 @@ namespace WLib.WinCtrls.PluginCtrl
                     MessageBox.Show($@"已存在名为“{form.KeyWord}”的插件方案，请重新填写方案名称！", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                plans.Add(CreatePluginPlan(PlanSystem.SysInfo.AppPath, planName, false));
+                plans.Add(CreatePluginPlan(AppDir, planName, false));
                 ReBindingPlans(plans);
             }
         }
@@ -515,8 +502,14 @@ namespace WLib.WinCtrls.PluginCtrl
                 cmds = cmdNode.Nodes.Cast<TreeNode>().Select(n => (ICommand)n.Tag).ToList();
             else if (cmdNode.Tag is ICommand)
                 cmds.Add((ICommand)cmdNode.Tag);
-
-            var newNodes = cmds.Select(cmd => PluginItem.FromCommand(cmd).CreateNode(4));
+            //特殊处理：由于Assembly.LoadFrom方法反射程序集A会被缓存，
+            //随后再反射同名但路径不同的程序集B，因缓存原因实际反射的仍是程序集A的奇葩机制，目前未找到解决方案，此处只能强行替代程序集的路径
+            var newNodes = cmds.Select(cmd =>
+            {
+                var plugin = PluginItem.FromCommand(cmd, AppDir);
+                plugin.AssemblyPath = Path.Combine(PluginDir, Path.GetFileName(plugin.AssemblyPath));
+                return plugin.CreateNode(4);
+            });
             foreach (var node in newNodes)
                 AppendToMenu(menuNode, node);
         }

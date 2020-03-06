@@ -20,10 +20,10 @@ namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
         {
             FolderBrowserDialog browser = new FolderBrowserDialog();
             if (value != null)
-                browser.DirectoryPath = value.ToString();
+                browser.SelectedPath = value.ToString();
 
             if (browser.ShowDialog(null) == DialogResult.OK)
-                return browser.DirectoryPath;
+                return browser.SelectedPath;
             return value;
         }
     }

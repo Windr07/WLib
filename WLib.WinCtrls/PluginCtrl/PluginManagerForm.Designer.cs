@@ -156,8 +156,8 @@
             // 
             this.splitContainerAll.Panel2.Controls.Add(this.splitContainerPlugin);
             this.splitContainerAll.Panel2.Controls.Add(this.panel1);
-            this.splitContainerAll.Size = new System.Drawing.Size(856, 526);
-            this.splitContainerAll.SplitterDistance = 573;
+            this.splitContainerAll.Size = new System.Drawing.Size(945, 546);
+            this.splitContainerAll.SplitterDistance = 632;
             this.splitContainerAll.TabIndex = 1;
             // 
             // splitContainerConfig
@@ -177,8 +177,8 @@
             // splitContainerConfig.Panel2
             // 
             this.splitContainerConfig.Panel2.Controls.Add(this.groupBoxPlan);
-            this.splitContainerConfig.Size = new System.Drawing.Size(573, 526);
-            this.splitContainerConfig.SplitterDistance = 244;
+            this.splitContainerConfig.Size = new System.Drawing.Size(632, 546);
+            this.splitContainerConfig.SplitterDistance = 269;
             this.splitContainerConfig.TabIndex = 0;
             // 
             // panel4
@@ -189,7 +189,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 48);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(242, 476);
+            this.panel4.Size = new System.Drawing.Size(267, 496);
             this.panel4.TabIndex = 9;
             // 
             // listBoxPlans
@@ -202,7 +202,7 @@
             this.listBoxPlans.ImageSize = 16;
             this.listBoxPlans.Location = new System.Drawing.Point(0, 33);
             this.listBoxPlans.Name = "listBoxPlans";
-            this.listBoxPlans.Size = new System.Drawing.Size(238, 439);
+            this.listBoxPlans.Size = new System.Drawing.Size(263, 459);
             this.listBoxPlans.TabIndex = 10;
             this.listBoxPlans.SelectedIndexChanged += new System.EventHandler(this.ListBoxPlans_SelectedIndexChanged);
             this.listBoxPlans.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBoxPlans_MouseDoubleClick);
@@ -233,7 +233,7 @@
             this.panelPlanTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPlanTop.Location = new System.Drawing.Point(0, 0);
             this.panelPlanTop.Name = "panelPlanTop";
-            this.panelPlanTop.Size = new System.Drawing.Size(238, 33);
+            this.panelPlanTop.Size = new System.Drawing.Size(263, 33);
             this.panelPlanTop.TabIndex = 7;
             // 
             // tableLayoutPanel1
@@ -252,7 +252,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(151, 31);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(176, 31);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
             // btnAdd
@@ -261,7 +261,7 @@
             this.btnAdd.Location = new System.Drawing.Point(0, 0);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(0);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(50, 31);
+            this.btnAdd.Size = new System.Drawing.Size(58, 31);
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "新建";
             this.toolTip1.SetToolTip(this.btnAdd, "新建");
@@ -271,10 +271,10 @@
             // btnSelect
             // 
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSelect.Location = new System.Drawing.Point(100, 0);
+            this.btnSelect.Location = new System.Drawing.Point(116, 0);
             this.btnSelect.Margin = new System.Windows.Forms.Padding(0);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(51, 31);
+            this.btnSelect.Size = new System.Drawing.Size(60, 31);
             this.btnSelect.TabIndex = 6;
             this.btnSelect.Text = "选用";
             this.toolTip1.SetToolTip(this.btnSelect, "选用");
@@ -284,10 +284,10 @@
             // btnDeletePlan
             // 
             this.btnDeletePlan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDeletePlan.Location = new System.Drawing.Point(50, 0);
+            this.btnDeletePlan.Location = new System.Drawing.Point(58, 0);
             this.btnDeletePlan.Margin = new System.Windows.Forms.Padding(0);
             this.btnDeletePlan.Name = "btnDeletePlan";
-            this.btnDeletePlan.Size = new System.Drawing.Size(50, 31);
+            this.btnDeletePlan.Size = new System.Drawing.Size(58, 31);
             this.btnDeletePlan.TabIndex = 6;
             this.btnDeletePlan.Text = "删除";
             this.toolTip1.SetToolTip(this.btnDeletePlan, "删除");
@@ -310,7 +310,7 @@
             this.panelSubSystem.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSubSystem.Location = new System.Drawing.Point(0, 22);
             this.panelSubSystem.Name = "panelSubSystem";
-            this.panelSubSystem.Size = new System.Drawing.Size(242, 26);
+            this.panelSubSystem.Size = new System.Drawing.Size(267, 26);
             this.panelSubSystem.TabIndex = 10;
             // 
             // lblSubSystem
@@ -330,7 +330,7 @@
             this.cmbSubSystem.FormattingEnabled = true;
             this.cmbSubSystem.Location = new System.Drawing.Point(52, 3);
             this.cmbSubSystem.Name = "cmbSubSystem";
-            this.cmbSubSystem.Size = new System.Drawing.Size(187, 20);
+            this.cmbSubSystem.Size = new System.Drawing.Size(212, 20);
             this.cmbSubSystem.TabIndex = 0;
             this.cmbSubSystem.SelectedIndexChanged += new System.EventHandler(this.CmbSubSystem_SelectedIndexChanged);
             // 
@@ -340,7 +340,7 @@
             this.panelSystemName.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSystemName.Location = new System.Drawing.Point(0, 0);
             this.panelSystemName.Name = "panelSystemName";
-            this.panelSystemName.Size = new System.Drawing.Size(242, 22);
+            this.panelSystemName.Size = new System.Drawing.Size(267, 22);
             this.panelSystemName.TabIndex = 8;
             // 
             // lblSystemName
@@ -359,7 +359,7 @@
             this.groupBoxPlan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxPlan.Location = new System.Drawing.Point(0, 0);
             this.groupBoxPlan.Name = "groupBoxPlan";
-            this.groupBoxPlan.Size = new System.Drawing.Size(323, 524);
+            this.groupBoxPlan.Size = new System.Drawing.Size(357, 544);
             this.groupBoxPlan.TabIndex = 2;
             this.groupBoxPlan.TabStop = false;
             this.groupBoxPlan.Text = "插件方案名称";
@@ -380,9 +380,8 @@
             // splitContainerMenus.Panel2
             // 
             this.splitContainerMenus.Panel2.AutoScroll = true;
-            this.splitContainerMenus.Panel2.Resize += new System.EventHandler(this.SplitContainerMenus_Panel2_Resize);
-            this.splitContainerMenus.Size = new System.Drawing.Size(325, 483);
-            this.splitContainerMenus.SplitterDistance = 342;
+            this.splitContainerMenus.Size = new System.Drawing.Size(359, 503);
+            this.splitContainerMenus.SplitterDistance = 307;
             this.splitContainerMenus.TabIndex = 10;
             // 
             // treeViewMenus
@@ -432,7 +431,7 @@
             this.treeViewMenus.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode11});
             this.treeViewMenus.SelectedImageIndex = 12;
-            this.treeViewMenus.Size = new System.Drawing.Size(325, 342);
+            this.treeViewMenus.Size = new System.Drawing.Size(359, 307);
             this.treeViewMenus.TabIndex = 8;
             this.treeViewMenus.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.TreeViewCmds_ItemDrag);
             this.treeViewMenus.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewMenus_AfterSelect);
@@ -543,7 +542,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(325, 26);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(359, 26);
             this.tableLayoutPanel2.TabIndex = 9;
             // 
             // btnRemoveMenu
@@ -552,7 +551,7 @@
             this.btnRemoveMenu.Location = new System.Drawing.Point(0, 0);
             this.btnRemoveMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnRemoveMenu.Name = "btnRemoveMenu";
-            this.btnRemoveMenu.Size = new System.Drawing.Size(54, 26);
+            this.btnRemoveMenu.Size = new System.Drawing.Size(59, 26);
             this.btnRemoveMenu.TabIndex = 7;
             this.btnRemoveMenu.Text = "移除";
             this.toolTip1.SetToolTip(this.btnRemoveMenu, "移除");
@@ -562,10 +561,10 @@
             // btnInsertSplit
             // 
             this.btnInsertSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnInsertSplit.Location = new System.Drawing.Point(138, 0);
+            this.btnInsertSplit.Location = new System.Drawing.Point(152, 0);
             this.btnInsertSplit.Margin = new System.Windows.Forms.Padding(0);
             this.btnInsertSplit.Name = "btnInsertSplit";
-            this.btnInsertSplit.Size = new System.Drawing.Size(84, 26);
+            this.btnInsertSplit.Size = new System.Drawing.Size(93, 26);
             this.btnInsertSplit.TabIndex = 7;
             this.btnInsertSplit.Text = "插入分隔符";
             this.toolTip1.SetToolTip(this.btnInsertSplit, "插入分隔符");
@@ -575,10 +574,10 @@
             // btnDown
             // 
             this.btnDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDown.Location = new System.Drawing.Point(272, 0);
+            this.btnDown.Location = new System.Drawing.Point(301, 0);
             this.btnDown.Margin = new System.Windows.Forms.Padding(0);
             this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(53, 26);
+            this.btnDown.Size = new System.Drawing.Size(58, 26);
             this.btnDown.TabIndex = 7;
             this.btnDown.Text = "下移";
             this.toolTip1.SetToolTip(this.btnDown, "下移");
@@ -588,10 +587,10 @@
             // btnUp
             // 
             this.btnUp.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnUp.Location = new System.Drawing.Point(222, 0);
+            this.btnUp.Location = new System.Drawing.Point(245, 0);
             this.btnUp.Margin = new System.Windows.Forms.Padding(0);
             this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(50, 26);
+            this.btnUp.Size = new System.Drawing.Size(56, 26);
             this.btnUp.TabIndex = 7;
             this.btnUp.Text = "上移";
             this.toolTip1.SetToolTip(this.btnUp, "上移");
@@ -601,10 +600,10 @@
             // btnAddMenu
             // 
             this.btnAddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnAddMenu.Location = new System.Drawing.Point(54, 0);
+            this.btnAddMenu.Location = new System.Drawing.Point(59, 0);
             this.btnAddMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnAddMenu.Name = "btnAddMenu";
-            this.btnAddMenu.Size = new System.Drawing.Size(84, 26);
+            this.btnAddMenu.Size = new System.Drawing.Size(93, 26);
             this.btnAddMenu.TabIndex = 8;
             this.btnAddMenu.Text = "添加子菜单";
             this.toolTip1.SetToolTip(this.btnAddMenu, "添加子菜单");
@@ -626,8 +625,8 @@
             // splitContainerPlugin.Panel2
             // 
             this.splitContainerPlugin.Panel2.Controls.Add(this.txtPluginInfo);
-            this.splitContainerPlugin.Size = new System.Drawing.Size(277, 502);
-            this.splitContainerPlugin.SplitterDistance = 389;
+            this.splitContainerPlugin.Size = new System.Drawing.Size(307, 522);
+            this.splitContainerPlugin.SplitterDistance = 366;
             this.splitContainerPlugin.TabIndex = 2;
             // 
             // treeViewCmds
@@ -641,7 +640,7 @@
             this.treeViewCmds.Location = new System.Drawing.Point(0, 0);
             this.treeViewCmds.Name = "treeViewCmds";
             this.treeViewCmds.SelectedImageIndex = 12;
-            this.treeViewCmds.Size = new System.Drawing.Size(277, 389);
+            this.treeViewCmds.Size = new System.Drawing.Size(307, 366);
             this.treeViewCmds.TabIndex = 0;
             this.treeViewCmds.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.TreeViewCmds_ItemDrag);
             this.treeViewCmds.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeViewCmds_NodeMouseClick);
@@ -704,7 +703,7 @@
             this.txtPluginInfo.Name = "txtPluginInfo";
             this.txtPluginInfo.ReadOnly = true;
             this.txtPluginInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtPluginInfo.Size = new System.Drawing.Size(277, 109);
+            this.txtPluginInfo.Size = new System.Drawing.Size(307, 152);
             this.txtPluginInfo.TabIndex = 0;
             this.txtPluginInfo.Text = "命令信息";
             // 
@@ -715,7 +714,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(277, 22);
+            this.panel1.Size = new System.Drawing.Size(307, 22);
             this.panel1.TabIndex = 1;
             // 
             // label3
@@ -723,7 +722,7 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.Blue;
-            this.label3.Location = new System.Drawing.Point(72, 5);
+            this.label3.Location = new System.Drawing.Point(102, 5);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(203, 12);
             this.label3.TabIndex = 1;
@@ -794,7 +793,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(631, 533);
+            this.btnSave.Location = new System.Drawing.Point(720, 553);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(114, 33);
             this.btnSave.TabIndex = 2;
@@ -806,7 +805,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(747, 533);
+            this.btnCancel.Location = new System.Drawing.Point(836, 553);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 33);
             this.btnCancel.TabIndex = 2;
@@ -818,7 +817,7 @@
             // 
             this.lblTips.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTips.AutoSize = true;
-            this.lblTips.Location = new System.Drawing.Point(8, 542);
+            this.lblTips.Location = new System.Drawing.Point(8, 562);
             this.lblTips.Name = "lblTips";
             this.lblTips.Size = new System.Drawing.Size(317, 12);
             this.lblTips.TabIndex = 4;
@@ -830,7 +829,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(865, 569);
+            this.ClientSize = new System.Drawing.Size(954, 589);
             this.Controls.Add(this.lblTips);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);

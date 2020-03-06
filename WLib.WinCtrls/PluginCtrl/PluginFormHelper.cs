@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using WLib.Plugins;
 using WLib.Plugins.Interface;
 using WLib.Plugins.Model;
+using WLib.WinCtrls.MessageCtrl;
 
 namespace WLib.WinCtrls.PluginCtrl
 {
@@ -13,6 +14,33 @@ namespace WLib.WinCtrls.PluginCtrl
     /// </summary>
     public static class PluginFormHelper
     {
+        /// <summary>
+        /// 以菜单形式加载插件
+        /// <para>将<see cref="IPluginView"/>中的插件以<see cref="MenuStrip"/>的菜单形式来加载， 在点击菜单、窗口加载、窗口关闭时调用相应插件</para>
+        /// </summary>
+        /// <param name="menuStrip"></param>
+        /// <param name="view"></param>
+        /// <param name="form"></param>
+        /// <param name="cmdData">插件命令的传入参数</param>
+        /// <param name="bingdingPluginCommandEvents">插件命令事件处理方法</param>
+        public static void LoadPluginView<TCmdData>(this MenuStrip menuStrip,
+            Form form, IPluginView view, TCmdData cmdData, Action<IPluginView> bingdingPluginCommandEvents)
+        {
+            try
+            {
+                var container = view.QueryContainer(menuStrip);
+                menuStrip.LoadPluginContainer(container);
+                container.LoadPluginCommands(cmdData);
+                bingdingPluginCommandEvents(view);//绑定插件命令事件处理
+
+                //在窗口加载时、窗口关闭时触发相应插件
+                view.InvokePlugins(EPluginInvokeType.OnViewLoad, form);
+                form.FormClosing += (sender, e) => view.InvokePlugins(EPluginInvokeType.OnViewClose, form);
+            }
+            catch (Exception ex) { MessageBoxEx.ShowError(ex); }
+        }
+
+
         /// <summary>
         /// 将<see cref="MenuStrip"/>作为插件容器
         /// </summary>
@@ -34,29 +62,16 @@ namespace WLib.WinCtrls.PluginCtrl
         /// </summary>
         /// <param name="menuStrip"></param>
         /// <param name="pluginPlan"></param>
-        /// <param name="cmdData">插件命令的传入参数</param>
-        public static void LoadPlugins(this MenuStrip menuStrip, IPluginPlan pluginPlan, object cmdData)
-        {
-            var form = menuStrip.FindForm();
-            var view = pluginPlan.QueryViews(form);            //找到窗体对应的插件视图
-            var container = QueryContainer(view, menuStrip);   //找到控件对应的插件容器
-            container.LoadPluginContainer(menuStrip);          //向控件加载插件容器包含的插件
-            container.LoadPluginCommands(cmdData);             //创建容器包含的插件对应的命令
-        }
-        /// <summary>
-        /// 从插件方案中查找<see cref="MenuStrip"/>对应的插件，加载插件
-        /// </summary>
-        /// <param name="menuStrip"></param>
-        /// <param name="pluginPlan"></param>
         /// <param name="cmdData">插件命令的传入参数，泛型对象</param>
         public static void LoadPlugins<TCmdData>(this MenuStrip menuStrip, IPluginPlan pluginPlan, TCmdData cmdData)
         {
             var form = menuStrip.FindForm();
             var view = pluginPlan.QueryViews(form);            //找到窗体对应的插件视图
             var container = QueryContainer(view, menuStrip);   //找到控件对应的插件容器
-            container.LoadPluginContainer(menuStrip);          //向控件加载插件容器包含的插件
+            menuStrip.LoadPluginContainer(container);          //向控件加载插件容器包含的插件
             container.LoadPluginCommands(cmdData);             //创建容器包含的插件对应的命令
         }
+
 
         /// <summary>
         /// 从插件方案中，查找与指定窗体关联的插件视图
@@ -79,7 +94,7 @@ namespace WLib.WinCtrls.PluginCtrl
         /// <param name="pluginView"></param>
         /// <param name="menuStrip"></param>
         /// <returns></returns>
-        private static IPluginContainer QueryContainer(this IPluginView pluginView, MenuStrip menuStrip)
+        public static IPluginContainer QueryContainer(this IPluginView pluginView, MenuStrip menuStrip)
         {
             var name = menuStrip.Name;
             var text = menuStrip.Text;
@@ -93,7 +108,7 @@ namespace WLib.WinCtrls.PluginCtrl
         /// </summary>
         /// <param name="container"></param>
         /// <param name="menuStrip"></param>
-        private static void LoadPluginContainer(this IPluginContainer container, MenuStrip menuStrip)
+        public static void LoadPluginContainer(this MenuStrip menuStrip, IPluginContainer container)
         {
             var form = menuStrip.FindForm();
             foreach (var subContainer in container.SubContainers)
@@ -128,7 +143,12 @@ namespace WLib.WinCtrls.PluginCtrl
             foreach (var plugin in container.Plugins)
                 menuItem.DropDownItems.Add(CreateMenuItem(plugin, form));
         }
-
+        /// <summary>
+        /// 将插件作为菜单，创建菜单
+        /// </summary>
+        /// <param name="plugin">插件</param>
+        /// <param name="form">插件/菜单所在窗口</param>
+        /// <returns></returns>
         private static ToolStripMenuItem CreateMenuItem(IPluginItem plugin, Form form)
         {
             var menuItem = new ToolStripMenuItem
@@ -136,12 +156,17 @@ namespace WLib.WinCtrls.PluginCtrl
                 Text = plugin.Text,
                 ToolTipText = plugin.Tips,
                 Tag = plugin,
-                Image = plugin.GetImage(),
+                Image = plugin.GetIcon(),
                 ShortcutKeys = string.IsNullOrWhiteSpace(plugin.ShortcutKeys) ? Keys.None : (Keys)Enum.Parse(typeof(Keys), plugin.ShortcutKeys)
             };
-            menuItem.Click += (sender, e) => plugin.Command.Invoke(form);
+            menuItem.Click += (sender, e) => plugin.Command?.Invoke(form);
             return menuItem;
         }
+        /// <summary>
+        /// 将插件容器作为菜单，创建菜单
+        /// </summary>
+        /// <param name="container">插件容器</param>
+        /// <returns></returns>
         private static ToolStripMenuItem CreateMenuItem(IPluginContainer container)
         {
             return new ToolStripMenuItem
