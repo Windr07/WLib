@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Windragon</authors>
+    <owners>Windragon</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/Windr07/WLib/tree/master/WLib</projectUrl>
+    <description>.NET Common Code Library</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>dbHelper HardwareInfo Plugins ProgressOperation</tags>
+  </metadata>
+</package>
