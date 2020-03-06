@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using WLib.Model;
 using WLib.Plugins.Interface;
@@ -34,6 +35,7 @@ namespace WLib.Plugins.Model
         /// <summary>
         /// 插件方案序列化后的字符串
         /// </summary>
+        [JsonIgnore]
         public string StrPluginPlan { get; set; }
 
 
@@ -48,10 +50,11 @@ namespace WLib.Plugins.Model
         /// <returns></returns>
         public PluginPlan Copy(string newPlanName = null)
         {
-            var pluginPlan = this.CopyBySerialize();
+            var pluginPlan = this.CopyByReflect();
             pluginPlan.Id = Guid.NewGuid().ToString();
             pluginPlan.Name = newPlanName ?? this.Name + " - 副本";
             pluginPlan.Text = pluginPlan.Name;
+            pluginPlan.Selected = false;
             return pluginPlan;
         }
         /// <summary>

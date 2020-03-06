@@ -5,6 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using WLib.Drawing;
+using WLib.Files;
 using WLib.Plugins.Interface;
 using WLib.Plugins.Model;
 using WLib.Reflection;
@@ -22,61 +25,51 @@ namespace WLib.Plugins
         /// </summary>
         /// <param name="view"></param>
         /// <param name="invokeType"></param>
-        public static void InvokePlugins(this IPluginView view, IPluginPlan pluginPlan, EPluginInvokeType invokeType)
+        public static void InvokePlugins(this IPluginView view, EPluginInvokeType invokeType, object caller = null)
         {
-            if (pluginPlan == null)
-                return;
-            var pluginView = pluginPlan.Views.First(v => v.Name == view.Name && v.Text == view.Text);
-            var plugins = pluginView.QueryPlugins(invokeType).ToList();
-            plugins.ForEach(p => p.Command.Invoke(view));
-        }
-        #endregion
-
-
-        #region 插件项扩展
-        /// <summary>
-        /// 通过反射创建插件中的命令（ICommand），设置命令的传入参数
-        /// </summary>
-        /// <param name="plugin"></param>
-        /// <param name="inputData"></param>
-        /// <returns></returns>
-        public static ICommand CreateCommand(this IPluginItem plugin, object inputData)
-        {
-            var cmd = Assembly.LoadFrom(plugin.AssemblyPath).CreateInstance(plugin.TypeName) as ICommand;
-            cmd.InputData = inputData;
-            return plugin.Command = cmd;
+            var plugins = view.QueryPlugins(invokeType).ToList();
+            plugins.ForEach(p => p.Command?.Invoke(caller));
         }
         /// <summary>
-        /// 通过反射创建插件中的命令（ICommand），设置命令的传入参数
+        /// 从插件视图中筛选指定的调用类型的插件
         /// </summary>
-        /// <typeparam name="TCmdData"></typeparam>
-        /// <param name="plugin"></param>
-        /// <param name="inputData"></param>
+        /// <param name="view">插件视图</param>
+        /// <param name="invokeType">插件调用类型</param>
         /// <returns></returns>
-        public static ICommand CreateCommand<TCmdData>(this IPluginItem plugin, TCmdData inputData)
+        public static IEnumerable<IPluginItem> QueryPlugins(this IPluginView view, EPluginInvokeType invokeType)
         {
-            var cmd = Assembly.LoadFrom(plugin.AssemblyPath).CreateInstance(plugin.TypeName) as ICommand<TCmdData>;
-            cmd.InputData = inputData;
-            return plugin.Command = cmd;
+            return view.Containers.SelectMany(container => QueryPlugins(container, invokeType));
         }
         /// <summary>
-        /// 获取插件图标
+        /// 获取插件视图中的全部插件
         /// </summary>
-        /// <param name="plugin"></param>
+        /// <param name="view">插件视图</param>
+        /// <param name="invokeType">插件调用类型</param>
         /// <returns></returns>
-        public static Image GetImage(this IPluginItem plugin)
+        public static IEnumerable<IPluginItem> QueryPlugins(this IPluginView view)
         {
-            if (!string.IsNullOrWhiteSpace(plugin.IconPath) && !Path.IsPathRooted(plugin.IconPath))
-                plugin.IconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, plugin.IconPath);
-            var image = File.Exists(plugin.IconPath) ? Image.FromFile(plugin.IconPath) : null;
-            return image;
+            return view.Containers.SelectMany(container => QueryPlugins(container));
         }
         #endregion
 
 
         #region 插件容器扩展
         /// <summary>
-        /// 从插件容器中筛选指定的调用类型的插件
+        /// 获取插件容器（及其子容器）中的全部插件
+        /// </summary>
+        /// <param name="container">插件容器</param>
+        /// <param name="filter">过滤条件委托</param>
+        /// <returns></returns>
+        public static IEnumerable<IPluginItem> QueryPlugins(this IPluginContainer container)
+        {
+            var plugins = container.Plugins.ToList();
+            foreach (var sbuContainer in container.SubContainers)
+                plugins.AddRange(QueryPlugins(sbuContainer));
+
+            return plugins;
+        }
+        /// <summary>
+        /// 从插件容器（及其子容器）中筛选指定的过滤条件的插件
         /// </summary>
         /// <param name="container">插件容器</param>
         /// <param name="filter">过滤条件委托</param>
@@ -90,7 +83,7 @@ namespace WLib.Plugins
             return plugins;
         }
         /// <summary>
-        /// 从插件容器中筛选指定的调用类型的插件
+        /// 从插件容器（及其子容器）中筛选指定的调用类型的插件
         /// </summary>
         /// <param name="container">插件容器</param>
         /// <param name="invokeType">插件调用类型</param>
@@ -100,41 +93,27 @@ namespace WLib.Plugins
             return QueryPlugins(container, plugin => plugin.InvokType == invokeType);
         }
         /// <summary>
-        /// 从插件视图中筛选指定的调用类型的插件
-        /// </summary>
-        /// <param name="view">插件视图</param>
-        /// <param name="invokeType">插件调用类型</param>
-        /// <returns></returns>
-        public static IEnumerable<IPluginItem> QueryPlugins(this IPluginView view, EPluginInvokeType invokeType)
-        {
-            return view.Containers.SelectMany(container => QueryPlugins(container, invokeType));
-        }
-
-        /// <summary>
         /// 通过反射创建插件容器中的插件的命令（ICommand），设置命令的传入参数
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="cmdData"></param>
-        public static void LoadPluginCommands(this IPluginContainer container, object cmdData)
-        {
-            foreach (var pageContainer in container.SubContainers)
-                foreach (var groupContainer in pageContainer.SubContainers)
-                    foreach (var plugin in groupContainer.Plugins)
-                        plugin.CreateCommand(cmdData);
-        }
-        /// <summary>
-        /// 通过反射创建插件容器中的插件的命令（ICommand），设置命令的传入参数
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="cmdData"></param>
+        /// <param name="container">插件容器</param>
+        /// <param name="cmdData">插件命令的传入参数</param>
         public static void LoadPluginCommands<TCmdData>(this IPluginContainer container, TCmdData cmdData)
         {
-            foreach (var pageContainer in container.SubContainers)
-                foreach (var groupContainer in pageContainer.SubContainers)
-                    foreach (var plugin in groupContainer.Plugins)
-                        plugin.CreateCommand<TCmdData>(cmdData);
+            var sbErrorCmds = new StringBuilder();
+            foreach (var plugin in container.QueryPlugins())
+            {
+                try
+                {
+                    plugin.CreateCommand<TCmdData>(cmdData);
+                }
+                catch { sbErrorCmds.AppendLine($"程序集：{ plugin.AssemblyPath}\r\n命令：{plugin.TypeName}"); }
+            }
+            if (sbErrorCmds.Length > 0)
+            {
+                sbErrorCmds.Insert(0, "以下插件命令创建失败（找不到程序集或命令，请注意程序集路径、名称、后缀(dll、exe)、类名是否正确）：");
+                throw new Exception(sbErrorCmds.ToString());
+            }
         }
-
         /// <summary>
         /// 判断容器是否为指定类型之一
         /// </summary>
@@ -167,6 +146,60 @@ namespace WLib.Plugins
         #endregion
 
 
+        #region 插件项扩展
+        /// <summary>
+        /// 通过反射创建插件中的命令（ICommand），设置命令的传入参数
+        /// </summary>
+        /// <param name="plugin"></param>
+        /// <param name="inputData"></param>
+        /// <returns></returns>
+        public static ICommand CreateCommand(this IPluginItem plugin, object inputData)
+        {
+            var assemblyPath = FileOpt.GetRootPath(plugin.AssemblyPath);
+            var objCmd = Assembly.LoadFile(assemblyPath).CreateInstance(plugin.TypeName);
+            var cmd = objCmd as ICommand;
+            cmd.InputData = inputData;
+            return plugin.Command = cmd;
+        }
+        /// <summary>
+        /// 通过反射创建插件中的命令（ICommand），设置命令的传入参数
+        /// </summary>
+        /// <typeparam name="TCmdData"></typeparam>
+        /// <param name="plugin"></param>
+        /// <param name="inputData"></param>
+        /// <returns></returns>
+        public static ICommand CreateCommand<TCmdData>(this IPluginItem plugin, TCmdData inputData)
+        {
+            var assemblyPath = FileOpt.GetRootPath(plugin.AssemblyPath);
+            var objCmd = Assembly.LoadFile(assemblyPath).CreateInstance(plugin.TypeName);
+            var cmd = objCmd as ICommand<TCmdData>;
+            cmd.InputData = inputData;
+            return plugin.Command = cmd;
+        }
+        /// <summary>
+        /// 获取插件图标
+        /// </summary>
+        /// <param name="plugin"></param>
+        /// <param name="imageFolderPath">默认插件图标目录，仅在<see cref="PluginItem.IconPath"/>为相对路径时使用该值</param>
+        /// <returns></returns>
+        public static Bitmap GetIcon(this IPluginItem plugin, string imageFolderPath = null)
+        {
+            var path = plugin.IconPath;
+            if (!string.IsNullOrWhiteSpace(path) && !Path.IsPathRooted(path))
+            {
+                if (!string.IsNullOrWhiteSpace(imageFolderPath))
+                    path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageFolderPath, path);
+                else
+                    path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+            }
+            if (!File.Exists(path))
+                return null;
+
+            return GetBitmap.FromFile(path);
+        }
+        #endregion
+
+
         #region 插件方案获取
         /// <summary>
         /// 根据指定路径的程序集创建插件方案
@@ -179,7 +212,7 @@ namespace WLib.Plugins
             if (Directory.Exists(appAssemblyPath))
                 appAssemblyPath = Directory.GetFiles(appAssemblyPath, "*.exe").First();
 
-            var assembly = Assembly.LoadFrom(appAssemblyPath);
+            var assembly = Assembly.LoadFile(appAssemblyPath);
             var pluginViews = assembly.GetInterfaceAchieveTypes<IPluginView>();
             pluginViews = pluginViews.Select(v => new PluginView { Name = v.Name, Text = v.Text, Containers = v.Containers });
             return new PluginPlan { Name = planName, Text = planName, Selected = selected, Views = pluginViews.ToList() };
@@ -223,19 +256,12 @@ namespace WLib.Plugins
         {
             var assemblies = Directory.GetFiles(assemblyDiretory, "*.exe").Select(path => Assembly.LoadFile(path));
             foreach (var assembly in assemblies)
-                yield return CreatePluginPlanSystem(assembly);
-        }
-        /// <summary>
-        /// 从程序集中获取应用软件插件方案系统信息
-        /// </summary>
-        /// <param name="assembly">程序集，若为null则获取当前程序集信息</param>
-        /// <returns></returns>
-        public static IPluginPlanSystem CreatePluginPlanSystem(Assembly assembly = null)
-        {
-            var pluginPlanSystem = new PluginPlanSystem();
-            pluginPlanSystem.SysInfo = CreateAssemblySystemInfo(assembly);
-            pluginPlanSystem.Plans.Add(CreatePluginPlan(pluginPlanSystem.SysInfo.AppPath));
-            return pluginPlanSystem;
+            {
+                var planSystem = new PluginPlanSystem();
+                planSystem.SysInfo = CreateAssemblySystemInfo(assembly);
+                planSystem.Plans.Add(CreatePluginPlan(assembly.Location));
+                yield return planSystem;
+            }
         }
         /// <summary>
         /// 从程序集中获取应用软件的信息
@@ -247,7 +273,7 @@ namespace WLib.Plugins
             if (assembly == null)
                 assembly = Assembly.GetEntryAssembly();
             var assName = assembly.GetName();
-            return new SystemInfo(assembly.Location, assName.Name, assName.FullName);
+            return new SystemInfo(assName.Name, assName.FullName);
         }
         /// <summary>
         /// 获取指定目录及子目录下全部程序集文件的路径，默认筛选dll和exe文件
@@ -268,5 +294,47 @@ namespace WLib.Plugins
             return filePaths;
         }
         #endregion
+
+
+        /// <summary>
+        /// 将插件方案的全部插件的图标，统一复制到指定图标目录中，存储图标的相对路径
+        /// </summary>
+        /// <param name="pluginPlans">插件方案集合</param>
+        public static void SynPluginImages(this IEnumerable<IPluginPlan> pluginPlans, string appDir, string imageFolder)
+        {
+            var targetDir = Path.Combine(appDir, imageFolder);
+            if (!Directory.Exists(targetDir))
+                Directory.CreateDirectory(targetDir);
+
+            targetDir = targetDir.Trim().ToLower();
+            foreach (var plan in pluginPlans)
+            {
+                foreach (var view in plan.Views)
+                {
+                    var plugins = view.QueryPlugins();
+                    foreach (var plugin in plugins)
+                    {
+                        var sourcePath = plugin.IconPath?.Trim();
+                        if (!Path.IsPathRooted(sourcePath))//已经存储为相对路径的图标跳过
+                            continue;
+
+                        var sourceDir = Path.GetDirectoryName(sourcePath).ToLower();
+                        var fileName = Path.GetFileName(sourcePath);
+                        if (sourceDir != targetDir)//源目录与目标目录不同，则复制图标到目标目录
+                        {
+                            var targetPath = Path.Combine(targetDir, fileName);
+                            if (File.Exists(targetPath))//源文件存在，则修改新图标文件的名称
+                            {
+                                fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(fileName);
+                                targetPath = Path.Combine(targetDir, fileName);
+                            }
+                            File.Copy(plugin.IconPath, targetPath);
+                        }
+                        plugin.IconPath = fileName;//存储相对路径
+                    }
+                }
+            }
+        }
+
     }
 }

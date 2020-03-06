@@ -16,6 +16,10 @@ namespace WLib.Plugins.Interface
     public interface IPluginContainer : IItemBase
     {
         /// <summary>
+        /// 是否显示
+        /// </summary>
+        bool Visible { get; set; }
+        /// <summary>
         /// 插件容器的快捷键
         /// </summary>
         string ShortcutKeys { get; set; }

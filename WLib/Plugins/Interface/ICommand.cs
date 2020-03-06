@@ -5,8 +5,6 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-
 namespace WLib.Plugins.Interface
 {
     /// <summary>
@@ -34,6 +32,11 @@ namespace WLib.Plugins.Interface
         /// 传入给命令的参数
         /// </summary>
         object InputData { get; set; }
+        /// <summary>
+        /// 调用命令的插件视图
+        /// </summary>
+
+        IPluginView View { get; set; }
 
 
         /// <summary>
@@ -41,10 +44,5 @@ namespace WLib.Plugins.Interface
         /// </summary>
         /// <param name="caller">调用命令的对象，可空</param>
         void Invoke(object caller);
-        /// <summary>
-        /// 改变创建命令的对象的状态的委托
-        /// <para>例如命令是一个选择shp图层命令，调用命令选择shp图层后执行该委托，可绑定委托处理为：在主窗体的地图控件中加载所选shp图层</para>
-        /// </summary>
-        Action ChangedStatus { get; }
     }
 }

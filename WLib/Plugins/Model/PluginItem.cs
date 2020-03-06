@@ -7,6 +7,7 @@
 
 using Newtonsoft.Json;
 using System;
+using WLib.Files;
 using WLib.Plugins.Interface;
 
 namespace WLib.Plugins.Model
@@ -15,7 +16,6 @@ namespace WLib.Plugins.Model
     /// 插件项
     /// <para>通常对应一个按钮、菜单项</para>
     /// </summary>
-    /// <typeparam name="T">插件对应的命令</typeparam>
     [Serializable]
     public class PluginItem : IPluginItem
     {
@@ -80,19 +80,21 @@ namespace WLib.Plugins.Model
         /// </summary>
         public PluginItem() => Id = Guid.NewGuid().ToString();
         /// <summary>
-        /// 将插件关联到指定命令
+        /// 将命令转为插件
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="cmd">通过反射获取的功能命令</param>
+        /// <param name="appPath">插件所属应用软件的位置，插件的命令位置将设置为对于应用程序的相对路径</param>
         /// <returns></returns>
-        public static PluginItem FromCommand(ICommand cmd)
+        public static PluginItem FromCommand(ICommand cmd, string appPath)
         {
             var type = cmd.GetType();
+            var assemblyPath = FileOpt.GetRelativePath(type.Assembly.Location, appPath);
             return new PluginItem
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = cmd.Name,
                 Text = cmd.Text,
-                AssemblyPath = type.Assembly.Location,
+                AssemblyPath = assemblyPath,
                 TypeName = type.FullName,
                 Tips = cmd.Description,
                 Visible = true,

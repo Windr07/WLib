@@ -31,6 +31,10 @@ namespace WLib.Plugins.Model
         /// </summary>
         public string Text { get; set; }
         /// <summary>
+        /// 是否显示
+        /// </summary>
+        public bool Visible { get; set; } = true;
+        /// <summary>
         /// 插件容器的快捷键
         /// </summary>
         public string ShortcutKeys { get; set; }

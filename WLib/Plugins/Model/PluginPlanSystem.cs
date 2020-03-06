@@ -44,6 +44,27 @@ namespace WLib.Plugins.Model
                 }
             }
         }
+
+
+        /// <summary>
+        /// 插件方案系统，即一个系统拥有的插件方案
+        /// </summary>
+        public PluginPlanSystem() { }
+        /// <summary>
+        /// 插件方案系统，即一个系统拥有的插件方案
+        /// </summary>
+        /// <param name="appName"></param>
+        /// <param name="appId"></param>
+        /// <param name="plans"></param>
+        public PluginPlanSystem(string appName, string appId, IList<IPluginPlan> plans)
+        {
+            SysInfo = new SystemInfo(appName, appId);
+            Plans = plans;
+        }
+        /// <summary>
+        /// 输出“标题”
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => SysInfo?.Text;
     }
 }

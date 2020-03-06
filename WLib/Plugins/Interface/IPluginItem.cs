@@ -11,7 +11,6 @@ namespace WLib.Plugins.Interface
     /// 插件项
     /// <para>通常对应一个按钮、菜单项</para>
     /// </summary>
-    /// <typeparam name="T">插件对应的命令</typeparam>
     public interface IPluginItem : IItemBase
     {
         /// <summary>

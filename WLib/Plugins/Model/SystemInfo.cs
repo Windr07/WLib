@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using WLib.Plugins.Interface;
 
 namespace WLib.Plugins.Model
@@ -6,6 +6,7 @@ namespace WLib.Plugins.Model
     /// <summary>
     /// 应用软件系统信息
     /// </summary>
+    [Serializable]
     public class SystemInfo : ISystemInfo
     {
         /// <summary>
@@ -20,16 +21,7 @@ namespace WLib.Plugins.Model
         /// 应用软件的标题
         /// </summary>
         public string Text { get; set; }
-        /// <summary>
-        /// 应用软件程序集路径
-        /// <para>即exe文件路径</para>
-        /// </summary>
-        public string AppPath { get; set; }
-        /// <summary>
-        /// 应用软件所在目录
-        /// </summary>
-        public string AppDir => Path.GetDirectoryName(AppPath);
-
+      
 
         /// <summary>
         /// 应用软件系统信息
@@ -38,12 +30,10 @@ namespace WLib.Plugins.Model
         /// <summary>
         /// 应用软件系统信息
         /// </summary>
-        /// <param name="appAssemblyPath">应用软件主程序集路径（exe文件路径）</param>
         /// <param name="appName">应用软件的名称</param>
         /// <param name="appId">应用软件的ID</param>
-        public SystemInfo(string appAssemblyPath, string appName, string appId)
+        public SystemInfo(string appName, string appId)
         {
-            AppPath = appAssemblyPath;
             Name = appName;
             Text = appName;
             Id = appId;
