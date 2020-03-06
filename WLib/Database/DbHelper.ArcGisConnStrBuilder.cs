@@ -15,13 +15,15 @@ namespace WLib.Database
      *      1、需要ESRI OLE DB提供程序，该程序是Desktop的一部分，使用ESRI OLE DB需要安装ArcGIS Desktop
      *      2、不同数据源使用的SQL语句细节上有不同的要求，例如查询语句的区别：
      *          mdb: select [fieldName] from City
-     *          shp: select "fieldName" from City
      *          gdb: select  fieldName  from City
+     *          shp: select "fieldName" from City
+     *          dbf: select  fieldName  from c:\data\City.dbf
      *      3、不同数据源可进行的操作的区别：
      *          mdb：可执行select,update,insert,delete操作
-     *          shp：只能执行select操作，要增删改查属性表，请操作dbf文件
      *          gdb：可执行select,update,insert,delete操作
      *          sde：未测试（update,insert,delete操作应该需要先注册表格）
+     *          shp：只能执行select操作
+     *          dbf：可执行select操作，update,insert,delete操作不稳定
      *      4、查询完成后要及时关闭连接，否则因数据占用等原因后续查询出错
      */
 
@@ -35,13 +37,15 @@ namespace WLib.Database
     {
         /// <summary>
         /// 构造OleDb连接shp/dbf/mdb/gdb的连接字符串
+        /// <para>①shp只能查询，增删改属性表请操作dbf；mdb,gdb,dbf可以增删改查，但是增删改有很多坑暂不建议使用</para>
+        /// <para>②sourcePath参数可以是shp目录或shp/dbf/mdb/gdb文件路径，不包含.gdb后缀目录将认为是shp目录</para>
         /// </summary>
-        /// <param name="sourcePath">shp/dbf/mdb/gdb路径</param>
+        /// <param name="sourcePath">shp目录或shp/dbf/mdb/gdb文件路径，不包含.gdb后缀目录将认为是shp目录</param>
         /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
         /// <returns></returns>
         public static string ShpMdbGdb(string sourcePath, string geometry = "WKB")
         {
-            
+
             if (File.Exists(sourcePath))
             {
                 var extension = Path.GetExtension(sourcePath);
@@ -49,8 +53,12 @@ namespace WLib.Database
                 if (extension == ".dbf") return Dbf(sourcePath);
                 if (extension == ".mdb") return Mdb(sourcePath, geometry);
             }
-            if (Directory.Exists(sourcePath) && sourcePath.EndsWith(".gdb"))
-                return Gdb(sourcePath);
+            if (Directory.Exists(sourcePath))
+            {
+                return sourcePath.EndsWith(".gdb") ?
+                    Gdb(sourcePath, geometry) :
+                    ShpDir(sourcePath, geometry);
+            }
 
             throw new Exception($"数据源路径“{sourcePath}”不存在，或该数据源不是shp/dbf/mdb/gdb数据！");
         }
@@ -76,6 +84,7 @@ namespace WLib.Database
         }
         /// <summary>
         /// 构造OleDb连接Shapefile文件的连接字符串
+        /// <para>shp只能查询，例如SELECT * FROM River.shp或SELECT * FROM River</para>
         /// </summary>
         /// <param name="shpPath">shp文件路径</param>
         /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
@@ -86,6 +95,7 @@ namespace WLib.Database
         }
         /// <summary>
         /// 构造OleDb连接Shapefile文件的连接字符串
+        /// <para>shp只能查询，例如SELECT * FROM River.shp或SELECT * FROM River</para>
         /// </summary>
         /// <param name="shpDir">shp文件所在目录</param>
         /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
@@ -106,8 +116,8 @@ namespace WLib.Database
         }
         /// <summary>
         /// 构造OleDb连接shapefile当中的dbf文件的连接字符串
-        /// （注意：OleDb连接dbf的BUG：dbf文件名称长度不能超过8）
-        /// （注意：sql语句必须包含select xxx from [dbfPath]的部分，其中[dbfPath]就是dbf文件全路径）
+        /// <para>注意：OleDb连接dbf的BUG：dbf文件名称长度不能超过8</para>
+        /// <para>注意：sql语句必须包含select xxx from dbfPath的部分，其中dbfPath就是dbf文件全路径，例如：select * from c:\data\test.dbf</para>
         /// </summary>
         /// <param name="dbfPath">dbf文件路径</param>
         /// <returns></returns>
@@ -122,8 +132,8 @@ namespace WLib.Database
         }
         /// <summary>
         /// 构造OleDb连接shapefile当中的dbf文件的连接字符串
-        /// （注意：OleDb连接dbf的BUG：dbf文件名称长度不能超过8）
-        /// （注意：sql语句必须包含select xxx from [dbfPath]的部分，其中[dbfPath]就是dbf文件全路径）
+        /// <para>注意：OleDb连接dbf的BUG：dbf文件名称长度不能超过8</para>
+        /// <para>注意：sql语句必须包含select xxx from dbfPath的部分，其中dbfPath就是dbf文件全路径，例如：select * from c:\data\test.dbf</para>
         /// </summary>
         /// <param name="dbfDirectory">dbf文件所在目录</param>
         /// <returns></returns>
