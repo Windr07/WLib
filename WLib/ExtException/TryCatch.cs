@@ -25,7 +25,7 @@ namespace WLib.ExtException
         /// <param name="func">需要执行和捕获异常的有返回值的方法</param>
         /// <param name="finallyAction">在finally中执行的方法，可赋值为null</param>
         /// <returns></returns>
-        public static T TryRun<T>(Func<T> func, Action finallyAction)
+        public static T TryRun<T>(this Func<T> func, Action finallyAction = null)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace WLib.ExtException
         /// <param name="catchActon">异常处理方式</param>
         /// <param name="finallyAction">在finally中执行的方法，可赋值为null</param>
         /// <returns></returns>
-        public static T TryRun<T>(Func<T> func, ICatchAction catchActon, Action finallyAction)
+        public static T TryRun<T>(this Func<T> func, ICatchAction catchActon, Action finallyAction = null)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace WLib.ExtException
         /// <param name="action">需要执行和捕获异常的无返回值的方法</param>
         /// <param name="finallyAction">在finally中执行的方法，可赋值为null</param>
         /// <returns></returns>
-        public static void TryRun(Action action, Action finallyAction)
+        public static void TryRun(this Action action, Action finallyAction = null)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace WLib.ExtException
         /// <param name="catchActon">异常处理方式</param>
         /// <param name="finallyAction">在finally中执行的方法，可赋值为null</param>
         /// <returns></returns>
-        public static void TryRun(Action action, ICatchAction catchActon, Action finallyAction)
+        public static void TryRun(this Action action, ICatchAction catchActon, Action finallyAction = null)
         {
             try
             {

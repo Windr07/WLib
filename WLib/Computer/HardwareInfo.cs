@@ -51,9 +51,8 @@ namespace WLib.Computer
         /// <returns></returns>
         public static string GetDiskVolumeSerialNumber()
         {
-            string osLetter = GetOsLetter();//系统所在盘符，一般为"c:"
-            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-            ManagementObject disk = new ManagementObject($"win32_logicaldisk.deviceid=\"{osLetter}\"");
+            var osLetter = GetOsLetter();//系统所在盘符，一般为"c:"
+            var disk = new ManagementObject($"win32_logicaldisk.deviceid=\"{osLetter}\"");
             disk.Get();
             return disk.GetPropertyValue("VolumeSerialNumber").ToString();
         }
@@ -65,9 +64,9 @@ namespace WLib.Computer
         {
             try
             {
-                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-                ManagementObjectCollection moc = mc.GetInstances();
-                foreach (ManagementObject mo in moc)
+                var managementClass = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                var managementObjectCollection = managementClass.GetInstances();
+                foreach (ManagementObject mo in managementObjectCollection)
                 {
                     if ((bool)mo["IPEnabled"] == true)
                     {
@@ -90,12 +89,12 @@ namespace WLib.Computer
         /// <returns></returns>
         public static string GetMacAddress()
         {
-            string mac = "";
-            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-            ManagementObjectCollection moc = mc.GetInstances();
-            foreach (var o in moc)
+            var mac = "";
+            var managementClass = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            var managementObjectCollection = managementClass.GetInstances();
+            foreach (var o in managementObjectCollection)
             {
-                var mo = (ManagementObject) o;
+                var mo = (ManagementObject)o;
                 if ((bool)mo["IPEnabled"])
                 {
                     mac = mo["MacAddress"].ToString();
@@ -116,8 +115,8 @@ namespace WLib.Computer
         {
             try
             {
-                ManagementClass managementClass = new ManagementClass(typePath);
-                ManagementObjectCollection managementObjColl = managementClass.GetInstances();
+                var managementClass = new ManagementClass(typePath);
+                var managementObjColl = managementClass.GetInstances();
                 PropertyDataCollection properties = managementClass.Properties;
                 foreach (PropertyData property in properties)
                 {

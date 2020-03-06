@@ -219,5 +219,14 @@ namespace WLib.Attributes.Description
             return (int)result;
         }
         #endregion
+
+        /// <summary>
+        /// 获取枚举值的名称
+        /// </summary>
+        /// <returns></returns>
+        public static string GetName<T>(this T t) where T : struct
+        {
+            return Enum.GetName(typeof(T), t);
+        }
     }
 }

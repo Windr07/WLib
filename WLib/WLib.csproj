@@ -50,16 +50,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="oracle.dataaccess">
-      <HintPath>..\DLL\oracle.dataaccess.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -84,8 +77,27 @@
     <Compile Include="Attributes\Table\ReadOnlyAttribute.cs" />
     <Compile Include="Data\Calculate\ChineseRound.cs" />
     <Compile Include="Delegates\DelegateBinding.cs" />
-    <Compile Include="ExtProgress\IProgressView.cs" />
+    <Compile Include="Drawing\EImageColorType.cs" />
+    <Compile Include="Drawing\GetBitmap.cs" />
+    <Compile Include="Drawing\ImageColorConvert.cs" />
+    <Compile Include="Events\EventArgs`T.cs" />
+    <Compile Include="ExtProgram\Contact\ContactInfo.cs" />
+    <Compile Include="ExtProgram\Contact\EContactType.cs" />
+    <Compile Include="ExtProgress\Core\IProgressEvents.cs" />
+    <Compile Include="ExtProgress\Core\IProgressMsgs.cs" />
+    <Compile Include="ExtProgress\Core\IProgressMsgs`T.cs" />
+    <Compile Include="ExtProgress\Core\IProgressOperation.cs" />
+    <Compile Include="ExtProgress\Core\IProgressOperation`T3.cs" />
+    <Compile Include="ExtProgress\Core\ProgressMsgs.cs" />
+    <Compile Include="ExtProgress\Core\ProgressMsgs`T.cs" />
+    <Compile Include="ExtProgress\Core\ProgressOperation.cs" />
+    <Compile Include="ExtProgress\Core\ProgressOperation`T3.cs" />
+    <Compile Include="ExtProgress\ProEventArgs\ProDataOutputEventArgs.cs" />
+    <Compile Include="ExtProgress\ProLogGroup.cs" />
+    <Compile Include="ExtProgress\ProLogManager.cs" />
+    <Compile Include="ExtProgress\ProLogOperation.cs" />
     <Compile Include="Files\DirectoryOpt.cs" />
+    <Compile Include="Model\NodeObject.cs" />
     <Compile Include="Model\ObjectCopy.cs" />
     <Compile Include="Plugins\EPluginContainerType.cs" />
     <Compile Include="Plugins\EPluginInvokeType.cs" />
@@ -94,8 +106,8 @@
     <Compile Include="Plugins\Interface\IPluginContainer.cs" />
     <Compile Include="Plugins\Interface\IPluginPlan.cs" />
     <Compile Include="Plugins\Interface\IPluginPlanSystem.cs" />
+    <Compile Include="Plugins\Interface\IPluginView`T1.cs" />
     <Compile Include="Plugins\Interface\ISystemInfo.cs" />
-    <Compile Include="Plugins\Interface\IPluginSplitItem.cs" />
     <Compile Include="Plugins\Model\Command.cs" />
     <Compile Include="Plugins\Model\Command`T1.cs" />
     <Compile Include="Plugins\Model\Command`T3.cs" />
@@ -110,12 +122,6 @@
     <Compile Include="Database\DbBase\EDbProviderType.cs" />
     <Compile Include="Database\DbBase\ProviderFactory.cs" />
     <Compile Include="Database\DbHelper.cs" />
-    <Compile Include="Database\OracleGis\SdoElemInfoFactory.cs" />
-    <Compile Include="Database\OracleGis\SdoGeomFactory.cs" />
-    <Compile Include="Database\OracleGis\SdoGeomType.cs" />
-    <Compile Include="Database\OracleGis\SdoOrdinateFactory.cs" />
-    <Compile Include="Database\OracleGis\SdoPointType.cs" />
-    <Compile Include="Database\OracleGis\SdoPointTypeFactory.cs" />
     <Compile Include="Database\TableInfo\DictionaryTable.cs" />
     <Compile Include="Database\TableInfo\DictionaryTableHelper.cs" />
     <Compile Include="Database\TableInfo\FieldClass.cs" />
@@ -135,24 +141,10 @@
     <Compile Include="ExtException\ICatchAction.cs" />
     <Compile Include="ExtException\TryCatch.cs" />
     <Compile Include="ExtProgram\QQInvoke.cs" />
-    <Compile Include="ExtProgress\Core\ProgressMsgs.cs" />
-    <Compile Include="ExtProgress\Core\ProgressOperation`T.cs" />
-    <Compile Include="ExtProgress\Core\ProgressOperation`T3.cs" />
     <Compile Include="ExtProgress\ProEventArgs\ProErrorEventArgs.cs" />
     <Compile Include="ExtProgress\ProEventArgs\ProChangedEventArgs.cs" />
     <Compile Include="ExtProgress\ProEventArgs\ProMsgChangedEventArgs.cs" />
     <Compile Include="ExtProgress\ProEventArgs\ProMsgChangedEventArgs`T.cs" />
-    <Compile Include="ExtProgress\Core\IProgressEvents.cs" />
-    <Compile Include="ExtProgress\Core\IProgressMsgs.cs" />
-    <Compile Include="ExtProgress\Core\IProgressMsgs`T.cs" />
-    <Compile Include="ExtProgress\Core\IProgressOperation.cs" />
-    <Compile Include="ExtProgress\Core\IProgressOperation`T.cs" />
-    <Compile Include="ExtProgress\Core\IProgressOperation`T2.cs" />
-    <Compile Include="ExtProgress\Core\ProgressMsgs`T.cs" />
-    <Compile Include="ExtProgress\Core\ProgressOperation`T2.cs" />
-    <Compile Include="ExtProgress\ProgressViewManager.cs" />
-    <Compile Include="ExtProgress\ProLogFileInfo.cs" />
-    <Compile Include="ExtProgress\ProLogManager.cs" />
     <Compile Include="Files\ArcGisFiles.cs" />
     <Compile Include="Files\DirectoryFileAceess.cs" />
     <Compile Include="Files\FileEncode.cs" />
@@ -173,11 +165,11 @@
     <Compile Include="Plugins\Model\PluginItem.cs" />
     <Compile Include="Plugins\Model\PluginPlan.cs" />
     <Compile Include="Plugins\Model\PluginView.cs" />
+    <Compile Include="Plugins\Model\PluginView`T1.cs" />
     <Compile Include="Plugins\Model\SystemInfo.cs" />
     <Compile Include="Model\JsonConverterEx.cs" />
     <Compile Include="Plugins\PluginHelper.cs" />
     <Compile Include="Print\PrintOption.cs" />
-    <Compile Include="Test\Tester.cs" />
     <Compile Include="ThreadHelper\EControlInvokeType.cs" />
     <Compile Include="Web\FtpHelper.cs" />
     <Compile Include="Web\TransferProgressEventArgs.cs" />
@@ -191,22 +183,16 @@
     <Compile Include="ThreadHelper\ControlInvokeParam.cs" />
     <Compile Include="WindowsAPI\WinApi.cs" />
     <Compile Include="WindowsAPI\WinFormStyle.cs" />
-    <Compile Include="WinForm\AppExceptionOpt.cs" />
-    <Compile Include="WinForm\DialogOpt.cs" />
-    <Compile Include="WinForm\EResize.cs" />
-    <Compile Include="WinForm\MenuOpt.cs" />
     <Compile Include="Reflection\ReflectionOpt.cs" />
     <Compile Include="Attributes\ObjToNodeAttribute.cs" />
-    <Compile Include="WinForm\TreeNodeOpt.cs" />
-    <Compile Include="WinForm\WinFormOpt.cs" />
     <Compile Include="Xml\XmlConfig.cs" />
     <Compile Include="Xml\XmlSaveAttrParams.cs" />
     <Compile Include="Xml\XmlConvert.cs" />
-    <Compile Include="Zip\SharpZip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DbHelper.Creator.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

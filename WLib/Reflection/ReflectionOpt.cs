@@ -57,6 +57,39 @@ namespace WLib.Reflection
 
 
         /// <summary>
+        /// 判断指定的类型 <paramref name="type"/> 是否是指定泛型类型的子类型，或实现了指定泛型接口。
+        /// </summary>
+        /// <remarks>来源：https://www.cnblogs.com/walterlv/p/10236419.html </remarks>
+        /// <param name="type">需要测试的类型。</param>
+        /// <param name="genericType">泛型接口类型，传入 typeof(IXxx&lt;&gt;)，例如 typeof(IList&lt;&gt;) 或者  typeof(List&lt;&gt;)</param>
+        /// <returns>如果是泛型接口的子类型，则返回 true，否则返回 false。</returns>
+        public static bool HasImplementedRawGeneric(this Type type, Type genericType)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (genericType == null) throw new ArgumentNullException(nameof(genericType));
+
+            // 测试接口
+            var isTheRawGenericType = type.GetInterfaces().Any(IsTheRawGenericType);
+            if (isTheRawGenericType) return true;
+
+            // 测试类型
+            while (type != null && type != typeof(object))
+            {
+                isTheRawGenericType = IsTheRawGenericType(type);
+                if (isTheRawGenericType) return true;
+                type = type.BaseType;
+            }
+
+            // 没有找到任何匹配的接口或类型。
+            return false;
+
+            // 测试某个类型是否是指定的原始接口。
+            bool IsTheRawGenericType(Type test)
+                => genericType == (test.IsGenericType ? test.GetGenericTypeDefinition() : test);
+        }
+
+
+        /// <summary>
         /// 递归获得类型的继承树，包括类型继承的各级父类和接口
         /// </summary>
         /// <param name="type"></param>
@@ -123,6 +156,7 @@ namespace WLib.Reflection
         {
             if (!interfaceType.IsInterface)
                 throw new Exception($"类型{interfaceType.FullName}不是接口类型！");
+
 
             var types = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceType));
             if (achieveClass)

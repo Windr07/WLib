@@ -19,15 +19,15 @@ namespace WLib.Events
         /// 移除对象事件绑定过的全部事件处理方法
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="TClass"></param>
+        /// <param name="obj">需要移除全部事件处理方法的对象</param>
         /// <param name="eventName">事件名</param>
-        public static void RemoveEvent<T>(this T TClass, string eventName)
+        public static void RemoveEvent<T>(this T obj, string eventName)
         {
-            Delegate[] handlers = GetObjectEventList(TClass, eventName);
+            Delegate[] handlers = GetObjectEventList(obj, eventName);
             if (handlers != null)
             {
                 foreach (Delegate handler in handlers)
-                    typeof(T).GetEvent(eventName).RemoveEventHandler(TClass, handler);
+                    typeof(T).GetEvent(eventName).RemoveEventHandler(obj, handler);
             }
         }
         ///  <summary>     
