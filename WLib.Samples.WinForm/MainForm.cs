@@ -99,19 +99,31 @@ namespace WLib.Samples.WinForm
 
         }
 
-        private void Test()
+        private void SmapleMethod()
         {
-            double sumRiverLength = 0.0;
-            FeatureClassEx.FromPath(@"c:\River.shp").QueryFeatures(@"XZQDM = '440000'",
-                feature => sumRiverLength += feature.ToDouble("RiverLength"));
+            //使用以下对象需引用：
+            //using WLib.ArcGis.Data;
+            //using WLib.ArcGis.GeoDatabase.FeatClass;
+            //using WLib.ArcGis.GeoDatabase.WorkSpace;
+            //using WLib.Database;
+            //using WLib.Database.DbBase;
 
+            //---------示例1：获得区域内的河流的总长度----------
+            //1、直接根据图层的路径获得 IFeatureClass 对象
+            IFeatureClass featureClass = FeatureClassEx.FromPath(@"c:\World.mdb\River");//获取河流图层
+            //2、通过QueryFeatures扩展方法，查询图层中的数据
+            double sumRiverLength = 0.0;//计算河流的总长度
+            featureClass.QueryFeatures(@"XZQDM = '440000'", feature => sumRiverLength += feature.ToDouble("RiverLength"));
+
+
+            //---------示例2：复制图层----------
             var workspace = WorkspaceEx.GetWorkSpace(@"c:\World.mdb");
-            FeatureClassEx.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, "NewRiver", "河流");
+            workspace.GetFeatureClassByName("River").CopyStruct(workspace, "NewRiver", "河流");
 
-            var dbHelper1 = DbHelper.GetShpMdbGdbHelper(@"c:\River.dbf");
-            dbHelper1.ExcNonQuery(@"update River set Name = 'Pearl River' where RiverCode ='003'");
-
-            var dbHelper2 = DbHelper.GetShpMdbGdbHelper(@"c:\World.mdb");
+            //---------示例3：----------
+            //数据库连接和SQL查询的方式获取shp、mdb、gdb、dbf数据
+            DbHelper dbHelper1 = DbHelper.GetShpMdbGdbHelper(@"c:\River.dbf");
+            System.Data.DataTable dataTable = dbHelper1.GetDataTable(@"select * from River where RiverName =  'Pearl River'");
         }
 
         private void 测试ToolStripMenuItem_Click(object sender, EventArgs e)
