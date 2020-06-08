@@ -170,7 +170,6 @@
     <Compile Include="Model\JsonConverterEx.cs" />
     <Compile Include="Plugins\PluginHelper.cs" />
     <Compile Include="Print\PrintOption.cs" />
-    <Compile Include="ThreadHelper\EControlInvokeType.cs" />
     <Compile Include="Web\FtpHelper.cs" />
     <Compile Include="Web\TransferProgressEventArgs.cs" />
     <Compile Include="Web\WebServiceAgent.cs" />
@@ -179,8 +178,6 @@
     <Compile Include="Model\ItemObject`T.cs" />
     <Compile Include="Data\Format\CnNumberConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThreadHelper\ControlOpt.cs" />
-    <Compile Include="ThreadHelper\ControlInvokeParam.cs" />
     <Compile Include="WindowsAPI\WinApi.cs" />
     <Compile Include="WindowsAPI\WinFormStyle.cs" />
     <Compile Include="Reflection\ReflectionOpt.cs" />
