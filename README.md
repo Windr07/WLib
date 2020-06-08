@@ -32,31 +32,32 @@ WLib.Files|excel、Word、pdf读写库|使用[NPOI](https://github.com/tonyqus/n
  * [itextsharp]()
  
  
-  ## 使用
- 添加相关引用：
-  ```cSharp
-using WLib.ArcGis.Data;
-using WLib.ArcGis.GeoDatabase.FeatClass;
-using WLib.ArcGis.GeoDatabase.WorkSpace;
-using WLib.Database;
-using WLib.Database.DbBase;
-```
-使用示例：
+  ## 使用示例
 ```cSharp
-private void Test()
- {
-double sumRiverLength = 0.0;
-FeatClassFromPath.FromPath(@"c:\River.shp").QueryFeatures(@"XZQDM = '440000'", feature => sumRiverLength +=feature.ToDouble("RiverLength"));
+private void SmapleMethod()
+{
+    //使用以下对象需引用：
+    //using WLib.ArcGis.Data;
+    //using WLib.ArcGis.GeoDatabase.FeatClass;
+    //using WLib.ArcGis.GeoDatabase.WorkSpace;
+    //using WLib.Database;
+    //using WLib.Database.DbBase;
 
- var workspace = GetWorkspace.GetWorkSpace(@"c:\World.mdb"); 
-FeatClassFromPath.FromPath(@"c:\World.mdb\river").CopyStruct(workspace, 
-"NewRiver", "河流");
+    //---------示例1：获得区域内的河流的总长度----------
+    //1、直接根据图层的路径获得 IFeatureClass 对象
+    IFeatureClass featureClass = FeatureClassEx.FromPath(@"c:\World.mdb\River");//获取河流图层
+    //2、通过QueryFeatures扩展方法，查询图层中的数据
+    double sumRiverLength = 0.0;//计算河流的总长度
+    featureClass.QueryFeatures(@"XZQDM = '440000'", feature => sumRiverLength += feature.ToDouble("RiverLength"));
 
-var connString = ConnStringHelper.Dbf_OleDb4(@"c:\River.dbf");
 
-new DbHelper(connString, EDbProviderType.OleDb).ExcNonQuery(@"update 
-River set Name = 'Pearl River' where RiverCode ='003'");
+    //---------示例2：复制图层----------
+    var workspace = WorkspaceEx.GetWorkSpace(@"c:\World.mdb");
+    workspace.GetFeatureClassByName("River").CopyStruct(workspace, "NewRiver", "河流");
 
-var connString2 = ConnStringHelper.Access_OleDb4(@"c:\World.mdb");
- }
+    //---------示例3：数据查询----------
+    //数据库连接和SQL查询的方式获取shp、mdb、gdb、dbf数据
+    DbHelper dbHelper1 = DbHelper.GetShpMdbGdbHelper(@"c:\River.dbf");
+    System.Data.DataTable dataTable = dbHelper1.GetDataTable(@"select * from River where RiverName =  'Pearl River'");
+}
 ```
