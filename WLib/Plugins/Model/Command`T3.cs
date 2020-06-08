@@ -26,11 +26,11 @@ namespace WLib.Plugins.Model
         /// </summary>
         public Action<TCmdEventType, EventArgs> CommandAction { get; set; }
         /// <summary>
-        /// 调用命令的插件视图
+        /// 调用命令的插件视图，例如程序的主窗体
         /// </summary>
         public new IPluginView<TViewEventType> View { get; set; }
         /// <summary>
-        /// 进度操作的输入数据
+        /// 调用命令的插件视图，例如程序的主窗体
         /// </summary>
         IPluginView ICommand.View { get => this.View; set => this.View = (IPluginView<TViewEventType>)value; }
     }

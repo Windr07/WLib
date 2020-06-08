@@ -42,7 +42,7 @@ namespace WLib.ArcGis.Carto.MapExport
         /// 设置地图文档内容并进行出图的操作
         /// </summary>
         /// <param name="cfg">对地图进行各项配置和出图的信息</param>
-        /// <param name="mapDoc">要设置并出图的地图文档，若值为null则根据<see cref="cfg"/>参数指定的信息
+        /// <param name="mapDoc">要设置并出图的地图文档，若值为null则根据<paramref name="cfg"/>参数指定的信息
         /// 复制地图模板到生成目录或临时目录，打开复制后的地图文档进行设置和出图</param>
         public MapExportHelper(MapExportInfo cfg, IMapDocument mapDoc = null) : base(cfg.CfgName, cfg) => MapDoc = mapDoc;
 
@@ -57,7 +57,7 @@ namespace WLib.ArcGis.Carto.MapExport
             try
             {
                 if (!ValidateConfig(InputData, out var cfgMessage)) throw new Exception(cfgMessage);//验证配置是否正确
-                if (!ValidateData(InputData, out var dataMessage)) Wranning = dataMessage;//验证数据是否正确
+                if (!ValidateData(InputData, out var dataMessage)) Warnning = dataMessage;//验证数据是否正确
                 if (MapDoc == null) MapDoc = CopyOpenMapDoc(InputData);//复制地图文档至生成目录或临时目录，打开地图文档
                 ExportMapMainOperation(InputData, MapDoc);//根据配置设置地图文档，保存并且导出地图
             }
@@ -187,12 +187,16 @@ namespace WLib.ArcGis.Carto.MapExport
                 graphicsContainer.GetMapFrame(mapFrameInfo.Name)?.Map;
 
             if (map == null) throw new Exception($"找不到名称为{mapFrameInfo.Name}的地图数据框！");
+            var spatialRef = map.SpatialReference;
 
-            foreach (var layerInfo in mapFrameInfo.LayerInfos)
+            for (int i = 0; i < mapFrameInfo.LayerInfos.Count; i++)
             {
-                var layer = SetLayerDataSource(map, layerInfo);//设置数据源
+                var layerInfo = mapFrameInfo.LayerInfos[i];
+                var layer = SetLayerDataSource(map, layerInfo, spatialRef);//设置数据源
                 if (layer is IFeatureLayer featureLayer)//设置定义查询
+                {
                     ((IFeatureLayerDefinition)featureLayer).DefinitionExpression = layerInfo.Definition;
+                }
             }
             if (mapFrameInfo.Scale > 0)//设置比例尺
                 map.ReferenceScale = mapFrameInfo.Scale;
@@ -205,7 +209,7 @@ namespace WLib.ArcGis.Carto.MapExport
         /// <param name="map">地图</param>
         /// <param name="layerInfo">图层设置配置</param>
         /// <returns></returns>
-        protected virtual ILayer SetLayerDataSource(IMap map, LayerInfo layerInfo)
+        protected virtual ILayer SetLayerDataSource(IMap map, LayerInfo layerInfo, ISpatialReference spatialRef = null)
         {
             var layer = layerInfo.Index > -1 ?
                 map.get_Layer(layerInfo.Index) :
@@ -221,6 +225,8 @@ namespace WLib.ArcGis.Carto.MapExport
                 }
                 else throw new Exception(msg);
             }
+            layer.SpatialReference = spatialRef;
+
             var sourcePath = layer.GetSourcePath()?.ToLower().Trim();
             var setSourcePath = layerInfo.DataSource?.ToLower().Trim();
             if (setSourcePath != null && sourcePath != setSourcePath)
@@ -291,6 +297,20 @@ namespace WLib.ArcGis.Carto.MapExport
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null);
+            }
+        }
+        /// <summary>
+        /// 判断图层坐标系是否与指定坐标系一致，不一致将其坐标系设置成与指定坐标系一致
+        /// </summary>
+        /// <param name="featureLayer"></param>
+        /// <param name="spatialRef"></param>
+        protected virtual void ResetSpatialRef(IFeatureLayer featureLayer, ISpatialReference spatialRef)
+        {
+            var spatialRef2 = featureLayer.GetSpatialRef();
+            if (spatialRef2 != null && !SpatialRefOpt.CheckSpatialRef(new[] { spatialRef, spatialRef2 }, out _))
+            {
+                featureLayer.SpatialReference = spatialRef;
+                Info = $"已修改图层{featureLayer.Name}坐标系，将与地图坐标系保持一致";
             }
         }
 

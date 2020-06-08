@@ -151,6 +151,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -214,15 +215,33 @@
     <Compile Include="Control\MapAssociation\MapCtrlMenu.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlPageLayoutSyn.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlToc.cs" />
-    <Compile Include="DataCheck\Compare\Item\AreasCompare.cs" />
-    <Compile Include="DataCheck\Compare\Item\FieldsCompare.cs" />
+    <Compile Include="DataCheck\Compare\CompareRecord.cs" />
+    <Compile Include="DataCheck\Compare\DataCompareChecker.cs" />
+    <Compile Include="DataCheck\Compare\Item\CompareItemCollection.cs" />
+    <Compile Include="DataCheck\Compare\Plan\EachFieldComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\EachSpatialComparePlan.cs" />
+    <Compile Include="DataCheck\Core\ESpatialMatchTypes.cs" />
+    <Compile Include="DataCheck\Compare\Item\FieldCompare.cs" />
     <Compile Include="DataCheck\Compare\Item\CompareItem.cs" />
-    <Compile Include="DataCheck\Compare\ComparePlan.cs" />
-    <Compile Include="DataCheck\Compare\Enum\EMatchRuleType.cs" />
-    <Compile Include="DataCheck\Compare\Enum\ENoneMatchErrorType.cs" />
-    <Compile Include="DataCheck\Compare\Enum\ENoneMatchType.cs" />
-    <Compile Include="DataCheck\Compare\EachComparePlan.cs" />
-    <Compile Include="DataCheck\Compare\SelfComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\ComparePlan.cs" />
+    <Compile Include="DataCheck\Core\ENoneMatchHandlers.cs" />
+    <Compile Include="DataCheck\Core\ENoneMatchTypes.cs" />
+    <Compile Include="DataCheck\Compare\Plan\EachComparePlan.cs" />
+    <Compile Include="DataCheck\Core\NoneMatchHelper.cs" />
+    <Compile Include="DataCheck\Compare\Plan\IFieldComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\ISpatialComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfDefaultComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfFieldComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfSpatialComparePlan.cs" />
+    <Compile Include="DataCheck\Core\Checker.cs" />
+    <Compile Include="DataCheck\Core\EErrorLevel.cs" />
+    <Compile Include="DataCheck\Core\CheckRecord.cs" />
+    <Compile Include="DataCheck\Core\ICheckGroup.cs" />
+    <Compile Include="DataCheck\Core\IChecker.cs" />
+    <Compile Include="DataCheck\Core\ICheckScheme.cs" />
+    <Compile Include="DataCheck\Core\INodeProperty.cs" />
+    <Compile Include="DataCheck\Core\SpatialMatchTypesHelper.cs" />
     <Compile Include="Data\EStatisticsType.cs" />
     <Compile Include="Data\TypeConvert.cs" />
     <Compile Include="Display\ColorCreate.cs" />
@@ -234,6 +253,7 @@
     <Compile Include="GeoDatabase\Fields\FieldItemEx.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Create.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.cs" />
+    <Compile Include="Geometry\GeometrySplitor.cs" />
     <Compile Include="Geometry\ProjectionInfo.cs" />
     <Compile Include="Geometry\SpatialRefOpt.cs" />
     <Compile Include="Data\DataTableConvert.cs" />
@@ -296,7 +316,9 @@
       <Name>WLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="GeoDatabase\Table\TableEx.FromPath.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -70,7 +70,7 @@ namespace WLib.ExtProgress.Core
         /// <summary>
         /// 追加当前时间的时间格式，默认"yyyy/MM/dd,HH:mm:ss"
         /// </summary>
-        public string TimeFormat { get; set; } = "yyyy/MM/dd,HH:mm:ss";
+        public string TimeFormat { get; set; } = "yyyy/MM/dd,HH:mm:ss.ff";
         #endregion
 
 

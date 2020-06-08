@@ -39,13 +39,25 @@ namespace WLib.ExtProgress
             sb.AppendLine("程序名称：" + Msgs.AssemblyName);
             sb.AppendLine("程序版本：" + Msgs.AssemblyVersion);
             sb.AppendLine("操作异常：" + Msgs.Error);
-            sb.AppendLine("\r\n\r\n\r\n---------------------------------------进程信息---------------------------------------");
-            sb.AppendLine(Msgs.AllMessage);
+            sb.AppendLine("\r\n---------------------------------------进程信息---------------------------------------");
+            GetOptMessages(sb, opt);
 
             logDirectory = string.IsNullOrWhiteSpace(logDirectory) ? AppDomain.CurrentDomain.BaseDirectory + "Log" : logDirectory;
             Directory.CreateDirectory(logDirectory);
             string logFilePath = Path.Combine(logDirectory, logPrefix + DateTime.Now.ToString("yyyy-MM-dd HH：mm：ss") + ".txt");
             File.WriteAllText(logFilePath, sb.ToString());
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sbMessage"></param>
+        /// <param name="opt"></param>
+        private static void GetOptMessages(StringBuilder sbMessage, IProgressOperation opt)
+        {
+            sbMessage.AppendLine($"【{opt.Name}】");
+            sbMessage.AppendLine(opt.Msgs.GetAllMessage());
+            foreach (var subOpt in opt.SubProgressOperations)
+                GetOptMessages(sbMessage, subOpt);
         }
         /// <summary>
         /// 将进度信息写入数据库中

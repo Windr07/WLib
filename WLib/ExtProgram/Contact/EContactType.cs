@@ -10,32 +10,32 @@ namespace WLib.ExtProgram.Contact
         /// <summary>
         /// 邮箱
         /// </summary>
-        [Description("邮箱")]
+        [DescriptionEx("邮箱")]
         EMail,
         /// <summary>
         /// 电话
         /// </summary>
-        [Description("电话")]
+        [DescriptionEx("电话")]
         Phone,
         /// <summary>
         /// QQ
         /// </summary>
-        [Description("QQ")]
+        [DescriptionEx("QQ")]
         QQ,
         /// <summary>
         /// QQ群
         /// </summary>
-        [Description("QQ群")]
+        [DescriptionEx("QQ群")]
         QQGroup,
         /// <summary>
         /// 微信
         /// </summary>
-        [Description("微信")]
+        [DescriptionEx("微信")]
         Wechat,
         /// <summary>
         /// 网站
         /// </summary>
-        [Description("网站")]
+        [DescriptionEx("网站")]
         WebSite
     }
 }

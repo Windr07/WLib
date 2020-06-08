@@ -13,7 +13,7 @@ namespace WLib.Envir.ArcGis.CheckVersion
     public enum EArcGisVersion
     {
         /// <summary>
-        /// 未知
+        /// 未知版本或未安装ArcGIS
         /// </summary>
         Unknown,
         /// <summary>

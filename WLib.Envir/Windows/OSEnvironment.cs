@@ -28,7 +28,6 @@ namespace WLib.Envir.Windows
         /// </summary>
         private static EWinVersion _winVersion;
 
-
         /// <summary>
         /// Windows操作系统版本
         /// </summary>
@@ -49,7 +48,6 @@ namespace WLib.Envir.Windows
         /// Windows操作系统版本信息
         /// </summary>
         public static string OSName => _winVersion.ToString();
-
         /// <summary>
         /// 检查操作系统版本
         /// </summary>
@@ -58,28 +56,18 @@ namespace WLib.Envir.Windows
             Version ver = Environment.OSVersion.Version;
             int major = ver.Major;  //主版本
             int minor = ver.Minor;  //次版本
-            EWinVersion winVersion;
-
-            if (major == 4 && minor == 0)
-                winVersion = EWinVersion.Win95;
-            else if (major == 4 && minor == 10)
-                winVersion = EWinVersion.Win98;
-            else if (major == 4 && minor == 90)
-                winVersion = EWinVersion.WinMe;
-            else if (major == 5 && minor == 0)
-                winVersion = EWinVersion.Win2000;
-            else if (major == 5 && minor == 1)
-                winVersion = EWinVersion.XP;
-            else if (major == 6 && minor == 0)
-                winVersion = EWinVersion.Vista;
-            else if (major == 6 && minor == 1)
-                winVersion = EWinVersion.Win7;
-            else if (major == 6 && minor == 2)
-                winVersion = EWinVersion.Win8或以上;
-            else
-                winVersion = EWinVersion.UnKnown;
-
-            return winVersion;
+            switch (major)
+            {
+                case 4 when minor == 0: return EWinVersion.Win95;
+                case 4 when minor == 10: return EWinVersion.Win98;
+                case 4 when minor == 90: return EWinVersion.WinMe;
+                case 5 when minor == 0: return EWinVersion.Win2000;
+                case 5 when minor == 1: return EWinVersion.XP;
+                case 6 when minor == 0: return EWinVersion.Vista;
+                case 6 when minor == 1: return EWinVersion.Win7;
+                case 6 when minor == 2: return EWinVersion.Win8或以上;
+                default: return EWinVersion.UnKnown;
+            }
         }
         /// <summary>
         /// 判断系统是否为64位系统

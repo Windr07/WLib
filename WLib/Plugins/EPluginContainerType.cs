@@ -18,43 +18,43 @@ namespace WLib.Plugins
         /// <summary>
         /// 菜单栏
         /// </summary>
-        [Description("菜单")]
+        [DescriptionEx("菜单")]
         MenuStrip = 0,
 
         /// <summary>
         /// 子菜单，可以包含无限层级的子菜单
         /// </summary>
-        [Description("子菜单")]
+        [DescriptionEx("子菜单")]
         SubMenu = 1,
 
         /// <summary>
         /// 工具条
         /// </summary>
-        [Description("工具条")]
+        [DescriptionEx("工具条")]
         ToolBar = 2,
 
         /// <summary>
         /// 快捷菜单（下拉菜单，或鼠标右键菜单）
         /// </summary>
-        [Description("快捷菜单")]
+        [DescriptionEx("快捷菜单")]
         ContextMenu = 3,
 
         /// <summary>
         /// Ribbon风格的菜单
         /// </summary>
-        [Description("Ribbon菜单栏")]
+        [DescriptionEx("Ribbon菜单栏")]
         RibbonMenu = 4,
 
         /// <summary>
         /// Ribbon风格的菜单页
         /// </summary>
-        [Description("Ribbon菜单页")]
+        [DescriptionEx("Ribbon菜单页")]
         RibbonPage = 5,
 
         /// <summary>
         /// Ribbon风格的菜单组
         /// </summary>
-        [Description("Ribbon菜单组")]
+        [DescriptionEx("Ribbon菜单组")]
         RibbonGroup = 6,
     }
 }

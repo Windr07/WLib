@@ -42,7 +42,7 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
         {
             set
             {
-                var description2 = EnumDescriptionHelper.GetDescriptions<EWorkspaceType>(2);
+                var description2 = EnumDescriptionExHelper.GetDescriptions<EWorkspaceType>(2);
                 var workspaceTypes = value.Split('|').Where(v => description2.Contains(v)).ToArray();
                 if (workspaceTypes.Length == 0)
                     workspaceTypes = _defaultWorkspaceType.Split('|');

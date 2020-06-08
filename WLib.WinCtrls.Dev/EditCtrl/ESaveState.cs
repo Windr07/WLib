@@ -17,17 +17,17 @@ namespace WLib.WinCtrls.Dev.EditCtrl
         /// <summary>
         /// 未执行保存
         /// </summary>
-        [Description("未执行保存")]
+        [DescriptionEx("未执行保存")]
         UnSaved = -1,
         /// <summary>
         /// 保存失败
         /// </summary>
-        [Description("保存失败")]
+        [DescriptionEx("保存失败")]
         Fail = 0,
         /// <summary>
         /// 保存成功
         /// </summary>
-        [Description("保存成功")]
+        [DescriptionEx("保存成功")]
         Success = 1
     }
 }

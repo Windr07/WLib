@@ -15,40 +15,40 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// </summary>
     public enum EMapTools
     {
-        [Description("无")]
+        [DescriptionEx("无")]
         None = -1,
 
-        [Description("全图")]
+        [DescriptionEx("全图")]
         FullExtent = 0,
 
-        [Description("放大")]
+        [DescriptionEx("放大")]
         ZoomIn = 1,
 
-        [Description("缩小")]
+        [DescriptionEx("缩小")]
         ZoomOut = 2,
 
-        [Description("平移")]
+        [DescriptionEx("平移")]
         Pan = 3,
 
-        [Description("前一视图")]
+        [DescriptionEx("前一视图")]
         PreView = 4,
 
-        [Description("后一视图")]
+        [DescriptionEx("后一视图")]
         NextView = 5,
 
-        [Description("测量距离")]
+        [DescriptionEx("测量距离")]
         MeasureDistance = 6,
 
-        [Description("测量面积")]
+        [DescriptionEx("测量面积")]
         MeasureArea = 7,
 
-        [Description("卷帘")]
+        [DescriptionEx("卷帘")]
         Swipe = 8,
 
-        [Description("识别")]
+        [DescriptionEx("识别")]
         Identify = 9,
 
-        [Description("选择图斑")]
+        [DescriptionEx("选择图斑")]
         Selection = 10,
     }
 }

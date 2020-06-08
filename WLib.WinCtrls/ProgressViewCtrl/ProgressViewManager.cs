@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -31,6 +32,15 @@ namespace WLib.WinCtrls.ProgressViewCtrl
         /// </summary>
         public Control MessageCtrl { get; set; }
         /// <summary>
+        /// 显示进度操作实时数据输出数据的表格控件
+        /// </summary>
+        public DataGridView GridView { get; set; }
+        /// <summary>
+        /// 表示进度操作进度条
+        /// </summary>
+        public ProgressBar ProgressBarCtrl { get; set; }
+
+        /// <summary>
         /// 表示以追加（True）还是替换（False）的方式，将信息显示到消息控件<see cref="MessageCtrl"/>中
         /// <para>默认为True，即追加信息</para>
         /// </summary>
@@ -40,18 +50,17 @@ namespace WLib.WinCtrls.ProgressViewCtrl
         /// </summary>
         public bool AppendBefore { get; set; }
         /// <summary>
-        /// 表示进度操作进度条
-        /// </summary>
-        public ProgressBar ProgressBarCtrl { get; set; }
-        /// <summary>
         /// 改变界面显示状态的委托，bool值参数代表开始操作(true)还是结束操作(false)
         /// </summary>
         public Action<bool> ChangeView { get; set; }
-
         /// <summary>
         /// 是否中止操作
         /// </summary>
         public bool StopRunning { get; protected set; }
+        /// <summary>
+        /// 进度操作输出的实时数据
+        /// </summary>
+        public List<object> Datas { get; } = new List<object>();
         /// <summary>
         /// 多项可进度控制的操作
         /// </summary>
@@ -64,6 +73,11 @@ namespace WLib.WinCtrls.ProgressViewCtrl
         /// 正在运行的操作
         /// </summary>
         public IProgressOperation RunningOpt { get; protected set; }
+        /// <summary>
+        /// 是否在操作完成、中止、异常出现时弹出提示框
+        /// </summary>
+
+        public bool ShowMessageBox { get; set; } = true;
 
 
         /// <summary>
@@ -76,13 +90,17 @@ namespace WLib.WinCtrls.ProgressViewCtrl
         /// <param name="fromCtrl">执行操作的窗体</param>
         /// <param name="progressBarCtrl">进度条，可为null</param>
         /// <param name="messageCtrl">显示进度信息的控件，可为null</param>
+        /// <param name="gridView">显示进度操作实时数据输出数据的表格控件</param>
         /// <param name="changeView">改变界面显示状态的委托</param>
-        public virtual void BindEvent(Form fromCtrl, ProgressBar progressBarCtrl, Control messageCtrl, Action<bool> changeView)
+        public virtual void BindEvent(Form fromCtrl, ProgressBar progressBarCtrl, Control messageCtrl, DataGridView gridView, Action<bool> changeView)
         {
             FormCtrl = fromCtrl;
             MessageCtrl = messageCtrl;
             ProgressBarCtrl = progressBarCtrl;
+            GridView = gridView;
             ChangeView += changeView;
+
+            FormCtrl.FormClosing -= OptForm_Closing;
             FormCtrl.FormClosing += OptForm_Closing;
             Opts.ForEach(opt => BindEventByOneOpt(opt, true));
         }
@@ -140,7 +158,7 @@ namespace WLib.WinCtrls.ProgressViewCtrl
         /// 设置状态为中止操作
         /// </summary>
         /// <param name="opt"></param>
-        protected void StopOperation(IProgressOperation opt)
+        protected virtual void StopOperation(IProgressOperation opt)
         {
             opt.Stop();
             opt.SubProgressOperations.ForEach(StopOperation);
@@ -150,7 +168,7 @@ namespace WLib.WinCtrls.ProgressViewCtrl
         /// </summary>
         /// <param name="opt"></param>
         /// <param name="isTopOperation">标识是否为顶层进度操作（非子操作）</param>
-        protected void BindEventByOneOpt(IProgressOperation opt, bool isTopOperation)
+        protected virtual void BindEventByOneOpt(IProgressOperation opt, bool isTopOperation)
         {
             if (isTopOperation)//只有顶层进度操作才绑定开始、中止、结束、异常事件处理
             {
@@ -159,30 +177,51 @@ namespace WLib.WinCtrls.ProgressViewCtrl
                 opt.OperationFinished += ProgressOperation_OperationFinished;
                 opt.OperationError += ProgressOperation_OperationError;
             }
+            else//子操作事件处理
+            {
+                opt.OperationError += Sub_ProgressOperation_OperationError;
+            }
 
             if (MessageCtrl != null) opt.Msgs.MessageChanged += ProgressOperation_MessageChanged;
+            if (GridView != null) opt.DataOutput += ProgressOperation_DataOutput;
             if (ProgressBarCtrl != null) opt.ProgressChanged += ProgressOperation_ProgressChanged;
             if (ProgressBarCtrl != null) opt.ProgressAdd += ProgressOperation_ProgressAdd;
 
             opt.SubProgressOperations.ForEach(subOpt => BindEventByOneOpt(subOpt, false));
         }
+
+
         /// <summary>
         /// 对指定进度操作对象及其子操作移除进度条改变、进度信息改变、执行结束、执行中止、执行异常事件的事件处理
         /// </summary>
         /// <param name="opt"></param>
-        protected void UnBindEventByOneOpt(IProgressOperation opt)
+        protected virtual void UnBindEventByOneOpt(IProgressOperation opt)
         {
             opt.OperationStart -= ProgressOperation_OperationStart;
             opt.OperationFinished -= ProgressOperation_OperationFinished;
             opt.OperationStoped -= ProgressOperation_OperationStoped;
             opt.OperationError -= ProgressOperation_OperationError;
+            opt.DataOutput -= ProgressOperation_DataOutput;
             opt.Msgs.MessageChanged -= ProgressOperation_MessageChanged;
             opt.ProgressChanged -= ProgressOperation_ProgressChanged;
             opt.ProgressAdd -= ProgressOperation_ProgressAdd;
+            opt.OperationError -= Sub_ProgressOperation_OperationError;
 
             opt.SubProgressOperations.ForEach(UnBindEventByOneOpt);
         }
 
+        protected virtual void ProgressOperation_DataOutput(object sender, ProDataOutputEventArgs e)
+        {
+            Datas.Add(e.Data);
+            if (Datas.Count == 1)
+            {
+                GridView.Invoke(new Action(() =>
+                {
+                    GridView.DataSource = null;
+                    GridView.DataSource = new BindingList<object>(Datas);
+                }));
+            }
+        }
 
         protected virtual void OptForm_Closing(object sender, FormClosingEventArgs e)
         {
@@ -222,13 +261,10 @@ namespace WLib.WinCtrls.ProgressViewCtrl
             {
                 if (MessageAppend)
                 {
-                    if (AppendBefore)
-                        MessageCtrl.Text.Insert(0, e.CurMessage + Environment.NewLine);
-                    else
-                        MessageCtrl.Text += e.CurMessage + Environment.NewLine;
+                    if (AppendBefore) MessageCtrl.Text.Insert(0, e.CurMessage + Environment.NewLine);
+                    else MessageCtrl.Text += e.CurMessage + Environment.NewLine;
                 }
-                else
-                    MessageCtrl.Text = e.CurMessage;
+                else MessageCtrl.Text = e.CurMessage;
                 Application.DoEvents();
             }));
         }
@@ -248,7 +284,7 @@ namespace WLib.WinCtrls.ProgressViewCtrl
                 var opt = sender as IProgressOperation;
                 opt.Msgs.Error = e.OptException.ToString();
                 opt.WriteLogFile();
-                MessageBoxEx.ShowError(e.OptException);
+                if (ShowMessageBox) MessageBoxEx.ShowError(e.OptException);
                 ChangeView?.Invoke(false);
                 RunningOpt = null;
             }));
@@ -281,7 +317,7 @@ namespace WLib.WinCtrls.ProgressViewCtrl
                 var opt = sender as IProgressOperation;
                 opt.WriteLogFile();
                 ChangeView?.Invoke(false);
-                MessageBoxEx.ShowInfo(FormCtrl, "用户中止操作！");
+                if (ShowMessageBox) MessageBoxEx.ShowInfo(FormCtrl, "用户中止操作！");
                 RunningOpt = null;
             }));
         }
@@ -294,9 +330,16 @@ namespace WLib.WinCtrls.ProgressViewCtrl
                 var opt = sender as IProgressOperation;
                 opt.WriteLogFile();
                 ChangeView?.Invoke(false);
-                MessageBoxEx.ShowInfo(FormCtrl, "全部处理完成！");
+                if (ShowMessageBox) MessageBoxEx.ShowInfo(FormCtrl, "全部处理完成！");
                 RunningOpt = null;
             }));
+        }
+
+        protected virtual void Sub_ProgressOperation_OperationError(object sender, ProErrorEventArgs e)
+        {
+            var opt = (IProgressOperation)sender;
+            opt.Msgs.Error = e.OptException.ToString();
+            opt.Msgs.Info(e.OptException.Message);
         }
     }
 }

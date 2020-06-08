@@ -56,6 +56,8 @@ namespace WLib.ArcGis.Geometry
         /// <returns></returns>
         public static ISpatialReference GetSpatialRef(this IFeatureLayer featureLayer)
         {
+            if (featureLayer?.FeatureClass == null)
+                throw new Exception($"无法获取{featureLayer?.Name}图层的坐标系，该图层为空或者图层没有绑定要素类！");
             IGeoDataset geoDataset = (IGeoDataset)featureLayer.FeatureClass;
             return geoDataset.SpatialReference;
         }
@@ -307,6 +309,7 @@ namespace WLib.ArcGis.Geometry
                 throw new Exception("坐标系(ISpatialReference)对象为Null，无法获取坐标系信息！");
 
             string str = string.Empty;
+            string spatialRefName = spatialRef.Name;
             try
             {
                 if (spatialRef is IPRJSpatialReferenceGEN gen1)
@@ -321,12 +324,21 @@ namespace WLib.ArcGis.Geometry
                 str = Environment.NewLine + str;
             }
             catch { }//在部分环境中无法将ISpatialReference转成IPRJSpatialReferenceGEN接口
-            return spatialRef.Name + str;
+            return $"{spatialRefName}{str}";
         }
         #endregion
 
 
         #region 对比坐标系是否一致
+        /// <summary>
+        /// "坐标系不一致"
+        /// </summary>
+        public static string CheckSpatialRef_Message = "✘坐标系不一致";
+        /// <summary>
+        /// "✘坐标系具体参数有所差异，请注意调整坐标系！"
+        /// </summary>
+        public static string CheckSpatialRef_Message_Detail = "✘坐标系不是完全一致的，请注意调整坐标系！";
+
         /// <summary>
         /// 简单地根据名称和FactoryCode，判断两个坐标系是否一致
         /// </summary>
@@ -349,7 +361,6 @@ namespace WLib.ArcGis.Geometry
             string str2 = GetSpatialRefDetail(spatialRef2);
             return str1.Trim() == str2.Trim();
         }
-
         /// <summary>
         /// 判断两个坐标系是否一致
         /// </summary>
@@ -365,11 +376,11 @@ namespace WLib.ArcGis.Geometry
                 var str1 = GetSpatialRefDetail(spatialRef1);
                 var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
-                message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
+                message = result ? str1 : $"{CheckSpatialRef_Message_Detail}\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
             }
             else
             {
-                message = $"✘坐标系不一致！\r\n\t坐标系1：{spatialRef1.Name}\r\n\t坐标系2：{spatialRef2.Name}";
+                message = $"{CheckSpatialRef_Message}\r\n\t坐标系1：{spatialRef1.Name}\r\n\t坐标系2：{spatialRef2.Name}";
             }
             return result;
         }
@@ -390,12 +401,12 @@ namespace WLib.ArcGis.Geometry
                 var str1 = GetSpatialRefDetail(spatialRef1);
                 var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
-                message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
+                message = result ? str1 : $"{CheckSpatialRef_Message_Detail}\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
             }
             else
             {
                 message =
-                    $"✘坐标系不一致！\r\n\t{featureClass1.AliasName}-坐标系：{spatialRef1.Name}\r\n\t{featureClass2.AliasName}-坐标系：{spatialRef2.Name}";
+                    $"{CheckSpatialRef_Message}\r\n\t{featureClass1.AliasName}-坐标系：{spatialRef1.Name}\r\n\t{featureClass2.AliasName}-坐标系：{spatialRef2.Name}";
             }
             return result;
         }
@@ -422,7 +433,7 @@ namespace WLib.ArcGis.Geometry
 
             if (result == false)
             {
-                sb.Insert(0, "各图层坐标系不是完全一致的，请先调整坐标系！\r\n");
+                sb.Insert(0, $"{CheckSpatialRef_Message_Detail}\r\n");
                 message = sb.ToString();
             }
             else
@@ -454,7 +465,7 @@ namespace WLib.ArcGis.Geometry
 
             if (result == false)
             {
-                sb.Insert(0, "各坐标系不是完全一致的，请先调整坐标系！\r\n");
+                sb.Insert(0, $"{CheckSpatialRef_Message_Detail}\r\n");
                 message = sb.ToString();
             }
             else

@@ -5,13 +5,13 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using WLib.ArcGis.GeoDatabase.Table;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 
@@ -32,7 +32,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
      */
 
     /// <summary>
-    /// 提供对要素类数据的增、删、改、查、筛选、检查、重命名等方法
+    /// 提供对要素类数据的获取、输出、复制、创建、增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static partial class FeatureClassEx
     {
@@ -402,10 +402,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
             if (nullRecordException && feature == null)//找不到记录时，抛出异常
             {
-                if (string.IsNullOrEmpty(whereClause))
-                    throw new Exception($"在{featureClass.AliasName}图层中，找不到记录");
-                else
-                    throw new Exception($"在{featureClass.AliasName}图层中，找不到“{whereClause}”的记录！");
+                var msg = string.IsNullOrEmpty(whereClause) ? null : $"“{whereClause}”的";
+                throw new Exception($"在{featureClass.AliasName}图层中，找不到{msg}记录");
             }
 
             while (feature != null)
@@ -414,6 +412,50 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 feature = featureCursor.NextFeature();
             }
             Marshal.ReleaseComObject(featureCursor);
+        }
+        /// <summary>
+        ///  根据查询条件查询要素，对查询获取的要素执行指定操作
+        /// </summary>
+        /// <param name="featureClass">查询的要素类</param>
+        /// <param name="whereClause">查询条件，此值为null时查询所有要素</param>
+        /// <param name="doActionByFeatures">针对要素执行的操作（<see cref="IFeature"/>参数代表执行操作的要素，<see cref="int"/>参数代表当前是从0开始的第几条要素）</param>
+        /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
+        public static void QueryFeatures(this IFeatureClass featureClass, string whereClause, Action<IFeature, int> doActionByFeatures, bool nullRecordException = false)
+        {
+            var featureCursor = GetSearchCursor(featureClass, whereClause);
+            var feature = featureCursor.NextFeature();
+
+            if (nullRecordException && feature == null)//找不到记录时，抛出异常
+            {
+                var msg = string.IsNullOrEmpty(whereClause) ? null : $"“{whereClause}”的";
+                throw new Exception($"在{featureClass.AliasName}图层中，找不到{msg}记录");
+            }
+
+            int index = -1;
+            while (feature != null)
+            {
+                doActionByFeatures(feature, ++index);
+                feature = featureCursor.NextFeature();
+            }
+            Marshal.ReleaseComObject(featureCursor);
+        }
+        /// <summary>
+        ///  根据查询条件查询要素，对查询获取的要素执行指定操作
+        /// </summary>
+        /// <param name="featureClass">查询的要素类</param>
+        /// <param name="whereClause">查询条件，此值为null时查询所有要素</param>
+        /// <param name="doActionByFeatures">针对要素执行的操作</param>
+        /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
+        public static Dictionary<TKey, TValue> QueryFeatures<TKey, TValue>(this IFeatureClass featureClass, string whereClause,
+            Func<IFeature, TKey> keyFunc, Func<IFeature, TValue> valueFunc, bool nullRecordException = false)
+        {
+            var pairs = new Dictionary<TKey, TValue>();
+            QueryFeatures(featureClass, whereClause, feature =>
+            {
+                pairs.Add(keyFunc(feature), valueFunc(feature));
+            }, nullRecordException);
+
+            return pairs;
         }
         #endregion
 
@@ -623,6 +665,18 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         public static IEnumerable<string> QueryStrValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
         {
             return QueryValues(featureClass, queryFiledName, whereClause).Select(v => v.ToString());
+        }
+        /// <summary>
+        /// 查询符合条件的指定字段值，并转化成整型
+        /// <para>注意要查询的字段应当为非空整型字段，否则类型转换失败时会抛出异常</para>
+        /// </summary>
+        /// <param name="featureClass">查询的要素类</param>
+        /// <param name="queryFiledName">查询的字段（该字段必须存在否则抛出异常）</param>
+        /// <param name="whereClause">查询条件</param>
+        /// <returns></returns>
+        public static IEnumerable<int> QueryIntValues(this IFeatureClass featureClass, string queryFiledName, string whereClause = null)
+        {
+            return QueryValues(featureClass, queryFiledName, whereClause).Select(v => Convert.ToInt32(v));
         }
 
         /// <summary>
@@ -837,7 +891,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClass">执行条件查询的要素类</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
-        public static string ValidateWhereClause(this IFeatureClass featureClass, string whereClause) => 
+        public static string ValidateWhereClause(this IFeatureClass featureClass, string whereClause) =>
             TableEx.ValidateWhereClause(featureClass as ITable, whereClause);
         /// <summary>
         /// 校验并返回与数据源一致的条件查询语句
@@ -845,8 +899,115 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="eType">数据源类型</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
-        public static string ValidateWhereClause(EWorkspaceType eType, string whereClause) => 
+        public static string ValidateWhereClause(EWorkspaceType eType, string whereClause) =>
             TableEx.ValidateWhereClause(eType, whereClause);
+        #endregion
+
+
+        #region 获取字段
+        /// <summary>
+        /// 获取字段
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public static IField GetField(this IFeatureClass featureClass, string fieldName) => featureClass.Fields.get_Field(featureClass.FindField(fieldName));
+        /// <summary>
+        /// 获取字段
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
+        public static IField GetField(this IFeatureClass featureClass, int fieldIndex) => featureClass.Fields.get_Field(fieldIndex);
+        #endregion
+
+
+        #region 创建、删除索引
+        /// <summary>
+        /// 创建要素类的字段索引
+        /// </summary>
+        /// <param name="featureClass">要创建索引的要素类</param>
+        /// <param name="fieldName">要创建索引的字段</param>
+        /// <param name="indexName">要创建的索引的名称，值为null则索引名称为字段名后加上“_Index”：即“{<paramref name="fieldName"/>}_Index”</param>
+        public static void CreateIndex(this IFeatureClass featureClass, string fieldName, string indexName = null)
+        {
+            int fieldIndex = featureClass.FindField(fieldName);
+            if (fieldIndex < 0)
+                throw new Exception($"找不到字段{fieldName}");
+
+            IField field = featureClass.Fields.Field[fieldIndex];
+            IIndex index = TableEx.CreateIndex(field, indexName);
+            featureClass.AddIndex(index);
+        }
+        /// <summary>
+        /// 创建要素类的空间索引
+        /// <para>参考：https://desktop.arcgis.com/en/arcobjects/latest/net/CreateIndexes.htm </para>
+        /// <para>无法在个人地理数据库(mdb)中的要素类上重新创建空间索引</para>
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="gridOneSize"></param>
+        /// <param name="gridTwoSize"></param>
+        /// <param name="gridThreeSize"></param>
+        public static void CreateSpatialIndex(this IFeatureClass featureClass, double gridOneSize = 0, double gridTwoSize = 0, double gridThreeSize = 0)
+        {
+            //从索引集合中查找和删除已有的空间索引（Shape字段索引）
+            // Get an enumerator for indexes based on the shape field.
+            IIndexes indexes = featureClass.Indexes;
+            var shapeFieldName = featureClass.ShapeFieldName;
+            IEnumIndex enumIndex = indexes.FindIndexesByFieldName(shapeFieldName);
+            enumIndex.Reset();
+            // Get the index based on the shape field (should only be one) and delete it.
+            IIndex index = enumIndex.Next();
+            if (index != null)
+                featureClass.DeleteIndex(index);
+
+            //复制Shape字段
+            // Clone the shape field from the feature class.
+            int shapeFieldIndex = featureClass.FindField(shapeFieldName);
+            IField sourceField = featureClass.Fields.get_Field(shapeFieldIndex);
+            IClone sourceFieldClone = (IClone)sourceField;
+            IClone targetFieldClone = sourceFieldClone.Clone();
+            IField targetField = (IField)targetFieldClone;
+
+            //修改新的Shape字段的几何定义
+            // Open the geometry definition from the cloned field and modify it.
+            IGeometryDef geometryDef = targetField.GeometryDef;
+            IGeometryDefEdit geometryDefEdit = (IGeometryDefEdit)geometryDef;
+            geometryDefEdit.GridCount_2 = 3;
+            geometryDefEdit.set_GridSize(0, gridOneSize);
+            geometryDefEdit.set_GridSize(1, gridTwoSize);
+            geometryDefEdit.set_GridSize(2, gridThreeSize);
+
+            //创建空间索引
+            // Create a spatial index and set the required attributes.
+            IIndex newIndex = new IndexClass();
+            IIndexEdit indexEdit = (IIndexEdit)newIndex;
+            indexEdit.Name_2 = string.Concat(shapeFieldName, "_Index");
+            indexEdit.IsAscending_2 = true;
+            indexEdit.IsUnique_2 = false;
+            // Create a fields collection and assign it to the new index.
+            IFields newIndexFields = new FieldsClass();
+            IFieldsEdit newIndexFieldsEdit = (IFieldsEdit)newIndexFields;
+            newIndexFieldsEdit.AddField(targetField);
+            indexEdit.Fields_2 = newIndexFields;
+            // Add the spatial index back into the feature class.
+            featureClass.AddIndex(newIndex);
+        }
+        /// <summary>
+        /// 删除要素类的索引
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="indexName">要删除的索引的名称</param>
+        public static void DeleteIndexByName(this IFeatureClass featureClass, String indexName)
+        {
+            IIndexes indexes = featureClass.Indexes;
+            indexes.FindIndex(indexName, out var indexPos);
+            if (indexPos < 0)
+                throw new ArgumentException($"找不到名称为“{indexName}”的索引");
+
+            IIndex index = indexes.get_Index(indexPos);
+            featureClass.DeleteIndex(index);
+        }
         #endregion
 
 
@@ -856,6 +1017,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="featureClass"></param>
         /// <returns></returns>
         public static string GetName(this IFeatureClass featureClass) => (featureClass as IDataset)?.Name;
+
         /// <summary>
         /// 创建查询要素的游标
         /// </summary>
@@ -932,7 +1094,6 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="featureClass"></param>
         public static IEnvelope GetExtent(this IFeatureClass featureClass) => ((IGeoDataset)featureClass).Extent;
 
-
         /// <summary>
         /// 判断要素类是否被占用
         /// </summary>
@@ -941,27 +1102,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns>对象被占用返回True，未被占用返回False</returns>
         public static bool CheckClassLock(this IFeatureClass featureClass, out string message)
         {
-            return CheckClassLock(featureClass as IObjectClass, out message);
-        }
-        /// <summary>
-        /// 判断对象是否被占用
-        /// </summary>
-        /// <param name="objectClass"></param>
-        /// <param name="message">被占用情况信息，未被占用则值为null</param>
-        /// <returns>对象被占用返回True，未被占用返回False</returns>
-        public static bool CheckClassLock(this IObjectClass objectClass, out string message)
-        {
-            var sb = new StringBuilder();
-            ISchemaLock schemaLock = (ISchemaLock)objectClass;
-            schemaLock.GetCurrentSchemaLocks(out var enumSchemaLockInfo);
-            ISchemaLockInfo schemaLockInfo;
-            while ((schemaLockInfo = enumSchemaLockInfo.Next()) != null)
-            {
-                sb.AppendFormat("{0} : {1} : {2}\r\n", schemaLockInfo.TableName, schemaLockInfo.UserName, schemaLockInfo.SchemaLockType);
-            }
-
-            message = sb.Length > 0 ? sb.ToString() : null;
-            return sb.Length > 0;
+            return TableEx.CheckClassLock(featureClass as IObjectClass, out message);
         }
     }
 }

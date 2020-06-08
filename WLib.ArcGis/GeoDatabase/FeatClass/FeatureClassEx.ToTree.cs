@@ -15,7 +15,7 @@ using WLib.Model;
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
     /// <summary>
-    /// 提供将数据源的要素类存储结构转为树结构的方法
+    /// 提供对要素类数据的获取、输出、复制、创建、增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static partial class FeatureClassEx
     {
@@ -89,7 +89,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             IFeatureDataset featureDataset;
             while ((featureDataset = enumDataset.Next() as IFeatureDataset) != null)//遍历数据集
             {
-                int datasetId = id;
+                int datasetId = id++;
                 nodes.Add(new NodeObject(datasetId, 0, featureDataset.Name, 0, 0, featureClass.GetName()));
                 var enumFeatureClass = ((IFeatureClassContainer)featureDataset).Classes;
                 while ((featureClass = enumFeatureClass.Next()) != null)//在每一个数据集中遍历数据层IFeatureClass

@@ -26,16 +26,23 @@ namespace WLib.ArcGis.Analysis.Gp
         /// </summary>
         /// <param name="path"></param>
         /// <returns>符合规范返回null,否则返回提示信息</returns>
-        public static string CheckClassValidate(params string[] paths)
+        public static string CheckClassesValidate(params string[] paths)
         {
             var sb = new StringBuilder();
-            foreach (var path in paths)
+            try
             {
-                var message = CheckClassPath(path);
-                if (message != null)
-                    sb.AppendLine($"路径“{path}”不合法：{message}");
+                foreach (var path in paths)
+                {
+                    var message = CheckClassValidate(path);
+                    if (message != null)
+                        sb.AppendLine($"路径“{path}”不合法：{message}");
+                }
+                sb.Append(CheckCoordinates(paths));
             }
-            sb.Append(CheckCoordinates(paths));
+            catch (Exception ex)
+            {
+                sb.AppendLine("检查路径及数据是否符合GP工具发生错误：" + ex.Message);
+            }
             return sb.Length > 0 ? sb.ToString() : null;
         }
         /// <summary>
@@ -44,7 +51,7 @@ namespace WLib.ArcGis.Analysis.Gp
         /// </summary>
         /// <param name="path"></param>
         /// <returns>符合规范返回null,否则返回提示信息</returns>
-        public static string CheckClassPath(string path)
+        public static string CheckClassValidate(string path)
         {
             string message;
             if ((message = CheckPathValidate(path)) != null) return message;//路径合法性

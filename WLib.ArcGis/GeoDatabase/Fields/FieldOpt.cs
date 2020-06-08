@@ -479,7 +479,21 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         #endregion
 
 
-        #region 获取字段名称、别名、索引等信息
+        #region 获取字段、字段名称、别名、索引等信息
+        /// <summary>
+        /// 获取字段
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public static IField GetField(this IFields fields, string fieldName) => fields.get_Field(fields.FindField(fieldName));
+        /// <summary>
+        /// 获取字段
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
+        public static IField GetField(this IFields fields, int fieldIndex) => fields.get_Field(fieldIndex);
         /// <summary>
         /// 查找指定类型的字段
         /// </summary>
@@ -686,6 +700,45 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             if (index < 0)
                 throw new Exception("在“{0}”图层中找不到字段“{1}”，请检验数据！");
             return index;
+        }
+        /// <summary>
+        /// 查找指定字段在表格中的索引
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="fieldNames"></param>
+        /// <param name="unfindException">表示当找不到字段时是否抛出异常</param>
+        /// <returns></returns>
+        public static IEnumerable<int> GetFieldIndexs(this IFeatureClass featureClass, IEnumerable<string> fieldNames, bool unfindException = false)
+        {
+            foreach (var fieldName in fieldNames)
+            {
+                int index = featureClass.FindField(fieldName);
+                if (unfindException && index < 0)
+                    throw new Exception($"在“{featureClass.AliasName}”图层中找不到字段“{fieldName}”，请检验数据！");
+                yield return index;
+            }
+        }
+        /// <summary>
+        /// 查找指定字段在表格中的索引
+        /// <para>只返回能找到的字段的索引，找不到的字段将存入<paramref name="unfindFields"/>参数中</para>
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="fieldNames"></param>
+        /// <param name="unfindFields">表示找不到的字段</param>
+        /// <returns></returns>
+        public static List<int> GetFieldIndexs(this IFeatureClass featureClass, IEnumerable<string> fieldNames, out List<string> unfindFields)
+        {
+            unfindFields = new List<string>();
+            var resultIndexs = new List<int>();
+            foreach (var fieldName in fieldNames)
+            {
+                int index = featureClass.FindField(fieldName);
+                if (index < 0)
+                    unfindFields.Add(fieldName);
+                else
+                    resultIndexs.Add(index);
+            }
+            return resultIndexs;
         }
         #endregion
 

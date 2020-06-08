@@ -88,7 +88,7 @@ namespace WLib.WinCtrls.PluginCtrl
             InitializeComponent();
             this.cmbShortcutKeys.Items.AddRange(Enum.GetNames(typeof(Shortcut)));
             this.cmbShortcutKeys.SelectedIndex = 0;
-            this.cmbInvokeType.Items.AddRange(EnumDescriptionHelper.GetDescriptions<EPluginInvokeType>());
+            this.cmbInvokeType.Items.AddRange(EnumDescriptionExHelper.GetDescriptions<EPluginInvokeType>());
             this.cmbInvokeType.SelectedIndex = 0;
         }
 

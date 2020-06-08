@@ -32,5 +32,7 @@
             Text = text;
             Path = path;
         }
+
+        public override string ToString() => $"{Name} - {Text}: {Path}";
     }
 }

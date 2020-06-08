@@ -149,7 +149,7 @@ namespace WLib.ExtProgress.Core
         /// <summary>
         /// 操作执行过程向外部输出实时数据的事件
         /// </summary>
-        public event EventHandler<ProDataOutputEventArgs> ProgressDataOuput;
+        public event EventHandler<ProDataOutputEventArgs> DataOutput;
         /// <summary>
         /// 执行<see cref="OperationStart"/>事件处理
         /// </summary>
@@ -189,9 +189,9 @@ namespace WLib.ExtProgress.Core
         /// </summary>
         protected void OnProgressAdd() => ProgressAdd?.Invoke(this, new EventArgs());
         /// <summary>
-        /// 执行<see cref="ProgressDataOuput"/>事件处理，设置向外部输出的数据
+        /// 执行<see cref="DataOutput"/>事件处理，设置向外部输出的数据
         /// </summary>
-        protected void OnProgressDataOutput(object data) => ProgressDataOuput?.Invoke(this, new ProDataOutputEventArgs(data));
+        protected void OnDataOutput(object data) => DataOutput?.Invoke(this, new ProDataOutputEventArgs(data));
         #endregion
 
 
@@ -337,6 +337,9 @@ namespace WLib.ExtProgress.Core
             Msgs.StartTime = opt.StartTime;
             Msgs.EndTime = opt.EndTime;
             Msgs.AllMessage = Msgs.GetAllMessage();
+            //var sbMessage = new StringBuilder();
+            //GetSubMessage(sbMessage, opt);
+            //Msgs.AllMessage = sbMessage.ToString();
         }
     }
 }

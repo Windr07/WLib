@@ -14,25 +14,25 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// </summary>
     public enum EPageTools
     {
-        [Description("无")]
+        [DescriptionEx("无")]
         None = -1,
 
-        [Description("全图")]
+        [DescriptionEx("全图")]
         FullExtent = 0,
 
-        [Description("放大")]
+        [DescriptionEx("放大")]
         ZoomIn = 1,
 
-        [Description("缩小")]
+        [DescriptionEx("缩小")]
         ZoomOut = 2,
 
-        [Description("平移")]
+        [DescriptionEx("平移")]
         Pan = 3,
 
-        [Description("上一视图")]
+        [DescriptionEx("上一视图")]
         PreView = 4,
 
-        [Description("下一视图")]
+        [DescriptionEx("下一视图")]
         NextView = 5,
     }
 }

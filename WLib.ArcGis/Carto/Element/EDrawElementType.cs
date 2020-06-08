@@ -22,37 +22,37 @@ namespace WLib.ArcGis.Carto.Element
         /// <summary>
         /// 无
         /// </summary>
-        [Description("无")]
+        [DescriptionEx("无")]
         None,
         /// <summary>
         /// 点
         /// </summary>
-        [Description("点")]
+        [DescriptionEx("点")]
         Point,
         /// <summary>
         /// 线
         /// </summary>
-        [Description("线")]
+        [DescriptionEx("线")]
         Polyline,
         /// <summary>
         /// 多边形
         /// </summary>
-        [Description("多边形")]
+        [DescriptionEx("多边形")]
         Polygon,
         /// <summary>
         /// 圆
         /// </summary>
-        [Description("圆")]
+        [DescriptionEx("圆")]
         Circle,
         /// <summary>
         /// 矩形
         /// </summary>
-        [Description("矩形")]
+        [DescriptionEx("矩形")]
         Rectangle,
         /// <summary>
         /// 文本
         /// </summary>
-        [Description("文本")]
+        [DescriptionEx("文本")]
         Text
     }
 }

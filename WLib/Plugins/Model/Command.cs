@@ -65,7 +65,7 @@ namespace WLib.Plugins.Model
         /// <summary>
         /// 调用命令
         /// </summary>
-        /// <param name="caller">调用命令的对象，可空</param>
+        /// <param name="caller">调用命令的对象，一般是窗体或各类容器控件，可空</param>
         public abstract void Invoke(object caller);
     }
 }

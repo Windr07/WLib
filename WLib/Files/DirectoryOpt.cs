@@ -21,7 +21,31 @@ namespace WLib.Files
             return !Path.GetInvalidPathChars().Any(folderName.Contains);
         }
 
-
+        /// <summary>
+        /// 按照给定的“子级文件夹或文件名<paramref name="subFolders"/>”，依次查找子目录或文件，返回子目录或文件路径
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="subFolders"></param>
+        /// <returns></returns>
+        public static string FindSubPath(string dir, bool unfindException, params string[] subFolders)
+        {
+            string resultPath = dir;
+            for (int i = 0; i < subFolders.Length; i++)
+            {
+                var subPath = Directory.GetDirectories(resultPath, subFolders[i], SearchOption.TopDirectoryOnly).FirstOrDefault();
+                if (subPath == null)
+                    subPath = Directory.GetFiles(resultPath, subFolders[i], SearchOption.TopDirectoryOnly).FirstOrDefault();
+                if (subPath == null)
+                {
+                    if (unfindException)
+                        throw new Exception($"在目录“{resultPath}”中找不到名称包含“{subFolders[i]}”的子文件夹");
+                    else
+                        break;
+                }
+                resultPath = subPath;
+            }
+            return resultPath;
+        }
         /// <summary>
         /// 复制指定目录下的所有数据（各级文件和文件夹）到目标目录
         /// </summary>

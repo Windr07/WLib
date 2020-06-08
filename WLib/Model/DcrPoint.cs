@@ -10,7 +10,7 @@ using System;
 namespace WLib.Model
 {
     /// <summary>
-    /// 表示笛卡尔坐标系的一个点
+    /// 表示笛卡尔坐标系的一个点  
     /// </summary>
     [Serializable]
     public class DcrPoint

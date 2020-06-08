@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using System;
+using System.Reflection;
 
 namespace WLib.ExtProgress.Core
 {
@@ -68,5 +69,23 @@ namespace WLib.ExtProgress.Core
         /// 进度操作的结果
         /// </summary>
         object IProgressOperation.ResultData { get => this.ResultData; }
+
+
+        /// <summary>
+        /// 从<see cref="IProgressOperation"/>获取基本的操作信息，同时获取全部进度信息
+        /// </summary>
+        /// <param name="opt"></param>
+        protected override void GetMsgs(IProgressOperation opt)
+        {
+            Msgs.Name = opt.Name;
+            Msgs.Description = opt.Description;
+            Msgs.Code = opt.GetType().Name;
+            var assemblyName = Assembly.GetEntryAssembly().GetName();
+            Msgs.AssemblyName = assemblyName.Name;
+            Msgs.AssemblyVersion = assemblyName.Version.ToString();
+            Msgs.StartTime = opt.StartTime;
+            Msgs.EndTime = opt.EndTime;
+            Msgs.AllMessage = Msgs.GetAllMessage();
+        }
     }
 }

@@ -293,6 +293,10 @@ namespace WLib.WinCtrls.Dev.PathCtrl
                 }
             };
         }
+        /// <summary>
+        /// 输出"{Name}:{Text}"
+        /// </summary>
+        public override string ToString() => $"{Name}:{Text}";
 
 
         private void btnSelect_Click(object sender, EventArgs e)

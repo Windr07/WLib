@@ -211,20 +211,15 @@ namespace WLib.WinCtrls.MessageCtrl
                     {
                         for (int i = 0; i < 7; i++)
                         {
-                            Invoke(new Action(() => this.lblConcatTips.Visible = !this.lblConcatTips.Visible));
+                            if (!this.IsDisposed)
+                                Invoke(new Action(() => this.lblConcatTips.Visible = !this.lblConcatTips.Visible));
                             Thread.Sleep(300);
                         }
                     }).Start();
                     break;
-                case EContactType.QQ:
-                    new QQInvoke().OpenQQ(info.Content);
-                    break;
-                case EContactType.QQGroup:
-                    new QQInvoke().OpenQQGroup(info.Content);
-                    break;
-                case EContactType.WebSite:
-                    Process.Start(info.Content);
-                    break;
+                case EContactType.QQ: new QQInvoke().OpenQQ(info.Content); break;
+                case EContactType.QQGroup: new QQInvoke().OpenQQGroup(info.Content); break;
+                case EContactType.WebSite: Process.Start(info.Content); break;
             }
         }
         /// <summary>

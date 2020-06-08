@@ -17,7 +17,7 @@ using WLib.ArcGis.Geometry;
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
     /// <summary>
-    /// 提供复制要素类的方法
+    /// 提供对要素类数据的获取、输出、复制、创建、增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static partial class FeatureClassEx
     {

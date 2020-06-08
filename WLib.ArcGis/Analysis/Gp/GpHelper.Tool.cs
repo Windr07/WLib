@@ -2,6 +2,7 @@
 using ESRI.ArcGIS.ConversionTools;
 using ESRI.ArcGIS.DataManagementTools;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geoprocessing;
 using ESRI.ArcGIS.Geoprocessor;
 using System;
 using WLib.ArcGis.Analysis.GpEnum;
@@ -96,18 +97,58 @@ namespace WLib.ArcGis.Analysis.Gp
         /// <summary>
         /// 调用相交工具，将一个或多个图层的相交部分输出到指定路径中（注意输入要素类和叠加要素类不能有空几何等问题）
         /// </summary>
-        /// <param name="inFeatureClassPaths">进行相交的一个或多个要素类路径，多个时用分号隔开，eg: @"F:\foshan\Data\wuqutu_b.shp;F:\foshan\Data\world30.shp"</param>
-        /// <param name="outFeatureClassPath">输出要素类路径</param>
+        /// <param name="in_features">进行相交的一个或多个要素类或要素类的完整路径，多个路径用分号隔开，e.g. @"F:\foshan\Data\wuqutu_b.shp;F:\foshan\Data\world30.shp"</param>
+        /// <param name="outFeatureClassPath">相交结果要素类的存放路径，e.g. @"F:\foshan\Data\intersect_result.shp"</param>
         /// <param name="joinAttributes">输入要素的哪些属性将传递到输出要素类：ALL, NO_FID, ONLY_FID</param>
+        /// <param name="tolerance">XY容差，建议设置为0.001（创建要素类时的默认XY容差）</param>
         /// <returns></returns>
-        public static IGPProcess Intersect(string inFeatureClassPaths, string outFeatureClassPath, EIsJoinAttributes joinAttributes = EIsJoinAttributes.ALL)
+        public static IGPProcess Intersect(object in_features, string outFeatureClassPath, EIsJoinAttributes joinAttributes = EIsJoinAttributes.ALL, double tolerance = -1)
         {
-            return new Intersect
+            var intersect = new Intersect
             {
-                in_features = inFeatureClassPaths,
+                in_features = in_features,
                 out_feature_class = outFeatureClassPath,
                 join_attributes = Enum.GetName(typeof(EIsJoinAttributes), joinAttributes),
             };
+            if (tolerance >= 0) intersect.cluster_tolerance = tolerance;
+
+            return intersect;
+        }
+        /// <summary>
+        /// 调用相交工具，将两个图层的相交部分输出到指定路径中（注意输入要素类和叠加要素类不能有空几何等问题）
+        /// </summary>
+        /// <param name="inputClass1">进行相交的第一个要素类</param>
+        /// <param name="inputClass2">进行相交的第二个要素类</param>
+        /// <param name="outFeatureClassPath">相交结果要素类的存放路径，e.g. @"F:\foshan\Data\intersect_result.shp"</param>
+        /// <param name="joinAttributes">输入要素的哪些属性将传递到输出要素类：ALL, NO_FID, ONLY_FID</param>
+        /// <param name="tolerance">XY容差</param>
+        /// <returns></returns>
+        public static IGPProcess Intersect(IFeatureClass inputClass1, IFeatureClass inputClass2, string outFeatureClassPath, EIsJoinAttributes joinAttributes = EIsJoinAttributes.ALL, double tolerance = -1)
+        {
+            //使用值表赋值多值参数（管理相交的多个输入图层）：http://help.arcgis.com/en/sdk/10.0/arcobjects_net/conceptualhelp/index.html#/Using_value_tables/00010000028m000000/
+            IGpValueTableObject gpValueTableObject = new GpValueTableObjectClass();
+            gpValueTableObject.SetColumns(2);
+
+            object row = inputClass1;
+            object rank = 1;
+            gpValueTableObject.SetRow(0, ref row);
+            gpValueTableObject.SetValue(0, 1, ref rank);
+
+            row = inputClass2;
+            gpValueTableObject.SetRow(1, ref row);
+            rank = 2;
+            gpValueTableObject.SetValue(1, 1, ref rank);
+
+            //创建相交工具
+            var intersect = new Intersect
+            {
+                in_features = gpValueTableObject,
+                out_feature_class = outFeatureClassPath,
+                join_attributes = Enum.GetName(typeof(EIsJoinAttributes), joinAttributes),
+            };
+            if (tolerance >= 0) intersect.cluster_tolerance = tolerance;
+
+            return intersect;
         }
         /// <summary>
         /// 调用要素类至要素类工具，即导出要素类至指定位置

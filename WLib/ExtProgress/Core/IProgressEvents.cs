@@ -46,6 +46,6 @@ namespace WLib.ExtProgress.Core
         /// <summary>
         /// 操作执行过程向外部输出实时数据的事件
         /// </summary>
-        event EventHandler<ProDataOutputEventArgs> ProgressDataOuput;
+        event EventHandler<ProDataOutputEventArgs> DataOutput;
     }
 }

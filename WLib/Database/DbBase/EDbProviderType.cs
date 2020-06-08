@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using WLib.Attributes.Description;
+using System.ComponentModel;
 
 namespace WLib.Database.DbBase
 {

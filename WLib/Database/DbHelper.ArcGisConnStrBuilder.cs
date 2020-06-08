@@ -37,7 +37,7 @@ namespace WLib.Database
     {
         /// <summary>
         /// 构造OleDb连接shp/dbf/mdb/gdb的连接字符串
-        /// <para>①shp只能查询，增删改属性表请操作dbf；mdb,gdb,dbf可以增删改查，但是增删改有很多坑暂不建议使用</para>
+        /// <para>①shp只能查询，增删改属性表请操作dbf；mdb,gdb,dbf可以增删改查，但是增、删、改有很多坑暂不建议使用，建议只进行简单select查询</para>
         /// <para>②sourcePath参数可以是shp目录或shp/dbf/mdb/gdb文件路径，不包含.gdb后缀目录将认为是shp目录</para>
         /// </summary>
         /// <param name="sourcePath">shp目录或shp/dbf/mdb/gdb文件路径，不包含.gdb后缀目录将认为是shp目录</param>

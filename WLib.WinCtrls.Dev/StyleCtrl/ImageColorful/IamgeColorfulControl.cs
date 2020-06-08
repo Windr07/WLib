@@ -67,7 +67,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
         public IamgeColorfulControl()
         {
             InitializeComponent();
-            var descriptions = EnumDescriptionHelper.GetDescriptions<EImageColorType>();
+            var descriptions = EnumDescriptionExHelper.GetDescriptions<EImageColorType>();
             this.listBoxColors.Items.AddRange(descriptions);
             this.listBoxColors.SelectedItem = EImageColorType.Default.GetDescription();
             this.cmbIconLib.Properties.Items.AddRange(new[] { "动物世界", "中国省份" });
@@ -112,7 +112,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
             foreach (var pair in pathDict)
             {
                 var image = Image.FromFile(pair.Key);
-                var newBitmap = new Bitmap(image).ToColorType(ImageColorType, colors);//转换图标
+                var newBitmap = new Bitmap(image).ToColorType(ImageColorType, false, colors);//转换图标
                 image.Dispose();//释放图标文件
                 newBitmap.Save(pair.Value);
                 ImageColorStyleItemChanged?.Invoke(this, new ImageStyleItemChangedEventArgs(pair.Key, pair.Value, ImageColorType));
@@ -132,7 +132,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
             {
                 if (i > endIndex) i = startIndex;
                 var image = this.imageCollection1.Images[i++];
-                var newBitmap = new Bitmap(image).ToColorType(ImageColorType, colors);
+                var newBitmap = new Bitmap(image).ToColorType(ImageColorType, false, colors);
                 newBitmap.Save(pair.Value);
                 ImageColorStyleItemChanged?.Invoke(this, new ImageStyleItemChangedEventArgs(pair.Key, pair.Value, ImageColorType));
             }
@@ -144,7 +144,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
         {
             //获取选中的图标色彩风格
             var description = this.listBoxColors.SelectedItem.ToString();
-            ImageColorType = EnumDescriptionHelper.GetEnum<EImageColorType>(description);
+            ImageColorType = EnumDescriptionExHelper.GetEnum<EImageColorType>(description);
             this.panelCustom.Enabled = ImageColorType == EImageColorType.Custom;
             if (ImageColorType == EImageColorType.Default)
             {
@@ -163,7 +163,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
         private void btnReset_Click(object sender, EventArgs e)//重置图标
         {
             var paths = Directory.GetFiles(ImageDir).Where(v => ImageExtensions.Contains(Path.GetExtension(v))).ToArray();
-            foreach (var description in EnumDescriptionHelper.GetDescriptions<EImageColorType>())
+            foreach (var description in EnumDescriptionExHelper.GetDescriptions<EImageColorType>())
             {
                 var subDir = Path.Combine(ImageDir, description);
                 if (!Directory.Exists(subDir)) continue;

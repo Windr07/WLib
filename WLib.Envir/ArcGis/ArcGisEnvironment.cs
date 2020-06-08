@@ -25,7 +25,7 @@ namespace WLib.Envir.ArcGis
         /// <summary>
         /// 当前安装的ArcGIS版本
         /// </summary>
-        public static EArcGisVersion Version => CheckArcGisInstall.Version;
+        public static EArcGisVersion Version => CheckArcGisInstall == null ? EArcGisVersion.Unknown : CheckArcGisInstall.Version;
 
 
         /// <summary>

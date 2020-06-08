@@ -134,8 +134,8 @@
     <Compile Include="Database\TableInfo\TableStructure.cs" />
     <Compile Include="Database\TableInfo\TableStructureHelper.cs" />
     <Compile Include="DesignPattern\Singleton.cs" />
-    <Compile Include="Attributes\Description\DescriptionAttribute.cs" />
-    <Compile Include="Attributes\Description\EnumDescriptionHelper.cs" />
+    <Compile Include="Attributes\Description\DescriptionExAttribute.cs" />
+    <Compile Include="Attributes\Description\EnumDescriptionExHelper.cs" />
     <Compile Include="Events\EventBinding.cs" />
     <Compile Include="ExtException\CatchAction.cs" />
     <Compile Include="ExtException\ICatchAction.cs" />

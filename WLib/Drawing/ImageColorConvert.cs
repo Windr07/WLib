@@ -15,23 +15,24 @@ namespace WLib.Drawing
         /// </summary>
         /// <param name="bitmap">源图标对象</param>
         /// <param name="imageColorType">要转换的色彩风格</param>
+        /// <param name="vertical">若指定色彩风格是渐变色，此值指示图片色彩渐变方向， true为纵向（由上往下）渐变，false为横向（从左到右）渐变</param>
         /// <param name="colors">当色彩风格为自定义（即<paramref name="imageColorType"/>为<see cref="EImageColorType.Custom"/>）时，自定义的色彩</param>
         /// <returns></returns>
-        public static Bitmap ToColorType(this Bitmap bitmap, EImageColorType imageColorType, Color[] colors = null)
+        public static Bitmap ToColorType(this Bitmap bitmap, EImageColorType imageColorType, bool vertical = false, Color[] colors = null)
         {
             switch (imageColorType)
             {
-                case EImageColorType.LinearDark: return bitmap.ToMultiColor(false, Color.DimGray, Color.Black);
-                case EImageColorType.LinearBlue: return bitmap.ToMultiColor(false, Color.SkyBlue, Color.LightBlue);
-                case EImageColorType.LinearRed: return bitmap.ToMultiColor(false, Color.OrangeRed, Color.Red);
-                case EImageColorType.LinearGreen: return bitmap.ToMultiColor(false, Color.LawnGreen, Color.ForestGreen);
-                case EImageColorType.LinearGold: return bitmap.ToMultiColor(false, Color.Yellow, Color.Gold);
-                case EImageColorType.LinearWhite: return bitmap.ToMultiColor(false, Color.WhiteSmoke, Color.White);
+                case EImageColorType.LinearDark: return bitmap.ToMultiColor(vertical, Color.DimGray, Color.Black);
+                case EImageColorType.LinearBlue: return bitmap.ToMultiColor(vertical, Color.SkyBlue, Color.LightBlue);
+                case EImageColorType.LinearRed: return bitmap.ToMultiColor(vertical, Color.OrangeRed, Color.Red);
+                case EImageColorType.LinearGreen: return bitmap.ToMultiColor(vertical, Color.LawnGreen, Color.ForestGreen);
+                case EImageColorType.LinearGold: return bitmap.ToMultiColor(vertical, Color.Yellow, Color.Gold);
+                case EImageColorType.LinearWhite: return bitmap.ToMultiColor(vertical, Color.WhiteSmoke, Color.White);
                 case EImageColorType.RandomColor: return bitmap.ToRandomColor();
-                case EImageColorType.ColorfulDark: return bitmap.ToDarkMultiColor(true);
-                case EImageColorType.ColorfulWhite: return bitmap.ToLightMultiColor(true);
-                case EImageColorType.RinbowColor: return bitmap.TorRinbowColor();
-                case EImageColorType.Custom: return bitmap.ToMultiColor(false, colors);
+                case EImageColorType.ColorfulDark: return bitmap.ToDarkMultiColor(true, vertical);
+                case EImageColorType.ColorfulWhite: return bitmap.ToLightMultiColor(true, vertical);
+                case EImageColorType.RinbowColor: return bitmap.TorRinbowColor(vertical);
+                case EImageColorType.Custom: return bitmap.ToMultiColor(vertical, colors);
                 default: return null;
             }
         }
@@ -39,7 +40,7 @@ namespace WLib.Drawing
         /// <summary>
         /// 图片变成黑白图
         /// </summary>
-        /// <param name="bitmap">原始图</param>
+        /// <param name="bitmap">源图标对象</param>
         /// <param name="mode">模式。0:加权平均  1:算数平均</param>
         /// <returns></returns>
         public static Bitmap ToGray(this Bitmap bitmap, int mode = 0)
@@ -65,7 +66,7 @@ namespace WLib.Drawing
         /// <summary>
         /// 图片变成指定颜色的单色图
         /// </summary>
-        /// <param name="bitmap">原始图</param>
+        /// <param name="bitmap">源图标对象</param>
         /// <param name="newColor">修改后的图片颜色</param>
         /// <returns></returns>
         public static Bitmap ToColor(this Bitmap bitmap, Color newColor)
@@ -85,7 +86,7 @@ namespace WLib.Drawing
         /// <summary>
         /// 图片变成随机颜色的单色图
         /// </summary>
-        /// <param name="bitmap"></param>
+        /// <param name="bitmap">源图标对象</param>
         /// <returns></returns>
         public static Bitmap ToRandomColor(this Bitmap bitmap)
         {
@@ -95,8 +96,8 @@ namespace WLib.Drawing
         /// <summary>
         /// 图片按照指定多种颜色渐变
         /// </summary>
-        /// <param name="bitmap">原始图</param>
-        /// <param name="vertical">色彩的渐变方向，true为纵向，False为横向</param>
+        /// <param name="bitmap">源图标对象</param>
+        /// <param name="vertical">图片色彩的渐变方向， true为纵向（由上往下）渐变，false为横向（从左到右）渐变</param>
         /// <returns></returns>
         public static Bitmap ToMultiColor(this Bitmap bitmap, bool vertical, params Color[] colors)
         {
@@ -142,9 +143,9 @@ namespace WLib.Drawing
         /// <summary>
         /// 图片按照指定多种颜色渐变，指定的多种颜色按随机顺序渐变
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="colors"></param>
-        /// <param name="vertical"></param>
+        /// <param name="bitmap">源图标对象</param>
+        /// <param name="colors">指定的图标渐变色彩</param>
+        /// <param name="vertical">图片色彩的渐变方向， true为纵向（由上往下）渐变，false为横向（从左到右）渐变</param>
         /// <returns></returns>
         public static Bitmap ToRandomMultiColor(this Bitmap bitmap, IEnumerable<Color> colors, bool vertical = false)
         {
@@ -162,10 +163,11 @@ namespace WLib.Drawing
         }
         /// <summary>
         /// 图片按照多种深色调颜色渐变
+        /// <para>深色调包括：黑色、深红、深绿、深蓝</para>
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="random"></param>
-        /// <param name="vertical"></param>
+        /// <param name="bitmap">源图标对象</param>
+        /// <param name="random">色彩渐变的顺序是否随机</param>
+        /// <param name="vertical">图片色彩的渐变方向， true为纵向（由上往下）渐变，false为横向（从左到右）渐变</param>
         /// <returns></returns>
         public static Bitmap ToDarkMultiColor(this Bitmap bitmap, bool random, bool vertical = false)
         {
@@ -177,10 +179,11 @@ namespace WLib.Drawing
         }
         /// <summary>
         /// 图片按照多种浅色调颜色渐变
+        /// <para>浅色调包括：白色、（浅橙色）、（浅绿色）、（浅蓝色）</para>
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="random"></param>
-        /// <param name="vertical"></param>
+        /// <param name="bitmap">源图标对象</param>
+        /// <param name="random">色彩渐变的顺序是否随机</param>
+        /// <param name="vertical">图片色彩的渐变方向， true为纵向（由上往下）渐变，false为横向（从左到右）渐变</param>
         /// <returns></returns>
         public static Bitmap ToLightMultiColor(this Bitmap bitmap, bool random, bool vertical = false)
         {
@@ -193,8 +196,8 @@ namespace WLib.Drawing
         /// <summary>
         /// 图片按照彩虹色渐变
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="vertical"></param>
+        /// <param name="bitmap">源图标对象</param>
+        /// <param name="vertical">图片色彩的渐变方向， true为纵向（由上往下）渐变，false为横向（从左到右）渐变</param>
         /// <returns></returns>
         public static Bitmap TorRinbowColor(this Bitmap bitmap, bool vertical = false)
         {

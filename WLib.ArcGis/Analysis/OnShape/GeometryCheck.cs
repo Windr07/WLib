@@ -41,7 +41,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         {
             ITopologicalOperator3 topologicalOperator = (ITopologicalOperator3)geometry;
             topologicalOperator.IsKnownSimple_2 = false;//布尔型，指示此几何图形是否是已知的（或假设）是拓扑正确。这里赋值false,就是非已知的几何图形
-
+            
             //reason枚举参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000
             //返回布尔值，指示该几何图形是否为简单的。如果返回的是false，则可以对输出的"reason"参数检查审查
             if (!topologicalOperator.get_IsSimpleEx(out var reason))

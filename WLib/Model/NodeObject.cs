@@ -65,5 +65,10 @@
             NodeTag = nodeTag;
             Tag = tag;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"{ParentId}|{Id}：{Text}|{NodeType}|{NodeTag}";
     }
 }

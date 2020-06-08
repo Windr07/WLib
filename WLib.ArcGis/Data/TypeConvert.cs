@@ -21,7 +21,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="geoType"></param>
         /// <returns></returns>
-        public static string GetGeoTypeStr(esriGeometryType geoType)
+        public static string GetGeoTypeStr(this esriGeometryType geoType)
         {
             return geoType.ToString().Replace("esriGeometry", "");
         }
@@ -31,7 +31,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="fieldType">字段类型</param>
         /// <returns></returns>
-        public static Type ParseFieldType(esriFieldType fieldType)
+        public static Type ParseFieldType(this esriFieldType fieldType)
         {
             switch (fieldType)
             {

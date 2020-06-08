@@ -11,7 +11,9 @@ using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Geodatabase;
+using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.Fields;
+using WLib.ArcGis.GeoDatabase.Table;
 
 namespace WLib.ArcGis.Data
 {
@@ -130,7 +132,7 @@ namespace WLib.ArcGis.Data
                 curRow++;
                 if (curRow < startRow) continue;
                 if (curRow > endRow) break;
-                AddDataToTable(dataTable, row);
+                AddIRowToTable(dataTable, row);
             }
             Marshal.ReleaseComObject(cursor);
             return dataTable;
@@ -232,7 +234,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="dataTable"></param>
         /// <param name="rows"></param>
-        public static void AddDataToTable(DataTable dataTable, IEnumerable<IRow> rows)
+        public static void AddIRowToTable(this DataTable dataTable, IEnumerable<IRow> rows)
         {
             for (int j = 0; j < rows.Count(); j++)
             {
@@ -249,7 +251,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="dataTable"></param>
         /// <param name="row"></param>
-        public static void AddDataToTable(DataTable dataTable, IRow row)
+        public static void AddIRowToTable(this DataTable dataTable, IRow row)
         {
             if (row == null) return;
             object[] values = new object[row.Fields.FieldCount];
@@ -263,7 +265,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="row"></param>
         /// <param name="dataTable"></param>
-        public static void AddDataToTable2(DataTable dataTable, IRow row)
+        public static void AddIRowToTable2(this DataTable dataTable, IRow row)
         {
             if (row == null) return;
             object[] values = new object[dataTable.Columns.Count];
@@ -278,29 +280,33 @@ namespace WLib.ArcGis.Data
 
 
         /// <summary>
-        /// 将DataTable的数据写入ITable中
+        /// 获取DataTable和ITable共有的字段的名称（key）和在ITable中的索引（value）
         /// </summary>
-        /// <param name="dataTable">System.Data.DataTable对象，其字段名与ITable对象的字段名或字段别名一致的数据将写入ITable对象</param>
-        /// <param name="table">ESRI.ArcGIS.Geodatabase.ITable对象</param>
-        public static void DataTable2ITable(DataTable dataTable, ITable table)
+        /// <param name="dataTable"></param>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        private static Dictionary<string, int> GetFieldNameIndexDict(DataTable dataTable, ITable table)
         {
-            //获取在ITable和System.Data.DataTable共有的字段
-            var exsitFields = new List<string>();//共有字段的名称
-            var exsitFieldsIndex = new List<int>();//共有字段的索引
+            var fieldNameIndexDict = new Dictionary<string, int>();//共有字段的名称、在ITable的索引
             for (int i = 0; i < table.Fields.FieldCount; i++)
             {
                 var field = table.Fields.get_Field(i);
                 if (dataTable.Columns.Contains(field.Name))
-                {
-                    exsitFields.Add(field.Name);
-                    exsitFieldsIndex.Add(i);
-                }
+                    fieldNameIndexDict.Add(field.Name, i);
                 else if (dataTable.Columns.Contains(field.AliasName))
-                {
-                    exsitFields.Add(field.AliasName);
-                    exsitFieldsIndex.Add(i);
-                }
+                    fieldNameIndexDict.Add(field.AliasName, i);
             }
+            return fieldNameIndexDict;
+        }
+        /// <summary>
+        /// 将DataTable的数据写入ITable中
+        /// </summary>
+        /// <param name="dataTable">System.Data.DataTable对象，其字段名与ITable对象的字段名或字段别名一致的数据将写入ITable对象</param>
+        /// <param name="table">ESRI.ArcGIS.Geodatabase.ITable对象</param>
+        public static void AddToITable(this DataTable dataTable, ITable table)
+        {
+            //获取在ITable和System.Data.DataTable共有的字段
+            var fieldNameIndexDict = GetFieldNameIndexDict(dataTable, table);//共有字段的名称、在ITable的索引
 
             //将System.Data.DataTable的数据写入ESRI的ITable中
             ICursor cursor = table.Insert(true);
@@ -313,13 +319,13 @@ namespace WLib.ArcGis.Data
                     rowBuffer = table.CreateRowBuffer();
                     rowIndex = i + 1;
                     var dataRow = dataTable.Rows[i];
-                    for (int j = 0; j < exsitFields.Count; j++)
+                    foreach (var pair in fieldNameIndexDict)
                     {
-                        var name = exsitFields[j];
+                        var name = pair.Key;
                         var value = dataRow[name];
                         if (value == null || value.ToString() == "")
                             continue;
-                        rowBuffer.set_Value(exsitFieldsIndex[j], value);
+                        rowBuffer.set_Value(pair.Value, value);
                     }
                     cursor.InsertRow(rowBuffer);
                 }
@@ -330,6 +336,48 @@ namespace WLib.ArcGis.Data
                 throw new Exception($"将DataTable的第{rowIndex}行写入“{(table as IDataset)?.Name}”表中时出现错误：{ex.Message}");
             }
             Marshal.ReleaseComObject(cursor);
+        }
+        /// <summary>
+        /// 根据ID字段，将DataTable的数据更新到ITable中
+        /// </summary>
+        /// <param name="dataTable">属性表数据，注意不能包含Shape字段和其他不可编辑字段</param>
+        /// <param name="table">要更新数据的ArcGIS ITable对象</param>
+        /// <param name="idFieldName">作为ID，用于匹配DataTable和ITable的数据的字段</param>
+        /// <param name="afterUpdateRow">每遍历ITable的一条记录(IRow)后执行的操作，返回值false表示继续遍历下一条记录，true表示中止执行</param>
+        public static void UpdateToITable(this DataTable dataTable, ITable table, string idFieldName, Func<IRow, bool> afterUpdateRow)
+        {
+            int idFieldIndex = table.FindField(idFieldName);
+            if (idFieldIndex < -1)
+                throw new Exception($"ITable对象“{table.GetName()}”找不到字段“{idFieldName}”");
+            if (!dataTable.Columns.Contains(idFieldName))
+                throw new Exception($"DataTable对象“{dataTable.TableName}”找不到字段“{idFieldName}”");
+
+            var columnNames = dataTable.Columns.Cast<DataColumn>().Select(v => v.ColumnName).ToArray();
+            var fieldNameIndexDict = GetFieldNameIndexDict(dataTable, table);//共有字段的名称、在ITable的索引
+            fieldNameIndexDict.Remove(idFieldName);//ID字段不更新
+
+            table.UpdateRows(null, row =>
+            {
+                var id = row.OID;
+                var dataRow = dataTable.Select($"{idFieldName} = {id}").FirstOrDefault();
+                if (dataRow != null)
+                {
+                    foreach (var pair in fieldNameIndexDict)
+                        row.set_Value(pair.Value, dataRow[pair.Key]);
+                }
+                return afterUpdateRow(row);
+            });
+        }
+        /// <summary>
+        /// 根据ID字段，将DataTable的数据更新到要素类中（不包含图形）
+        /// </summary>
+        /// <param name="dataTable">属性表数据，注意不能包含Shape字段和其他不可编辑字段</param>
+        /// <param name="featureClass">要更新数据的要素类</param>
+        /// <param name="idFieldName">作为ID，用于匹配DataTable和要素类的数据的字段</param>
+        /// <param name="afterUpdateRow">每遍历ITable的一条记录(IRow)后执行的操作，返回值false表示继续遍历下一条记录，true表示中止执行</param>
+        public static void UpdateToFeatureClass(this DataTable dataTable, IFeatureClass featureClass, string idFieldName, Func<IRow, bool> afterUpdateRow)
+        {
+            UpdateToITable(dataTable, (ITable)featureClass, idFieldName, afterUpdateRow);
         }
     }
 }

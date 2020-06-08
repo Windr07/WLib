@@ -11,8 +11,8 @@ namespace WLib.Plugins.Interface
     {
         /// <summary>
         /// 插件视图事件
-        /// <para><see cref="TEventType"/>插件视图事件的类型，例如此参数为枚举值，表示事件类型有选择工作空间已重载、配置已重置等</para>
-        /// <para><see cref="EventArgs"/>插件视图事件的参数</para>
+        /// <para><typeparamref name="TEventType"/>：插件视图事件的类型，通常将此泛型参数设置为枚举值，通过枚举值表示不同的事件类型</para>
+        /// <para><see cref="EventArgs"/>：插件视图事件的参数</para>
         /// </summary>
         Action<TEventType, EventArgs> ViewAction { get; set; }
     }     

@@ -5,9 +5,10 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Common;
-using WLib.Attributes.Description;
 
 namespace WLib.Database.DbBase
 {
@@ -31,7 +32,15 @@ namespace WLib.Database.DbBase
         static ProviderFactory()
         {
             ProviderFactoryDict = new Dictionary<EDbProviderType, DbProviderFactory>();
-            ProviderNameDict = EnumDescriptionHelper.GetValueAndDescriptionDict<EDbProviderType>();
+
+            ProviderNameDict = new Dictionary<EDbProviderType, string>();
+            var enumType = typeof(EDbProviderType);
+            foreach (var name in Enum.GetNames(enumType))
+            {
+                var fieldInfo = enumType.GetField(name);
+                var attributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                ProviderNameDict.Add((EDbProviderType)Enum.Parse(enumType, name), attributes[0].Description);
+            }
         }
         /// <summary>
         /// 根据数据库类型获取所对应的数据提供程序名

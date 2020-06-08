@@ -31,10 +31,11 @@ namespace WLib.Database
              => new DbHelper(connectionString, EDbProviderType.OleDb, commandTimeOut);
         /// <summary>
         /// 构建OLEDB方式操作shp/dbf/mdb/gdb数据的帮助类
-        /// <para>①shp只能查询，增删改属性表请操作dbf；mdb,gdb,dbf可以增删改查，但是增删改有很多坑暂不建议使用</para>
-        /// <para>②<paramref name="sourcePath"/>参数可以是shp目录或shp/dbf/mdb/gdb文件路径，不包含.gdb后缀目录将认为是shp目录</para>
+        /// <para>①shp只能查询，增删改属性表请操作dbf；mdb,gdb,dbf可以增删改查，但是增、删、改有很多坑暂不建议使用，建议只进行简单select查询</para>
+        /// <para>②<paramref name="sourcePath"/>参数可以是shp目录、gdb目录或shp/dbf/mdb文件路径，不包含.gdb后缀目录将认为是shp目录</para>
+        /// <para>③必须安装ArcGIS Desktop后才能通过OLEDB方式连接操作shp/dbf/mdb/gdb数据（ArcGIS OLEDB提供程序附带在ArcGIS Desktop安装包中）</para>
         /// </summary>
-        /// <param name="sourcePath">shp目录或shp/dbf/mdb/gdb文件路径，不包含.gdb后缀目录将认为是shp目录</param>
+        /// <param name="sourcePath">shp目录、gdb目录或shp/dbf/mdb文件路径，不包含.gdb后缀目录将认为是shp目录</param>
         /// <param name="geometry">值为"WKB"和"OBJECT"之一</param>
         /// <param name="commandTimeOut">执行一条命令的超时时间（以秒为单位）</param>
         /// <returns></returns>

@@ -170,7 +170,7 @@ namespace WLib.Database
             OnPreExcute("Get Data Set", sql);
             DbDataAdapter adapter = _providerFactory.CreateDataAdapter();
             DbCommand dbCommand = _providerFactory.CreateCommand();
-            dbCommand.Connection = Connection; 
+            dbCommand.Connection = Connection;
             dbCommand.CommandTimeout = CommandTimeOut;
             dbCommand.CommandText = sql;
             if (dbParameters != null)
@@ -190,6 +190,18 @@ namespace WLib.Database
         public DataTable GetDataTable(string sql)
         {
             return GetDataset(sql).Tables[0];
+        }
+        /// <summary>
+        /// 连接数据源，执行SQL语句并返回DataTable
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="tableName">表格名称</param>
+        /// <returns></returns>
+        public DataTable GetDataTable(string sql, string tableName)
+        {
+            var dataTable = GetDataset(sql).Tables[0];
+            dataTable.TableName = tableName;
+            return dataTable;
         }
         /// <summary>
         /// 连接数据源，执行SQL语句并返回DataTable
@@ -249,7 +261,9 @@ namespace WLib.Database
 
 
         #region 实现IDbConnection接口
-      
+        /// <summary>
+        /// 关闭数据库连接
+        /// </summary>
         public void Close() => _connection?.Close();
 
         public int ConnectionTimeout => Connection.ConnectionTimeout;

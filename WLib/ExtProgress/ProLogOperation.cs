@@ -50,7 +50,7 @@ namespace WLib.ExtProgress
         /// <summary>
         /// 设置当前警告信息
         /// </summary>
-        public string Wranning { set => Msgs.Info(value, ProLogGroup.Warnning); }
+        public string Warnning { set => Msgs.Info(value, ProLogGroup.Warnning); }
         /// <summary>
         /// 设置当前错误信息
         /// </summary>
