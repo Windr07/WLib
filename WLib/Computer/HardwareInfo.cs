@@ -19,59 +19,40 @@ namespace WLib.Computer
         /// 获取系统所在盘符（eg:"c:\"）
         /// </summary>
         /// <returns></returns>
-        public static string GetOsLetter()
-        {
-            return Environment.GetEnvironmentVariable("systemdrive");
-        }
+        public static string GetOsLetter() => Environment.GetEnvironmentVariable("systemdrive");
         /// <summary>
         /// 获取CPU的ID
         /// </summary>
         /// <returns></returns>
-        public static string GetCpuId()
-        {
-            return GetHardWareInfo("Win32_Processor", "ProcessorId");
-        }
+        public static string CpuId => GetHardWareInfo("Win32_Processor", "ProcessorId");
         /// <summary>
         /// 获取BIOS序列号
         /// </summary>
         /// <returns></returns>
-        public static string GetBiosSerialNumber()
-        {
-            return GetHardWareInfo("Win32_BIOS", "SerialNumber");
-        }
+        public static string BiosSerialNumber => GetHardWareInfo("Win32_BIOS", "SerialNumber");
         /// <summary>
         /// 获取主板序列号
         /// </summary>
         /// <returns></returns>
-        public static string GetBaseBoardSerialNumber()
-        {
-            return GetHardWareInfo("Win32_BaseBoard", "SerialNumber");
-        }
+        public static string BaseBoardSerialNumber => GetHardWareInfo("Win32_BaseBoard", "SerialNumber");
         /// <summary>
         /// 获取硬盘ID 
         /// </summary>
         /// <returns></returns>
-        public static string GetDiskId()
-        {
-            return GetHardWareInfo("Win32_DiskDrive", "Model");
-        }
+        public static string DiskId => GetHardWareInfo("Win32_DiskDrive", "Model");
         /// <summary>
         /// 获取磁盘驱动器序列号
         /// </summary>
         /// <returns></returns>
-        public static string GetDiskSerialNumber()
-        {
-            return GetHardWareInfo("Win32_PhysicalMedia", "SerialNumber");
-        }
+        public static string DiskSerialNumber => GetHardWareInfo("Win32_PhysicalMedia", "SerialNumber");
         /// <summary>
         /// 取得设备硬盘的卷标号
         /// </summary>
         /// <returns></returns>
         public static string GetDiskVolumeSerialNumber()
         {
-            string osLetter = GetOsLetter();//系统所在盘符，一般为"c:"
-            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-            ManagementObject disk = new ManagementObject($"win32_logicaldisk.deviceid=\"{osLetter}\"");
+            var osLetter = GetOsLetter();//系统所在盘符，一般为"c:"
+            var disk = new ManagementObject($"win32_logicaldisk.deviceid=\"{osLetter}\"");
             disk.Get();
             return disk.GetPropertyValue("VolumeSerialNumber").ToString();
         }
@@ -83,9 +64,9 @@ namespace WLib.Computer
         {
             try
             {
-                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-                ManagementObjectCollection moc = mc.GetInstances();
-                foreach (ManagementObject mo in moc)
+                var managementClass = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                var managementObjectCollection = managementClass.GetInstances();
+                foreach (ManagementObject mo in managementObjectCollection)
                 {
                     if ((bool)mo["IPEnabled"] == true)
                     {
@@ -101,22 +82,19 @@ namespace WLib.Computer
         /// 获取总物理内存
         /// </summary>
         /// <returns></returns>
-        public static string GetPhysicalMemory()
-        {
-            return GetHardWareInfo("Win32_ComputerSystem", "TotalPhysicalMemory");
-        }
+        public static string PhysicalMemory => GetHardWareInfo("Win32_ComputerSystem", "TotalPhysicalMemory");
         /// <summary>
         ///  获取网卡mac地址
         /// </summary>
         /// <returns></returns>
         public static string GetMacAddress()
         {
-            string mac = "";
-            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-            ManagementObjectCollection moc = mc.GetInstances();
-            foreach (var o in moc)
+            var mac = "";
+            var managementClass = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            var managementObjectCollection = managementClass.GetInstances();
+            foreach (var o in managementObjectCollection)
             {
-                var mo = (ManagementObject) o;
+                var mo = (ManagementObject)o;
                 if ((bool)mo["IPEnabled"])
                 {
                     mac = mo["MacAddress"].ToString();
@@ -137,8 +115,8 @@ namespace WLib.Computer
         {
             try
             {
-                ManagementClass managementClass = new ManagementClass(typePath);
-                ManagementObjectCollection managementObjColl = managementClass.GetInstances();
+                var managementClass = new ManagementClass(typePath);
+                var managementObjColl = managementClass.GetInstances();
                 PropertyDataCollection properties = managementClass.Properties;
                 foreach (PropertyData property in properties)
                 {

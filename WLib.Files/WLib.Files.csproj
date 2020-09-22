@@ -96,6 +96,7 @@
     <Compile Include="Pdf\PdfHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Word\MSWordHelper.cs" />
+    <Compile Include="Zip\SharpZip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\DLL\AppLibrary.dll" />

@@ -25,7 +25,7 @@ namespace WLib.Print
         /// <param name="paperName">纸张类型的名称，例如"A3"</param>
         public static void SetPaperSize(this PrintDocument printDocument1, string paperName)
         {
-            //设置纸张大小为A3
+            //设置纸张大小
             PaperSize pageSize = null;
             foreach (PaperSize tmpPageSize in printDocument1.PrinterSettings.PaperSizes)
             {

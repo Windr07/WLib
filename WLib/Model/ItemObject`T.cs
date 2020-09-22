@@ -5,12 +5,15 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
+
 namespace WLib.Model
 {
     /// <summary>
     /// 放入列表中的对象
     /// </summary>
     /// <typeparam name="T">与对象关联的用户定义数据</typeparam>
+    [Serializable]
     public class ItemObject<T> : ItemObject
     {
         /// <summary>
@@ -21,7 +24,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         public ItemObject(string code, string name)
             : base(code, name)
@@ -30,7 +33,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
         public ItemObject(string code, string name, int index)
@@ -40,7 +43,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
         /// <param name="classify">所在分类</param>
@@ -51,7 +54,7 @@ namespace WLib.Model
         /// <summary>
         /// 放入列表中的对象
         /// </summary>
-        /// <param name="code">唯一值（通常为ID、编码、代码或图幅号等）</param>
+        /// <param name="code">唯一值编码（通常为ID、编码、代码或图幅号等）</param>
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
         /// <param name="classify">所在分类</param>
