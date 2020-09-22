@@ -100,6 +100,7 @@ namespace WLib.WinCtrls.Dev.ArcGisCtrl
 
         private void txtSearchFields_EditValueChanged(object sender, EventArgs e)//查找字段
         {
+            if(cmbTables.SelectedItem!=null)
             listBoxFields.SelectedItem = ((AttributeQuery)cmbTables.SelectedItem).QueryField(txtSearchFields.Text);
         }
 

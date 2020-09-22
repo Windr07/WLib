@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
@@ -20,7 +21,7 @@ using WLib.ArcGis.GeoDatabase.FeatClass;
 namespace WLib.ArcGis.Control
 {
     /// <summary>
-    /// 缩放显示图斑的操作
+    /// 缩放显示图斑/要素/图层的操作
     /// </summary>
     public static class ZoomTo
     {
@@ -102,10 +103,10 @@ namespace WLib.ArcGis.Control
         /// <param name="activeView"></param>
         /// <param name="geometries"></param>
         /// <param name="expendRate">实际显示范围与图形范围框的比值，即放大的倍数</param>
-        public static void MapZoomTo(this IActiveView activeView, List<IGeometry> geometries, double expendRate = 2)
+        public static void MapZoomTo(this IActiveView activeView, IEnumerable<IGeometry> geometries, double expendRate = 2)
         {
-            IGeometry uniongeo = TopologicalOpt.UnionGeometry(geometries);
-            MapZoomTo(activeView, uniongeo, expendRate);
+            var unionGeometry = TopologicalOpt.UnionGeometry(geometries);
+            MapZoomTo(activeView, unionGeometry, expendRate);
         }
         #endregion
 
@@ -151,14 +152,13 @@ namespace WLib.ArcGis.Control
         /// </summary>
         /// <param name="activeView"></param>
         /// <param name="geomtries"></param>
-        public static void MapZoomToAndHightLight(this IActiveView activeView, List<IGeometry> geomtries)
+        public static void MapZoomToAndHightLight(this IActiveView activeView, IEnumerable<IGeometry> geomtries)
         {
             activeView.GraphicsContainer.DeleteAllElements();
-            IGeometry unionGeometry = TopologicalOpt.UnionGeometry(geomtries);
+            var unionGeometry = TopologicalOpt.UnionGeometry(geomtries);
             foreach (IGeometry geometry in geomtries)
-            {
                 HightLightGeo(activeView, geometry);
-            }
+
             MapZoomTo(activeView, unionGeometry);
         }
         /// <summary>
@@ -275,6 +275,51 @@ namespace WLib.ArcGis.Control
 
         #region 缩放至图斑、闪烁图斑
         /// <summary>
+        /// 地图缩放至指定要素并闪烁
+        /// </summary>
+        /// <param name="axMapControl">地图控件</param>
+        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
+        /// <param name="whereClause">筛选要素的where条件</param>
+        /// <param name="nFlashes">闪烁次数</param>
+        public static void MapZoomToAndFlash(this AxMapControl axMapControl, string featureLayerName, int[] oids, int nFlashes = 2)
+        {
+            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
+            if (featureLayer == null)
+                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
+
+            var strOids = oids.Select(v => v.ToString()).Aggregate((a, b) => a + "," + b);
+            var whereClause = $"{featureLayer.FeatureClass.OIDFieldName} In ({strOids})";
+            MapZoomToAndFlash(axMapControl, featureLayer, whereClause, nFlashes);
+        }
+        /// <summary>
+        /// 地图缩放至指定要素并闪烁
+        /// </summary>
+        /// <param name="axMapControl">地图控件</param>
+        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
+        /// <param name="whereClause">筛选要素的where条件</param>
+        /// <param name="nFlashes">闪烁次数</param>
+        public static void MapZoomToAndFlash(this AxMapControl axMapControl, string featureLayerName, string whereClause, int nFlashes = 2)
+        {
+            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
+            if (featureLayer == null)
+                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
+
+            MapZoomToAndFlash(axMapControl, featureLayer, whereClause, nFlashes);
+        }
+        /// <summary>
+        /// 地图缩放至指定要素并闪烁
+        /// </summary>
+        /// <param name="axMapControl">地图控件</param>
+        /// <param name="featureLayer">要素图层，该图层应当存在于地图控件中</param>
+        /// <param name="whereClause">筛选要素的where条件</param>
+        /// <param name="nFlashes">闪烁次数</param>
+        public static void MapZoomToAndFlash(this AxMapControl axMapControl, IFeatureLayer featureLayer, string whereClause, int nFlashes = 2)
+        {
+            var geometries = featureLayer.FeatureClass.QueryGeometriesCopy(whereClause);
+            var geometry = geometries.UnionGeometry();
+            MapZoomToAndFlash(axMapControl, geometry, nFlashes);
+        }
+        /// <summary>
         /// 地图缩放至指定图形并闪烁
         /// </summary>
         /// <param name="axMapControl">地图控件</param>
@@ -349,6 +394,22 @@ namespace WLib.ArcGis.Control
         /// </summary>
         /// <param name="thread"></param>
         private delegate void StopThreadDelegate(Thread thread);
+        #endregion
+
+
+        #region 缩放至图层
+        /// <summary>
+        /// 缩放至图层
+        /// </summary>
+        /// <param name="axMapControl">地图控件</param>
+        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
+        public static void MapZoomToLayer(this AxMapControl axMapControl, string featureLayerName)
+        {
+            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
+            if (featureLayer == null)
+                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
+            MapZoomTo(axMapControl.ActiveView, featureLayer.AreaOfInterest);
+        }
         #endregion
     }
 }

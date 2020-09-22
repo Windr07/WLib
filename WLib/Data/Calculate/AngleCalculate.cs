@@ -43,9 +43,7 @@ namespace WLib.Data.Calculate
         /// <param name="first">角的一个端点</param>
         /// <param name="second">角的另一个端点</param>
         /// <returns></returns>
-        public static float GetAngle(Point center, Point first, Point second)
-        {
-            return GetRadian(center, first, second) * 180f / (float)Math.PI;
-        }
+        public static float GetAngle(Point center, Point first, Point second) 
+            => GetRadian(center, first, second) * 180f / (float)Math.PI;
     }
 }

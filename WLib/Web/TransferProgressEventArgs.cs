@@ -10,7 +10,7 @@ using System;
 namespace WLib.Web
 {
     /// <summary>
-    /// 传输进度事件参数
+    /// 为传输进度事件<see cref="FtpHelper.TransferProgressChanged"/>提供参数
     /// </summary>
     public class TransferProgressEventArgs : EventArgs
     {
@@ -28,14 +28,14 @@ namespace WLib.Web
         public double Rate => CurrentValue * 1.0 / TotalValue * 100;
 
         /// <summary>
-        /// 传输进度事件参数
+        /// 为传输进度事件<see cref="FtpHelper.TransferProgressChanged"/>提供参数
         /// </summary>
         public TransferProgressEventArgs()
         {
 
         }
         /// <summary>
-        /// 传输进度事件参数
+        /// 为传输进度事件<see cref="FtpHelper.TransferProgressChanged"/>提供参数
         /// </summary>
         /// <param name="currentValue"></param>
         /// <param name="totalValue"></param>

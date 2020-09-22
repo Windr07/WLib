@@ -9,15 +9,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.GeoDatabase.Table
 {
     /// <summary>
-    /// 提供对表格(ITable)数据的增、删、改、查、复制、检查、重命名等方法
+    /// 提供对表格【<see cref="ITable"/>】数据的获取、增、删、改、查、复制、检查、重命名等方法
     /// </summary>
-    public static class TableEx
+    public static partial class TableEx
     {
         #region 新增记录
         /// <summary>
@@ -130,9 +131,9 @@ namespace WLib.ArcGis.GeoDatabase.Table
         /// </summary>
         /// <param name="table">查询的表</param>
         /// <param name="whereClause">查询条件，此值为null时查询所有记录</param>
-        /// <param name="doActionByRows">针对记录执行的操作</param>
+        /// <param name="doFuncByRows">针对记录执行的操作，返回值False表示继续执行，true表示中断操作</param>
         /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
-        public static void UpdateRows(this ITable table, string whereClause, Action<IRow> doActionByRows, bool nullRecordException = false)
+        public static void UpdateRows(this ITable table, string whereClause, Func<IRow, bool> doFuncByRows, bool nullRecordException = false)
         {
             IQueryFilter queryFilter = new QueryFilterClass { WhereClause = whereClause };
             var cursor = table.Update(queryFilter, false);
@@ -145,8 +146,9 @@ namespace WLib.ArcGis.GeoDatabase.Table
             {
                 while ((row = cursor.NextRow()) != null)
                 {
-                    doActionByRows(row);
+                    var @break = doFuncByRows(row);
                     cursor.UpdateRow(row);
+                    if (@break) break;
                 }
             }
             catch (Exception ex)//抛出更具体的异常信息
@@ -595,7 +597,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
         }
         /// <summary>
         /// 校验并返回与数据源一致的条件查询语句
-        /// （例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'）
+        /// <para>例如eType == <see cref="EWorkspaceType.Access"/>，条件查询语句为 BH like '440101%'，则返回结果为 BH like '440101*'</para>
         /// </summary>
         /// <param name="eType">数据源类型</param>
         /// <param name="whereClause">需要校验的条件查询语句</param>
@@ -607,6 +609,93 @@ namespace WLib.ArcGis.GeoDatabase.Table
         }
         #endregion
 
+
+
+        #region 获取字段
+        /// <summary>
+        /// 获取字段
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public static IField GetField(this ITable table, string fieldName) => table.Fields.get_Field(table.FindField(fieldName));
+        /// <summary>
+        /// 获取字段
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
+        public static IField GetField(this ITable table, int fieldIndex) => table.Fields.get_Field(fieldIndex);
+        #endregion
+
+        #region 创建、删除索引
+        /// <summary>
+        /// 创建要素类的字段索引
+        /// </summary>
+        /// <param name="featureClass">要创建索引的要素类</param>
+        /// <param name="fieldName">要创建索引的字段</param>
+        /// <param name="indexName">要创建的索引的名称，值为null则索引名称为字段名后加上“_Index”：即“{<paramref name="fieldName"/>}_Index”</param>
+        public static void CreateIndex(this IFeatureClass featureClass, string fieldName, string indexName = null)
+        {
+            int fieldIndex = featureClass.FindField(fieldName);
+            if (fieldIndex < 0)
+                throw new Exception($"找不到字段{fieldName}");
+
+            IField field = featureClass.Fields.Field[fieldIndex];
+            IIndex index = CreateIndex(field, indexName);
+            featureClass.AddIndex(index);
+        }
+        /// <summary>
+        /// 创建字段索引
+        /// </summary>
+        /// <param name="field">要创建索引的字段</param>
+        /// <param name="indexName">要创建的索引的名称，值为null则索引名称为字段名后加上“_Index”</param>
+        /// <returns></returns>
+        internal static IIndex CreateIndex(IField field, string indexName = null)
+        {
+            IFields fields = new FieldsClass();
+            IFieldsEdit fieldsEdit = fields as IFieldsEdit;
+            fieldsEdit.FieldCount_2 = 1;
+            fieldsEdit.set_Field(0, field);
+
+            IIndex index = new IndexClass();
+            IIndexEdit indexEdit = index as IIndexEdit;
+            indexEdit.Fields_2 = fields;
+            indexEdit.Name_2 = indexName ?? field.Name + "_Index";//索引名称
+            indexEdit.IsAscending_2 = true;
+
+            return index;
+        }
+        /// <summary>
+        /// 删除表格的索引
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="indexName">要删除的索引的名称</param>
+        public static void DeleteIndexByName(this ITable table, String indexName)
+        {
+            IIndexes indexes = table.Indexes;
+            indexes.FindIndex(indexName, out var indexPos);
+            if (indexPos < 0)
+                throw new ArgumentException($"找不到名称为“{indexName}”的索引");
+
+            IIndex index = indexes.get_Index(indexPos);
+            table.DeleteIndex(index);
+        }
+        #endregion
+
+
+        /// <summary>
+        /// 获取表格名称
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string GetName(this ITable table) => ((IDataset)table).Name;
+        /// <summary>
+        /// 获取表格别名
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string GetAliasName(this ITable table) => ((IObjectClass)table).AliasName;
 
         /// <summary>
         /// 创建查询要素的游标
@@ -655,6 +744,37 @@ namespace WLib.ArcGis.GeoDatabase.Table
                 throw new Exception($"在{(table as IDataset)?.Name}表格中，找不到记录！");
             else
                 throw new Exception($"在{(table as IDataset)?.Name}表格中，找不到“{whereClause}”的记录！");
+        }
+
+        /// <summary>
+        /// 判断表格是否被占用
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="message">被占用情况信息，未被占用则值为null</param>
+        /// <returns>对象被占用返回True，未被占用返回False</returns>
+        public static bool IsLock(this ITable table, out string message)
+        {
+            return IsLock(table as IObjectClass, out message);
+        }
+        /// <summary>
+        /// 判断对象是否被占用
+        /// </summary>
+        /// <param name="objectClass"></param>
+        /// <param name="message">被占用情况信息，未被占用则值为null</param>
+        /// <returns>对象被占用返回True，未被占用返回False</returns>
+        public static bool IsLock(this IObjectClass objectClass, out string message)
+        {
+            var sb = new StringBuilder();
+            ISchemaLock schemaLock = (ISchemaLock)objectClass;
+            schemaLock.GetCurrentSchemaLocks(out var enumSchemaLockInfo);
+            ISchemaLockInfo schemaLockInfo;
+            while ((schemaLockInfo = enumSchemaLockInfo.Next()) != null)
+            {
+                sb.AppendFormat("{0} : {1} : {2}\r\n", schemaLockInfo.TableName, schemaLockInfo.UserName, schemaLockInfo.SchemaLockType);
+            }
+
+            message = sb.Length > 0 ? sb.ToString() : null;
+            return sb.Length > 0;
         }
     }
 }

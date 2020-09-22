@@ -14,12 +14,14 @@ namespace WLib.ArcGis.Analysis.OnClass
 {
     /// <summary>
     /// 提供空间过滤要素的方法
+    /// <para>（该方式属于精确匹配，不能设置容差）</para>
     /// </summary>
     public static class SpatialFilterOpt
     {
         /// <summary>
         /// 筛选要素类中，与指定图形满足一定空间关系的要素
-        /// (参考：http://blog.csdn.net/lanpy88/article/details/7173063)
+        /// <para>该方式属于精确匹配，不能设置容差</para>
+        /// <para>参考：http://blog.csdn.net/lanpy88/article/details/7173063) </para>
         /// </summary>
         /// <param name="featureLayer">从中筛选要素的图层</param>
         /// <param name="geometry">过滤条件图形</param>
@@ -32,7 +34,8 @@ namespace WLib.ArcGis.Analysis.OnClass
         }
         /// <summary>
         /// 筛选要素类中，与指定图形满足一定空间关系的要素
-        /// (参考：http://blog.csdn.net/lanpy88/article/details/7173063)
+        /// <para>该方式属于精确匹配，不能设置容差；设置容差请通过GP工具或<see cref="ITopologicalOperator.Buffer(double)"/>等方法实现</para>
+        /// <para>参考：http://blog.csdn.net/lanpy88/article/details/7173063) </para>
         /// </summary>
         /// <param name="featureClass">从中筛选要素的要素类(A)</param>
         /// <param name="geometry">过滤条件图形(B)</param>
@@ -58,7 +61,8 @@ namespace WLib.ArcGis.Analysis.OnClass
         }
         /// <summary>
         /// 筛选要素类中，与指定图形满足一定空间关系的要素（空间筛选时添加空间索引）
-        /// (参考：http://blog.csdn.net/lanpy88/article/details/7173063)
+        /// <para>该方式属于精确匹配，不能设置容差</para>
+        /// <para>参考：http://blog.csdn.net/lanpy88/article/details/7173063) </para>
         /// </summary>
         /// <param name="featureClass">从中筛选要素的要素类(A)</param>
         /// <param name="geometry">过滤条件图形(B)</param>

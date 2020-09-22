@@ -11,7 +11,8 @@ using DevExpress.XtraEditors.Controls;
 namespace WLib.WinCtrls.Dev.ProbarCtrl
 {
     /// <summary>
-    /// 
+    /// 进度条控件
+    /// <para>包含进度提示信息和进度条</para>
     /// </summary>
     public partial class ProgressBarControl : DevExpress.XtraEditors.XtraUserControl
     {
@@ -37,15 +38,19 @@ namespace WLib.WinCtrls.Dev.ProbarCtrl
                 this.labelControl1.Text = value;
             }
         }
-        public BorderStyles ProgressBarPanelStyle { get => this.panelControl1.BorderStyle; set => this.panelControl1.BorderStyle = value; }
-    
         /// <summary>
-        /// 
+        /// 控件边框样式
+        /// </summary>
+        public BorderStyles ProgressBarPanelStyle { get => this.panelControl1.BorderStyle; set => this.panelControl1.BorderStyle = value; }
+
+        /// <summary>
+        /// 进度条控件
+        /// <para>包含进度提示信息和进度条</para>
         /// </summary>
         public ProgressBarControl()
         {
             InitializeComponent();
-            this.marqueeBar.Properties.ProgressKind = DevExpress.XtraEditors.Controls.ProgressKind.Horizontal;
+            this.marqueeBar.Properties.ProgressKind = ProgressKind.Horizontal;
             this.marqueeBar.Properties.Stopped = false;
             this.marqueeBar.Properties.MarqueeAnimationSpeed = 120;
             Tips = this.labelControl1.Text;

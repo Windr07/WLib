@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------- 
 // auth： Windragon
 // date： 2017/5/9 9:43:00
-// desc： None
+// desc： DataTable或DataRow与对象的互转
 // mdfy:  None
 //----------------------------------------------------------------*/
 
@@ -9,14 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 
 namespace WLib.Data
 {
     /// <summary>
-    /// 将表格数据转换成指定类型的对象
+    /// 表格数据与指定类型对象的互相转换
     /// </summary>
     public static class ModelConvert
     {
@@ -101,6 +100,7 @@ namespace WLib.Data
         #region 泛型转表格数据
         /// <summary>
         /// 将指定类型对象的属性与表格列对应，将对象属性值转为表格数据
+        /// <para>注意：只转换可读属性，COM组件、object类型等无法有效转换</para>
         /// </summary>
         /// <typeparam name="T">要转换的类型，注意类型应包含可读属性（get）</typeparam>
         /// <param name="value">要转换的对象，注意对象应包含可读属性（get）</param>
@@ -108,8 +108,8 @@ namespace WLib.Data
         /// <returns>返回新增了一行的表格数据</returns>
         public static DataTable ConvertToDataTable<T>(this T value, DataTable dataTable)
         {
-            Type t = value.GetType();
-            PropertyInfo[] properties = t.GetProperties();
+            Type type = value.GetType();
+            PropertyInfo[] properties = type.GetProperties();
             if (properties != null)
             {
                 properties = properties.Where(v => v.CanRead).ToArray(); //可读属性
@@ -126,6 +126,7 @@ namespace WLib.Data
         }
         /// <summary>
         /// 将指定类型对象的属性与表格列对应，将对象属性值转为表格数据
+        /// <para>注意：只转换可读属性，COM组件、object类型等无法有效转换</para>
         /// </summary>
         /// <typeparam name="T">要转换的类型，注意类型应包含可读属性（get）</typeparam>
         /// <param name="values">要转换的对象，注意对象应包含可读属性（get）</param>
@@ -169,12 +170,15 @@ namespace WLib.Data
         #region 泛型转新表格数据
         /// <summary>
         /// 创建新的DataTable，将指定类型的对象转换为表格数据
+        /// <para>注意：只转换可读属性，COM组件、object类型等无法有效转换</para>
         /// </summary>
         /// <typeparam name="T">要转换的类型</typeparam>
         /// <param name="value">要转换的对象</param>
         /// <param name="tableName">表格名称</param>
+        /// <param name="useDescriptionAttribute">如果对象属性包含<see cref="DescriptionAttribute"/>特性，
+        /// 是否将特性的<see cref="DescriptionAttribute.Description"/>属性作为列标题(<see cref="DataColumn.Caption"/>)</param>
         /// <returns>返回一行表格数据</returns>
-        public static DataTable ConvertToDataTable<T>(this T value, string tableName = null)
+        public static DataTable ConvertToDataTable<T>(this T value, string tableName = null, bool useDescriptionAttribute = true)
         {
             var dataTable = new DataTable(tableName);
             Type t = value.GetType();
@@ -184,7 +188,12 @@ namespace WLib.Data
                 properties = properties.Where(v => v.CanRead).ToArray();//可读属性
 
                 foreach (var propertyInfo in properties)//添加列
-                    dataTable.Columns.Add(new DataColumn(propertyInfo.Name, propertyInfo.DeclaringType));
+                {
+                    var sourceType = GetNullableSourceType(propertyInfo.PropertyType);
+                    var dataColumn = new DataColumn(propertyInfo.Name, sourceType);
+                    if (useDescriptionAttribute) DescriptionAttributeForColumnCaption(propertyInfo, dataColumn);
+                    dataTable.Columns.Add(dataColumn);
+                }
 
                 object[] values = new object[properties.Length];//添加行
                 for (int i = 0; i < properties.Length; i++)
@@ -195,23 +204,68 @@ namespace WLib.Data
         }
         /// <summary>
         /// 创建新的DataTable，将指定类型的对象转换为表格数据
+        /// <para>注意：只转换可读属性，COM组件、object类型等无法有效转换</para>
         /// </summary>
         /// <typeparam name="T">要转换的类型</typeparam>
         /// <param name="values">要转换的对象</param>
         /// <param name="tableName">表格名称</param>
+        /// <param name="useDescriptionAttribute">如果对象属性包含<see cref="DescriptionAttribute"/>特性，
+        /// 是否将特性的<see cref="DescriptionAttribute.Description"/>属性作为列标题(<see cref="DataColumn.Caption"/>)</param>
         /// <returns>返回多行表格数据</returns>
-        public static DataTable ConvertToDataTable<T>(this IEnumerable<T> values, string tableName = null)
+        public static DataTable ConvertToDataTable<T>(this IEnumerable<T> values, string tableName = null, bool useDescriptionAttribute = true)
         {
             var dataTable = new DataTable(tableName);
 
-            Type t = typeof(T);
-            PropertyInfo[] properties = t.GetProperties();
+            Type type = typeof(T);
+            PropertyInfo[] properties = type.GetProperties();
             if (properties != null)
             {
                 properties = properties.Where(v => v.CanRead).ToArray();//可读属性
 
                 foreach (var propertyInfo in properties)//添加列
-                    dataTable.Columns.Add(new DataColumn(propertyInfo.Name, propertyInfo.DeclaringType));
+                {
+                    var sourceType = GetNullableSourceType(propertyInfo.PropertyType);
+                    var dataColumn = new DataColumn(propertyInfo.Name, sourceType);
+                    if (useDescriptionAttribute) DescriptionAttributeForColumnCaption(propertyInfo, dataColumn);
+                    dataTable.Columns.Add(dataColumn);
+                }
+
+                foreach (var value in values)//添加行
+                {
+                    object[] cellValues = new object[properties.Length];
+                    for (int i = 0; i < properties.Length; i++)
+                        cellValues[i] = properties[i].GetValue(value, null);
+                    dataTable.Rows.Add(cellValues);
+                }
+            }
+            return dataTable;
+        }
+        /// <summary>
+        /// 创建新的DataTable，将指定数据对象转换为表格数据
+        /// <para>注意：只转换可读属性，COM组件等无法有效转换</para>
+        /// </summary>
+        /// <param name="values">要转换的对象</param>
+        /// <param name="type">转换对象的类型</param>
+        /// <param name="tableName">表格名称</param>
+        /// <param name="useDescriptionAttribute">如果对象属性包含<see cref="DescriptionAttribute"/>特性，
+        /// 是否将特性的<see cref="DescriptionAttribute.Description"/>属性作为列标题(<see cref="DataColumn.Caption"/>)</param>
+        /// <returns>返回多行表格数据</returns>
+        public static DataTable ConvertToDataTable(this IEnumerable<object> values, Type type, string tableName = null, bool useDescriptionAttribute = true)
+        {
+            var dataTable = new DataTable(tableName);
+
+            PropertyInfo[] properties = type.GetProperties();
+            if (properties != null)
+            {
+                properties = properties.Where(v => v.CanRead).ToArray();//可读属性
+
+                foreach (var propertyInfo in properties)//添加列
+                {
+                    var sourceType = GetNullableSourceType(propertyInfo.PropertyType);
+                    var dataColumn = new DataColumn(propertyInfo.Name, sourceType);
+                    if (useDescriptionAttribute) DescriptionAttributeForColumnCaption(propertyInfo, dataColumn);
+                    dataTable.Columns.Add(dataColumn);
+                }
 
                 foreach (var value in values)//添加行
                 {
@@ -235,15 +289,24 @@ namespace WLib.Data
         private static object ChangeType(object value, Type type)
         {
             if (type.FullName == typeof(string).FullName)
-            {
                 return Convert.ChangeType(Convert.IsDBNull(value) ? null : value, type);
-            }
+
             if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-            {
-                NullableConverter convertor = new NullableConverter(type);
-                return Convert.IsDBNull(value) ? null : convertor.ConvertFrom(value);
-            }
+                return Convert.IsDBNull(value) ? null : new NullableConverter(type).ConvertFrom(value);
+
             return value;
+        }
+        /// <summary>
+        /// 若类型为可空类型，返回其原始类型，否则直接返回该类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static Type GetNullableSourceType(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                return type.GetGenericArguments()[0];
+
+            return type;
         }
         /// <summary>
         /// 获取T的属性中可写的、且属性名与reader中的字段名相同的属性。
@@ -271,6 +334,17 @@ namespace WLib.Data
                 }
             }
             return result;
+        }
+        /// <summary>
+        /// 若属性中包含<see cref=" DescriptionAttribute"/>特性，获取该特性的<see cref="DescriptionAttribute.Description"/>属性值，作为<paramref name="dataColumn"/>的<see cref="DataColumn.Caption"/>的值
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="dataColumn"></param>
+        private static void DescriptionAttributeForColumnCaption(PropertyInfo property, DataColumn dataColumn)
+        {
+            var attributes = (DescriptionAttribute[])property.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (attributes.Length > 0)
+                dataColumn.Caption = attributes[0].Description;
         }
     }
 }

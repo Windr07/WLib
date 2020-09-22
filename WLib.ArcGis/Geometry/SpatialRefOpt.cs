@@ -15,15 +15,12 @@ using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.Carto.Map;
 using WLib.ArcGis.GeoDatabase.Fields;
 
-// ReSharper disable PossibleMultipleEnumeration
-
 namespace WLib.ArcGis.Geometry
 {
     //关于坐标系、坐标系代码(WKID/SRID/EPSG Code)：
     //   https://www.cnblogs.com/liweis/p/5951032.html
     //   http://spatialreference.org/ref/
     //   https://epsg.io/
-
     //常用坐标系代码：
     //  地理坐标系：
     //      4326  WGS84
@@ -34,6 +31,11 @@ namespace WLib.ArcGis.Geometry
     //      2361: Xian 1980 / 3-degree Gauss-Kruger zone 37
     //      2362: Xian 1980 / 3-degree Gauss-Kruger zone 38
     //      2363: Xian 1980 / 3-degree Gauss-Kruger zone 39
+    //      4525: CGCS 2000 / 3-degree Gauss-Kruger zone 37
+    //      4526: CGCS 2000 / 3-degree Gauss-Kruger zone 38
+    //      4527: CGCS 2000 / 3-degree Gauss-Kruger zone 39
+    //  高程坐标系：
+    //      5737: YELLO SEA 1985
 
     /// <summary>
     /// 坐标系操作
@@ -58,6 +60,8 @@ namespace WLib.ArcGis.Geometry
         /// <returns></returns>
         public static ISpatialReference GetSpatialRef(this IFeatureLayer featureLayer)
         {
+            if (featureLayer?.FeatureClass == null)
+                throw new Exception($"无法获取{featureLayer?.Name}图层的坐标系，该图层为空或者图层没有绑定要素类！");
             IGeoDataset geoDataset = (IGeoDataset)featureLayer.FeatureClass;
             return geoDataset.SpatialReference;
         }
@@ -78,7 +82,7 @@ namespace WLib.ArcGis.Geometry
         /// <returns></returns>
         public static ISpatialReference GetSpatialRef(this IFields fields)
         {
-            var shapeField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeGeometry);
+            var shapeField = fields.GetFirstField(esriFieldType.esriFieldTypeGeometry);
             if (shapeField == null) throw new Exception("字段集中不包含SHAPE字段！");
 
             return GetSpatialRef(shapeField);
@@ -91,6 +95,15 @@ namespace WLib.ArcGis.Geometry
         public static ISpatialReference GetSpatialRef(this IField shapeField)
         {
             return shapeField.GeometryDef.SpatialReference;
+        }
+        /// <summary>
+        /// 获取高程坐标系（Z坐标系）
+        /// </summary>
+        /// <param name="spatialRef"></param>
+        /// <returns></returns>
+        public static IVerticalCoordinateSystem GetVerticalCoordinateSystem(this ISpatialReference spatialRef)
+        {
+            return (spatialRef as ISpatialReference3).VerticalCoordinateSystem;
         }
         #endregion
 
@@ -145,7 +158,7 @@ namespace WLib.ArcGis.Geometry
         /// <summary>
         /// 根据指定坐标系代码创建坐标系
         /// </summary>
-        /// <param name="factoryCode">坐标系代码</param>
+        /// <param name="factoryCode">坐标系代码，e.g.(int)esriSRGeoCS3Type.esriSRGeoCS_Xian1980</param>
         /// <param name="type">创建的坐标系类别</param>
         /// <returns></returns>
         public static ISpatialReference CreateSpatialRef(int factoryCode, ESrType type = ESrType.Projected)
@@ -198,6 +211,26 @@ namespace WLib.ArcGis.Geometry
         #endregion
 
 
+        #region 修改点坐标系
+        /// <summary>
+        /// 将点坐标从源坐标系转成指定坐标系
+        /// </summary>
+        /// <param name="x">点的X坐标</param>
+        /// <param name="y">点的Y坐标</param>
+        /// <param name="sourceSpatialRef">点的原始坐标系</param>
+        /// <param name="destSpatialRef">转换后的坐标系</param>
+        /// <returns>转换坐标系之后的点</returns>
+        public static IPoint AlterSpatialRef(double x, double y, ISpatialReference sourceSpatialRef, ISpatialReference destSpatialRef)
+        {
+            IPoint point = new PointClass();
+            point.PutCoords(x, y);
+            point.SpatialReference = sourceSpatialRef;
+            point.Project(destSpatialRef);
+            return point;
+        }
+        #endregion
+
+
         #region 修改图形坐标系
         /// <summary>
         /// 将图形转换成指定坐标系（要求图形已定义了坐标系）
@@ -213,7 +246,7 @@ namespace WLib.ArcGis.Geometry
         /// 将图形转换成指定经纬度坐标系（要求图形已定义了坐标系）
         /// </summary>
         /// <param name="geometry">被转换坐标系的几何图形</param>
-        /// <param name="gcsType">地理坐标系（经纬度坐标系）（eg:(int)esriSRGeoCS3Type.esriSRGeoCS_Xian1980)</param>
+        /// <param name="gcsType">地理坐标系代码，e.g.(int)esriSRGeoCS3Type.esriSRGeoCS_Xian1980</param>
         /// <returns></returns>
         public static void ToGCS(this IGeometry geometry, int gcsType)
         {
@@ -223,7 +256,7 @@ namespace WLib.ArcGis.Geometry
         /// 将图形集合全部转换成指定经纬度坐标系（要求图形已定义了坐标系）
         /// </summary>
         /// <param name="geometries"></param>
-        /// <param name="gcsType"></param>
+        /// <param name="gcsType">地理坐标系代码，e.g.(int)esriSRGeoCS3Type.esriSRGeoCS_Xian1980</param>
         public static void ToGCS(this IEnumerable<IGeometry> geometries, int gcsType)
         {
             var gcs = new SpatialReferenceEnvironmentClass().CreateGeographicCoordinateSystem(gcsType);
@@ -236,7 +269,7 @@ namespace WLib.ArcGis.Geometry
         /// 将图形转换成指定投影坐标系（要求图形已定义了坐标系）
         /// </summary>
         /// <param name="geometry">被转换坐标系的几何图形</param>
-        /// <param name="prjType">投影坐标系（eg:(int)esriSRProjCS4Type.esriSRProjCS_Xian1980_3_Degree_GK_Zone_37）</param>
+        /// <param name="prjType">投影坐标系代码，e.g.(int)esriSRProjCS4Type.esriSRProjCS_Xian1980_3_Degree_GK_Zone_37</param>
         /// <returns></returns>
         public static void ToPRJ(this IGeometry geometry, int prjType)
         {
@@ -246,7 +279,7 @@ namespace WLib.ArcGis.Geometry
         /// 将图形集合全部转换成指定投影坐标系（要求图形已定义了坐标系）
         /// </summary>
         /// <param name="geometries">被转换坐标系的几何图形</param>
-        /// <param name="prjType">投影坐标系（eg:(int)esriSRProjCS4Type.esriSRProjCS_Xian1980_3_Degree_GK_Zone_37）</param>
+        /// <param name="prjType">投影坐标系代码，e.g.(int)esriSRProjCS4Type.esriSRProjCS_Xian1980_3_Degree_GK_Zone_37</param>
         /// <returns></returns>
         public static void ToPRJ(this IEnumerable<IGeometry> geometries, int prjType)
         {
@@ -261,8 +294,8 @@ namespace WLib.ArcGis.Geometry
         /// （需要预先知道源几何图形坐标系，可用于源图形坐标系未定义或定义错误的情况）
         /// </summary>
         /// <param name="geometry">被定义和转换坐标系的几何图形</param>
-        /// <param name="gcsType">地理坐标系（经纬度坐标系），先将图形定义为此坐标系（eg:(int)esriSRGeoCS3Type.esriSRGeoCS_Xian1980)</param>
-        /// <param name="prjType">投影坐标系，图形坐标系将转为此坐标系（eg:(int)esriSRProjCS4Type.esriSRProjCS_Xian1980_3_Degree_GK_Zone_37）</param>
+        /// <param name="gcsType">地理坐标系（经纬度坐标系），先将图形定义为此坐标系，e.g.(int)esriSRGeoCS3Type.esriSRGeoCS_Xian1980</param>
+        /// <param name="prjType">投影坐标系，图形坐标系将转为此坐标系，e.g.(int)esriSRProjCS4Type.esriSRProjCS_Xian1980_3_Degree_GK_Zone_37</param>
         public static void DefinitionGCStoPRJ(this IGeometry geometry, int gcsType, int prjType)
         {
             ISpatialReferenceFactory spatialRefFact = new SpatialReferenceEnvironmentClass();
@@ -309,6 +342,7 @@ namespace WLib.ArcGis.Geometry
                 throw new Exception("坐标系(ISpatialReference)对象为Null，无法获取坐标系信息！");
 
             string str = string.Empty;
+            string spatialRefName = spatialRef.Name;
             try
             {
                 if (spatialRef is IPRJSpatialReferenceGEN gen1)
@@ -323,12 +357,21 @@ namespace WLib.ArcGis.Geometry
                 str = Environment.NewLine + str;
             }
             catch { }//在部分环境中无法将ISpatialReference转成IPRJSpatialReferenceGEN接口
-            return spatialRef.Name + str;
+            return $"{spatialRefName}{str}";
         }
         #endregion
 
 
         #region 对比坐标系是否一致
+        /// <summary>
+        /// "坐标系不一致"
+        /// </summary>
+        public static string CheckSpatialRef_Message = "✘坐标系不一致";
+        /// <summary>
+        /// "✘坐标系具体参数有所差异，请注意调整坐标系！"
+        /// </summary>
+        public static string CheckSpatialRef_Message_Detail = "✘坐标系不是完全一致的，请注意调整坐标系！";
+
         /// <summary>
         /// 简单地根据名称和FactoryCode，判断两个坐标系是否一致
         /// </summary>
@@ -351,7 +394,6 @@ namespace WLib.ArcGis.Geometry
             string str2 = GetSpatialRefDetail(spatialRef2);
             return str1.Trim() == str2.Trim();
         }
-
         /// <summary>
         /// 判断两个坐标系是否一致
         /// </summary>
@@ -367,11 +409,11 @@ namespace WLib.ArcGis.Geometry
                 var str1 = GetSpatialRefDetail(spatialRef1);
                 var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
-                message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
+                message = result ? str1 : $"{CheckSpatialRef_Message_Detail}\r\n\t坐标系1：\r\n{str1}\r\n\t坐标系2：\r\n{str2}\r\n";
             }
             else
             {
-                message = $"✘坐标系不一致！\r\n\t坐标系1：{spatialRef1.Name}\r\n\t坐标系2：{spatialRef2.Name}";
+                message = $"{CheckSpatialRef_Message}\r\n\t坐标系1：{spatialRef1.Name}\r\n\t坐标系2：{spatialRef2.Name}";
             }
             return result;
         }
@@ -392,12 +434,12 @@ namespace WLib.ArcGis.Geometry
                 var str1 = GetSpatialRefDetail(spatialRef1);
                 var str2 = GetSpatialRefDetail(spatialRef2);
                 result = str1.Trim() == str2.Trim();
-                message = result ? str1 : $"✘坐标系具体参数有所差异，请先调整坐标系！\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
+                message = result ? str1 : $"{CheckSpatialRef_Message_Detail}\r\n\t{featureClass1.AliasName}-坐标系：\r\n{str1}\r\n\t{featureClass2.AliasName}-坐标系：\r\n{str2}\r\n";
             }
             else
             {
                 message =
-                    $"✘坐标系不一致！\r\n\t{featureClass1.AliasName}-坐标系：{spatialRef1.Name}\r\n\t{featureClass2.AliasName}-坐标系：{spatialRef2.Name}";
+                    $"{CheckSpatialRef_Message}\r\n\t{featureClass1.AliasName}-坐标系：{spatialRef1.Name}\r\n\t{featureClass2.AliasName}-坐标系：{spatialRef2.Name}";
             }
             return result;
         }
@@ -424,7 +466,39 @@ namespace WLib.ArcGis.Geometry
 
             if (result == false)
             {
-                sb.Insert(0, "各图层坐标系不是完全一致的，请先调整坐标系！\r\n");
+                sb.Insert(0, $"{CheckSpatialRef_Message_Detail}\r\n");
+                message = sb.ToString();
+            }
+            else
+            {
+                message = null;
+            }
+            return result;
+        }
+        /// <summary>
+        /// 检查多个要素类的坐标系是否完全一致
+        /// </summary>
+        /// <param name="spatialRefs"></param>
+        /// <param name="message">判断结果信息，若要素类坐标系一致，此值为坐标系详细参数，否则提示坐标不一致并列出各坐标系详细参数</param>
+        /// <returns></returns>
+        public static bool CheckSpatialRef(this IEnumerable<ISpatialReference> spatialRefs, out string message)
+        {
+            bool result = true;
+            StringBuilder sb = new StringBuilder();
+            string str1 = GetSpatialRefDetail(spatialRefs.ElementAt(0));
+            sb.AppendFormat("坐标系1:\r\n{0}\r\n", str1);
+
+            for (int i = 1; i < spatialRefs.Count(); i++)
+            {
+                string str2 = GetSpatialRefDetail(spatialRefs.ElementAt(i));
+                if (str1.Trim() != str2.Trim())
+                    result = false;
+                sb.AppendFormat("\r\n坐标系{0}:\r\n{1}\r\n", i + 1, str2);
+            }
+
+            if (result == false)
+            {
+                sb.Insert(0, $"{CheckSpatialRef_Message_Detail}\r\n");
                 message = sb.ToString();
             }
             else
@@ -587,22 +661,19 @@ namespace WLib.ArcGis.Geometry
 
         #region 国家2000坐标系
         /// <summary>
-        /// 获取“国家2000高斯克吕格3度分带含带号”的指定带号的投影坐标系的枚举
+        /// 获取“国家2000高斯克吕格3度分带含带号”的指定带号的投影坐标系的PCSType（等同于WKID）
         /// </summary>
         /// <param name="belt">带号（范围在[25,45]之间）</param>
         /// <returns></returns>
-        public static int GetPcsType_Gauss3_GCGS2000(int belt)
+        public static int GetPcsType_Gauss3_CGCS2000(int belt)
         {
-            if (belt < 25 && belt > 45)
-                throw new Exception("带号超出范围，GCGS2000 3度分带的带号范围为25至45");
-
-            return 4513 - 25 + belt;
+            return GetWkid_Gauss3_CGCS2000(belt);
         }
         /// <summary>
         /// 创建国家2000地理坐标系（经纬度坐标系）
         /// </summary>
         /// <returns></returns>
-        public static ISpatialReference CreateGeoRef_GCGS2000()
+        public static ISpatialReference CreateGeoRef_CGCS2000()
         {
             return new SpatialReferenceEnvironmentClass().CreateGeographicCoordinateSystem(4490);
         }
@@ -611,17 +682,17 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="belt">带号（范围在[25,45]之间）</param>
         /// <returns></returns>
-        public static ISpatialReference CreateGauss3_GCGS2000(int belt)
+        public static ISpatialReference CreateGauss3_CGCS2000(int belt)
         {
-            int jcsType = GetPcsType_Gauss3_GCGS2000(belt);
-            return new SpatialReferenceEnvironmentClass().CreateProjectedCoordinateSystem(jcsType);
+            int pcsType = GetPcsType_Gauss3_CGCS2000(belt);
+            return new SpatialReferenceEnvironmentClass().CreateProjectedCoordinateSystem(pcsType);
         }
         /// <summary>
         ///  获取“国家2000高斯克吕格3度分带含带号”中指定WKID的坐标系对应的带号
         /// </summary>
         /// <param name="wkid">Well Known Id，等同于SRID或EPSG（37/38/39度带分别为2361,2362,2363，即：带号 = wkid - 2324）</param>
         /// <returns></returns>
-        public static int GetBelt_Gauss3_GCGS2000(int wkid)
+        public static int GetBelt_Gauss3_CGCS2000(int wkid)
         {
             int minWkid = 4513, maxWkid = 4533;
             if (wkid < minWkid || wkid > maxWkid)
@@ -633,13 +704,75 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="belt">带号</param>
         /// <returns></returns>
-        public static int GetWkid_Gauss3_GCGS2000(int belt)
+        public static int GetWkid_Gauss3_CGCS2000(int belt)
         {
             int minBelt = 25, maxBelt = 45, minWkid = 4513;
             if (belt < minBelt || belt > maxBelt)
                 throw new Exception($"带号超出范围，GCGS2000 3度分带的带号范围为{minBelt}至{maxBelt}");
-            return belt + minWkid;
+            return belt + minWkid - 25;
         }
+        /// <summary>
+        ///  获取“国家2000高斯克吕格3度分带含带号”的全部坐标系的WKID
+        ///  <para>范围[4513,4533]</para>
+        /// </summary>
+        /// <returns></returns>
+        public static int[] GetWkid_Gauss3_CGCS2000()
+        {
+            return Enumerable.Range(4513, 21).ToArray();//4513至4533
+        }
+        #endregion
+
+
+        #region 国家2000坐标系广东省范围
+        /// <summary>
+        ///  获取“国家大地2000高斯克吕格3度分带含带号”的指定带号的投影坐标系的WKID，
+        ///  带号不在广东省范围（37,38,39）内则抛出异常
+        /// </summary>
+        /// <param name="belt">带号（37,38,39）</param>
+        /// <returns></returns>
+        public static int GetPcsType_Gauss3_GCGS2000_GuangDong(int belt)
+        {
+            if (belt < 37 || belt > 39)
+                throw new Exception("带号超出范围，广东省的“国家大地2000 3度分带”坐标系的带号范围为37至39");
+
+            return GetPcsType_Gauss3_CGCS2000(belt);
+        }
+        /// <summary>
+        ///  获取“国家大地2000高斯克吕格3度分带含带号”广东省范围的坐标系WKID
+        /// </summary>
+        /// <returns></returns>
+        public static int[] GetPcsType_Gauss3_CGCS2000_GuangDong()
+        {
+            return new[]
+            {
+                GetPcsType_Gauss3_CGCS2000(37),
+                GetPcsType_Gauss3_CGCS2000(38),
+                GetPcsType_Gauss3_CGCS2000(39)
+            };
+        }
+        /// <summary>
+        /// 创建国家大地2000高斯克吕格3度分带含带号”的广东省范围的坐标系
+        /// </summary>
+        /// <returns></returns>
+        public static ISpatialReference[] CreateGauss3_CGCS2000_GuangDong()
+        {
+            ISpatialReferenceFactory spatialRefFac = new SpatialReferenceEnvironmentClass();
+            return new ISpatialReference[]
+            {
+                spatialRefFac.CreateProjectedCoordinateSystem(GetPcsType_Gauss3_CGCS2000(37)),
+                spatialRefFac.CreateProjectedCoordinateSystem(GetPcsType_Gauss3_CGCS2000(38)),
+                spatialRefFac.CreateProjectedCoordinateSystem(GetPcsType_Gauss3_CGCS2000(39)),
+            };
+        }
+        #endregion
+
+
+        #region 黄海1985高程坐标系
+        /// <summary>
+        /// 黄海1985高程坐标系的WKID
+        /// <para>参考：https://spatialreference.org/ref/epsg/5737/</para>
+        /// </summary>
+        public const int YELLO_SEA_1985_WKID = 5737;
         #endregion
 
 

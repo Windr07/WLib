@@ -114,10 +114,6 @@ namespace WLib.Web
         /// <param name="methodName">服务方法的名称</param>
         /// <param name="parameters">服务方法的参数，没有参数则应设置为null</param>
         /// <returns></returns>
-        public object InvokeMethod(string methodName, object[] parameters)
-        {
-            MethodInfo methodInfo = ServiceType.GetMethod(methodName);
-            return methodInfo.Invoke(ServiceInstance, parameters);
-        }
+        public object InvokeMethod(string methodName, object[] parameters) => ServiceType.GetMethod(methodName).Invoke(ServiceInstance, parameters);
     }
 }

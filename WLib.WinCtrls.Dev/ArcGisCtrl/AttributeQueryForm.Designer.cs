@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.listBoxFields = new DevExpress.XtraEditors.ListBoxControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.listBoxValues = new DevExpress.XtraEditors.ListBoxControl();
@@ -59,7 +58,7 @@
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.sBtnClear = new DevExpress.XtraEditors.SimpleButton();
-            this.cMenuStripFields = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cMenuStripFields = new System.Windows.Forms.ContextMenuStrip();
             this.获取唯一值CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.等于EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清空DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -476,7 +475,7 @@
             this.cmbTables.TabIndex = 0;
             this.cmbTables.SelectedIndexChanged += new System.EventHandler(this.cmbTables_SelectedIndexChanged);
             // 
-            // QueryForm
+            // AttributeQueryForm
             // 
             this.AcceptButton = this.sBtnApply;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -492,7 +491,7 @@
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "QueryForm";
+            this.Name = "AttributeQueryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "按属性查询";
             ((System.ComponentModel.ISupportInitialize)(this.listBoxFields)).EndInit();

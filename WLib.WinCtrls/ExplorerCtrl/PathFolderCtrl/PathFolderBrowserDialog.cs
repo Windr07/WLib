@@ -74,7 +74,7 @@ namespace WLib.WinCtrls.ExplorerCtrl.PathFolderCtrl
             if (string.IsNullOrWhiteSpace(path))
                 return;
 
-            var newPath = FileOpt.CombineReNameFolder(path, "新建文件夹", false);
+            var newPath = PathEx.CombineReNameFolder(path, "新建文件夹", false);
             Directory.CreateDirectory(newPath);
             selectedNode.Collapse();
             this.folderBrowser1.SelectedPath = newPath;

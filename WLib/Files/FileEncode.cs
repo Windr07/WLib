@@ -40,7 +40,7 @@ namespace WLib.Files
             byte[] utf8 = new byte[] { 0xEF, 0xBB, 0xBF }; //带BOM   
             Encoding encoding = Encoding.Default;
 
-            BinaryReader reander = new BinaryReader(stream, System.Text.Encoding.Default);
+            BinaryReader reander = new BinaryReader(stream, Encoding.Default);
             byte[] ss = reander.ReadBytes(4);
             if (ss[0] == 0xFE && ss[1] == 0xFF && ss[2] == 0x00)
             {

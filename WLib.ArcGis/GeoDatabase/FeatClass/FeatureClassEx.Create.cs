@@ -6,7 +6,6 @@
 //----------------------------------------------------------------*/
 
 using System;
-using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
@@ -17,7 +16,7 @@ using WLib.ArcGis.Geometry;
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
     /// <summary>
-    /// 提供创建要素类的方法
+    /// 提供对要素类数据的获取、输出、复制、创建、增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static partial class FeatureClassEx
     {
@@ -26,11 +25,11 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="obj">IWorkspace、IFeatureWorkspace或IFeatureDataset对象，在该对象中创建要素类</param>
         /// <param name="name">要素类名称（如果为shapefile,不能包含文件扩展名".shp"）</param>
-        /// <param name="fields">要创建的字段集（必须包含SHAPE字段），可参考<see cref="FieldOpt.CreateBaseFields"/>等方法创建字段集</param>
+        /// <param name="fields">要创建的字段集（必须包含SHAPE字段），可参考<see cref="FieldEx.CreateBaseFields"/>等方法创建字段集</param>
         /// <returns></returns>
         public static IFeatureClass Create(object obj, string name, IFields fields)
         {
-            var shapeField = fields.GetFirstFieldsByType(esriFieldType.esriFieldTypeGeometry);
+            var shapeField = fields.GetFirstField(esriFieldType.esriFieldTypeGeometry);
             if (shapeField == null)
                 throw new Exception($"在要创建的字段集（参数{nameof(fields)}）中找不到几何字段，创建要素类时应指定几何字段以确定几何类型和坐标系！");
 
@@ -155,7 +154,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// 创建要素类，该要素类仅存储在内存中
         /// </summary>
         /// <param name="name">要素类名称</param>
-        /// <param name="fields">要创建的字段集（必须包含SHAPE字段和OID字段），可参考<see cref="FieldOpt.CreateBaseFields"/>等方法创建字段集</param>
+        /// <param name="fields">要创建的字段集（必须包含SHAPE字段和OID字段），可参考<see cref="FieldEx.CreateBaseFields"/>等方法创建字段集</param>
         /// <param name="strWorkspaceName">内存工作空间的名称</param>
         /// <returns></returns>
         public static IFeatureClass CreateInMemory(string name, IFields fields, string strWorkspaceName = "InMemoryWorkspace")
@@ -173,8 +172,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="fields">要创建的字段集（可以为null，该方法自动修改或加入OID和SHAPE字段以确保几何类型、坐标系与参数一致）</param>
         /// <param name="strWorkspaceName">内存工作空间的名称</param>
         /// <returns></returns>
-        public static IFeatureClass CreateInMemory(string name, ISpatialReference spatialRef,
-            esriGeometryType geometryType, IFields fields = null, string strWorkspaceName = "InMemoryWorkspace")
+        public static IFeatureClass CreateInMemory(string name, ISpatialReference spatialRef, esriGeometryType geometryType, IFields fields = null, string strWorkspaceName = "InMemoryWorkspace")
         {
             if (fields == null)
                 fields = new FieldsClass();

@@ -18,12 +18,41 @@ namespace WLib.Data.Format
     public static class StringUtility
     {
         /// <summary>
+        /// 将一个中文字符长度当成2，获取字符串的长度
+        /// </summary>
+        /// <returns></returns>
+        public static int GetCNLength(this string str)
+        {
+            int length = 0;
+            for (int i = 1; i < str.Length; i++)
+                length += IsChinese(str[i]) || IsChinesePunctuation(str[i]) ? 2 : 1;
+
+            return length;
+        }
+        /// <summary>
+        /// 判断当前字符串(str)是否包含指定字符串数组中的一个或多个元素
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static bool ContainsAny(this string str, params string[] values)
+        {
+            foreach (var value in values)
+            {
+                if (str.Contains(value))
+                    return true;
+            }
+            return false;
+        }
+
+
+        /// <summary>
         /// 将字符串按固定显示长度换行（英文和数字字符长度为1，中文字符与中文符号长度为2）
         /// </summary>
         /// <param name="subjectString">需要按固定长度换行的字符串</param>
         /// <param name="lineLength">每一行的长度，英文和数字字符长度为1，中文字符与中文符号长度为2</param>
         /// <returns></returns>
-        public static string BreakStringToLines(string subjectString, int lineLength)
+        public static string BreakToLines(this string subjectString, int lineLength)
         {
             if (lineLength < 2)
                 throw new Exception("字符串按固定长度换行时，指定的长度（参数：lineLength）不能小于2！");
@@ -44,7 +73,7 @@ namespace WLib.Data.Format
         /// <param name="subjectString">需要按固定长度分组的字符串</param>
         /// <param name="lineLength">每一组的长度，英文和数字字符长度为1，中文字符与中文符号长度为2</param>
         /// <returns></returns>
-        public static List<string> BreakString(string subjectString, int lineLength)
+        public static List<string> BreakString(this string subjectString, int lineLength)
         {
             if (lineLength < 2)
                 throw new Exception("字符串按固定长度分组时，指定的长度（参数：lineLength）不能小于2！");
@@ -60,6 +89,33 @@ namespace WLib.Data.Format
                 result.Add(subjectString.Substring(indexList.Last(), subjectString.Length - indexList.Last()));
             return result;
         }
+        /// <summary>
+        /// 将字符串按固定显示长度分组时，将获取字符串中应该分组的位置
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <param name="maxLength">每组显示的字符串长度</param>
+        /// <returns></returns>
+        private static List<int> BuildInsertIndexList(string str, int maxLength)
+        {
+            int length = 0;
+            List<int> list = new List<int>();
+            for (int i = 1; i < str.Length; i++)
+            {
+                if (IsChinese(str[i]) || IsChinesePunctuation(str[i]))
+                    length += 2;
+                else
+                    length++;
+
+                if (length > maxLength)
+                {
+                    length = 0;
+                    list.Add(i);
+                }
+            }
+            return list;
+        }
+
+
         /// <summary>
         /// 判断字符是否为中文字符
         /// </summary>
@@ -118,46 +174,6 @@ namespace WLib.Data.Format
             //书名号  3008　 〈
             //        3009　　〉
             #endregion
-        }
-        /// <summary>
-        /// 将字符串按固定显示长度分组时，将获取字符串中应该分组的位置
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <param name="maxLength">每组显示的字符串长度</param>
-        /// <returns></returns>
-        private static List<int> BuildInsertIndexList(string str, int maxLength)
-        {
-            int length = 0;
-            List<int> list = new List<int>();
-            for (int i = 1; i < str.Length; i++)
-            {
-                if (IsChinese(str[i]) || IsChinesePunctuation(str[i]))
-                    length += 2;
-                else
-                    length++;
-
-                if (length > maxLength)
-                {
-                    length = 0;
-                    list.Add(i);
-                }
-            }
-            return list;
-        }
-        /// <summary>
-        /// 判断当前字符串(str)是否包含指定字符串数组中的一个或多个元素
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public static bool ContainsAny(this string str, params string[] values)
-        {
-            foreach (var value in values)
-            {
-                if (str.Contains(value))
-                    return true;
-            }
-            return false;
         }
         /// <summary>
         /// 将字符数组转成字符串

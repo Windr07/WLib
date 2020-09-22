@@ -279,47 +279,11 @@ namespace WLib.ArcGis.Analysis.Topology
 
         #region 获取、创建拓扑规则
         /// <summary>
-        /// 创建拓扑规则
-        /// </summary>
-        /// <param name="ruleType">拓扑规则类型</param>
-        /// <param name="featureClassA">第一个要素类</param>
-        /// <param name="featureClassB">第二个要素类</param>
-        /// <returns></returns>
-        public static ITopologyRule CreateTopologyRule(this esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
-        {
-            ITopologyRule topologyRule = new TopologyRuleClass();
-            topologyRule.TopologyRuleType = ruleType;
-            topologyRule.Name = ruleType.ToString();
-            topologyRule.OriginClassID = featureClassA.FeatureClassID;
-            topologyRule.AllOriginSubtypes = true;
-            if (featureClassB != null)
-            {
-                topologyRule.DestinationClassID = featureClassB.FeatureClassID;
-                topologyRule.AllDestinationSubtypes = true;
-            }
-            return topologyRule;
-        }
-        /// <summary>  
-        /// 添加拓扑规则  
-        /// </summary>  
-        /// <param name="topology"></param>
-        /// <param name="ruleType">要添加的双要素规则</param>  
-        /// <param name="featureClassA">第一个要素类</param>  
-        /// <param name="featureClassB">第二个要素类</param>  
-        public static void AddRuleToTopology(this ITopology topology, esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
-        {
-            if (topology == null)
-                throw new Exception("请先构建拓扑");
-
-            var topologyRule = CreateTopologyRule(ruleType, featureClassA, featureClassB);
-            AddRuleToTopology(topology, topologyRule);
-        }
-        /// <summary>
         /// 添加拓扑规则
         /// </summary>
         /// <param name="topology"></param>
         /// <param name="topologyRule"></param>
-        public static void AddRuleToTopology(this ITopology topology, ITopologyRule topologyRule)
+        public static ITopology AddRuleToTopology(this ITopology topology, ITopologyRule topologyRule)
         {
             ITopologyRuleContainer topologyRuleContainer = (ITopologyRuleContainer)topology;//构建容器  
             try
@@ -339,6 +303,44 @@ namespace WLib.ArcGis.Analysis.Topology
             {
                 throw new Exception("不支持添加拓扑规则：" + ex.Message);
             }
+            return topology;
+        }
+        /// <summary>  
+        /// 添加拓扑规则  
+        /// </summary>  
+        /// <param name="topology"></param>
+        /// <param name="ruleType">要添加的双要素规则</param>  
+        /// <param name="featureClassA">第一个要素类</param>  
+        /// <param name="featureClassB">第二个要素类</param>  
+        public static ITopologyRule AddRuleToTopology(this ITopology topology, esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
+        {
+            if (topology == null)
+                throw new Exception("请先构建拓扑");
+
+            var topologyRule = CreateTopologyRule(ruleType, featureClassA, featureClassB);
+            AddRuleToTopology(topology, topologyRule);
+            return topologyRule;
+        }
+        /// <summary>
+        /// 创建拓扑规则
+        /// </summary>
+        /// <param name="ruleType">拓扑规则类型</param>
+        /// <param name="featureClassA">第一个要素类</param>
+        /// <param name="featureClassB">第二个要素类</param>
+        /// <returns></returns>
+        public static ITopologyRule CreateTopologyRule(this esriTopologyRuleType ruleType, IFeatureClass featureClassA, IFeatureClass featureClassB = null)
+        {
+            ITopologyRule topologyRule = new TopologyRuleClass();
+            topologyRule.TopologyRuleType = ruleType;
+            topologyRule.Name = ruleType.ToString();
+            topologyRule.OriginClassID = featureClassA.FeatureClassID;
+            topologyRule.AllOriginSubtypes = true;
+            if (featureClassB != null)
+            {
+                topologyRule.DestinationClassID = featureClassB.FeatureClassID;
+                topologyRule.AllDestinationSubtypes = true;
+            }
+            return topologyRule;
         }
         /// <summary>
         /// 获取拓扑的全部拓扑规则

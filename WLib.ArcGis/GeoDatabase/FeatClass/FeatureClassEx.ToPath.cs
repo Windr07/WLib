@@ -20,7 +20,7 @@ using Path = System.IO.Path;
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
     /// <summary>
-    /// 提供从指定路径生成要素类的方法
+    /// 提供对要素类数据的获取、输出、复制、创建、增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static partial class FeatureClassEx
     {
@@ -33,7 +33,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// ②mdb文件路径[\DatasetName]\FeatureClassName，在mdb中或mdb的指定要素集中，创建指定名称的图层；若mdb或要素集不存在则自动创建；
         /// ③gdb目录[\DatasetName]\FeatureClassName，在gdb中或gdb的指定要素集中，创建指定名称的图层；若gdb或要素集不存在则自动创建；
         /// </param>
-        /// <param name="fields">要创建的字段集，必须包含OID和SHAPE字段，创建字段集可参考<see cref="FieldOpt.CreateBaseFields"/>等方法</param>
+        /// <param name="fields">要创建的字段集，必须包含OID和SHAPE字段，创建字段集可参考<see cref="FieldEx.CreateBaseFields"/>等方法</param>
         /// <returns></returns>
         public static IFeatureClass CreateToPath(string fullPath, IFields fields)
         {
@@ -96,7 +96,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static IFeatureClass CreateToPath(string fullPath, esriGeometryType geoType, ISpatialReference spatialRef, IEnumerable<IField> otherFields = null)
         {
-            IFields fields = FieldOpt.CreateBaseFields(geoType, spatialRef);
+            IFields fields = FieldEx.CreateBaseFields(geoType, spatialRef);
             fields.AddFields(otherFields);
             return CreateToPath(fullPath, fields);
         }
@@ -141,7 +141,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         public static IFeatureClass CreateToDb(string geoDbPath, string datasetName, string className, esriGeometryType geoType,
             ISpatialReference spatialRef, IEnumerable<IField> otherFields = null)
         {
-            var fields = FieldOpt.CreateFields(geoType, spatialRef, otherFields);
+            var fields = FieldEx.CreateFields(geoType, spatialRef, otherFields);
             var workspace = WorkspaceEx.GetWorkSpace(geoDbPath);
             IFeatureClass featureClass;
             if (!string.IsNullOrEmpty(datasetName))

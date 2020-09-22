@@ -32,8 +32,8 @@ namespace WLib.Files.Excel.AppLibExcel.StyleHelper
             xf.Font.Height = (ushort)(size * 20);
             xf.Font.Underline = underline;
             xf.TextWrapRight = true;
-            xf.HorizontalAlignment = AppLibrary.WriteExcel.HorizontalAlignments.Centered;
-            xf.VerticalAlignment = AppLibrary.WriteExcel.VerticalAlignments.Centered;
+            xf.HorizontalAlignment = HorizontalAlignments.Centered;
+            xf.VerticalAlignment = VerticalAlignments.Centered;
             if (cellLine.ShowTop) xf.TopLineStyle = 1;
             if (cellLine.ShowRight) xf.RightLineStyle = 1;
             if (cellLine.ShowBottom) xf.BottomLineStyle = 1;

@@ -5,16 +5,16 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.ArcGis.Geometry;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.Analysis.OnClass
 {
@@ -31,11 +31,11 @@ namespace WLib.ArcGis.Analysis.OnClass
         /// <param name="outPath">保存分析结果的工作空间路径</param>
         /// <param name="outName">保存分析结果的要素类名称</param>
         /// <returns></returns>
-        public static IFeatureClass Intersect(this IFeatureClass inClass, IFeatureClass overlayClass, string outPath, string outName)
+        public static IFeatureClass Intersect(this IFeatureClass inClass, IFeatureClass overlayClass, string outPath, string outName, double tolorance = 0.01)
         {
             var workspaceType = WorkspaceEx.GetDefaultWorkspaceType(outPath);
             if (workspaceType == EWorkspaceType.Default)
-                throw new Exception($"工作空间路径(outPath)不存在！{outPath} 该路径必须是已存在的mdb文件路径，或shp所在文件夹路径，或gdb文件夹路径");
+                throw new Exception($"工作空间路径(outPath)不存在！{outPath} 该路径必须是已存在的mdb文件路径，或shp所在文件夹路径，或gdb文件夹路径，或sde连接字符串");
 
             IFeatureClassName outClassName = new FeatureClassNameClass
             {
@@ -52,7 +52,7 @@ namespace WLib.ArcGis.Analysis.OnClass
             datasetName.Name = outName;
             datasetName.WorkspaceName = workspaceName;
 
-            return new BasicGeoprocessorClass().Intersect((ITable)inClass, false, (ITable)overlayClass, false, 0.01, outClassName);
+            return new BasicGeoprocessorClass().Intersect((ITable)inClass, false, (ITable)overlayClass, false, tolorance, outClassName);
         }
 
         /// <summary>

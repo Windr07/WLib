@@ -1,10 +1,17 @@
-﻿using ESRI.ArcGIS.esriSystem;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： None
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using ESRI.ArcGIS.esriSystem;
 
 namespace WLib.ArcGis.Carto.Layer
 {
     /// <summary>
     /// 各类图层的UID定义，
-    /// 为<see cref="WLib.ArcGis.Carto.Map.MapQuery.GetLayersByUid(ESRI.ArcGIS.Carto.IMap, UID)"/> 等方法提供参数调用
+    /// 为<see cref="WLib.ArcGis.Carto.Map.MapEx.GetLayersByUid(ESRI.ArcGIS.Carto.IMap, UID)"/> 等方法提供参数调用
     /// </summary>
     public static class LayerUid
     {

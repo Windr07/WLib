@@ -18,8 +18,9 @@ namespace WLib.ArcGis.Carto.LabelAnno
     /** 标注和注记说明
      * 1、ArcGIS中，标注(Label)是动态创建的，注记(Annotation)是作为图形/要素存储的
      * 2、Shp文件不支持注记
-     * 3、保存在地图上的注记是IGraphicsLayer->IGraphicsContainer->IElement
-     * 4、保存在数据库的注记图层是IFeatureClass，加到地图中是IFeatureLayer/IAnnotationLayer，注记记录是IFeature/IAnnotationFeature.Annotation->IElement
+     * 3、注记可作为图形（Graphics->Element）保存在地图上(即mxd文件中)；也可做为图层保存在数据库(mdb、gdb、sde等)中：
+     *  （1）保存在地图上的注记是IGraphicsLayer->IGraphicsContainer->IElement
+     *  （2）保存在数据库的注记图层是IFeatureClass，加到地图中是IFeatureLayer/IAnnotationLayer，注记记录是IFeature/IAnnotationFeature.Annotation->IElement
      */
 
     /// <summary>

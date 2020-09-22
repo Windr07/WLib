@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 
 namespace WLib.Files.Excel.AppLibExcel
 {
@@ -17,12 +18,23 @@ namespace WLib.Files.Excel.AppLibExcel
     public static class DataToExcel
     {
         /// <summary>
-        /// 构造函数，将DataSet里面的数据写到Excel中，DataTable名称对应sheet的名称
+        /// 将DataSet里面的数据写到Excel中，DataTable名称对应sheet的名称
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="fullPath"></param>
+        public static void ToExcel(this DataSet ds, string fullPath)
+        {
+            var dir = Path.GetDirectoryName(fullPath);
+            var name = Path.GetFileName(fullPath);
+            ToExcel(ds, dir, name);
+        }
+        /// <summary>
+        /// 将DataSet里面的数据写到Excel中，DataTable名称对应sheet的名称
         /// </summary>
         /// <param name="ds">数据集</param>
-        /// <param name="path"></param>
-        /// <param name="fileName">Excel的名称</param>
-        public static void DataSetToExcel(this DataSet ds, string path, string fileName)
+        /// <param name="dir"></param>
+        /// <param name="fileName">Excel文件名</param>
+        public static void ToExcel(this DataSet ds, string dir, string fileName)
         {
             AppLibrary.WriteExcel.XlsDocument doc = new AppLibrary.WriteExcel.XlsDocument();
             doc.FileName = fileName;
@@ -39,7 +51,7 @@ namespace WLib.Files.Excel.AppLibExcel
                     xf.HorizontalAlignment = AppLibrary.WriteExcel.HorizontalAlignments.Centered;
                     xf.VerticalAlignment = AppLibrary.WriteExcel.VerticalAlignments.Centered;
                     cells.Add(1, i + 1, dt.Columns[i].ColumnName, xf);
-                    
+
                     for (int j = 0; j < dt.Rows.Count; j++)
                     {
                         if (Convert.IsDBNull(dt.Rows[j][i])) continue;
@@ -48,7 +60,7 @@ namespace WLib.Files.Excel.AppLibExcel
                 }
 
             }
-            doc.Save(path, true);
+            doc.Save(dir, true);
         }
         /// <summary>
         /// 导出表格的所有数据到Excel,DataTable名称对应sheet的名称
@@ -56,7 +68,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <param name="dt">DataTable对象，DataTable名称对应sheet的名称，如果名称为空则sheet名称为Sheet1</param>
         /// <param name="path">Excel保存目录</param>
         /// <param name="fileName">Excel文件名，包含扩展名</param>
-        public static void DataTableToExcel(this DataTable dt, string path, string fileName)
+        public static void ToExcel(this DataTable dt, string path, string fileName)
         {
             AppLibrary.WriteExcel.XlsDocument doc = new AppLibrary.WriteExcel.XlsDocument();
             doc.FileName = fileName;
@@ -89,7 +101,7 @@ namespace WLib.Files.Excel.AppLibExcel
         /// <param name="path">Excel保存目录</param>
         /// <param name="fileName">Excel文件名，包含扩展名</param>
         /// <param name="fieldNames">指定字段名称</param>
-        public static void DataTableToExcel(this DataTable dt, string path, string fileName,List<string> fieldNames)
+        public static void ToExcel(this DataTable dt, string path, string fileName, List<string> fieldNames)
         {
             AppLibrary.WriteExcel.XlsDocument doc = new AppLibrary.WriteExcel.XlsDocument();
             doc.FileName = fileName;
@@ -112,7 +124,7 @@ namespace WLib.Files.Excel.AppLibExcel
                     if (Convert.IsDBNull(dt.Rows[j][fieldNames[i]])) continue;
                     cells.Add(j + 2, i + 1, dt.Rows[j][fieldNames[i]]);
                 }
-            } 
+            }
             doc.Save(path, true);
         }
     }

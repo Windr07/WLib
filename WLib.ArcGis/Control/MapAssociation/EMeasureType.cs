@@ -5,7 +5,7 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {
@@ -17,22 +17,22 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <summary>
         /// 0-空操作
         /// </summary>
-        [Description("空操作")]
+        [DescriptionEx("空操作")]
         None = 0,
         /// <summary>
         /// 1-测距离
         /// </summary>
-        [Description("测距离")]
+        [DescriptionEx("测距离")]
         Distance = 1,
         /// <summary>
         /// 2-测面积
         /// </summary>
-        [Description("测面积")]
+        [DescriptionEx("测面积")]
         Area = 2,
         /// <summary>
         /// 3-测角度
         /// </summary>
-        [Description("测角度")]
+        [DescriptionEx("测角度")]
         Angle = 3
     }
 }

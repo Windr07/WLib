@@ -208,7 +208,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="pointRings"></param>
         /// <returns></returns>
-        public static IPolygon CreatePolygon(IEnumerable<IEnumerable<IPoint>> pointRings)
+        public static IPolygon CreatePolygon(this IEnumerable<IEnumerable<IPoint>> pointRings)
         {
             List<IRing> rings = new List<IRing>();
             foreach (var ptRing in pointRings)
@@ -222,7 +222,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="rings"></param>
         /// <returns></returns>
-        public static IPolygon CreatePolygon(IEnumerable<IRing> rings)
+        public static IPolygon CreatePolygon(this IEnumerable<IRing> rings)
         {
             IPolygon polygon = new PolygonClass();
             IGeometryCollection geometryColl = (IGeometryCollection)polygon;
@@ -237,7 +237,7 @@ namespace WLib.ArcGis.Geometry
         /// </summary>
         /// <param name="points"></param>
         /// <returns></returns>
-        public static IRing CreateRing(IEnumerable<IPoint> points)
+        public static IRing CreateRing(this IEnumerable<IPoint> points)
         {
             IRing ring = new RingClass();
             IPointCollection pointColl = (IPointCollection)ring;

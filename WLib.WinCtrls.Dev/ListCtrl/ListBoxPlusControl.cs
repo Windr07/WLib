@@ -307,7 +307,7 @@ namespace WLib.WinCtrls.Dev.ListCtrl
                     foreach (CheckedListBoxItem item in this.checkedListBox1.Items)
                     {
                         string strChecked = item.CheckState == CheckState.Checked ? "√" : "  ";
-                        sb.AppendFormat("{0} {1}{2}", strChecked, item.Value.ToString(), System.Environment.NewLine);
+                        sb.AppendFormat("{0} {1}{2}", strChecked, item.Value.ToString(), Environment.NewLine);
                     }
                     System.IO.File.WriteAllText(sv.FileName, sb.ToString());
                 }
@@ -323,7 +323,7 @@ namespace WLib.WinCtrls.Dev.ListCtrl
                     }
                     string dir = System.IO.Path.GetDirectoryName(sv.FileName);
                     string name = System.IO.Path.GetFileName(sv.FileName);
-                    DataToExcel.DataTableToExcel(dt, dir, name);
+                    DataToExcel.ToExcel(dt, dir, name);
                 }
             }
         }

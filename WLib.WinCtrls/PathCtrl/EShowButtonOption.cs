@@ -13,32 +13,32 @@ namespace WLib.WinCtrls.PathCtrl
     public enum EShowButtonOption
     {
         /// <summary>
-        /// 同时显示浏览按钮、选择按钮、操作按钮
-        /// </summary>
-        All,
-        /// <summary>
-        /// 同时显示浏览按钮、选择按钮
-        /// </summary>
-        ViewSelect,
-        /// <summary>
-        /// 同时显示浏览按钮、操作按钮
-        /// </summary>
-        ViewOpt,
-        /// <summary>
         /// 不显示按钮
         /// </summary>
-        None,
-        /// <summary>
-        /// 只显示选择按钮
-        /// </summary>
-        Select,
+        None = 0,
         /// <summary>
         /// 只显示浏览按钮
         /// </summary>
-        View,
+        View = 1,
+        /// <summary>
+        /// 只显示选择按钮
+        /// </summary>
+        Select = 2,
         /// <summary>
         /// 只显示操作按钮
         /// </summary>
-        Opt,
+        Opt = 4,
+        /// <summary>
+        /// 同时显示浏览按钮、选择按钮
+        /// </summary>
+        ViewSelect = View | Select,
+        /// <summary>
+        /// 同时显示浏览按钮、操作按钮
+        /// </summary>
+        ViewOpt = View | Opt,
+        /// <summary>
+        /// 同时显示浏览按钮、选择按钮、操作按钮
+        /// </summary>
+        All = View | Select | Opt,
     }
 }

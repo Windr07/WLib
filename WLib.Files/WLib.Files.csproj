@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AEB9C1BE-96CF-42F5-AB08-7A45817CF906}</ProjectGuid>
+    <ProjectGuid>{12A3F0C7-4587-4359-BC01-1012825CC2B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WLib.Files</RootNamespace>
@@ -41,6 +41,10 @@
   <ItemGroup>
     <Reference Include="AppLibrary">
       <HintPath>..\DLL\AppLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\DLL\itextsharp.dll</HintPath>

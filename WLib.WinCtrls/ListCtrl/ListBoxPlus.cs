@@ -15,7 +15,7 @@ using System.Windows.Forms;
 using WLib.Data;
 using WLib.Files.Excel.AppLibExcel;
 using WLib.WinCtrls.InputCtrl;
-using WLib.WinForm;
+using WLib.WinCtrls.Extension;
 
 namespace WLib.WinCtrls.ListCtrl
 {
@@ -179,7 +179,7 @@ namespace WLib.WinCtrls.ListCtrl
 
         private void picSearch_Click(object sender, EventArgs e)
         {
-            _searchForm = new InputForm("查找" + ListTitle, "查找", SearchDescription);
+            _searchForm = new InputForm("查找" + ListTitle, SearchDescription, "查找");
             if (_searchForm.ShowDialog() == DialogResult.OK)
             {
                 string keyWord = _searchForm.KeyWord;
@@ -259,13 +259,13 @@ namespace WLib.WinCtrls.ListCtrl
             }
             else if (extension == ".xls")
             {
-                DataTable dt = DataTableOpt.InitDataTable(ListTitle, "选中", ListTitle);
+                DataTable dt = DataTableOpt.CreateTable(ListTitle, "选中", ListTitle);
                 for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 {
                     var strChecked = checkedListBox1.GetItemChecked(i) ? "√" : "×";
                     dt.Rows.Add(strChecked, checkedListBox1.Items[i].ToString());
                 }
-                dt.DataTableToExcel(Path.GetDirectoryName(filePath), Path.GetFileName(filePath));
+                dt.ToExcel(Path.GetDirectoryName(filePath), Path.GetFileName(filePath));
             }
         }
 

@@ -1,4 +1,11 @@
-﻿using ESRI.ArcGIS.Carto;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.GISClient;
 

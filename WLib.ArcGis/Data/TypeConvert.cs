@@ -11,24 +11,27 @@ using System;
 
 namespace WLib.ArcGis.Data
 {
+    /// <summary>
+    /// ArcGIS字段类型和C#数据类型等的互相转换
+    /// </summary>
     public static class TypeConvert
     {
         /// <summary>
-        /// 获取几何类型字符（eg:"Line","Point","Polygon","Polyline","Null"等等）
+        /// 获取几何类型字符（"Line","Point","Polygon","Polyline","Null"等等）
         /// </summary>
         /// <param name="geoType"></param>
         /// <returns></returns>
-        public static string GetGeoTypeStr(esriGeometryType geoType)
+        public static string GetGeoTypeStr(this esriGeometryType geoType)
         {
             return geoType.ToString().Replace("esriGeometry", "");
         }
-        
+
         /// <summary>
         /// 将ArcGIS字段类型，转换成C#相应的数据类型
         /// </summary>
         /// <param name="fieldType">字段类型</param>
         /// <returns></returns>
-        public static Type ParseFieldType(esriFieldType fieldType)
+        public static Type ToCSharpType(this esriFieldType fieldType)
         {
             switch (fieldType)
             {
@@ -59,7 +62,7 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="type">数据类型，一般是long,double,float,int,string,DateTime,IGeometry之一，其他类型将默认当成字符串类型(esriFieldTypeString)</param>
         /// <returns></returns>
-        public static esriFieldType GetesriFieldTypeFromType(Type type)
+        public static esriFieldType ToEsriFieldType(this Type type)
         {
             if (type == typeof(long))
                 return esriFieldType.esriFieldTypeInteger;

@@ -9,9 +9,11 @@ using System;
 using System.Runtime.InteropServices;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesGDB;
+using ESRI.ArcGIS.DataSourcesOleDB;
+using ESRI.ArcGIS.DataSourcesRaster;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
-using WLib.Attributes;
+using WLib.Attributes.Description;
 
 namespace WLib.ArcGis.GeoDatabase.WorkSpace
 {
@@ -35,23 +37,44 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             Marshal.ReleaseComObject(workspaceFactory);
             return workspace;
         }
+
+        /// <summary>
+        /// 创建工作空间（地理数据库）
+        /// </summary>
+        /// <param name="parentDirectory">
+        /// 工作空间所在的父目录，具体为：
+        /// <para>①shp文件所在文件夹再上一层目录，e.g. c:\gis；</para>
+        /// <para>②mdb文件所在文件夹，e.g. c:\gis；</para>
+        /// <para>③dwg文件所在文件夹，e.g. c:\gis；</para>
+        /// <para>④gdb文件夹的上一层目录，e.g. c:\gis；</para>
+        /// </param>
+        /// <param name="strWorkspaceName">
+        /// 工作空间名称，具体为：
+        ///  <para>①shp文件所在文件夹，e.g. testShpFolder；</para>
+        ///  <para>②mdb文件名，e.g. testMdbFile.mdb；</para>
+        ///  <para>③dwg文件所在文件夹，e.g. testCadFolder；</para>
+        ///  <para>④gdb文件夹名，e.g. testGdb.gdb；</para>
+        /// </param>
+        /// <returns></returns>
+        public static IWorkspace NewWorkspace(string parentDirectory, string strWorkspaceName)
+            => NewWorkspace(EWorkspaceType.Default, parentDirectory, strWorkspaceName);
         /// <summary>
         /// 创建工作空间（地理数据库）
         /// </summary>
         /// <param name="eType">工作空间类别</param>
         /// <param name="parentDirectory">
         /// 工作空间所在的父目录，具体为：
-        /// ①shp文件所在文件夹再上一层目录，e.g. c:\gis；
-        /// ②mdb文件所在文件夹，e.g. c:\gis；
-        /// ③dwg文件所在文件夹，e.g. c:\gis；
-        /// ④gdb文件夹的上一层目录，e.g. c:\gis；
+        /// <para>①shp文件所在文件夹再上一层目录，e.g. c:\gis；</para>
+        /// <para>②mdb文件所在文件夹，e.g. c:\gis；</para>
+        /// <para>③dwg文件所在文件夹，e.g. c:\gis；</para>
+        /// <para>④gdb文件夹的上一层目录，e.g. c:\gis；</para>
         /// </param>
         /// <param name="strWorkspaceName">
         /// 工作空间名称，具体为：
-        /// ①shp文件所在文件夹，e.g. testShpFolder；
-        /// ②mdb文件名，e.g. testMdbFile(.mdb)；//去掉扩展名
-        /// ③dwg文件所在文件夹，e.g. testCadFolder；
-        /// ④gdb文件夹名，e.g. testGdb.gdb；
+        ///  <para>①shp文件所在文件夹，e.g. testShpFolder；</para>
+        ///  <para>②mdb文件名，e.g. testMdbFile(.mdb)；</para>
+        ///  <para>③dwg文件所在文件夹，e.g. testCadFolder；</para>
+        ///  <para>④gdb文件夹名，e.g. testGdb(.gdb)；</para>
         /// </param>
         /// <returns></returns>
         public static IWorkspace NewWorkspace(EWorkspaceType eType, string parentDirectory, string strWorkspaceName)
@@ -59,14 +82,23 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             if (eType == EWorkspaceType.Default)
                 eType = GetDefaultWorkspaceType(strWorkspaceName);
 
+            var extension = System.IO.Path.GetExtension(strWorkspaceName);
+            if (!string.IsNullOrEmpty(extension)) strWorkspaceName = strWorkspaceName.Replace(extension, "");
+
             switch (eType)
             {
                 case EWorkspaceType.ShapeFile: return NewWorkspace(new ShapefileWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
                 case EWorkspaceType.FileGDB: return NewWorkspace(new FileGDBWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
                 case EWorkspaceType.Access: return NewWorkspace(new AccessWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
                 case EWorkspaceType.CAD: return NewWorkspace(new CadWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
-                default:
-                    throw new ArgumentException($"未实现创建{eType.GetDescription()}的操作，请联系系统管理员");
+                case EWorkspaceType.InMemory: return NewWorkspace(new InMemoryWorkspaceFactoryClass(), "", strWorkspaceName);
+                case EWorkspaceType.Sde: return NewWorkspace(new SdeWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
+                case EWorkspaceType.Excel: return NewWorkspace(new ExcelWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
+                case EWorkspaceType.TextFile: return NewWorkspace(new TextFileWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
+                case EWorkspaceType.OleDb: return NewWorkspace(new OLEDBWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
+                case EWorkspaceType.Raster: return NewWorkspace(new RasterWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
+                case EWorkspaceType.Sql: return NewWorkspace(new SqlWorkspaceFactoryClass(), parentDirectory, strWorkspaceName);
+                default: throw new ArgumentException($"未实现创建{eType.GetDescription()}的操作，请联系系统管理员");
             }
         }
         /// <summary>

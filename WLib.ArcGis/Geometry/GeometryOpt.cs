@@ -11,6 +11,7 @@ using System.Linq;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.Analysis.OnShape;
 
 namespace WLib.ArcGis.Geometry
 {
@@ -25,7 +26,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="point1"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public static bool IsEqual(IPoint point1, IPoint point2)
+        public static bool IsEqual(this IPoint point1, IPoint point2)
         {
             return point1.X == point2.X && point1.Y == point2.Y;
         }
@@ -59,22 +60,39 @@ namespace WLib.ArcGis.Geometry
             };
         }
         /// <summary>
-        /// 获取几何类型(esriGeometryType)的中文描述
+        /// 获取几何类型<see cref="esriGeometryType"/>的中文描述
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string GetGeometryTypeCnName(esriGeometryType type)
+        public static string GetGeometryTypeCnName(this esriGeometryType type)
         {
             string typeName;
             switch (type)
             {
                 case esriGeometryType.esriGeometryPoint: typeName = "点"; break;
-                case esriGeometryType.esriGeometryPolyline: typeName = "折线"; break;
+                case esriGeometryType.esriGeometryPolyline: typeName = "线"; break;
                 case esriGeometryType.esriGeometryPolygon: typeName = "面"; break;
                 case esriGeometryType.esriGeometryMultipoint: typeName = "多点"; break;
                 default: typeName = type.ToString().Replace("esriGeometry", ""); break;
             }
             return typeName;
+        }
+        /// <summary>
+        /// 获取几何图形的面积
+        /// <para>参数<paramref name="nullAreaException"/>代表获取面积失败是抛出异常(True)还是返回0(False)</para>
+        /// </summary>
+        /// <param name="geometry">要获取面积的几何图形</param>
+        /// <param name="nullAreaException">获取面积失败是否抛出异常：True-抛出异常；False-返回0</param>
+        /// <returns></returns>
+        public static double GetArea(this IGeometry geometry, bool nullAreaException = true)
+        {
+            IArea iArea = geometry as IArea;
+            if (iArea == null)
+            {
+                if (nullAreaException) throw new Exception("无法获取图斑面积，请确保图斑为面图斑，且不为空");
+                else return 0.0;
+            }
+            return iArea.Area;
         }
 
 
@@ -136,7 +154,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="feature">要平移的对象</param>
         /// <param name="dx">在x方向上的平移量</param>
         /// <param name="dy">在y方向上的平移量</param>
-        public static void MoveGeometry(IFeature feature, double dx, double dy)
+        public static void MoveGeometry(this IFeature feature, double dx, double dy)
         {
             ITransform2D transform2D = feature.Shape as ITransform2D;
             transform2D.Move(dx, dy);
@@ -147,7 +165,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="element">要平移的对象</param>
         /// <param name="dx">在x方向上的平移量</param>
         /// <param name="dy">在y方向上的平移量</param>
-        public static void MoveGeometry(IElement element, double dx, double dy)
+        public static void MoveGeometry(this IElement element, double dx, double dy)
         {
             ITransform2D transform2D = element.Geometry as ITransform2D;
             transform2D.Move(dx, dy);
@@ -159,7 +177,7 @@ namespace WLib.ArcGis.Geometry
         /// <param name="geometry">要平移的对象</param>
         /// <param name="dx">在x方向上的平移量</param>
         /// <param name="dy">在y方向上的平移量</param>
-        public static void MoveGeometry(IGeometry geometry, double dx, double dy)
+        public static void MoveGeometry(this IGeometry geometry, double dx, double dy)
         {
             ITransform2D transform2D = geometry as ITransform2D;
             transform2D.Move(dx, dy);
@@ -167,9 +185,19 @@ namespace WLib.ArcGis.Geometry
         #endregion
 
 
-        #region 多边形的多部分
+        #region 是否多部分
         /// <summary>
-        /// 多边形是否由多部分组成（即是否多个外环）
+        /// 几何图形是否由多部分组成(多部件)
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <returns></returns>
+        public static bool IsMultiPart(this IGeometry geometry)
+        {
+            IGeometryCollection geometryCollection = geometry as IGeometryCollection;
+            return geometryCollection.GeometryCount > 1;
+        }
+        /// <summary>
+        /// 多边形是否由多部分组成(即是否多个外环)
         /// </summary>
         /// <param name="polygon"></param>
         /// <returns></returns>
@@ -179,6 +207,17 @@ namespace WLib.ArcGis.Geometry
             IGeometryCollection exteriorRingGeometryCollection = exteriorRingGeometryBag as IGeometryCollection;
             return exteriorRingGeometryCollection.GeometryCount > 1;
         }
+        /// <summary>
+        /// 几何图形是否由多部分组成(多部件)
+        /// </summary>
+        /// <param name="polyline"></param>
+        /// <returns></returns>
+        public static bool IsMultiPart(this IPolyline polyline)
+        {
+            IGeometryCollection geometryCollection = polyline as IGeometryCollection;
+            return geometryCollection.GeometryCount > 1;
+        }
+
         /// <summary>
         /// 多部分(多外环)的多边形转成多个单部分的多边形
         /// </summary>
@@ -240,7 +279,7 @@ namespace WLib.ArcGis.Geometry
 
         #region 构造线
         /// <summary>
-        /// 通过起点坐标和终点坐标创建线段（IPolyline对象）
+        /// 通过起点坐标和终点坐标创建线段(IPolyline对象)
         /// </summary>
         /// <param name="x1">起点x坐标</param>
         /// <param name="y1">起点y坐标</param>
@@ -261,14 +300,14 @@ namespace WLib.ArcGis.Geometry
             return CreatePolyline(pt1, pt2);
         }
         /// <summary>
-        /// 通过起点和终点创建线段（IPolyline对象）
+        /// 通过起点和终点创建线段(IPolyline对象)
         /// </summary>
         /// <param name="pt1">起点</param>
         /// <param name="pt2">终点</param>
         /// <returns></returns>
         public static IPolyline CreatePolyline(IPoint pt1, IPoint pt2)
         {
-            //a. 创建Line对象（也可是其他Segment对象），
+            //a. 创建Line对象(也可是其他Segment对象)，
             //b. QI到Segment对象
             //c. 创建Path对象，通过Path的addSegment，将最初的Line添加进Path中
             //d. 创建GeometryCollection对象，通过AddGeometry，将path添加进GeometryCollection中
@@ -291,7 +330,7 @@ namespace WLib.ArcGis.Geometry
             return resultPolyline;
         }
         /// <summary>
-        /// 通过点集创建线段（IPolyline对象）
+        /// 通过点集创建线段(IPolyline对象)
         /// </summary>
         /// <param name="pts"></param>
         /// <returns></returns>
@@ -318,28 +357,52 @@ namespace WLib.ArcGis.Geometry
 
         #region 构造面
         /// <summary>
-        /// 通过点集构成多边形
+        /// 通过点集构成多边形(只适用单环多边形)
         /// </summary>
-        /// <param name="pointList"></param>
+        /// <param name="points">按顺序构成一个环的点集</param>
         /// <returns></returns>
-        public static IPolygon CreatePolygon(List<IPoint> pointList)
+        public static IPolygon CreatePolygon(IEnumerable<double[]> points)
         {
-            if (pointList.Count < 3)
+            List<IPoint> iPoints = new List<IPoint>();
+            foreach (var pt in points)
+                iPoints.Add(new PointClass { X = pt[0], Y = pt[1] });
+
+            return CreatePolygon(iPoints);
+        }
+        /// <summary>
+        /// 通过点集构成多边形(只适用单环多边形)
+        /// </summary>
+        /// <param name="pointList">按顺序构成一个环的点集</param>
+        /// <returns></returns>
+        public static IPolygon CreatePolygon(IEnumerable<IPoint> pointList)
+        {
+            if (pointList.Count() < 3)
                 throw new Exception("地块点数小于3，不能构成多边形！");
 
             IGeometryCollection pointPolygon = new PolygonClass();
             Ring ring = new RingClass();
             object missing = Type.Missing;
-            for (int i = 0; i < pointList.Count; i++)
+            foreach (var pt in pointList)
             {
-                ring.AddPoint(pointList[i], ref missing, ref missing);
+                ring.AddPoint(pt, ref missing, ref missing);
             }
+
             pointPolygon.AddGeometry(ring as IGeometry, ref missing, ref missing);
             IPolygon polygon = pointPolygon as IPolygon;
             polygon.SimplifyPreserveFromTo();
 
             return polygon;
         }
+        #endregion
+
+
+        #region 合并图斑
+        /// <summary>
+        /// 将多个图形合并(Union)成一个图形
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("请直接使用 WLib.ArcGis.Analysis.OnShape.TopologicalOpt.UnionGeometryEx 等方法")]
+        public static IGeometry UnionGeometry(this IEnumerable<IGeometry> geometries) => TopologicalOpt.UnionGeometryEx(geometries);
         #endregion
     }
 }

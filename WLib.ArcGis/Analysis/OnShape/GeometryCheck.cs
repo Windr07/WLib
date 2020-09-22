@@ -11,6 +11,7 @@ namespace WLib.ArcGis.Analysis.OnShape
 {
     //参考：http://blog.csdn.net/yh0503/article/details/52432193
     //参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000
+    //代码参考：WLib.ArcGis.Analysis.OnShape.GeometryCheckInfo.GetGeometryCheckInfos()
     //检查几何：ArcToolbox->Datamanagement tools->features->check geometry
     //修复几何：ArcToolbox->Datamanagement tools->features->repair geometry
     //检查和修复几何处理以下问题【esriNonSimpleReasonEnum】：
@@ -40,7 +41,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         {
             ITopologicalOperator3 topologicalOperator = (ITopologicalOperator3)geometry;
             topologicalOperator.IsKnownSimple_2 = false;//布尔型，指示此几何图形是否是已知的（或假设）是拓扑正确。这里赋值false,就是非已知的几何图形
-
+            
             //reason枚举参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000
             //返回布尔值，指示该几何图形是否为简单的。如果返回的是false，则可以对输出的"reason"参数检查审查
             if (!topologicalOperator.get_IsSimpleEx(out var reason))
@@ -53,10 +54,10 @@ namespace WLib.ArcGis.Analysis.OnShape
 
         /// <summary>
         /// 判断图形是否存在指定几何错误，
-        /// 根据esriNonSimpleReasonEnum可判断的几何错误有：自相交、空几何、非闭合环、不正确环走向、不正确线段方向、短线段等
+        /// 根据<see cref="esriNonSimpleReasonEnum"/>可判断的几何错误有：自相交、非闭合环、不正确环走向、不正确线段方向、短线段等
         /// </summary>
         /// <param name="geometry"></param>
-        /// <param name="eNonSimpleReason">几何错误情况枚举，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 </param>
+        /// <param name="eNonSimpleReason">几何错误类型，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 ，或参考<see cref="GeometryCheckInfo.GetGeometryCheckInfos"/></param>
         /// <returns>True表示存在指定几何错误，False表示不存在指定几何错误</returns>
         public static bool Check(this IGeometry geometry, esriNonSimpleReasonEnum eNonSimpleReason)
         {
@@ -69,6 +70,25 @@ namespace WLib.ArcGis.Analysis.OnShape
                     return true;
             }
             return false;
+        }
+        /// <summary>
+        /// 判断图形是否存在几何错误， 
+        /// <para>True表示存在错误，False表示未检查出错误，</para>
+        /// <para>esriNonSimpleReasonEnum参数表示检查出的错误类型（自相交、非闭合环、不正确环走向、不正确线段方向、短线段等）</para>
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="eNonSimpleReason">几何错误类型，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 ，或参考<see cref="GeometryCheckInfo.GetGeometryCheckInfos"/></param>
+        /// <returns>True表示存在指定几何错误，False表示不存在指定几何错误</returns>
+        public static bool Check(this IGeometry geometry, out esriNonSimpleReasonEnum eNonSimpleReason)
+        {
+            ITopologicalOperator3 topologicalOperator = (ITopologicalOperator3)geometry;
+            topologicalOperator.IsKnownSimple_2 = false;//布尔型，指示此几何图形是否是已知的（或假设）是拓扑正确。这里赋值false,就是非已知的几何图形
+
+            eNonSimpleReason = esriNonSimpleReasonEnum.esriNonSimpleOK;
+            if (!topologicalOperator.get_IsSimpleEx(out var reason))//返回布尔值，指示该几何图形是否为简单的。如果返回的是false，则可以对输出的"reason"参数检查审查
+                eNonSimpleReason = reason;
+
+            return eNonSimpleReason != esriNonSimpleReasonEnum.esriNonSimpleOK;
         }
     }
 }

@@ -16,16 +16,16 @@ namespace WLib.Samples.WinForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //licenseInitializer.InitializeApplication(
-            //    new[] {
-            //        esriLicenseProductCode.esriLicenseProductCodeAdvanced
-            //    },
-            //    new[] {
-            //        esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork,
-            //        esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
-            //    });
+            licenseInitializer.InitializeApplication(
+                new[] {
+                    esriLicenseProductCode.esriLicenseProductCodeAdvanced
+                },
+                new[] {
+                    esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork,
+                    esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
+                });
 
-            ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+            //ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             Application.Run(new MainForm());
             //Application.Run(new OleDbQueryForm());
             //Application.Run(new ExportMapForm());

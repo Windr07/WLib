@@ -244,7 +244,7 @@ namespace WLib.WinCtrls
         /// </summary>
         [MergableProperty(false)]
         [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
-        [DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Visible)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [Localizable(true)]
         [Description("设置或获取合并列的集合，该列的单元格相同的值会自动合并"), Browsable(true), Category("单元格合并")]
         public List<string> MergeColumnNames { get; set; } = new List<string>();
@@ -253,7 +253,7 @@ namespace WLib.WinCtrls
         /// 二维表头的背景颜色
         /// </summary>
         [Description("二维表头的背景颜色"), Browsable(true), Category("二维表头")]
-        public Color MergeColumnHeaderBackColor { get; set; } = System.Drawing.SystemColors.Control;
+        public Color MergeColumnHeaderBackColor { get; set; } = SystemColors.Control;
         #endregion
 
         #region 二维表头

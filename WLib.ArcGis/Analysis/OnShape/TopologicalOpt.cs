@@ -11,6 +11,7 @@ using System.Linq;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using WLib.ArcGis.GeoDatabase.FeatClass;
+using WLib.ArcGis.Geometry;
 
 namespace WLib.ArcGis.Analysis.OnShape
 {
@@ -59,23 +60,21 @@ namespace WLib.ArcGis.Analysis.OnShape
 
         #region 获取相交面积
         /// <summary>
-        /// 将多个要素分别与指定图形进行相交，获得相交面积最大的要素
+        /// 将多个面要素分别与指定面图形进行相交，获得相交面积最大的要素
         /// </summary>
         /// <param name="features">进行相交筛选多个要素</param>
         /// <param name="geometry">作为筛选条件的图形</param>
         /// <param name="maxInsectArea">相交面积最大的要素的面积</param>
         /// <returns></returns>
-        public static IFeature GetMaxIntersectFeature(this IEnumerable<IFeature> features, IGeometry geometry, out double maxInsectArea)
+        public static IFeature GetMaxAreaIntersectFeature(this IEnumerable<IFeature> features, IGeometry geometry, out double maxInsectArea)
         {
-            if (!(geometry is ITopologicalOperator logicalOpt))
-                throw new Exception($"参数{nameof(geometry)}（作为筛选条件的图形）不能为空！");
-
+            var logicalOpt = ValidateGeometryParams(features, geometry);
             IFeature maxInsectFeature = null; //相交面积最大的辅助地块
             maxInsectArea = 0.0;
             foreach (var feature in features)
             {
                 IGeometry intersectGeo = logicalOpt.Intersect(feature.Shape, esriGeometryDimension.esriGeometry2Dimension);
-                if (intersectGeo == null || intersectGeo.IsEmpty || intersectGeo.Dimension != esriGeometryDimension.esriGeometry2Dimension)
+                if (intersectGeo == null || intersectGeo.IsEmpty)
                     continue;
 
                 double area = ((IArea)intersectGeo).Area;
@@ -88,26 +87,85 @@ namespace WLib.ArcGis.Analysis.OnShape
             return maxInsectFeature;
         }
         /// <summary>
-        /// 将多个图形分别与指定图形进行相交，获得相交面积最大的要素
+        /// 将多个面图形分别与指定面图形进行相交，获得相交面积最大的要素
         /// </summary>
         /// <param name="geometries">进行相交筛选多个图形</param>
         /// <param name="geometry">作为筛选条件的图形</param>
         /// <param name="maxInsectArea">相交面积最大的图形的面积</param>
         /// <returns></returns>
-        public static IGeometry GetMaxIntersectGeometry(this IEnumerable<IGeometry> geometries, IGeometry geometry, out double maxInsectArea)
+        public static IGeometry GetMaxAreaIntersectGeometry(this IEnumerable<IGeometry> geometries, IGeometry geometry, out double maxInsectArea)
         {
-            if (!(geometry is ITopologicalOperator logicalOpt))
-                throw new Exception($"参数{nameof(geometry)}作为筛选条件的图形）不能为空！");
-
+            var logicalOpt = ValidateGeometryParams(geometries, geometry);
             IGeometry maxInsectGeometry = null; //相交面积最大的辅助地块
             maxInsectArea = 0.0;
             foreach (var tmpGeometry in geometries)
             {
                 IGeometry intersectGeo = logicalOpt.Intersect(tmpGeometry, esriGeometryDimension.esriGeometry2Dimension);
+                if (intersectGeo == null || intersectGeo.IsEmpty)
+                    continue;
+
                 double area = ((IArea)intersectGeo).Area;
                 if (area > maxInsectArea)
                 {
                     maxInsectArea = area;
+                    maxInsectGeometry = tmpGeometry;
+                }
+            }
+            return maxInsectGeometry;
+        }
+        #endregion
+
+
+        #region 获取相交长度
+        /// <summary>
+        /// 将多个图形分别与指定线图形进行相交，获得相交长度最大的要素
+        /// </summary>
+        /// <param name="features">进行相交筛选多个要素</param>
+        /// <param name="geometry">作为筛选条件的图形</param>
+        /// <param name="maxInsectLength">相交长度最大的图形的长度</param>
+        /// <returns></returns>
+        public static IFeature GetMaxLengthIntersectFeature(this IEnumerable<IFeature> features, IGeometry geometry, out double maxInsectLength)
+        {
+            var logicalOpt = ValidateGeometryParams(features, geometry);
+            IFeature maxInsectFeature = null; //相交面积最大的辅助地块
+            maxInsectLength = 0.0;
+            foreach (var feature in features)
+            {
+                IGeometry intersectGeo = logicalOpt.Intersect(feature.Shape, esriGeometryDimension.esriGeometry1Dimension);
+                if (intersectGeo == null || intersectGeo.IsEmpty)
+                    continue;
+
+                double length = (intersectGeo as IPolyline).Length;
+                if (length > maxInsectLength)
+                {
+                    maxInsectLength = length;
+                    maxInsectFeature = feature;
+                }
+            }
+            return maxInsectFeature;
+        }
+        /// <summary>
+        /// 将多个图形分别与指定线图形进行相交，获得相交长度最大的要素
+        /// </summary>
+        /// <param name="geometries">进行相交筛选多个图形</param>
+        /// <param name="geometry">作为筛选条件的图形</param>
+        /// <param name="maxInsectLength">相交长度最大的图形的长度</param>
+        /// <returns></returns>
+        public static IGeometry GetMaxLengthIntersectGeometry(this IEnumerable<IGeometry> geometries, IGeometry geometry, out double maxInsectLength)
+        {
+            var logicalOpt = ValidateGeometryParams(geometries, geometry);
+            IGeometry maxInsectGeometry = null; //相交面积最大的辅助地块
+            maxInsectLength = 0.0;
+            foreach (var tmpGeometry in geometries)
+            {
+                IGeometry intersectGeo = logicalOpt.Intersect(tmpGeometry, esriGeometryDimension.esriGeometry1Dimension);
+                if (intersectGeo == null || intersectGeo.IsEmpty)
+                    continue;
+
+                double length = (intersectGeo as IPolyline).Length;
+                if (length > maxInsectLength)
+                {
+                    maxInsectLength = length;
                     maxInsectGeometry = tmpGeometry;
                 }
             }
@@ -169,6 +227,16 @@ namespace WLib.ArcGis.Analysis.OnShape
             return UnionGeometryEx(geometryBag, geometries.First().GeometryType);
         }
         /// <summary>
+        /// 将多个要素中的图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
+        /// </summary>
+        /// <param name="features"></param>
+        /// <param name="geometryType"></param>
+        /// <returns></returns>
+        public static IGeometry UnionGeometryEx(this IEnumerable<IFeature> features)
+        {
+            return UnionGeometryEx(features.Select(v => v.Shape));
+        }
+        /// <summary>
         /// 将多个图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
         /// </summary>
         /// <param name="geometryBag"></param>
@@ -176,25 +244,53 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <returns></returns>
         private static IGeometry UnionGeometryEx(this IGeometry geometryBag, esriGeometryType geometryType)
         {
-            ITopologicalOperator unionedGeometry;
+            ITopologicalOperator geomerty;
             switch (geometryType)
             {
-                case esriGeometryType.esriGeometryPoint:
-                    unionedGeometry = new PointClass();
-                    break;
-                case esriGeometryType.esriGeometryPolyline:
-                    unionedGeometry = new PolylineClass();
-                    break;
-                case esriGeometryType.esriGeometryPolygon:
-                    unionedGeometry = new PolygonClass();
-                    break;
-                default:
-                    throw new NotImplementedException($"几何类型({nameof(geometryType)})应是点(point)、线(polyline)、多边形(polygon)之一，未实现{geometryType}类型的图形合并（Union）！");
+                case esriGeometryType.esriGeometryPoint: geomerty = new PointClass(); break;
+                case esriGeometryType.esriGeometryPolyline: geomerty = new PolylineClass(); break;
+                case esriGeometryType.esriGeometryPolygon: geomerty = new PolygonClass(); break;
+                default: throw new NotImplementedException($"几何类型({nameof(geometryType)})应是点(point)、线(polyline)、多边形(polygon)之一，未实现{geometryType}类型的图形合并（Union）！");
             }
 
-            unionedGeometry.ConstructUnion(geometryBag as IEnumGeometry);
-            return (IGeometry)unionedGeometry;
+            geomerty.ConstructUnion(geometryBag as IEnumGeometry);
+            return (IGeometry)geomerty;
         }
         #endregion
+
+
+        /// <summary>
+        /// 验证几何参数是否正确，包括参数不能为空、图形不能为空、坐标系一致
+        /// </summary>
+        /// <param name="geometries"></param>
+        /// <param name="geometry"></param>
+        /// <param name="dimensioin"></param>
+        /// <returns></returns>
+        private static ITopologicalOperator ValidateGeometryParams(IEnumerable<IGeometry> geometries, IGeometry geometry)
+        {
+            if (!(geometry is ITopologicalOperator logicalOpt))
+                throw new Exception($"参数{nameof(geometry)}作为筛选条件的图形）不能为空！");
+            if (geometries == null || geometries.Count() == 0)
+                throw new ArgumentException($"参数{nameof(geometries)}为空，或者元素个数为0！");
+            if (!geometry.SpatialReference.CheckSpatialRef(geometries.First().SpatialReference, out var message))//验证坐标系是否一致
+                throw new Exception(message);
+            return logicalOpt;
+        }
+        /// <summary>
+        /// 验证几何参数是否正确，包括参数不能为空、图形不能为空、坐标系一致
+        /// </summary>
+        /// <param name="features"></param>
+        /// <param name="geometry"></param>
+        /// <returns></returns>
+        private static ITopologicalOperator ValidateGeometryParams(IEnumerable<IFeature> features, IGeometry geometry)
+        {
+            if (!(geometry is ITopologicalOperator logicalOpt))
+                throw new Exception($"参数{nameof(geometry)}（作为筛选条件的图斑）不能为空！");
+            if (features == null || features.Count() == 0)
+                throw new ArgumentException($"参数{nameof(features)}为空，或者元素个数为0！");
+            if (!geometry.SpatialReference.CheckSpatialRef(features.First().Shape.SpatialReference, out var message))//验证坐标系是否一致
+                throw new Exception(message);
+            return logicalOpt;
+        }
     }
 }

@@ -36,9 +36,9 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         /// <summary>
         /// 添加出图元素信息
         /// </summary>
-        /// <param name="name">元素名称或元素标识</param>
+        /// <param name="name">元素名称或元素文本标识</param>
         /// <param name="type">元素类别</param>
         /// <param name="value">元素内容</param>
-        public void Add(string name, EPageElementType type, object value) => base.Add(new ElementInfo(name, type, value));
+        public void Add(string name, EPageElementType type, object value) => Add(new ElementInfo(name, type, value));
 }
 }

@@ -21,23 +21,23 @@ namespace WLib.Database.TableInfo
         /// <summary>
         /// 获取指定字段对应字典表的指定名称对应的编码
         /// </summary>
-        /// <param name="tableFields"></param>
+        /// <param name="table"></param>
         /// <param name="fieldName">表中的字段，该字段关联字典表</param>
         /// <param name="name">字典表中的值（即名称）</param>
         /// <returns></returns>
-        public static string GetDictionaryCode(this TableStructure tableFields, string fieldName, string name)
+        public static string GetDictionaryCode(this TableStructure table, string fieldName, string name)
         {
-            return tableFields.Fields.First(v => v.Name.Equals(fieldName)).DictionaryTable.CodeNameDict.FirstOrDefault(v => v.Value.Equals(name)).Key;
+            return table.Fields.First(v => v.Name.Equals(fieldName)).DictionaryTable.CodeNameDict.FirstOrDefault(v => v.Value.Equals(name)).Key;
         }
         /// <summary>
         /// 获取指定字段对应字典表的全部值（名称）
         /// </summary>
-        /// <param name="tableFields">表</param>
+        /// <param name="table">表</param>
         /// <param name="fieldName">表中的字段，该字段关联字典表</param>
         /// <returns></returns>
-        public static string[] GetDictionaryValues(this TableStructure tableFields, string fieldName)
+        public static string[] GetDictionaryValues(this TableStructure table, string fieldName)
         {
-            return tableFields.Fields.First(v => v.Name.Equals(fieldName)).DictionaryTable.CodeNameDict.Values.ToArray();
+            return table.Fields.First(v => v.Name.Equals(fieldName)).DictionaryTable.CodeNameDict.Values.ToArray();
         }
         #endregion
 
@@ -50,7 +50,7 @@ namespace WLib.Database.TableInfo
         /// <param name="whereClause">筛选条件，可空</param>
         /// <param name="orderByString">排序语句，此值为null时根据UPDATEDATE排序</param>
         /// <returns></returns>
-        public static DataTable QueryTable(DbHelper dbHelper, TableStructure tableStructure, string whereClause, string orderByString)
+        public static DataTable QueryTable(this TableStructure tableStructure, DbHelper dbHelper, string whereClause, string orderByString)
         {
             if (string.IsNullOrWhiteSpace(whereClause))
                 whereClause = "1=1";
@@ -67,12 +67,12 @@ namespace WLib.Database.TableInfo
         /// 根据条件查询表
         /// </summary>
         /// <param name="dbHelper">数据库帮助类</param>
-        /// <param name="tableStructure">表结构</param>
+        /// <param name="table">表结构</param>
         /// <param name="fieldClass">条件筛选的字段</param>
         /// <param name="fieldValue">条件筛选的字段值，可空</param>
         /// <param name="orderByString">排序语句，此值为null时根据UPDATEDATE排序</param>
         /// <returns></returns>
-        public static DataTable QueryTable(DbHelper dbHelper, TableStructure tableStructure, FieldClass fieldClass, string fieldValue, string orderByString)
+        public static DataTable QueryTable(this TableStructure table, DbHelper dbHelper, FieldClass fieldClass, string fieldValue, string orderByString)
         {
             string whereClause = null;
             if (!string.IsNullOrEmpty(fieldValue))
@@ -84,21 +84,21 @@ namespace WLib.Database.TableInfo
                 else
                     whereClause = $"{fieldClass.Name} = {fieldValue}";
             }
-            return QueryTable(dbHelper, tableStructure, whereClause, orderByString);
+            return QueryTable(table, dbHelper, whereClause, orderByString);
         }
         /// <summary>
         /// 根据条件查询表
         /// </summary>
         /// <param name="dbHelper">数据库帮助类</param>
-        /// <param name="tableStructure">表结构</param>
+        /// <param name="table">表结构</param>
         /// <param name="fieldName">条件筛选的字段</param>
         /// <param name="fieldValue">条件筛选的字段值，可空</param>
         /// <param name="orderbyString">排序语句，此值为null时根据UPDATEDATE排序</param>
         /// <returns></returns>
-        public static DataTable QueryTable(DbHelper dbHelper, TableStructure tableStructure, string fieldName, string fieldValue, string orderbyString)
+        public static DataTable QueryTable(TableStructure table, DbHelper dbHelper, string fieldName, string fieldValue, string orderbyString)
         {
-            FieldClass fieldClass = tableStructure.Fields.FirstOrDefault(v => v.Name == fieldName);
-            return QueryTable(dbHelper, tableStructure, fieldClass, fieldValue, orderbyString);
+            FieldClass fieldClass = table.Fields.FirstOrDefault(v => v.Name == fieldName);
+            return QueryTable(table, dbHelper, fieldClass, fieldValue, orderbyString);
         }
 
 
@@ -160,9 +160,7 @@ namespace WLib.Database.TableInfo
         public static void FormatGuid(DataTable dataTable, string guidFieldName)
         {
             foreach (DataRow row in dataTable.Rows)
-            {
                 row[guidFieldName] = row[guidFieldName].ToString().Replace("{", "").Replace("}", "").Replace("-", "");
-            }
         }
         /// <summary>
         /// 将表格中的38位或36位格式的GUID改成32位

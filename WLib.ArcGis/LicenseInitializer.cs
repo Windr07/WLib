@@ -1,3 +1,10 @@
+/*---------------------------------------------------------------- 
+// auth： ArcGIS.com
+// date： None
+// desc： ArcGIS License Initializer
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
 using System;
 using System.Windows.Forms;
 using ESRI.ArcGIS;
@@ -24,7 +31,23 @@ namespace WLib.ArcGis
      */
 
     /// <summary>
-    /// 初始化ARCGIS许可
+    /// 初始化ARCGIS运行环境许可：
+    /// <para>
+    /// private static LicenseInitializer licenseInitializer = new LicenseInitializer();
+    /// 
+    /// //Main Method：
+    /// licenseInitializer.InitializeApplication(
+    ///     new[]
+    ///     {
+    ///         /* 此处绑定Advanced/Desktop后不要再绑定其他权限，若绑定Engine权限有些GP工具无法使用 */
+    ///         esriLicenseProductCode.esriLicenseProductCodeAdvanced
+    ///     },
+    ///     new[]
+    ///     {
+    ///         esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
+    ///         esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork
+    ///     });
+    /// </para>
     /// </summary>
     public partial class LicenseInitializer
     {
@@ -34,6 +57,11 @@ namespace WLib.ArcGis
         public LicenseInitializer()
         {
             ResolveBindingEvent += BindingArcGISRuntime;
+        }
+
+        public void InitializeApplication(object[] p1, object[] p2)
+        {
+            throw new NotImplementedException();
         }
 
         private void BindingArcGISRuntime(object sender, EventArgs e)

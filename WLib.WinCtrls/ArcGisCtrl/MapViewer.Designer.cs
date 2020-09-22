@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapViewer));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.TableListBox = new WLib.WinCtrls.ArcGisCtrl.TableListBox();
             this.TocControl = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.tocGroupControl = new System.Windows.Forms.Panel();
             this.lblTocTips = new System.Windows.Forms.Label();
@@ -42,10 +41,12 @@
             this.EagleMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.ViewerTabControl = new System.Windows.Forms.TabControl();
             this.xtpMapView = new System.Windows.Forms.TabPage();
+            this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.MainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.MapNavigationTools = new WLib.WinCtrls.ArcGisCtrl.MapNavigationTools();
             this.xtpPageLayout = new System.Windows.Forms.TabPage();
             this.PageLayoutControl = new ESRI.ArcGIS.Controls.AxPageLayoutControl();
+            this.TableListBox = new WLib.WinCtrls.ArcGisCtrl.TableListBox();
+            this.MapNavigationTools = new WLib.WinCtrls.ArcGisCtrl.MapNavigationTools();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -59,6 +60,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.EagleMapControl)).BeginInit();
             this.ViewerTabControl.SuspendLayout();
             this.xtpMapView.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MainMapControl)).BeginInit();
             this.xtpPageLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PageLayoutControl)).BeginInit();
@@ -101,16 +103,6 @@
             this.splitContainer2.Size = new System.Drawing.Size(255, 537);
             this.splitContainer2.SplitterDistance = 335;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // TableListBox
-            // 
-            this.TableListBox.AttributeForm = null;
-            this.TableListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TableListBox.Location = new System.Drawing.Point(0, 0);
-            this.TableListBox.Name = "TableListBox";
-            this.TableListBox.Size = new System.Drawing.Size(255, 335);
-            this.TableListBox.TabIndex = 2;
-            this.TableListBox.Visible = false;
             // 
             // TocControl
             // 
@@ -211,14 +203,24 @@
             // xtpMapView
             // 
             this.xtpMapView.BackColor = System.Drawing.Color.Transparent;
-            this.xtpMapView.Controls.Add(this.MainMapControl);
             this.xtpMapView.Controls.Add(this.MapNavigationTools);
+            this.xtpMapView.Controls.Add(this.axLicenseControl1);
+            this.xtpMapView.Controls.Add(this.MainMapControl);
             this.xtpMapView.Location = new System.Drawing.Point(4, 4);
             this.xtpMapView.Name = "xtpMapView";
             this.xtpMapView.Padding = new System.Windows.Forms.Padding(3);
             this.xtpMapView.Size = new System.Drawing.Size(660, 511);
             this.xtpMapView.TabIndex = 0;
             this.xtpMapView.Text = "地图";
+            // 
+            // axLicenseControl1
+            // 
+            this.axLicenseControl1.Enabled = true;
+            this.axLicenseControl1.Location = new System.Drawing.Point(167, 207);
+            this.axLicenseControl1.Name = "axLicenseControl1";
+            this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
+            this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
+            this.axLicenseControl1.TabIndex = 2;
             // 
             // MainMapControl
             // 
@@ -228,16 +230,6 @@
             this.MainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MainMapControl.OcxState")));
             this.MainMapControl.Size = new System.Drawing.Size(654, 505);
             this.MainMapControl.TabIndex = 0;
-            // 
-            // MapNavigationTools
-            // 
-            this.MapNavigationTools.BackColor = System.Drawing.Color.Transparent;
-            this.MapNavigationTools.CurrentTool = WLib.ArcGis.Control.MapAssociation.EMapTools.None;
-            this.MapNavigationTools.Location = new System.Drawing.Point(6, 6);
-            this.MapNavigationTools.MapControl = this.MainMapControl;
-            this.MapNavigationTools.Name = "MapNavigationTools";
-            this.MapNavigationTools.Size = new System.Drawing.Size(255, 66);
-            this.MapNavigationTools.TabIndex = 1;
             // 
             // xtpPageLayout
             // 
@@ -258,6 +250,25 @@
             this.PageLayoutControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("PageLayoutControl.OcxState")));
             this.PageLayoutControl.Size = new System.Drawing.Size(654, 505);
             this.PageLayoutControl.TabIndex = 0;
+            // 
+            // TableListBox
+            // 
+            this.TableListBox.AttributeForm = null;
+            this.TableListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TableListBox.Location = new System.Drawing.Point(0, 0);
+            this.TableListBox.Name = "TableListBox";
+            this.TableListBox.Size = new System.Drawing.Size(255, 335);
+            this.TableListBox.TabIndex = 2;
+            this.TableListBox.Visible = false;
+            // 
+            // mapNavigationTools1
+            // 
+            this.MapNavigationTools.BackColor = System.Drawing.Color.Transparent;
+            this.MapNavigationTools.Location = new System.Drawing.Point(6, 6);
+            this.MapNavigationTools.MapControl = null;
+            this.MapNavigationTools.Name = "mapNavigationTools1";
+            this.MapNavigationTools.Size = new System.Drawing.Size(252, 24);
+            this.MapNavigationTools.TabIndex = 3;
             // 
             // MapViewer
             // 
@@ -280,6 +291,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.EagleMapControl)).EndInit();
             this.ViewerTabControl.ResumeLayout(false);
             this.xtpMapView.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MainMapControl)).EndInit();
             this.xtpPageLayout.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PageLayoutControl)).EndInit();
@@ -300,11 +312,12 @@
         private System.Windows.Forms.Button btnSwitchContent;
         private System.Windows.Forms.Button btnExpand;
         private System.Windows.Forms.Button btnCollapsed;
-        public MapNavigationTools MapNavigationTools;
         public ESRI.ArcGIS.Controls.AxTOCControl TocControl;
         public ESRI.ArcGIS.Controls.AxMapControl EagleMapControl;
         public ESRI.ArcGIS.Controls.AxMapControl MainMapControl;
         public TableListBox TableListBox;
         private System.Windows.Forms.Label lblTocTips;
+        private ESRI.ArcGIS.Controls.AxLicenseControl axLicenseControl1;
+        public MapNavigationTools MapNavigationTools;
     }
 }

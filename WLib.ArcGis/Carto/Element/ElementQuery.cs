@@ -364,7 +364,7 @@ namespace WLib.ArcGis.Carto.Element
         /// </summary>
         /// <param name="graphicsContainer">图形容器</param>
         /// <param name="mapName">地图(数据框)名称</param>
-        /// <returns></returns>
+        /// <returns>返回第一个符合指定名称的地图数据框，找不到则返回null</returns>
         public static IMapFrame GetMapFrame(this IGraphicsContainer graphicsContainer, string mapName)
         {
             IMapFrame mapFrame = null;
@@ -384,6 +384,28 @@ namespace WLib.ArcGis.Carto.Element
                 }
             }
             return mapFrame;
+        }
+        /// <summary>
+        /// 返回图形容器中的第一个地图数据框
+        /// </summary>
+        /// <param name="graphicsContainer">图形容器</param>
+        /// <returns>返回图形容器中的第一个地图数据框，找不到则返回null</returns>
+        public static IMapFrame GetMapFrame(this IGraphicsContainer graphicsContainer)
+        {
+            graphicsContainer.Reset();
+            for (IElement element = graphicsContainer.Next(); element != null; element = graphicsContainer.Next())
+            {
+                if (element is IGroupElement groupElement)
+                {
+                    element = GetElements(groupElement).FirstOrDefault(v => v is IMapFrame);
+                    if (element != null)
+                        return element as IMapFrame;
+                }
+
+                if (element is IMapFrame frame)
+                    return frame;
+            }
+            return null;
         }
         /// <summary>
         /// 查找地图所属的地图数据框

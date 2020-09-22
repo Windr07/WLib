@@ -53,11 +53,11 @@ namespace WLib.ArcGis.Display
         /// <summary>
         /// 获取简单的线符号SimpleLineSymbol
         /// </summary>
-        /// <param name="color">线条的颜色</param>
+        /// <param name="color">线条的颜色，若值为null则默认将色彩设置为RGB(128, 138, 135)</param>
         /// <param name="lineWidth">线条的宽度</param>
         /// <param name="style">线条样式，默认为实线</param>
         /// <returns></returns>
-        public static ISimpleLineSymbol GetSimpleLineSymbol(IColor color, double lineWidth = 1,
+        public static ISimpleLineSymbol GetSimpleLineSymbol(IColor color = null, double lineWidth = 1,
             esriSimpleLineStyle style = esriSimpleLineStyle.esriSLSSolid)
         {
             ISimpleLineSymbol simpleLineSymbol = new SimpleLineSymbol();

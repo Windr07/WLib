@@ -47,8 +47,8 @@
             this.lblSwipe = new System.Windows.Forms.Label();
             this.cmbLayers = new System.Windows.Forms.ComboBox();
             this.btnMeasureClose = new System.Windows.Forms.Button();
-            this.ToolPanel = new System.Windows.Forms.Panel();
-            this.ToolPanel.SuspendLayout();
+            this.grpMapNav = new System.Windows.Forms.Panel();
+            this.grpMapNav.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnFullExtent
@@ -59,7 +59,7 @@
             this.btnFullExtent.Name = "btnFullExtent";
             this.btnFullExtent.Size = new System.Drawing.Size(24, 24);
             this.btnFullExtent.TabIndex = 0;
-            this.btnFullExtent.Tag = "";
+            this.btnFullExtent.Tag = "全图";
             this.btnFullExtent.UseVisualStyleBackColor = true;
             this.btnFullExtent.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -98,6 +98,7 @@
             this.btnZoomIn.Name = "btnZoomIn";
             this.btnZoomIn.Size = new System.Drawing.Size(24, 24);
             this.btnZoomIn.TabIndex = 1;
+            this.btnZoomIn.Tag = "放大";
             this.btnZoomIn.UseVisualStyleBackColor = true;
             this.btnZoomIn.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -109,6 +110,7 @@
             this.btnPan.Name = "btnPan";
             this.btnPan.Size = new System.Drawing.Size(24, 24);
             this.btnPan.TabIndex = 3;
+            this.btnPan.Tag = "平移";
             this.btnPan.UseVisualStyleBackColor = true;
             this.btnPan.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -120,6 +122,7 @@
             this.btnZoomOut.Name = "btnZoomOut";
             this.btnZoomOut.Size = new System.Drawing.Size(24, 24);
             this.btnZoomOut.TabIndex = 2;
+            this.btnZoomOut.Tag = "缩小";
             this.btnZoomOut.UseVisualStyleBackColor = true;
             this.btnZoomOut.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -131,6 +134,7 @@
             this.btnAreaMeasure.Name = "btnAreaMeasure";
             this.btnAreaMeasure.Size = new System.Drawing.Size(24, 24);
             this.btnAreaMeasure.TabIndex = 7;
+            this.btnAreaMeasure.Tag = "测量面积";
             this.btnAreaMeasure.UseVisualStyleBackColor = true;
             this.btnAreaMeasure.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -142,6 +146,7 @@
             this.btnLenMeasure.Name = "btnLenMeasure";
             this.btnLenMeasure.Size = new System.Drawing.Size(24, 24);
             this.btnLenMeasure.TabIndex = 6;
+            this.btnLenMeasure.Tag = "测量距离";
             this.btnLenMeasure.UseVisualStyleBackColor = true;
             this.btnLenMeasure.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -153,6 +158,7 @@
             this.btnNextView.Name = "btnNextView";
             this.btnNextView.Size = new System.Drawing.Size(24, 24);
             this.btnNextView.TabIndex = 5;
+            this.btnNextView.Tag = "后一视图";
             this.btnNextView.UseVisualStyleBackColor = true;
             this.btnNextView.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -164,6 +170,7 @@
             this.btnPreView.Name = "btnPreView";
             this.btnPreView.Size = new System.Drawing.Size(24, 24);
             this.btnPreView.TabIndex = 4;
+            this.btnPreView.Tag = "前一视图";
             this.btnPreView.UseVisualStyleBackColor = true;
             this.btnPreView.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -175,6 +182,7 @@
             this.btnSelection.Name = "btnSelection";
             this.btnSelection.Size = new System.Drawing.Size(24, 24);
             this.btnSelection.TabIndex = 10;
+            this.btnSelection.Tag = "选择图斑";
             this.btnSelection.UseVisualStyleBackColor = true;
             this.btnSelection.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -186,6 +194,7 @@
             this.btnIdentify.Name = "btnIdentify";
             this.btnIdentify.Size = new System.Drawing.Size(24, 24);
             this.btnIdentify.TabIndex = 9;
+            this.btnIdentify.Tag = "识别";
             this.btnIdentify.UseVisualStyleBackColor = true;
             this.btnIdentify.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -197,6 +206,7 @@
             this.btnSwipe.Name = "btnSwipe";
             this.btnSwipe.Size = new System.Drawing.Size(24, 24);
             this.btnSwipe.TabIndex = 8;
+            this.btnSwipe.Tag = "卷帘";
             this.btnSwipe.UseVisualStyleBackColor = true;
             this.btnSwipe.Click += new System.EventHandler(this.navigationButton_Click);
             // 
@@ -257,30 +267,30 @@
             this.btnMeasureClose.Visible = false;
             this.btnMeasureClose.Click += new System.EventHandler(this.btnMeasureClose_Click);
             // 
-            // ToolPanel
+            // grpMapNav
             // 
-            this.ToolPanel.Controls.Add(this.btnFullExtent);
-            this.ToolPanel.Controls.Add(this.btnZoomIn);
-            this.ToolPanel.Controls.Add(this.btnZoomOut);
-            this.ToolPanel.Controls.Add(this.btnPan);
-            this.ToolPanel.Controls.Add(this.btnSelection);
-            this.ToolPanel.Controls.Add(this.btnPreView);
-            this.ToolPanel.Controls.Add(this.btnIdentify);
-            this.ToolPanel.Controls.Add(this.btnNextView);
-            this.ToolPanel.Controls.Add(this.btnSwipe);
-            this.ToolPanel.Controls.Add(this.btnLenMeasure);
-            this.ToolPanel.Controls.Add(this.btnAreaMeasure);
-            this.ToolPanel.Location = new System.Drawing.Point(0, -1);
-            this.ToolPanel.Name = "ToolPanel";
-            this.ToolPanel.Size = new System.Drawing.Size(253, 24);
-            this.ToolPanel.TabIndex = 16;
+            this.grpMapNav.Controls.Add(this.btnFullExtent);
+            this.grpMapNav.Controls.Add(this.btnZoomIn);
+            this.grpMapNav.Controls.Add(this.btnZoomOut);
+            this.grpMapNav.Controls.Add(this.btnPan);
+            this.grpMapNav.Controls.Add(this.btnSelection);
+            this.grpMapNav.Controls.Add(this.btnPreView);
+            this.grpMapNav.Controls.Add(this.btnIdentify);
+            this.grpMapNav.Controls.Add(this.btnNextView);
+            this.grpMapNav.Controls.Add(this.btnSwipe);
+            this.grpMapNav.Controls.Add(this.btnLenMeasure);
+            this.grpMapNav.Controls.Add(this.btnAreaMeasure);
+            this.grpMapNav.Location = new System.Drawing.Point(0, -1);
+            this.grpMapNav.Name = "grpMapNav";
+            this.grpMapNav.Size = new System.Drawing.Size(253, 24);
+            this.grpMapNav.TabIndex = 16;
             // 
             // MapNavigationTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.ToolPanel);
+            this.Controls.Add(this.grpMapNav);
             this.Controls.Add(this.btnMeasureClose);
             this.Controls.Add(this.lblMeasureInfo);
             this.Controls.Add(this.lblMeasureTips);
@@ -288,7 +298,7 @@
             this.Controls.Add(this.cmbLayers);
             this.Name = "MapNavigationTools";
             this.Size = new System.Drawing.Size(252, 56);
-            this.ToolPanel.ResumeLayout(false);
+            this.grpMapNav.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,6 +323,6 @@
         private System.Windows.Forms.Label lblSwipe;
         private System.Windows.Forms.ComboBox cmbLayers;
         private System.Windows.Forms.Button btnMeasureClose;
-        private System.Windows.Forms.Panel ToolPanel;
+        private System.Windows.Forms.Panel grpMapNav;
     }
 }

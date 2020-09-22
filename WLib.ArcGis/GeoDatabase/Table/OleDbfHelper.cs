@@ -29,6 +29,7 @@ namespace WLib.ArcGis.GeoDatabase.Table
     /// <summary>
     /// 提供OleDb连接dbf文件执行查询的方法
     /// </summary>
+    [Obsolete("该类仅用作参考，请改用 WLib.Database.DbHelper类及WLib.Database.DbHelper.GetShpMdbGdbHelper方法创建对dbf或其他ArcGIS数据的连接和相关查询操作")]
     public class OleDbfHelper
     {
         private string _filePath;

@@ -15,9 +15,10 @@ using WLib.Database.DbBase;
 namespace WLib.Database
 {
     /// <summary>
-    /// 提供连接和使用SQL操作不同类型的数据库(数据源)的方法
+    /// 实现<see cref="IDbConnection"/>，并且提供连接、使用SQL操作不同类型的数据库(数据源)的方法；
+    /// <para>同时提供构建各类连接字符串的方法；</para>
     /// </summary>
-    public class DbHelper : IDisposable
+    public partial class DbHelper : IDbConnection
     {
         #region 私有成员
         /// <summary>
@@ -31,7 +32,7 @@ namespace WLib.Database
         #endregion
 
 
-        #region 属性和事件
+        #region 属性事件
         /// <summary>
         /// 执行一条命令的超时时间（以秒为单位）
         /// </summary>
@@ -76,16 +77,13 @@ namespace WLib.Database
         /// <summary>
         /// 执行SQL语句之前的事件
         /// </summary>
-        public EventHandler<BeforeExcuteEventArgs> BeforeExcute;
+        public EventHandler<PreExcuteEventArgs> PreExcute;
         /// <summary>
         /// 触发执行SQL语句之前的事件处理
         /// </summary>
         /// <param name="description">执行的sql操作的描述</param>
         /// <param name="sql"></param>
-        protected void OnBeforeExcute(string description, string sql)
-        {
-            BeforeExcute?.Invoke(this, new BeforeExcuteEventArgs(description, sql));
-        }
+        protected void OnPreExcute(string description, string sql) => PreExcute?.Invoke(this, new PreExcuteEventArgs(description, sql));
         #endregion
 
 
@@ -96,7 +94,7 @@ namespace WLib.Database
         /// <param name="connectionString">数据库连接字符串</param>
         /// <param name="providerType">数据库类型</param>
         /// <param name="commandTimeOut">执行一条命令的超时时间（以秒为单位）</param>
-        public DbHelper(string connectionString, EDbProviderType providerType, int commandTimeOut = 30)
+        protected DbHelper(string connectionString, EDbProviderType providerType, int commandTimeOut = 30)
         {
             ConnectionString = connectionString;
             CommandTimeOut = commandTimeOut;
@@ -107,7 +105,7 @@ namespace WLib.Database
         #endregion
 
 
-        #region 各类查询方法
+        #region 查询方法
         /// <summary>
         /// 连接数据源，执行SQL语句并返回状态值
         /// </summary>
@@ -124,7 +122,7 @@ namespace WLib.Database
         /// <returns></returns>
         public void ExcNonQuery(IEnumerable<string> sqls)
         {
-            OnBeforeExcute("Excute None Query", sqls.Aggregate((a, b) => a + "," + b));
+            OnPreExcute("Excute None Query", sqls.Aggregate((a, b) => a + ";" + b));
             DbCommand dbCommand = _providerFactory.CreateCommand();
             dbCommand.Connection = Connection;
             dbCommand.CommandTimeout = CommandTimeOut;
@@ -142,7 +140,7 @@ namespace WLib.Database
         /// <returns></returns>
         public int ExcNonQuery(string sql, params DbParameter[] dbParameters)
         {
-            OnBeforeExcute("Excute None Query", sql);
+            OnPreExcute("Excute None Query", sql);
             DbCommand dbCommand = _providerFactory.CreateCommand();
             dbCommand.Connection = Connection;
             dbCommand.CommandTimeout = CommandTimeOut;
@@ -169,7 +167,7 @@ namespace WLib.Database
         /// <returns>返回数据集</returns> 
         public DataSet GetDataset(string sql, params DbParameter[] dbParameters)
         {
-            OnBeforeExcute("Get Data Set", sql);
+            OnPreExcute("Get Data Set", sql);
             DbDataAdapter adapter = _providerFactory.CreateDataAdapter();
             DbCommand dbCommand = _providerFactory.CreateCommand();
             dbCommand.Connection = Connection;
@@ -192,6 +190,18 @@ namespace WLib.Database
         public DataTable GetDataTable(string sql)
         {
             return GetDataset(sql).Tables[0];
+        }
+        /// <summary>
+        /// 连接数据源，执行SQL语句并返回DataTable
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="tableName">表格名称</param>
+        /// <returns></returns>
+        public DataTable GetDataTable(string sql, string tableName)
+        {
+            var dataTable = GetDataset(sql).Tables[0];
+            dataTable.TableName = tableName;
+            return dataTable;
         }
         /// <summary>
         /// 连接数据源，执行SQL语句并返回DataTable
@@ -238,7 +248,7 @@ namespace WLib.Database
         /// <returns></returns>
         public object ExcScalar(string sql, params DbParameter[] dbParameters)
         {
-            OnBeforeExcute("Excute Scalar", sql);
+            OnPreExcute("Excute Scalar", sql);
             DbCommand command = _providerFactory.CreateCommand();
             command.Connection = Connection;
             command.CommandTimeout = CommandTimeOut;
@@ -250,19 +260,29 @@ namespace WLib.Database
         #endregion
 
 
+        #region 实现IDbConnection接口
         /// <summary>
-        /// 释放对象的同时，关闭连接并释放资源
+        /// 关闭数据库连接
         /// </summary>
-        public void Dispose()
-        {
-            Close();
-        }
-        /// <summary>
-        /// 关闭连接
-        /// </summary>
-        public void Close()
-        {
-            _connection?.Close();
-        }
+        public void Close() => _connection?.Close();
+
+        public int ConnectionTimeout => Connection.ConnectionTimeout;
+
+        public string Database => Connection.Database;
+
+        public ConnectionState State => Connection.State;
+
+        public IDbTransaction BeginTransaction() => Connection.BeginTransaction();
+
+        public IDbTransaction BeginTransaction(IsolationLevel il) => Connection.BeginTransaction(il);
+
+        public IDbCommand CreateCommand() => Connection.CreateCommand();
+
+        public void Dispose() => _connection?.Dispose();
+
+        public void ChangeDatabase(string databaseName) => Connection.ChangeDatabase(databaseName);
+
+        public void Open() => _connection?.Open();
+        #endregion
     }
 }

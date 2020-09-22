@@ -5,10 +5,11 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
 using System.IO;
+using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
-using WLib.WinForm;
 
 namespace WLib.ArcGis.Control.MapAssociation
 {
@@ -62,7 +63,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// <returns></returns>
         public IMapDocument OpenDoc()
         {
-            var filePath = DialogOpt.ShowOpenFileDialog(@"*.mxd|*.mxd");
+            var filePath = ShowOpenFileDialog(@"*.mxd|*.mxd");
             if (filePath != null)
             {
                 if (MapDoc != null)
@@ -114,7 +115,7 @@ namespace WLib.ArcGis.Control.MapAssociation
         /// </summary>
         public void SaveAs()
         {
-            var filePath = DialogOpt.ShowSaveFileDialog(@"地图文档(*.mxd)|*.mxd", @"保存地图文档", @"地图文档");
+            var filePath = ShowSaveFileDialog(@"地图文档(*.mxd)|*.mxd", @"保存地图文档", @"地图文档");
             if (filePath != null)
             {
                 if (File.Exists(filePath))
@@ -125,6 +126,54 @@ namespace WLib.ArcGis.Control.MapAssociation
                 MapDoc.ReplaceContents(MapControl.Map as IMxdContents);
                 MapDoc.Save();
             }
+        }
+
+
+        /// <summary>
+        /// 弹出保存文件对话框，选择文件后返回所选的文件路径，未选择时返回null
+        /// </summary>
+        /// <param name="filter">文件格式</param>
+        /// <param name="title">标题</param>
+        /// <param name="fileName">文件名或文件路径</param>
+        /// <param name="initDir">初始目录</param>
+        /// <returns></returns>
+        private static string ShowSaveFileDialog(string filter, string title = null, string fileName = null, string initDir = null)
+        {
+            if (!string.IsNullOrWhiteSpace(initDir) && !Path.IsPathRooted(initDir))
+                initDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, initDir);
+
+            var dialog = new SaveFileDialog
+            {
+                Filter = filter,
+                Title = title,
+                FileName = fileName,
+                InitialDirectory = initDir
+            };
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
+        }
+        /// <summary>
+        /// 弹出打开文件对话框，选择文件后返回所选的文件路径，未选择时返回null
+        /// </summary>
+        /// <param name="filter">文件格式</param>
+        /// <param name="title">标题</param>
+        /// <param name="fileName">文件名或文件路径</param>
+        /// <param name="initDir">初始目录</param>
+        /// <param name="multiSelect">多选</param>
+        /// <returns></returns>
+        private static string ShowOpenFileDialog(string filter, string title = null, string fileName = null, string initDir = null, bool multiSelect = false)
+        {
+            if (!string.IsNullOrWhiteSpace(initDir) && !Path.IsPathRooted(initDir))
+                initDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, initDir);
+
+            var dialog = new OpenFileDialog
+            {
+                Filter = filter,
+                Title = title,
+                FileName = fileName,
+                InitialDirectory = initDir,
+                Multiselect = multiSelect
+            };
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : null;
         }
     }
 }

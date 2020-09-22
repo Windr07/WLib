@@ -121,7 +121,7 @@ namespace WLib.ArcGis.Data
             Dictionary<string, PropertyInfo> propertys = GetFields<T>(featureClass as ITable);
             if (featureClass == null) return list;
 
-            var features = featureClass.QueryFeatures(whereClause);
+            var features = featureClass.QueryFeatures(whereClause).ToList();
             foreach (IFeature feature in features)
             {
                 var obj = assembly.CreateInstance(t.FullName) as T;

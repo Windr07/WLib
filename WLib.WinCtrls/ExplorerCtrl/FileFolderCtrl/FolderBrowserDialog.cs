@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------- 
 // auth： https://github.com/code-mirage/FolderBrowserDialog
 // date： 
-// desc： Visual Studio 2017 default FolderBrowserDialog not practical The component will be overridden
+// desc： 提供只能选择文件夹的打开文件对话框（OpenFileDialog, Open Folder）
 // mdfy:  Windragon
 //----------------------------------------------------------------*/
 
@@ -16,26 +16,32 @@ namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
     /// <summary>
     /// 提供只能选择文件夹的打开文件对话框（OpenFileDialog, Open Folder）
     /// </summary>
-    [Description("提供一個Vista樣式的選擇文件夹對話框")]
+    [Description("提供只能选择文件夹的打开文件对话框")]
     [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
     public class FolderBrowserDialog : Component
     {
+        /// <summary>
+        /// 选择或设置目录路径
+        /// </summary>
+        public string SelectedPath { get; set; }
+        /// <summary>
+        /// 对话框中显示的说明文本
+        /// </summary>
+        public string Desrciption { get; set; }
         /// <summary>
         /// 提供只能选择文件夹的打开文件对话框（OpenFileDialog, Open Folder）
         /// </summary>
         public FolderBrowserDialog()
         {
         }
-        /// <summary>
-        /// 选择或设置目录路径
-        /// </summary>
-        public string DirectoryPath { get; set; }
+
+
         /// <summary>
         /// 显示对话框
         /// </summary>
         /// <param name="owner"></param>
         /// <returns></returns>
-        public DialogResult ShowDialog(IWin32Window owner)
+        public DialogResult ShowDialog(IWin32Window owner = null)
         {
             IntPtr hwndOwner = owner?.Handle ?? GetActiveWindow();
             IFileOpenDialog dialog = (IFileOpenDialog)new FileOpenDialog();
@@ -43,14 +49,15 @@ namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
             try
             {
                 IShellItem item;
-                if (!string.IsNullOrEmpty(DirectoryPath))
+                if (!string.IsNullOrEmpty(SelectedPath))
                 {
                     uint atts = 0;
-                    if (SHILCreateFromPath(DirectoryPath, out var idl, ref atts) == 0)
+                    if (SHILCreateFromPath(SelectedPath, out var idl, ref atts) == 0)
                         if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, idl, out item) == 0)
                             dialog.SetFolder(item);
                 }
                 dialog.SetOptions(FOS.FOS_PICKFOLDERS | FOS.FOS_FORCEFILESYSTEM);
+                dialog.SetTitle(Desrciption);
                 uint hr = dialog.Show(hwndOwner);
                 if (hr == ERROR_CANCELLED)
                     return DialogResult.Cancel;
@@ -59,7 +66,7 @@ namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
                     return DialogResult.Abort;
                 dialog.GetResult(out item);
                 item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out var path);
-                DirectoryPath = path;
+                SelectedPath = path;
                 return DialogResult.OK;
             }
             finally
@@ -67,7 +74,6 @@ namespace WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl
                 Marshal.ReleaseComObject(dialog);
             }
         }
-
 
         [DllImport("shell32.dll")]
         private static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)] string pszPath, out IntPtr ppIdl, ref uint rgflnOut);

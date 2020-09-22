@@ -47,14 +47,12 @@ namespace WLib.Database.TableInfo
             EDbProviderType eDbProviderType, string codeField = "编码", string nameField = "名称")
         {
             var sql = $"select {codeField},{nameField} from " + tableName;
-            var dbHelper = new DbHelper(connectString, eDbProviderType);
+            var dbHelper = DbHelper.GetDbHelper(connectString, eDbProviderType);
             var dataTable = dbHelper.GetDataTable(sql);
 
             var dictTable = new DictionaryTable(tableName);
             foreach (DataRow row in dataTable.Rows)
-            {
                 dictTable.CodeNameDict.Add(row[0].ToString(), row[1].ToString());
-            }
 
             dbHelper.Close();
             return dictTable;

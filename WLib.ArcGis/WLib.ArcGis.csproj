@@ -51,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.ADF.Local, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -129,6 +129,7 @@
     </Reference>
     <Reference Include="ESRI.ArcGIS.GISClient, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Output, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -142,6 +143,7 @@
     </Reference>
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -149,6 +151,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -158,8 +161,11 @@
     <Compile Include="Analysis\GpEnum\EIsJoinAttributes.cs" />
     <Compile Include="Analysis\GpEnum\ESjMatchOption.cs" />
     <Compile Include="Analysis\GpEnum\ESjOperation.cs" />
+    <Compile Include="Analysis\Gp\GpHelper.Check.cs" />
+    <Compile Include="Analysis\Gp\GpHelper.Tool.cs" />
     <Compile Include="Analysis\OnShape\GeometryCheck.cs" />
     <Compile Include="Analysis\Gp\GpHelper.cs" />
+    <Compile Include="Analysis\OnShape\GeometryCheckInfo.cs" />
     <Compile Include="Analysis\OnShape\RelationalOpt.cs" />
     <Compile Include="Analysis\OnClass\SpatialAnalysisOpt.cs" />
     <Compile Include="Analysis\OnClass\SpatialEfficiencyOpt.cs" />
@@ -188,9 +194,13 @@
     <Compile Include="Carto\MapExport\MapExportInfo.cs" />
     <Compile Include="Carto\MapExport\MapExportHelper.cs" />
     <Compile Include="Carto\MapExport\MapExportToPic.cs" />
+    <Compile Include="Carto\Map\MapDocEx.cs" />
+    <Compile Include="ComObjManager.cs" />
     <Compile Include="Control\AttributeCtrl\AttributeQuery.cs" />
+    <Compile Include="Control\AttributeCtrl\IAttributeForm.cs" />
     <Compile Include="Control\IMapNavigationTools.cs" />
     <Compile Include="Control\IPageNavigationTools.cs" />
+    <Compile Include="Control\MapAssociation\CmdCreator.cs" />
     <Compile Include="Control\MapAssociation\EMapTools.cs" />
     <Compile Include="Control\MapAssociation\EMeasureType.cs" />
     <Compile Include="Control\MapAssociation\EPageTools.cs" />
@@ -206,16 +216,46 @@
     <Compile Include="Control\MapAssociation\MapCtrlMenu.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlPageLayoutSyn.cs" />
     <Compile Include="Control\MapAssociation\MapCtrlToc.cs" />
+    <Compile Include="DataCheck\Compare\CompareRecord.cs" />
+    <Compile Include="DataCheck\Compare\DataCompareChecker.cs" />
+    <Compile Include="DataCheck\Compare\Item\CompareItemCollection.cs" />
+    <Compile Include="DataCheck\Compare\Plan\EachFieldComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\EachSpatialComparePlan.cs" />
+    <Compile Include="DataCheck\Core\ESpatialMatchTypes.cs" />
+    <Compile Include="DataCheck\Compare\Item\FieldCompare.cs" />
+    <Compile Include="DataCheck\Compare\Item\CompareItem.cs" />
+    <Compile Include="DataCheck\Compare\Plan\ComparePlan.cs" />
+    <Compile Include="DataCheck\Core\ENoneMatchHandlers.cs" />
+    <Compile Include="DataCheck\Core\ENoneMatchTypes.cs" />
+    <Compile Include="DataCheck\Compare\Plan\EachComparePlan.cs" />
+    <Compile Include="DataCheck\Core\NoneMatchHelper.cs" />
+    <Compile Include="DataCheck\Compare\Plan\IFieldComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\ISpatialComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfDefaultComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfFieldComparePlan.cs" />
+    <Compile Include="DataCheck\Compare\Plan\SelfSpatialComparePlan.cs" />
+    <Compile Include="DataCheck\Core\Checker.cs" />
+    <Compile Include="DataCheck\Core\EErrorLevel.cs" />
+    <Compile Include="DataCheck\Core\CheckRecord.cs" />
+    <Compile Include="DataCheck\Core\ICheckGroup.cs" />
+    <Compile Include="DataCheck\Core\IChecker.cs" />
+    <Compile Include="DataCheck\Core\ICheckScheme.cs" />
+    <Compile Include="DataCheck\Core\INodeProperty.cs" />
+    <Compile Include="DataCheck\Core\SpatialMatchTypesHelper.cs" />
     <Compile Include="Data\EStatisticsType.cs" />
     <Compile Include="Data\TypeConvert.cs" />
     <Compile Include="Display\ColorCreate.cs" />
     <Compile Include="Display\SymbolCreate.cs" />
-    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToTreeNodes.cs" />
+    <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToTree.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.ToPath.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.FromPath.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.Copy.cs" />
+    <Compile Include="GeoDatabase\Fields\FieldItemEx.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Create.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.cs" />
+    <Compile Include="Geometry\GeometrySplitor.cs" />
+    <Compile Include="Geometry\ProjectionInfo.cs" />
     <Compile Include="Geometry\SpatialRefOpt.cs" />
     <Compile Include="Data\DataTableConvert.cs" />
     <Compile Include="Geometry\ESrType.cs" />
@@ -229,7 +269,7 @@
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.cs" />
     <Compile Include="GeoDatabase\FeatDataset\FeatureDatasetEx.cs" />
     <Compile Include="GeoDatabase\Fields\FieldItem.cs" />
-    <Compile Include="GeoDatabase\Fields\FieldOpt.cs" />
+    <Compile Include="GeoDatabase\Fields\FieldEx.cs" />
     <Compile Include="Geometry\GeometryOpt.cs" />
     <Compile Include="Analysis\OnShape\GeometrySplit.cs" />
     <Compile Include="Geometry\PolygonRingsOpt.cs" />
@@ -239,25 +279,25 @@
       <DependentUpon>LicenseInitializer.cs</DependentUpon>
     </Compile>
     <Compile Include="Geometry\EnvelopeOpt.cs" />
-    <Compile Include="Carto\Map\FeatureSelection.cs" />
+    <Compile Include="Carto\Map\MapEx.FeatureSelection.cs" />
     <Compile Include="Carto\LabelAnno\LabelAnnoConvert.cs" />
     <Compile Include="Carto\Layer\LayerOpt.cs" />
     <Compile Include="Control\MapCtrlLayers.cs" />
     <Compile Include="Carto\Map\MapOption.cs" />
-    <Compile Include="Carto\Map\MapQuery.cs" />
+    <Compile Include="Carto\Map\MapEx.cs" />
     <Compile Include="Display\RenderCreate.cs" />
     <Compile Include="Control\ZoomTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeoDatabase\Raster\RasterOpt.cs" />
+    <Compile Include="GeoDatabase\Raster\RasterEx.cs" />
     <Compile Include="Server\ServerLayerOpt.cs" />
     <Compile Include="Sql\SqlQuery.cs" />
-    <Compile Include="GeoDatabase\Table\TableCreate.cs" />
+    <Compile Include="GeoDatabase\Table\TableEx.Create.cs" />
     <Compile Include="GeoDatabase\Table\OleDbfHelper.cs" />
     <Compile Include="GeoDatabase\Table\TableEx.cs" />
     <Compile Include="GeoDatabase\FeatClass\FeatureClassEx.Create.cs" />
     <Compile Include="GeoDatabase\WorkSpace\EWorkspaceType.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Get.cs" />
-    <Compile Include="GeoDatabase\WorkSpace\SubTypeDomian.cs" />
+    <Compile Include="GeoDatabase\SubTypeDomian.cs" />
     <Compile Include="GeoDatabase\WorkSpace\WorkspaceEx.Edit.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -277,7 +317,12 @@
       <Name>WLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="GeoDatabase\Table\TableEx.FromPath.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GeoDatabase\Raster\RasterEx.FromPath.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

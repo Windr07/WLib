@@ -40,6 +40,49 @@ namespace WLib.Files.Excel.NPOI
             }
             return workbook;
         }
+        /// <summary>
+        /// 保存工作簿到指定目录，文件已存在时则覆盖
+        /// </summary>
+        /// <param name="workbook">指定要保存的工作簿</param>
+        /// <param name="savePath">指定保存工作簿的路径</param>
+        public static void SaveWoorkbook(this IWorkbook workbook, string savePath)
+        {
+            FileStream fileStream = new FileStream(savePath, FileMode.Create);
+            workbook.Write(fileStream);
+            fileStream.Close();
+        }
+        /// <summary>
+        /// 新建Execl表格并设置单元格为文本格式 
+        /// </summary>
+        /// <param name="createRowCount">所需创建行数</param>
+        /// <param name="createColCount">所需创建列数</param>
+        /// <returns></returns>
+        public static IWorkbook CreatWorkbook(int createRowCount, int createColCount)
+        {
+            IWorkbook workbook = new HSSFWorkbook();
+            workbook.CreateSheet("Sheet1");
+            workbook.CreateSheet("Sheet2");
+            workbook.CreateSheet("Sheet3");
+
+            IRow rows;
+            ISheet sheet = workbook.GetSheetAt(0);
+
+            //创建CellStyle与DataFormat并加载格式样式  
+            IDataFormat dataformat = workbook.CreateDataFormat();
+            ICellStyle style = workbook.CreateCellStyle();
+            style.DataFormat = dataformat.GetFormat("text");
+            for (int i = 0; i < createRowCount; i++)
+            {
+                rows = sheet.CreateRow(i);
+                for (int j = 0; j < createColCount; j++)
+                {
+                    var cell = rows.CreateCell(j);
+                    sheet.GetRow(i).GetCell(j).CellStyle = style;
+                    SetBorderLine(workbook, i, j);
+                }
+            }
+            return workbook;
+        }
 
 
         /// <summary>
@@ -60,6 +103,76 @@ namespace WLib.Files.Excel.NPOI
 
             return cell.ToString().Trim();
         }
+        /// <summary>
+        /// 复制某一行的单元格格式到目标行中
+        /// </summary>
+        /// <param name="sourceStyleRow"></param>
+        /// <param name="desRow"></param>
+        public static void CopyCellStyle(this IRow sourceStyleRow, IRow desRow)
+        {
+            IRow firstTargetRow = desRow;
+            ICell firstSourceCell;
+            ICell firstTargetCell;
+
+            for (int m = sourceStyleRow.FirstCellNum; m < sourceStyleRow.LastCellNum; m++)
+            {
+                firstSourceCell = sourceStyleRow.GetCell(m);
+                if (firstSourceCell == null)
+                    continue;
+                firstTargetCell = firstTargetRow.CreateCell(m);
+                //firstTargetCell.Encoding = firstSourceCell.Encoding;
+                firstTargetCell.CellStyle = firstSourceCell.CellStyle;
+                firstTargetCell.SetCellType(firstSourceCell.CellType);
+            }
+        }
+        /// <summary>
+        /// 合并单元格并赋值
+        /// </summary>
+        /// <param name="workbook">指定工作簿</param>
+        /// <param name="sheet">指定工作表</param>
+        /// <param name="value">需要单元格的值</param>
+        /// <param name="row">开始行</param>
+        /// <param name="col">开始列</param>
+        /// <param name="eRow">结束行</param>
+        /// <param name="eCol">结束列</param>
+        public static void MergeCells(this ISheet sheet, Object value, int row, int eRow, int col, int eCol)
+        {
+            sheet.AddMergedRegion(new CellRangeAddress(row, eRow, col, eCol));
+            sheet.GetRow(row).GetCell(col).SetCellValue(value.ToString());
+        }
+        /// <summary>
+        /// 获取合并单元格的值
+        /// </summary>
+        /// <param name="sheet">指定工作表</param>
+        /// <param name="rowIndex">行号</param>
+        /// <param name="columnIndex">列号</param>
+        /// <param name="firstColumnIndex">返回合并单元格的列号（合并范围的第一列的列号）</param>
+        /// <param name="firstRowIndex">返回合并单元格的行号（合并范围的第一行的行号）</param>
+        /// <returns></returns>
+        public static string GetMergedRegionValue(this ISheet sheet, int rowIndex, int columnIndex, out int firstColumnIndex, out int firstRowIndex)
+        {
+            for (int i = 0; i < sheet.NumMergedRegions; i++)//遍历Sheet中所有的合并单元格
+            {
+                CellRangeAddress cellRange = sheet.GetMergedRegion(i);//获取第i个合并单元格
+                int firstColumn = cellRange.FirstColumn;
+                int lastColumn = cellRange.LastColumn;
+                int firstRow = cellRange.FirstRow;
+                int lastRow = cellRange.LastRow;
+                if (rowIndex >= firstRow && rowIndex <= lastRow &&
+                    columnIndex >= firstColumn && columnIndex <= lastColumn)
+                {
+                    IRow tmpRow = sheet.GetRow(firstRow);
+                    ICell tmpCell = tmpRow.GetCell(firstColumn);
+                    firstColumnIndex = tmpCell.ColumnIndex;
+                    firstRowIndex = tmpCell.RowIndex;
+                    tmpCell.SetCellType(CellType.String);
+                    return tmpCell.StringCellValue;
+                }
+            }
+            firstColumnIndex = firstRowIndex = -1;
+            return null;
+        }
+
 
         /// <summary>
         /// 插入行
@@ -92,28 +205,6 @@ namespace WLib.Files.Excel.NPOI
             CopyCellStyle(sourceStyleRow, sheet.GetRow(insertRowIndex));
         }
 
-        /// <summary>
-        /// 复制某一行的单元格格式到目标行中
-        /// </summary>
-        /// <param name="sourceStyleRow"></param>
-        /// <param name="desRow"></param>
-        public static void CopyCellStyle(this IRow sourceStyleRow, IRow desRow)
-        {
-            IRow firstTargetRow = desRow;
-            ICell firstSourceCell;
-            ICell firstTargetCell;
-
-            for (int m = sourceStyleRow.FirstCellNum; m < sourceStyleRow.LastCellNum; m++)
-            {
-                firstSourceCell = sourceStyleRow.GetCell(m);
-                if (firstSourceCell == null)
-                    continue;
-                firstTargetCell = firstTargetRow.CreateCell(m);
-                //firstTargetCell.Encoding = firstSourceCell.Encoding;
-                firstTargetCell.CellStyle = firstSourceCell.CellStyle;
-                firstTargetCell.SetCellType(firstSourceCell.CellType);
-            }
-        }
 
         /// <summary>
         /// 设置边框
@@ -134,7 +225,6 @@ namespace WLib.Files.Excel.NPOI
             style.BorderBottom = BorderStyle.Thin;
             cell.CellStyle = style;
         }
-
         /// <summary>
         /// 设置单元格为无边框
         /// </summary>
@@ -165,33 +255,7 @@ namespace WLib.Files.Excel.NPOI
 
         }
 
-        /// <summary>
-        /// 合并单元格并赋值
-        /// </summary>
-        /// <param name="workbook">指定工作簿</param>
-        /// <param name="sheet">指定工作表</param>
-        /// <param name="value">需要单元格的值</param>
-        /// <param name="row">开始行</param>
-        /// <param name="col">开始列</param>
-        /// <param name="eRow">结束行</param>
-        /// <param name="eCol">结束列</param>
-        public static void MergeCells(this ISheet sheet, Object value, int row, int eRow, int col, int eCol)
-        {
-            sheet.AddMergedRegion(new CellRangeAddress(row, eRow, col, eCol));
-            sheet.GetRow(row).GetCell(col).SetCellValue(value.ToString());
-        }
 
-        /// <summary>
-        /// 保存工作簿到指定目录，文件已存在时则覆盖
-        /// </summary>
-        /// <param name="workbook">指定要保存的工作簿</param>
-        /// <param name="savePath">指定保存工作簿的路径</param>
-        public static void SaveWoorkbook(this IWorkbook workbook, string savePath)
-        {
-            FileStream fileStream = new FileStream(savePath, FileMode.Create);
-            workbook.Write(fileStream);
-            fileStream.Close();
-        }
 
         /// <summary>
         /// 设置字符串的字体
@@ -209,7 +273,6 @@ namespace WLib.Files.Excel.NPOI
             richText.ApplyFont(0, richText.Length, font);
             return font;
         }
-
         /// <summary>
         /// 设置字符串的字体
         /// </summary>
@@ -221,7 +284,6 @@ namespace WLib.Files.Excel.NPOI
         {
             return ApplyFont(sheet.Workbook, richText, fontSize, fontName);
         }
-
         /// <summary>
         /// 在字符串的指定起止位置设置下划线
         /// </summary>
@@ -240,7 +302,6 @@ namespace WLib.Files.Excel.NPOI
             richText.ApplyFont(startIndex, endIndex, font);
             return font;
         }
-
         /// <summary>
         /// 在字符串的指定起止位置设置下划线
         /// </summary>
@@ -254,7 +315,6 @@ namespace WLib.Files.Excel.NPOI
         {
             return SetUnderline(sheet.Workbook, richText, fontSize, startIndex, endIndex, fontName);
         }
-
         /// <summary>
         /// 对单元格赋值，设置字符串的下划线
         /// </summary>
@@ -271,7 +331,6 @@ namespace WLib.Files.Excel.NPOI
             SetUnderline(sheet, richtext, 11, startIndex, endIndex);
             sheet.GetRow(row).GetCell(cell).SetCellValue(richtext);
         }
-
         /// <summary>
         /// 对单元格赋值，设置时间下划线
         /// </summary>
@@ -308,39 +367,6 @@ namespace WLib.Files.Excel.NPOI
 
             ISheet sheet = workbook.GetSheetAt(0);
             sheet.GetRow(row).GetCell(cell).SetCellValue(richtext);
-        }
-
-        /// <summary>
-        /// 新建Execl表格并设置单元格为文本格式 
-        /// </summary>
-        /// <param name="createRowCount">所需创建行数</param>
-        /// <param name="createColCount">所需创建列数</param>
-        /// <returns></returns>
-        public static IWorkbook CreatWorkbook(int createRowCount, int createColCount)
-        {
-            IWorkbook workbook = new HSSFWorkbook();
-            workbook.CreateSheet("Sheet1");
-            workbook.CreateSheet("Sheet2");
-            workbook.CreateSheet("Sheet3");
-
-            IRow rows;
-            ISheet sheet = workbook.GetSheetAt(0);
-
-            //创建CellStyle与DataFormat并加载格式样式  
-            IDataFormat dataformat = workbook.CreateDataFormat();
-            ICellStyle style = workbook.CreateCellStyle();
-            style.DataFormat = dataformat.GetFormat("text");
-            for (int i = 0; i < createRowCount; i++)
-            {
-                rows = sheet.CreateRow(i);
-                for (int j = 0; j < createColCount; j++)
-                {
-                    var cell = rows.CreateCell(j);
-                    sheet.GetRow(i).GetCell(j).CellStyle = style;
-                    SetBorderLine(workbook, i, j);
-                }
-            }
-            return workbook;
         }
     }
 }

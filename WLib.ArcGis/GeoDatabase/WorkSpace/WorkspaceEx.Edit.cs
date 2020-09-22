@@ -13,7 +13,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
     /// <summary>
     /// 工作空间编辑操作
     /// </summary>
-    public static partial class WorkspaceEditEx
+    public static partial class WorkspaceEx
     {
         /// <summary>
         /// 开始工作空间编辑，执行完指定操作后保存并停止编辑

@@ -16,6 +16,10 @@ namespace WLib.ArcGis
 {
     /// <summary>
     /// 初始化ARCGIS运行环境许可：
+    /// <para>
+    /// private static LicenseInitializer licenseInitializer = new LicenseInitializer();
+    /// 
+    /// //Main Method：
     /// licenseInitializer.InitializeApplication(
     ///     new[]
     ///     {
@@ -27,6 +31,7 @@ namespace WLib.ArcGis
     ///         esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst,
     ///         esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork
     ///     });
+    /// </para>
     /// </summary>
     public partial class LicenseInitializer
     {

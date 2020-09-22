@@ -41,10 +41,8 @@ namespace WLib.ArcGis.Carto.MapExport.Base
         /// <param name="extensions">导出的图片一种或多种格式</param>
         public void Add(double dpi, bool overwrite, params string[] extensions)
         {
-            foreach (var extension in extensions) 
-            {
-                base.Add(new ExportPicInfo(extension, dpi, overwrite));
-            }
+            foreach (var extension in extensions)
+                Add(new ExportPicInfo(extension, dpi, overwrite));
         }
     }
 }

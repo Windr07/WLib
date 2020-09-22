@@ -68,18 +68,12 @@ namespace WLib.Database.TableInfo
         /// 表示字段
         /// </summary>
         /// <param name="name">字段名</param>
-        public FieldClass(string name)
-        {
-            this.Name = name;
-        }
+        public FieldClass(string name) => this.Name = name;
         /// <summary>
         /// 输出字段别名
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return this.AliasName;
-        }
+        public override string ToString() => this.AliasName;
 
         /// <summary>
         /// 验证输入值是否符合字段规范

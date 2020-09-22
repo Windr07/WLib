@@ -10,29 +10,32 @@ using System.Collections.Generic;
 using System.IO;
 using ESRI.ArcGIS.Geodatabase;
 using WLib.ArcGis.GeoDatabase.FeatDataset;
+using WLib.ArcGis.GeoDatabase.Table;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 
 namespace WLib.ArcGis.GeoDatabase.FeatClass
 {
     /// <summary>
-    /// 提供从指定路径获取要素类的方法
+    /// 提供对要素类数据的获取、输出、复制、创建、增、删、改、查、筛选、检查、重命名等方法
     /// </summary>
     public static partial class FeatureClassEx
     {
         /// <summary>
-        /// 从指定路径（或连接字符串）中获取要素类。
-        /// ①shp文件路径，返回该shp存储的要素类；
-        /// ②mdb文件路径，返回该mdb数据库第一个要素类；
-        /// ③dwg文件路径，返回该dwg数据集第一个要素类；
-        /// ④shp目录，返回目录下第一个shp文件存储的要素类；
-        /// ⑤gdb目录，返回gdb数据库第一个要素类；
-        /// ⑥mdb文件路径[\DatasetName]\FeatureClassName，返回mdb数据库中指定名称或别名的要素类；
-        /// ⑦gdb目录[\DatasetName]\FeatureClassName，返回gdb数据库中指定名称或别名的要素类；
-        /// ⑧sde或oleDb或sql连接字符串，返回数据库中的第一个要素类；
+        /// 从指定路径（或连接字符串）中获取要素类
+        /// <para><paramref name="connStrOrPath"/>支持以下情况：</para>
+        /// <para>①shp路径：返回该shp存储的要素类；</para>
+        /// <para>②mdb路径：返回该mdb数据库第一个要素类；</para>
+        /// <para>③dwg路径：返回该dwg数据集第一个要素类；</para>
+        /// <para>④普通目录：返回目录下第一个shp（优先）或dwg文件存储的要素类；</para>
+        /// <para>⑤gdb目录：返回gdb数据库第一个要素类；</para>
+        /// <para>⑥mdb文件路径[\DatasetName]\FeatureClassName：返回mdb数据库中指定名称或别名的要素类；</para>
+        /// <para>⑦gdb目录[\DatasetName]\FeatureClassName：返回gdb数据库中指定名称或别名的要素类；</para>
+        /// <para>⑧sde或oleDb或sql连接字符串：返回数据库中的第一个要素类；</para>
         /// </summary>
         /// <param name="connStrOrPath">路径或连接字符串</param>
+        /// <param name="autoAddExtension">是否自动在路径末尾增加.shp/.mdb/.dwg后缀，以再次查找要素类</param>
         /// <returns></returns>
-        public static IFeatureClass FromPath(string connStrOrPath)
+        public static IFeatureClass FromPath(string connStrOrPath, bool autoAddExtension = false)
         {
             if (WorkspaceEx.IsConnectionString(connStrOrPath))
                 return FirstFromConnString(connStrOrPath);
@@ -43,12 +46,28 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             if (File.Exists(connStrOrPath))
                 return FirstFormFile(connStrOrPath);
 
-            return FirstFromFullPath(connStrOrPath);
+            var featureClass = FirstFromFullPath(connStrOrPath);
+            if (autoAddExtension && featureClass == null)
+            {
+                foreach (var extension in new[] { ".shp", ".dwg", ".mdb" })
+                    if (File.Exists(connStrOrPath + extension))
+                        return FirstFormFile(connStrOrPath + extension);
+            }
+            return featureClass;
         }
         /// <summary>
         /// 从指定路径（或连接字符串）中获取全部要素类
+        /// <para><paramref name="connStrOrPath"/>支持以下情况：</para>
+        /// <para>①shp路径：返回该shp存储的要素类；</para>
+        /// <para>②mdb路径：返回该mdb数据库的全部要素类；</para>
+        /// <para>③dwg路径：返回该dwg数据集的全部要素类；</para>
+        /// <para>④普通目录：返回目录下的全部shp和dwg要素类；</para>
+        /// <para>⑤gdb目录：返回gdb数据库的全部要素类；</para>
+        /// <para>⑥mdb文件路径[\DatasetName][\FeatureClassName]：返回mdb数据库中指定要素类，或指定数据集下的全部要素类；</para>
+        /// <para>⑦gdb目录[\DatasetName][\FeatureClassName]：返回gdb数据库中指定要素类，或指定数据集下的全部要素类；</para>
+        /// <para>⑧sde或oleDb或sql连接字符串：返回数据库的全部要素类；</para>
         /// </summary>
-        /// <param name="connStrOrPath"></param>
+        /// <param name="connStrOrPath">路径或连接字符串</param>
         /// <returns></returns>
         public static List<IFeatureClass> AllFromPath(string connStrOrPath)
         {
@@ -63,42 +82,25 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
 
             return FromFullPath(connStrOrPath);
         }
-
         /// <summary>
-        /// 从完整的要素类路径中，获取工作空间路径、数据集名称、要素类名称
+        /// 从完整的要素类或表格路径中，获取工作空间路径、数据集名称、要素类或表格名称
+        /// <para>注意：路径应为要素类或表格或工作空间路径，指向数据集的路径(dwg除外)是无法识别的</para>
+        /// <para>支持的数据类型包括gdb、mdb、shp、dbf、dwg等</para>
         /// </summary>
-        /// <param name="fullPath">格式为“工作空间路径[\要素集名称]\要素类名称”的路径</param>
+        /// <param name="fullPath">格式为“工作空间路径[\要素集名称]\要素类或表格名称”的路径</param>
         /// <param name="workspacePath">工作空间路径</param>
-        /// <param name="datasetName">数据集名称</param>
-        /// <param name="featureClassName">要素类名称</param>
+        /// <param name="datasetName">数据集名称（可能为空）</param>
+        /// <param name="objectName">要素类或表格名称，如果数据为shp则包含.shp后缀</param>
         /// <returns></returns>
-        public static void SplitPath(string fullPath, out string workspacePath, out string datasetName, out string featureClassName)
+        public static void SplitPath(string fullPath, out string workspacePath, out string datasetName, out string objectName)
         {
-            workspacePath = null; datasetName = null; featureClassName = null;
-            fullPath = fullPath.ToLower();
-            foreach (var extension in new[] { ".gdb", ".mdb" })
-            {
-                int index;
-                if ((index = fullPath.LastIndexOf(extension, StringComparison.OrdinalIgnoreCase)) > -1)
-                {
-                    workspacePath = fullPath.Substring(0, index + 4);
-                    break;
-                }
-            }
-            if (Path.GetExtension(fullPath) == ".shp")
-                workspacePath = Path.GetDirectoryName(fullPath);
-            if (!string.IsNullOrWhiteSpace(workspacePath))//按照"\"或者"/"分割子路径，获得要素集名称、要素类名称
-            {
-                var subPath = fullPath.Replace(workspacePath, "");
-                var names = subPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
-                if (names.Length == 1) { datasetName = null; featureClassName = names[0]; }
-                if (names.Length == 2) { datasetName = names[0]; featureClassName = names[1]; }
-            }
+            TableEx.SplitPath(fullPath, out workspacePath, out datasetName, out objectName);
         }
 
-        #region 私有方法 - 获取路径下的第一个要素类
+
+        #region 私有方法 - 获取路径或数据库下的第一个要素类
         /// <summary>
-        /// 获取指定目录下的第一个要素类，目录为gdb文件夹，或shp、dwg所在文件夹位置
+        /// 获取指定目录下的第一个要素类，目录为gdb文件夹，或shp（优先）、dwg所在文件夹位置
         /// </summary>
         /// <param name="dir">gdb文件夹，或shp、dwg所在文件夹路径</param>
         /// <returns></returns>
@@ -140,21 +142,23 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                     break;
                 }
             }
+
+            IFeatureClass featureClass = null;
             if (!string.IsNullOrWhiteSpace(workspacePath))//按照"\"或者"/"分割子路径，获得要素集名称、要素类名称
             {
-                var workspace = WorkspaceEx.GetWorkSpace(workspacePath);
-                if (workspace == null) throw new Exception($"无法按照指定路径或连接字符串“{workspacePath}”打开工作空间！");
-
-                var subPath = fullPath.Replace(workspacePath, "");
-                var names = subPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
-                if (names.Length == 1) return workspace.GetFeatureClassByName(names[0]);
-                if (names.Length == 2) return workspace.GetFeatureDataset(names[0])?.GetFeatureClassByName(names[1]);
+                workspacePath.ToWorkspace(workspace =>
+                {
+                    var subPath = fullPath.Replace(workspacePath, "");
+                    var names = subPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+                    if (names.Length == 1) featureClass = workspace.GetFeatureClassByName(names[0]);
+                    if (names.Length == 2) featureClass = workspace.GetFeatureDataset(names[0])?.GetFeatureClassByName(names[1]);
+                });
             }
 
-            if (fullPath.Contains(".dwg"))
-                return FromDwgFullPath(fullPath);
+            if (featureClass == null && fullPath.Contains(".dwg"))
+                featureClass = FromDwgFullPath(fullPath);
 
-            return null;
+            return featureClass;
         }
         /// <summary>
         /// 获取指定shp文件存储的要素类
@@ -165,7 +169,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             var dir = Path.GetDirectoryName(shpPath);
             var fileName = Path.GetFileNameWithoutExtension(shpPath);
-            return WorkspaceEx.GetWorkSpace(dir, EWorkspaceType.ShapeFile).GetFeatureClassByName(fileName);
+            return dir.ToWorkspace(workspace => workspace.GetFeatureClassByName(fileName));
         }
         /// <summary>
         /// 获取指定shp目录存储的第一个要素类
@@ -174,7 +178,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static IFeatureClass FirstFromShpDir(string shpDir)
         {
-            return WorkspaceEx.GetWorkSpace(shpDir, EWorkspaceType.ShapeFile).GetFirstFeatureClass();
+            return shpDir.ToWorkspace(workspace => workspace.GetFirstFeatureClass());
         }
         /// <summary>
         /// 获取指定mdb数据库存储的第一个要素类
@@ -183,7 +187,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static IFeatureClass FirstFromMdb(string mdbPath)
         {
-            return WorkspaceEx.GetWorkSpace(mdbPath, EWorkspaceType.Access).GetFirstFeatureClass();
+            return mdbPath.ToWorkspace(workspace => workspace.GetFirstFeatureClass());
         }
         /// <summary>
         /// 获取指定gdb数据库存储的第一个要素类
@@ -192,7 +196,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static IFeatureClass FirstFromGdb(string gdbPath)
         {
-            return WorkspaceEx.GetWorkSpace(gdbPath, EWorkspaceType.FileGDB).GetFirstFeatureClass();
+            return gdbPath.ToWorkspace(workspace => workspace.GetFirstFeatureClass());
         }
         /// <summary>
         /// 获取指定CAD的dwg工作空间存储的第一个要素类
@@ -201,24 +205,27 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static IFeatureClass FirstFromDwgDir(string dwgDir)
         {
-            return WorkspaceEx.GetWorkSpace(dwgDir, EWorkspaceType.CAD).GetFirstFeatureClass();
+            return dwgDir.ToWorkspace(workspace => workspace.GetFirstFeatureClass(), EWorkspaceType.CAD);
         }
         /// <summary>
         /// 获取指定CAD的dwg数据集存储的第一个要素类
         /// </summary>
         /// <param name="dwgPath">CAD的dwg数据集路径</param>
-        /// <returns></returns>
+        /// <returns>返回要素类，路径不存在则抛出异常，要素类不存在则返回null</returns>
         private static IFeatureClass FirstFromDwgFile(string dwgPath)
         {
+            if (!File.Exists(dwgPath))
+                throw new Exception("获取要素类失败，找不到指定路径：" + dwgPath);
+
             var dwgDir = Path.GetDirectoryName(dwgPath);
             var dataSetName = Path.GetFileNameWithoutExtension(dwgPath);
-            return WorkspaceEx.GetWorkSpace(dwgDir, EWorkspaceType.CAD).GetFeatureDataset(dataSetName).GetFirstFeatureClass();
+            return dwgDir.ToWorkspace(workspace => workspace.GetFeatureDataset(dataSetName).GetFirstFeatureClass(), EWorkspaceType.CAD);
         }
         /// <summary>
         /// 获取指定CAD的dwg数据集存储的第一个要素类
         /// </summary>
         /// <param name="dwgLayerPath">指向dwg图层的完整路径：dwg文件路径\图层名</param>
-        /// <returns></returns>
+        /// <returns>返回要素类，路径不存在则抛出异常，要素类不存在则返回null</returns>
         private static IFeatureClass FromDwgFullPath(string dwgLayerPath)
         {
             var index = dwgLayerPath.LastIndexOf(dwgLayerPath, StringComparison.OrdinalIgnoreCase);
@@ -232,23 +239,23 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             var dwgDir = Path.GetDirectoryName(dwgPath);
             var dataSetName = Path.GetFileNameWithoutExtension(dwgPath);
             var layerName = dwgLayerPath.Replace(dwgPath, "");
-            return WorkspaceEx.GetWorkSpace(dwgDir, EWorkspaceType.CAD).GetFeatureDataset(dataSetName).GetFeatureClassByName(layerName);
+            return dwgDir.ToWorkspace(workspace => workspace.GetFeatureDataset(dataSetName).GetFeatureClassByName(layerName), EWorkspaceType.CAD);
         }
         /// <summary>
         /// 获取指定连接字符串对应数据库存储的第一个要素类
         /// </summary>
         /// <param name="connString">连接字符串</param>
-        /// <returns></returns>
+        /// <returns>返回要素类，若工作空间没有要素类则返回null</returns>
         private static IFeatureClass FirstFromConnString(string connString)
         {
-            return WorkspaceEx.GetWorkSpace(connString).GetFirstFeatureClass();
+            return connString.ToWorkspace(workspace => workspace.GetFirstFeatureClass());
         }
         #endregion
 
 
-        #region 私有方法 - 获取路径下的全部要素类
+        #region 私有方法 - 获取路径或数据库下的全部要素类
         /// <summary>
-        /// 获取指定目录下存储的全部要素类
+        /// 获取指定目录下存储的全部shp和dwg要素类
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>
@@ -308,24 +315,24 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             IFeatureClass featureClass = null;
             if (!string.IsNullOrWhiteSpace(workspacePath))//按照"\"或者"/"分割子路径，获得要素集名称、要素类名称
             {
-                var workspace = WorkspaceEx.GetWorkSpace(workspacePath);
-                if (workspace == null) throw new Exception($"无法按照指定路径或连接字符串“{workspacePath}”打开工作空间！");
-
-                var subPath = fullPath.Replace(workspacePath, "");
-                var names = subPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
-                if (names.Length == 1)
+                workspacePath.ToWorkspace(workspace =>
                 {
-                    var dataset = workspace.GetFeatureDataset(names[0]);
-                    if (dataset != null)
-                        classes.AddRange(dataset.GetFeatureClasses());
-                    else if ((featureClass = workspace.GetFeatureClassByName(names[0])) != null)
+                    var subPath = fullPath.Replace(workspacePath, "");
+                    var names = subPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+                    if (names.Length == 1)
+                    {
+                        var dataset = workspace.GetFeatureDataset(names[0]);
+                        if (dataset != null)
+                            classes.AddRange(dataset.GetFeatureClasses());
+                        else if ((featureClass = workspace.GetFeatureClassByName(names[0])) != null)
+                            classes.Add(featureClass);
+                    }
+                    if (names.Length == 2)
+                    {
+                        featureClass = workspace.GetFeatureDataset(names[0])?.GetFeatureClassByName(names[1]);
                         classes.Add(featureClass);
-                }
-                if (names.Length == 2)
-                {
-                    featureClass = workspace.GetFeatureDataset(names[0])?.GetFeatureClassByName(names[1]);
-                    classes.Add(featureClass);
-                }
+                    }
+                });
             }
 
             if (fullPath.Contains(".dwg") &&
@@ -341,7 +348,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static List<IFeatureClass> FromShpDir(string shpDir)
         {
-            return WorkspaceEx.GetWorkSpace(shpDir, EWorkspaceType.ShapeFile).GetFeatureClasses();
+            return shpDir.ToWorkspace(workspace => workspace.GetFeatureClasses());
         }
         /// <summary>
         /// 获取指定mdb数据库存储的全部要素类
@@ -350,7 +357,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static List<IFeatureClass> FromMdb(string mdbPath)
         {
-            return WorkspaceEx.GetWorkSpace(mdbPath, EWorkspaceType.Access).GetFeatureClasses();
+            return mdbPath.ToWorkspace(workspace => workspace.GetFeatureClasses());
         }
         /// <summary>
         /// 获取指定gdb数据库存储的全部要素类
@@ -359,7 +366,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static List<IFeatureClass> FromGdb(string gdbPath)
         {
-            return WorkspaceEx.GetWorkSpace(gdbPath, EWorkspaceType.FileGDB).GetFeatureClasses();
+            return gdbPath.ToWorkspace(workspace => workspace.GetFeatureClasses());
         }
         /// <summary>
         /// 获取指定CAD的dwg数据集存储的要素类
@@ -370,7 +377,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         {
             var dir = Path.GetDirectoryName(dwgPath);
             var dataSetName = Path.GetFileNameWithoutExtension(dwgPath);
-            return WorkspaceEx.GetWorkSpace(dir, EWorkspaceType.CAD).GetFeatureDataset(dataSetName).GetFeatureClasses();
+            return dir.ToWorkspace(workspace => workspace.GetFeatureDataset(dataSetName).GetFeatureClasses(), EWorkspaceType.CAD);
         }
         /// <summary>
         /// 获取指定目录下全部CAD的dwg数据集存储的要素类
@@ -379,7 +386,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static List<IFeatureClass> FromDwgDir(string dwgDir)
         {
-            return WorkspaceEx.GetWorkSpace(dwgDir, EWorkspaceType.CAD).GetFeatureClasses();
+            return dwgDir.ToWorkspace(workspace => workspace.GetFeatureClasses(), EWorkspaceType.CAD);
         }
         /// <summary>
         /// 获取指定连接字符串对应数据库存储的全部要素类
@@ -388,7 +395,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         private static List<IFeatureClass> FromConnString(string connString)
         {
-            return WorkspaceEx.GetWorkSpace(connString).GetFeatureClasses();
+            return connString.ToWorkspace(workspace => workspace.GetFeatureClasses());
         }
         #endregion
     }

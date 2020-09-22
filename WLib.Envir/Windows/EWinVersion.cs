@@ -38,7 +38,7 @@ namespace WLib.Envir.Windows
         [Description("Windows 10")]
         Win10,
 
-        [Description("Windows或以上版本")]
+        [Description("Windows 8或以上版本")]
         Win8或以上,
 
         [Description("Windows 2000")]

@@ -6,6 +6,7 @@
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.Display;
+using System.Collections.Generic;
 
 namespace WLib.ArcGis.Display
 {
@@ -47,6 +48,17 @@ namespace WLib.ArcGis.Display
                 rgbColor.Transparency = byte.Parse(rrggbbtt.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
 
             return rgbColor;
+        }
+        /// <summary>
+        /// 获得多个颜色（IColor）
+        /// </summary>
+        /// <param name="rrggbbtt">16进制表示的颜色字符串数组，每个数组元素可以为： 6位颜色值RRGGBB，如"ff0000"为红色；
+        /// 或8位颜色值RRGGBBTT，如"ff0000ff"为红色不透明(最后两位00表示透明，ff表示不透明)</param>
+        /// <returns></returns>
+        public static IEnumerable<IColor> GetIColors(params string[] rrggbbtt)
+        {
+            foreach (var item in rrggbbtt)
+                yield return GetIColor(item);
         }
     }
 }

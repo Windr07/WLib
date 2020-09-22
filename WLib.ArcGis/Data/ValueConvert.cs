@@ -67,9 +67,9 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="feature"></param>
         /// <param name="fieldName"></param>
-        /// <param name="replaceStr">当值为DBNull或Empty或空白字符时输出此字符串，可以为null</param>
+        /// <param name="replaceStr">当值为DBNull或Empty或空白字符时输出此字符串，可以为null或Empty等</param>
         /// <returns></returns>
-        public static string ToStringTrim(this IFeature feature, string fieldName, string replaceStr)
+        public static string ToStringTrim(this IFeature feature, string fieldName, string replaceStr = "")
         {
             string value = feature.get_Value(feature.Fields.FindField(fieldName)).ToString().Trim();
             if (value == string.Empty)
@@ -187,9 +187,9 @@ namespace WLib.ArcGis.Data
         /// </summary>
         /// <param name="r"></param>
         /// <param name="fieldName"></param>
-        /// <param name="replaceStr">当值为null或Empty或空白字符时输出此字符串，可以为null</param>
+        /// <param name="replaceStr">当值为null或Empty或空白字符时输出此字符串，可以为null或Empty等</param>
         /// <returns></returns>
-        public static string ToStringTrim(this IRow r, string fieldName, string replaceStr)
+        public static string ToStringTrim(this IRow r, string fieldName, string replaceStr = "")
         {
             string value = r.get_Value(r.Fields.FindField(fieldName)).ToString().Trim();
             if (string.IsNullOrEmpty(value))

@@ -27,18 +27,11 @@ namespace WLib.Database.TableInfo
         /// <summary>
         /// 字典表
         /// </summary>
-        public DictionaryTable()
-        {
-            this.CodeNameDict = new Dictionary<string, string>();
-        }
+        public DictionaryTable() => this.CodeNameDict = new Dictionary<string, string>();
         /// <summary>
         /// 字典表
         /// </summary>
         /// <param name="dictionaryName"></param>
-        public DictionaryTable(string dictionaryName)
-        {
-            this.DictionaryName = dictionaryName;
-            this.CodeNameDict = new Dictionary<string, string>();
-        }
+        public DictionaryTable(string dictionaryName) : this() => this.DictionaryName = dictionaryName;
     }
 }
