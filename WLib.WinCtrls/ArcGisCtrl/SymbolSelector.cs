@@ -12,6 +12,7 @@ using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using WLib.Envir.ArcGis;
 using Path = System.IO.Path;
@@ -96,12 +97,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
                Path.Combine(ArcGisEnvironment.GetInstallPath(), "Styles","ESRI.ServerStyle"),
                Path.Combine(RuntimeManager.ActiveRuntime.Path, "Styles","ESRI.ServerStyle"),
             };
-            foreach (var path in paths)
-            {
-                if (File.Exists(path))
-                    return path;
-            }
-            return null;
+            return paths.FirstOrDefault(path => File.Exists(path));
         }
         /// <summary>
         /// 根据图层的几何类型，获取需要加载的符号类别
