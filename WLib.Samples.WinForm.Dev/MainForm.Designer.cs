@@ -35,8 +35,7 @@
             this.btnOpen = new DevExpress.XtraBars.BarButtonItem();
             this.btnSave = new DevExpress.XtraBars.BarButtonItem();
             this.btnSaveAs = new DevExpress.XtraBars.BarButtonItem();
-            this.btnAddData1 = new DevExpress.XtraBars.BarButtonItem();
-            this.btnAddData2 = new DevExpress.XtraBars.BarButtonItem();
+            this.btnAddData = new DevExpress.XtraBars.BarButtonItem();
             this.btnExit = new DevExpress.XtraBars.BarButtonItem();
             this.btnZoomIn = new DevExpress.XtraBars.BarButtonItem();
             this.btnZoomOut = new DevExpress.XtraBars.BarButtonItem();
@@ -85,8 +84,7 @@
             this.btnOpen,
             this.btnSave,
             this.btnSaveAs,
-            this.btnAddData1,
-            this.btnAddData2,
+            this.btnAddData,
             this.btnExit,
             this.btnZoomIn,
             this.btnZoomOut,
@@ -129,6 +127,7 @@
             this.btnNew.Name = "btnNew";
             this.btnNew.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
+            this.btnNew.Tag = ((short)(1));
             this.btnNew.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
             // 
             // btnOpen
@@ -139,6 +138,7 @@
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
+            this.btnOpen.Tag = ((short)(2));
             this.btnOpen.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
             // 
             // btnSave
@@ -149,6 +149,7 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
+            this.btnSave.Tag = ((short)(5));
             this.btnSave.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
             // 
             // btnSaveAs
@@ -159,27 +160,19 @@
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
+            this.btnSaveAs.Tag = ((short)(6));
             this.btnSaveAs.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
             // 
-            // btnAddData1
+            // btnAddData
             // 
-            this.btnAddData1.Caption = "添加数据1";
-            this.btnAddData1.Id = 6;
-            this.btnAddData1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAddData1.ImageOptions.Image")));
-            this.btnAddData1.Name = "btnAddData1";
-            this.btnAddData1.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
+            this.btnAddData.Caption = "添加数据1";
+            this.btnAddData.Id = 6;
+            this.btnAddData.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAddData1.ImageOptions.Image")));
+            this.btnAddData.Name = "btnAddData";
+            this.btnAddData.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
-            this.btnAddData1.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
-            // 
-            // btnAddData2
-            // 
-            this.btnAddData2.Caption = "添加数据2";
-            this.btnAddData2.Id = 8;
-            this.btnAddData2.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnAddData2.ImageOptions.Image")));
-            this.btnAddData2.Name = "btnAddData2";
-            this.btnAddData2.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
-            | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
-            this.btnAddData2.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
+            this.btnAddData.Tag = ((short)(4));
+            this.btnAddData.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
             // 
             // btnExit
             // 
@@ -189,6 +182,7 @@
             this.btnExit.Name = "btnExit";
             this.btnExit.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
+            this.btnExit.Tag = ((short)(0));
             this.btnExit.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.FileToolStripMenuItem_Click);
             // 
             // btnZoomIn
@@ -265,7 +259,7 @@
             // 
             this.btnPoint.Caption = "点";
             this.btnPoint.Id = 17;
-            this.btnPoint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem8.ImageOptions.Image")));
+            this.btnPoint.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPoint.ImageOptions.Image")));
             this.btnPoint.Name = "btnPoint";
             this.btnPoint.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -275,7 +269,7 @@
             // 
             this.btnLine.Caption = "线";
             this.btnLine.Id = 18;
-            this.btnLine.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem9.ImageOptions.Image")));
+            this.btnLine.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnLine.ImageOptions.Image")));
             this.btnLine.Name = "btnLine";
             this.btnLine.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -285,7 +279,7 @@
             // 
             this.btnPolygon.Caption = "多边形";
             this.btnPolygon.Id = 19;
-            this.btnPolygon.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem10.ImageOptions.Image")));
+            this.btnPolygon.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnPolygon.ImageOptions.Image")));
             this.btnPolygon.Name = "btnPolygon";
             this.btnPolygon.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -295,7 +289,7 @@
             // 
             this.btnRectangle.Caption = "矩形";
             this.btnRectangle.Id = 20;
-            this.btnRectangle.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.ImageOptions.Image")));
+            this.btnRectangle.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnRectangle.ImageOptions.Image")));
             this.btnRectangle.Name = "btnRectangle";
             this.btnRectangle.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -305,7 +299,7 @@
             // 
             this.btnCircle.Caption = "圆";
             this.btnCircle.Id = 21;
-            this.btnCircle.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem12.ImageOptions.Image")));
+            this.btnCircle.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnCircle.ImageOptions.Image")));
             this.btnCircle.Name = "btnCircle";
             this.btnCircle.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -315,7 +309,7 @@
             // 
             this.btnText.Caption = "文本";
             this.btnText.Id = 22;
-            this.btnText.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem13.ImageOptions.Image")));
+            this.btnText.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnText.ImageOptions.Image")));
             this.btnText.Name = "btnText";
             this.btnText.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -325,7 +319,7 @@
             // 
             this.btnSimpleRender.Caption = "简单渲染";
             this.btnSimpleRender.Id = 25;
-            this.btnSimpleRender.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.Image")));
+            this.btnSimpleRender.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSimpleRender.ImageOptions.Image")));
             this.btnSimpleRender.Name = "btnSimpleRender";
             this.btnSimpleRender.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -334,7 +328,7 @@
             // 
             this.btnClassifyRnder.Caption = "分级渲染";
             this.btnClassifyRnder.Id = 26;
-            this.btnClassifyRnder.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.Image")));
+            this.btnClassifyRnder.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnClassifyRnder.ImageOptions.Image")));
             this.btnClassifyRnder.Name = "btnClassifyRnder";
             this.btnClassifyRnder.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -343,7 +337,7 @@
             // 
             this.btnChartRender.Caption = "图表渲染";
             this.btnChartRender.Id = 27;
-            this.btnChartRender.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem3.ImageOptions.Image")));
+            this.btnChartRender.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnChartRender.ImageOptions.Image")));
             this.btnChartRender.Name = "btnChartRender";
             this.btnChartRender.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -352,7 +346,7 @@
             // 
             this.btnUniqueValueRender.Caption = "唯一值渲染";
             this.btnUniqueValueRender.Id = 28;
-            this.btnUniqueValueRender.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.Image")));
+            this.btnUniqueValueRender.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnUniqueValueRender.ImageOptions.Image")));
             this.btnUniqueValueRender.Name = "btnUniqueValueRender";
             this.btnUniqueValueRender.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -361,7 +355,7 @@
             // 
             this.btnQueryGeometry.Caption = "查询图形";
             this.btnQueryGeometry.Id = 29;
-            this.btnQueryGeometry.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.Image")));
+            this.btnQueryGeometry.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnQueryGeometry.ImageOptions.Image")));
             this.btnQueryGeometry.Name = "btnQueryGeometry";
             this.btnQueryGeometry.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -371,7 +365,7 @@
             // 
             this.btnQueryAttribute.Caption = "查询属性";
             this.btnQueryAttribute.Id = 30;
-            this.btnQueryAttribute.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem6.ImageOptions.Image")));
+            this.btnQueryAttribute.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnQueryAttribute.ImageOptions.Image")));
             this.btnQueryAttribute.Name = "btnQueryAttribute";
             this.btnQueryAttribute.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -381,7 +375,7 @@
             // 
             this.btnExport.Caption = "导出数据";
             this.btnExport.Id = 33;
-            this.btnExport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem15.ImageOptions.Image")));
+            this.btnExport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.ImageOptions.Image")));
             this.btnExport.Name = "btnExport";
             this.btnExport.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -391,7 +385,7 @@
             // 
             this.btnImport.Caption = "导入数据";
             this.btnImport.Id = 34;
-            this.btnImport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem16.ImageOptions.Image")));
+            this.btnImport.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnImport.ImageOptions.Image")));
             this.btnImport.Name = "btnImport";
             this.btnImport.RibbonStyle = ((DevExpress.XtraBars.Ribbon.RibbonItemStyles)(((DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithText) 
             | DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText)));
@@ -410,8 +404,7 @@
             this.ribbonPageGroup1.ItemLinks.Add(this.btnOpen);
             this.ribbonPageGroup1.ItemLinks.Add(this.btnSave);
             this.ribbonPageGroup1.ItemLinks.Add(this.btnSaveAs);
-            this.ribbonPageGroup1.ItemLinks.Add(this.btnAddData1);
-            this.ribbonPageGroup1.ItemLinks.Add(this.btnAddData2);
+            this.ribbonPageGroup1.ItemLinks.Add(this.btnAddData);
             this.ribbonPageGroup1.ItemLinks.Add(this.btnExit);
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "文件";
@@ -536,8 +529,7 @@
         private DevExpress.XtraBars.BarButtonItem btnOpen;
         private DevExpress.XtraBars.BarButtonItem btnSave;
         private DevExpress.XtraBars.BarButtonItem btnSaveAs;
-        private DevExpress.XtraBars.BarButtonItem btnAddData1;
-        private DevExpress.XtraBars.BarButtonItem btnAddData2;
+        private DevExpress.XtraBars.BarButtonItem btnAddData;
         private DevExpress.XtraBars.BarButtonItem btnExit;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage2;
         private DevExpress.XtraBars.BarButtonItem btnZoomIn;

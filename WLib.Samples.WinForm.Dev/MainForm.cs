@@ -1,17 +1,15 @@
-﻿using ESRI.ArcGIS.Geodatabase;
+﻿using DevExpress.Utils;
+using DevExpress.XtraBars.Ribbon;
+using ESRI.ArcGIS.Geodatabase;
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using WLib.ArcGis.Analysis.Gp;
 using WLib.ArcGis.Carto.Element;
 using WLib.ArcGis.Control;
 using WLib.ArcGis.Control.MapAssociation;
-using WLib.ArcGis.Data;
-using WLib.ArcGis.GeoDatabase.FeatClass;
-using WLib.ArcGis.GeoDatabase.WorkSpace;
-using WLib.Database;
 using WLib.WinCtrls.Dev.ArcGisCtrl;
-using DevExpress.XtraBars.Ribbon;
-using FolderBrowserDialog = WLib.WinCtrls.ExplorerCtrl.FileFolderCtrl.FolderBrowserDialog;
+using WLib.WinCtrls.Dev.Extension;
 
 namespace WLib.Samples.WinForm.Dev
 {
@@ -26,7 +24,7 @@ namespace WLib.Samples.WinForm.Dev
         {
             try
             {
-                this.mapViewer1.MainMapControl.LoadMxFile(AppDomain.CurrentDomain.BaseDirectory + @"Data\\SampleData.mxd");
+                this.mapViewer1.MainMapControl.LoadMxFile(AppDomain.CurrentDomain.BaseDirectory + @"Data\SampleData.mxd");
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
@@ -40,8 +38,7 @@ namespace WLib.Samples.WinForm.Dev
             else if (menuName == this.btnOpen.Name) docHelper.OpenDoc();
             else if (menuName == this.btnSave.Name) docHelper.Save();
             else if (menuName == this.btnSaveAs.Name) docHelper.SaveAs();
-            else if (menuName == this.btnAddData1.Name) docHelper.AddData();
-            else if (menuName == this.btnAddData2.Name) docHelper.AddData();
+            else if (menuName == this.btnAddData.Name) docHelper.AddData();
             else if (menuName == this.btnExit.Name) Application.Exit();
         }
 
@@ -93,6 +90,29 @@ namespace WLib.Samples.WinForm.Dev
         private void 导出数据ToolStripMenuItem_Click(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
 
+        }
+
+
+        private void ExportImages()
+        {
+            try
+            {
+                var imageCollection = new ImageCollection();
+                imageCollection.ExportImageCollectionImages(Environment.CurrentDirectory + @"\Photo\");
+            }
+            catch (Exception ex) { MessageBox.Show(@"错误：", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        private void RunIntersect()
+        {
+            try
+            {
+                var dbPath = AppDomain.CurrentDomain.BaseDirectory + @"Data\SampleData.mdb";
+                var path1 = dbPath + @"\XZQ;";
+                var resultPath = dbPath + @"\XZQ_Intersect";
+                new GpHelper(true).RunTool(GpHelper.Intersect(path1, resultPath), out _, out _);
+            }
+            catch (Exception ex) { MessageBox.Show(@"错误：", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
     }
 }
