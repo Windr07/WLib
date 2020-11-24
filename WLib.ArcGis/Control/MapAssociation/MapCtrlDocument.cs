@@ -17,7 +17,7 @@ namespace WLib.ArcGis.Control.MapAssociation
     /// 地图控件与地图文档关联操作
     /// （包括新建、加载、保存、另存地图文档，添加数据、清空图层等）
     /// </summary>
-    public class MapCtrlDocument: IMapCtrlAssociation
+    public class MapCtrlDocument : IMapCtrlAssociation
     {
         /// <summary>
         /// 地图文档
@@ -45,6 +45,24 @@ namespace WLib.ArcGis.Control.MapAssociation
         }
 
 
+        /// <summary>
+        /// 执行指定的地图文档操作
+        /// </summary>
+        /// <param name="mapDocOperate">地图文档操作类型</param>
+        public void ToolOnClick(EMapDocOperate mapDocOperate, object[] args = null)
+        {
+            switch (mapDocOperate)
+            {
+                case EMapDocOperate.NewEmptyDoc: NewEmptyDoc(); break;
+                case EMapDocOperate.OpenDocDialog: OpenDoc(); break;
+                case EMapDocOperate.OpenDoc when args == null || args.Length == 0: OpenDoc(); break;
+                case EMapDocOperate.OpenDoc: OpenDoc(args[0].ToString()); break;
+                case EMapDocOperate.AddData: AddData(); break;
+                case EMapDocOperate.Save: Save(); break;
+                case EMapDocOperate.SaveAs: SaveAs(); break;
+                default: break;
+            }
+        }
         /// <summary>
         /// 打开空白地图文档
         /// </summary>

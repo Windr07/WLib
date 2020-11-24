@@ -201,6 +201,7 @@
     <Compile Include="Control\IMapNavigationTools.cs" />
     <Compile Include="Control\IPageNavigationTools.cs" />
     <Compile Include="Control\MapAssociation\CmdCreator.cs" />
+    <Compile Include="Control\MapAssociation\EMapDocOperate.cs" />
     <Compile Include="Control\MapAssociation\EMapTools.cs" />
     <Compile Include="Control\MapAssociation\EMeasureType.cs" />
     <Compile Include="Control\MapAssociation\EPageTools.cs" />

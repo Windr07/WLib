@@ -38,7 +38,11 @@ namespace WLib.WinCtrls.ArcGisCtrl
         /// <summary>
         /// 当前使用的地图导航工具
         /// </summary>
-        public EMapTools CurrentTool { get; set; }
+        private EMapTools _currentTool;
+        /// <summary>
+        /// 当前使用的地图导航工具
+        /// </summary>
+        public EMapTools CurrentTool { get => _currentTool; set { _currentTool = value; ToolOnClick(value); } }
         /// <summary>
         /// 地图导航工具条所绑定的地图控件
         /// </summary>
@@ -55,7 +59,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
                     _measureTool = new MapCtrlMeasure(MapControl);
                 }
                 _effectLayer = new CommandsEnvironmentClass();
-                CurrentTool = EMapTools.None;
+                _currentTool = EMapTools.None;
             }
         }
 
@@ -171,18 +175,19 @@ namespace WLib.WinCtrls.ArcGisCtrl
         //点击地图导航条的工具
         private void navigationButton_Click(object sender, EventArgs e)
         {
-            if (MapControl == null) return;
-            var toolTip = ((Button)sender).Tag.ToString();
+            if (MapControl == null || !(sender is Button button)) return;
+            button.Focus();
+            var toolTip = button.Tag.ToString();
             if (string.IsNullOrWhiteSpace(toolTip))
                 throw new Exception($"点击的导航工具“{((Button)sender).Name}”的Tag为空，请联系系统管理员添加Tag！");
 
-            CurrentTool = toolTip.GetEnum<EMapTools>();
-            bool measure = CurrentTool == EMapTools.MeasureDistance || CurrentTool == EMapTools.MeasureArea;
+            var currentTool = _currentTool = toolTip.GetEnum<EMapTools>();
+            bool measure = currentTool == EMapTools.MeasureDistance || currentTool == EMapTools.MeasureArea;
             this.Height = measure ? this.lblMeasureInfo.Location.Y + this.lblMeasureInfo.Height : this.grpMapNav.Height;
             this.btnMeasureClose.Visible = this.lblMeasureInfo.Visible = this.lblMeasureTips.Visible = measure;
 
-            this.lblSwipe.Visible = this.cmbLayers.Visible = CurrentTool == EMapTools.Swipe;
-            if (CurrentTool == EMapTools.Swipe)
+            this.lblSwipe.Visible = this.cmbLayers.Visible = currentTool == EMapTools.Swipe;
+            if (currentTool == EMapTools.Swipe)
             {
                 this.Height = this.grpMapNav.Height + this.cmbLayers.Height + 1;
                 this.cmbLayers.Items.Clear();
@@ -190,7 +195,7 @@ namespace WLib.WinCtrls.ArcGisCtrl
                 if (this.cmbLayers.Items.Count > 0) this.cmbLayers.SelectedIndex = 0;
             }
 
-            ICommand command = CmdCreator.CreateCommand(CurrentTool);
+            ICommand command = CmdCreator.CreateCommand(currentTool);
             if (command != null)
             {
                 command.OnCreate(MapControl.Object);
