@@ -10,12 +10,12 @@
 * **通用.NET功能**
   1. 数据库连接查询：[DbHelper](WLib/Doc/02数据库连接.md)
   2. 部分常用Windows API调用
-  3. [计算机硬件信息获取](WLib/Doc/09计算机硬件信息获取)
-  4. [压缩与解压缩](WLib/Doc/08压缩与解压缩)
-  5. [部分反射操作（类型与程序集扩展）](WLib/Doc/10类型与程序集扩展)
-  6. [DataTable对象扩展、数据转换](WLib/Doc/06DataTable扩展操作)
+  3. [计算机硬件信息获取](WLib/Doc/09计算机硬件信息获取.md)
+  4. [压缩与解压缩](WLib/Doc/08压缩与解压缩.md)
+  5. [部分反射操作（类型与程序集扩展）](WLib/Doc/10类型与程序集扩展.md)
+  6. [DataTable对象扩展、数据转换](WLib/Doc/06DataTable扩展操作.md)
   7. [插件接口](WLib/Doc/03插件功能.md)
-  8. [进度操作（数据处理模板）](WLib/Doc/07数据处理模板)
+  8. [进度操作（数据处理模板）](WLib/Doc/07数据处理模板.md)
   9. [软件注册](WLib/Doc/05软件注册.md)
   10. [软件更新](WLib/Doc/04软件更新)
 * **基于ArcGIS Engine的GIS数据读写、空间分析**
