@@ -43,9 +43,9 @@ namespace WLib.WinCtrls.Dev.ProgressViewCtrl
         /// <param name="changeView">改变界面显示状态的委托，bool值参数代表开始批量操作(true)还是结束批量操作(false)</param>
         public void BindEvent(Form formCtrl, ProgressBarControl progressBarCtrl, Control messageCtrl, GridControl gridCtrl, Action<bool> changeView)
         {
-            if (Opt == null) 
+            if (Opt == null)
                 throw new Exception($"“{nameof(Opt)}”对象为空，请先对“{nameof(Opt)}”对象赋值，然后再调用“{nameof(BindEvent)}”方法对事件进行绑定！");
-            
+
             FormCtrl = formCtrl;
             MessageCtrl = messageCtrl;
             ProgressBarCtrl = progressBarCtrl;
@@ -115,7 +115,7 @@ namespace WLib.WinCtrls.Dev.ProgressViewCtrl
                 var opt = sender as IProgressOperation;
                 opt.Msgs.Error = e.OptException.ToString();
                 opt.WriteLogFile();
-                if(ShowErrorBox) MessageBoxEx.ShowError(e.OptException);
+                if (ShowErrorBox) MessageBoxEx.ShowError(e.OptException);
                 ChangeView?.Invoke(false);
                 RunningOpt = null;
             }));
@@ -127,6 +127,15 @@ namespace WLib.WinCtrls.Dev.ProgressViewCtrl
             {
                 ProgressBarCtrl.Properties.Maximum = e.MaxValue;
                 ProgressBarCtrl.Position = e.CurValue;
+                if (e.Message != null && MessageCtrl != null)
+                {
+                    if (MessageAppend)
+                    {
+                        if (AppendBefore) MessageCtrl.Text.Insert(0, e.Message + Environment.NewLine);
+                        else MessageCtrl.Text += e.Message + Environment.NewLine;
+                    }
+                    else MessageCtrl.Text = e.Message;
+                }
                 Application.DoEvents();
             }));
         }

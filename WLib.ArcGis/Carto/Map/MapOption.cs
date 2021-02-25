@@ -68,7 +68,7 @@ namespace WLib.ArcGis.Carto.Map
         /// <param name="mapFrame">要设定显示范围及比例尺的地图数据框</param>
         /// <param name="featureEnv">地图要素显示范围</param>
         /// <param name="scaleList">比例尺列表，将从中选取最合适的比例尺</param>
-        /// <param name="bufferDistance">要素与图廓的缓冲距离(厘米)，即地图实际显示范围是featEnvelope + 2 * bufferDistance</param>
+        /// <param name="bufferDistance">要素与图廓的缓冲距离(厘米)，即地图实际显示范围是featureEnvelope + 2 * bufferDistance</param>
         /// <param name="isFixedScale">是否设定固定比例尺</param>
         /// <returns></returns>
         public static double SetMapScale(this IPageLayout pageLayout, IMapFrame mapFrame,

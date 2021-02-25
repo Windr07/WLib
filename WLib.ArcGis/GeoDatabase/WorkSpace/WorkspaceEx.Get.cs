@@ -9,7 +9,10 @@ using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
 using System;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using WLib.Attributes.Description;
 using WLib.Files;
 
@@ -31,14 +34,14 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
         /// <returns></returns>
         public static bool IsWorkspacePath(string path)
         {
-            if (!System.IO.Path.IsPathRooted(path))
+            if (!Path.IsPathRooted(path))
                 path = AppDomain.CurrentDomain.BaseDirectory + path;
 
-            if (System.IO.Directory.Exists(path)) return true;
+            if (Directory.Exists(path)) return true;
 
-            if (!System.IO.File.Exists(path)) return false;
+            if (!File.Exists(path)) return false;
 
-            string extension = System.IO.Path.GetExtension(path)?.ToLower();
+            string extension = Path.GetExtension(path)?.ToLower();
             return extension == ".mdb" || extension == ".xls" || extension == ".xlsx";
         }
         /// <summary>
@@ -51,29 +54,35 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             if (string.IsNullOrWhiteSpace(str))
                 return false;
             str = str.TrimEnd(';');//去掉最后一个分号
-            var strConnectArray = str.Split('=', ';');
-            return strConnectArray.Length > 0 && strConnectArray.Length % 2 == 0;
+            var strConnectArray = str.Split(';');
+            return strConnectArray.All(v => v.Contains('='));
         }
         /// <summary>
-        /// 根据路径或连接参数，判断工作空间类型，只判断shp/gdb/mdb/sde/xls/xlsx，非gdb目录都将当成shp工作空间
+        /// 根据路径或连接字符串，判断工作空间类型
+        /// <para>只判断shp/gdb/mdb/sde/xls/xlsx，非gdb的目录将当成shp工作空间</para>
         /// </summary>
         /// <param name="connStrOrPath">工作空间的路径或连接参数，可以是shp/gdb文件夹路径、mdb/xls/xlsx文件路径、sde连接字符串</param>
         /// <returns>若strConnOrPath不是连接字符串，且指示的不是gdb,mdb,shp路径或路径不存在，返回null</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static EWorkspaceType GetDefaultWorkspaceType(string connStrOrPath)
         {
-            var eWorkspaceType = EWorkspaceType.Default;
-            if (IsConnectionString(connStrOrPath))
-                eWorkspaceType = EWorkspaceType.Sde;
-            else if (System.IO.File.Exists(connStrOrPath))
-            {
-                var extension = System.IO.Path.GetExtension(connStrOrPath).ToLower();
-                if (extension == ".mdb") eWorkspaceType = EWorkspaceType.Access;
-                else if (extension == ".xls" || extension == ".xlsx") eWorkspaceType = EWorkspaceType.Excel;
-            }
-            else if (System.IO.Directory.Exists(connStrOrPath))
-                eWorkspaceType = connStrOrPath.ToLower().EndsWith(".gdb") ? EWorkspaceType.FileGDB : EWorkspaceType.ShapeFile;
+            if (string.IsNullOrWhiteSpace(connStrOrPath))
+                throw new ArgumentNullException(nameof(connStrOrPath));
 
-            return eWorkspaceType;
+            if (IsConnectionString(connStrOrPath))
+                return EWorkspaceType.Sde;
+            else
+            {
+                var extension = Path.GetExtension(connStrOrPath)?.ToLower();
+                switch (extension)
+                {
+                    case ".xls":
+                    case ".xlsx": return EWorkspaceType.Excel;
+                    case ".mdb": return EWorkspaceType.Access;
+                    case ".gdb": return EWorkspaceType.FileGDB;
+                    default: return EWorkspaceType.ShapeFile;
+                }
+            }
         }
         /// <summary>
         /// 解析连接字符串，转成IPropertySet
@@ -91,7 +100,32 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             return propertySet;
         }
 
-
+        /// <summary>
+        /// 打开工作空间，若工作空间不存在则先创建（使用连接字符串的工作空间无法创建）
+        /// </summary>
+        /// <param name="connStrOrPath">
+        /// 工作空间路径或连接字符串，可以是以下情况：
+        /// 1、shp、txt、dwg、栅格文件（GRID、TIFF、ERDAS IMAGE等）所在目录；
+        /// 2、gdb文件夹自身路径；
+        /// 3、mdb、xls、xlsx文件路径；
+        /// 4、sde连接字符串（SERVER=ditu.test.com;INSTANCE=5151;DATABASE=sde_test;USER=sa;PASSWORD=sa;VERSION=dbo.DEFAULT）；
+        /// 5、oledb连接字符串，包括连接Excel、Access、Oracle、SQLServer等（Provider=Microsoft.Jet.OLEDB.4.0;Data Source=x:\xxx.mdb;User Id=admin;Password=xxx;）；
+        /// 6、直连sql连接字符串（server=localhost;uid=sa;pwd=sa;database=myDatabase）
+        /// </param>
+        /// <param name="eType">
+        /// 标识优先将strConnOrPath作为打开哪种工作空间的参数，值为Default时，
+        /// 根据strConnOrPath参数自动识别为shp/gdb/mdb/sde/oledb的其中一种工作空间</param>
+        /// <returns></returns>
+        public static IWorkspace GetOrCreateWorkspace(string connStrOrPath, EWorkspaceType eType = EWorkspaceType.Default)
+        {
+            var workspace = GetWorkSpace(connStrOrPath, eType);
+            if (workspace == null)
+            {
+                var dirInfo = new DirectoryInfo(connStrOrPath);
+                workspace = CreateWorkspace(eType, dirInfo.Parent.FullName, dirInfo.Name);
+            }
+            return workspace;
+        }
         /// <summary>
         /// 打开工作空间
         /// </summary>
@@ -123,19 +157,19 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             }
             else if (IsWorkspacePath(connStrOrPath))
             {
-                if (!System.IO.Path.IsPathRooted(connStrOrPath))
-                    connStrOrPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, connStrOrPath);
+                if (!Path.IsPathRooted(connStrOrPath))
+                    connStrOrPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, connStrOrPath);
 
-                if (System.IO.Directory.Exists(connStrOrPath)) //当参数是文件夹路径时
+                if (Directory.Exists(connStrOrPath)) //当参数是文件夹路径时
                 {
                     if (eType == EWorkspaceType.Default)
                         eType = connStrOrPath.ToLower().EndsWith(".gdb") ? EWorkspaceType.FileGDB : EWorkspaceType.ShapeFile;
 
                     workspace = GetWorkspaceFromFile(connStrOrPath, eType);
                 }
-                else if (System.IO.File.Exists(connStrOrPath)) //当参数是文件路径时
+                else if (File.Exists(connStrOrPath)) //当参数是文件路径时
                 {
-                    var extension = System.IO.Path.GetExtension(connStrOrPath)?.ToLower();
+                    var extension = Path.GetExtension(connStrOrPath)?.ToLower();
                     if (extension == ".mdb")
                         eType = EWorkspaceType.Access;
                     else if (extension == ".xls" || extension == ".xlsx")
@@ -143,6 +177,8 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
 
                     workspace = GetWorkspaceFromFile(connStrOrPath, eType);
                 }
+                else if (eType == EWorkspaceType.InMemory)
+                    workspace = GetWorkspaceInMemory();
             }
             return workspace;
         }
@@ -160,7 +196,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             try
             {
                 IWorkspaceName workspaceName = new WorkspaceNameClass();
-                workspaceName.WorkspaceFactoryProgID = eType.GetDescription(1);
+                workspaceName.WorkspaceFactoryProgID = eType.GetDescriptionEx(1);
                 workspaceName.ConnectionProperties = ConnectStringToPropetySet(connnectString);
                 IName iName = (IName)workspaceName;
                 IWorkspace workspace = iName.Open() as IWorkspace;
@@ -171,7 +207,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             }
             catch (Exception ex)
             {
-                throw new Exception($"打开{eType.GetDescription(2)}工作空间“{connnectString}”出错：{ex.Message}");
+                throw new Exception($"打开{eType.GetDescriptionEx(2)}工作空间“{connnectString}”出错：{ex.Message}");
             }
         }
         /// <summary>
@@ -185,7 +221,7 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
             try
             {
                 IWorkspaceName workspaceName = new WorkspaceNameClass();
-                workspaceName.WorkspaceFactoryProgID = eType.GetDescription(1);
+                workspaceName.WorkspaceFactoryProgID = eType.GetDescriptionEx(1);
                 workspaceName.PathName = path;
                 IName iName = (IName)workspaceName;
                 IWorkspace workspace = iName.Open() as IWorkspace;
@@ -201,8 +237,8 @@ namespace WLib.ArcGis.GeoDatabase.WorkSpace
                 if (!PathEx.PathLengthValidate(path, out var length))
                     msg += $"\r\n 可能原因为：路径长度超出限制，无法识别“{path}”的数据，请修改数据存放路径\r\n（允许路径最大长度为260，该路径长度为{length}）\r\n";
                 if (msg.Contains("WcsCommonProfileTypes}Text") || msg.Contains("未在 DTD/架构中声明"))
-                    msg += $"\r\n 可能原因为：该路径不是{eType.GetDescription()}（{eType} Workspace）";
-                throw new Exception($"打开{eType.GetDescription(2)}工作空间“{path}”出错：{msg}");
+                    msg += $"\r\n 可能原因为：该路径不是{eType.GetDescriptionEx()}（{eType} Workspace）";
+                throw new Exception($"打开{eType.GetDescriptionEx(2)}工作空间“{path}”出错：{msg}");
             }
         }
         /// <summary>

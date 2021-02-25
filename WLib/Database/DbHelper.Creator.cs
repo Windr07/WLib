@@ -3,6 +3,8 @@
 // date： 2019
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using WLib.Database.DbBase;
@@ -99,12 +101,12 @@ namespace WLib.Database
             => new DbHelper(Oracle(dataSource, userId, password), EDbProviderType.Oracle);
         /// <summary>
         ///  构建连接和操作SQL Server数据的帮助类（通过.NET自带的System.Data.SqlClient组件连接sqlServer的帮助类）
+        ///  <para>示例：Data Source=myServerAddress;Initial Catalog=myDataBase;User Id=myUsername;Password=myPassword;</para>
         /// </summary>
         /// <param name="dataSource">服务器地址</param>
         /// <param name="iniCatalog">数据库名称</param>
         /// <param name="userId">用户名</param>
         /// <param name="password">密码</param>
-        /// <example>Data Source=myServerAddress;Initial Catalog=myDataBase;User Id=myUsername;Password=myPassword;</example>
         /// <returns></returns>
         public static DbHelper SqlServerHelper(string dataSource, string iniCatalog, string userId, string password)
             => new DbHelper(SqlServer(dataSource, iniCatalog, userId, password), EDbProviderType.SqlServer);

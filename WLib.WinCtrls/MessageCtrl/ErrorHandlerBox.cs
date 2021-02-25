@@ -1,10 +1,18 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WLib.ExtProgram;
 using WLib.ExtProgram.Contact;
@@ -46,57 +54,6 @@ namespace WLib.WinCtrls.MessageCtrl
             remove { _openLog -= value; this.btnOpenLog.Visible = false; }
         }
 
-
-        /// <summary>
-        /// 错误显示和意见反馈框
-        /// </summary>
-        /// <param name="exception">异常</param>
-        /// <param name="suggestion">处理建议信息</param>
-        /// <param name="contactType">联系方式类型</param>
-        /// <param name="contact">联系方式内容</param>
-        /// <param name="helpAction">帮助按钮执行的操作</param>
-        public ErrorHandlerBox(Exception exception, string suggestion, EContactType contactType, string contact, Action<Exception> helpAction = null)
-        {
-            var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            LoadViewInfo(exception, suggestionActions, helpAction, new ContactInfo(contactType, "联系我们", contact));
-        }
-        /// <summary>
-        /// 错误显示和意见反馈框
-        /// </summary>
-        /// <param name="errorMessage">异常或错误信息</param>
-        /// <param name="suggestion">处理建议信息</param>
-        /// <param name="contactType">联系方式类型</param>
-        /// <param name="contact">联系方式内容</param>
-        /// <param name="helpAction">帮助按钮执行的操作</param>
-        public ErrorHandlerBox(string errorMessage, string suggestion, EContactType contactType, string contact, Action<Exception> helpAction = null)
-        {
-            var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            LoadViewInfo(new Exception(errorMessage), suggestionActions, helpAction, new ContactInfo(contactType, "联系我们", contact));
-        }
-        /// <summary>
-        /// 错误显示和意见反馈框
-        /// </summary>
-        /// <param name="exception">异常</param>
-        /// <param name="suggestion">处理建议信息</param>
-        /// <param name="contactInfos">联系信息</param>
-        /// <param name="helpAction">帮助按钮执行的操作</param>
-        public ErrorHandlerBox(Exception exception, string suggestion = null, IEnumerable<ContactInfo> contactInfos = null, Action<Exception> helpAction = null)
-        {
-            var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            LoadViewInfo(exception, suggestionActions, helpAction, contactInfos.ToArray());
-        }
-        /// <summary>
-        /// 错误显示和意见反馈框
-        /// </summary>
-        /// <param name="errorMessage">异常或错误信息</param>
-        /// <param name="suggestion">处理建议信息</param>
-        /// <param name="contactInfos">联系信息</param>
-        /// <param name="helpAction">帮助按钮执行的操作</param>
-        public ErrorHandlerBox(string errorMessage, string suggestion = null, IEnumerable<ContactInfo> contactInfos = null, Action<Exception> helpAction = null)
-        {
-            var suggestionActions = string.IsNullOrWhiteSpace(suggestion) ? null : new Dictionary<string, Action>() { { suggestion, null } };
-            LoadViewInfo(new Exception(errorMessage), suggestionActions, helpAction, contactInfos.ToArray());
-        }
         /// <summary>
         /// 错误显示和意见反馈框
         /// </summary>
@@ -106,32 +63,16 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="helpAction">帮助按钮执行的操作</param>
         public ErrorHandlerBox(Exception exception, Dictionary<string, Action> suggestionActions, IEnumerable<ContactInfo> contactInfos = null, Action<Exception> helpAction = null)
         {
-            LoadViewInfo(exception, suggestionActions, helpAction, contactInfos.ToArray());
-        }
-
-
-        /// <summary>
-        /// 初始化窗口，显示错误信息、处理建议、联系方式
-        /// </summary>
-        /// <param name="exception">异常</param>
-        /// <param name="suggestionActions">处理建议及点击建议对应的跳转操作</param>
-        /// <param name="contactInfos">联系信息</param>
-        /// <param name="helpAction">帮助按钮执行的操作</param>
-        private void LoadViewInfo(Exception exception, Dictionary<string, Action> suggestionActions, Action<Exception> helpAction, params ContactInfo[] contactInfos)
-        {
             InitializeComponent();
             this.lblMessage.MouseEnter += (sender, e) => this.lblCopyMsg.Visible = true;
             this.lblMessage.MouseLeave += (sender, e) => this.lblCopyMsg.Visible = false;
 
             //错误信息
             ShowExceptionMessage(this.Error = exception);
-
             //处理建议
             CreateLabelBySuggestions(this.SuggestionActions = suggestionActions ?? new Dictionary<string, Action>());
-
             //联系方式
             AddContactInfoButtons(this.ContactInfos = contactInfos);
-
             //帮助操作
             this.HelpButton = (this.HelpAction = helpAction) != null;
         }
@@ -142,7 +83,6 @@ namespace WLib.WinCtrls.MessageCtrl
         private void ShowExceptionMessage(Exception ex)
         {
             if (ex == null) return;
-
             var sb = new StringBuilder();
             sb.AppendLine($"【异常出现时间】：{DateTime.Now}");
             sb.AppendLine($"【引发异常的程序集】：{ex.Source}");
@@ -199,7 +139,7 @@ namespace WLib.WinCtrls.MessageCtrl
         /// 根据联系方式类型执行不同的操作
         /// </summary>
         /// <param name="eType"></param>
-        private void ActionByContactType(ContactInfo info)
+        private async void ActionByContactType(ContactInfo info)
         {
             switch (info.ContactType)
             {
@@ -207,15 +147,11 @@ namespace WLib.WinCtrls.MessageCtrl
                 case EContactType.Wechat:
                 case EContactType.Phone:
                     Clipboard.SetDataObject(info.Content);
-                    new Thread(() =>
+                    for (int i = 0; i < 7; i++)
                     {
-                        for (int i = 0; i < 7; i++)
-                        {
-                            if (!this.IsDisposed)
-                                Invoke(new Action(() => this.lblConcatTips.Visible = !this.lblConcatTips.Visible));
-                            Thread.Sleep(300);
-                        }
-                    }).Start();
+                        this.lblConcatTips.Visible = !this.lblConcatTips.Visible;
+                        await Task.Run(() => Thread.Sleep(300));
+                    }
                     break;
                 case EContactType.QQ: new QQInvoke().OpenQQ(info.Content); break;
                 case EContactType.QQGroup: new QQInvoke().OpenQQGroup(info.Content); break;
@@ -252,6 +188,7 @@ namespace WLib.WinCtrls.MessageCtrl
                         Margin = new Padding(0, 0, 0, 0)
                     };
                     linkLabel.LinkClicked += (sender, e) => pair.Value.Invoke();
+                    this.panelSuggestion.Controls.Add(linkLabel);
                 }
                 index++;
             }
@@ -271,15 +208,12 @@ namespace WLib.WinCtrls.MessageCtrl
             this.lblExpand.Text = expand ? "隐藏" : "展开";
         }
 
-        private void LblCopyMsg_Click(object sender, EventArgs e)
+        private async void LblCopyMsg_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(this.lblMessage.Text);
             this.lblCopyMsg.Text = "已复制";
-            new Thread(() =>
-            {
-                Thread.Sleep(3000);
-                if (!this.IsDisposed) Invoke(new Action(() => this.lblCopyMsg.Text = "复制(&C)"));
-            }).Start();
+            await Task.Run(() => Thread.Sleep(3000));
+            this.lblCopyMsg.Text = "复制(&C)";
         }
     }
 }

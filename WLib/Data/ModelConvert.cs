@@ -26,7 +26,7 @@ namespace WLib.Data
         /// <typeparam name="T">目标类型</typeparam>
         /// <param name="row">DataRow对象，遍历T对象的属性名，能在row中找到同名的列(ColumnName)则赋值该属性</param>
         /// <returns></returns>
-        public static T ConvertToObject<T>(this DataRow row) where T : class
+        public static T ToObject<T>(this DataRow row) where T : class
         {
             Type type = typeof(T);
             PropertyInfo[] properties = type.GetProperties();
@@ -50,12 +50,12 @@ namespace WLib.Data
         /// <typeparam name="T">目标类型</typeparam>
         /// <param name="reader">实现 IDataReader 接口的对象。</param>
         /// <returns>指定类型的对象集合。</returns>
-        public static List<T> ConvertToObject<T>(this IDataReader reader) where T : class
+        public static List<T> ToObject<T>(this IDataReader reader) where T : class
         {
             List<T> list = new List<T>();
             T obj = default(T);
             Type t = typeof(T);
-            Assembly ass = t.Assembly;
+            Assembly assembly = t.Assembly;
 
             Dictionary<string, PropertyInfo> propertys = GetFields<T>(reader);
             PropertyInfo propertyInfo;
@@ -63,7 +63,7 @@ namespace WLib.Data
             {
                 while (reader.Read())
                 {
-                    obj = ass.CreateInstance(t.FullName) as T;
+                    obj = assembly.CreateInstance(t.FullName) as T;
                     foreach (string key in propertys.Keys)
                     {
                         propertyInfo = propertys[key];
@@ -80,9 +80,9 @@ namespace WLib.Data
         /// <typeparam name="T">目标类型参数</typeparam>
         /// <param name="table">DataTale 对象。</param>
         /// <returns>指定类型的对象集合。</returns>
-        public static List<T> ConvertToObject<T>(this DataTable table) where T : class
+        public static List<T> ToObject<T>(this DataTable table) where T : class
         {
-            return table == null ? new List<T>() : ConvertToObject<T>(table.CreateDataReader());
+            return table == null ? new List<T>() : ToObject<T>(table.CreateDataReader());
         }
         /// <summary>
         /// 将数据转换为指定类型的对象，注意当object可以为DBNull.Value或null时，T应为可空类型
@@ -90,7 +90,7 @@ namespace WLib.Data
         /// <typeparam name="T">目标类型</typeparam>
         /// <param name="value">要转换的数据</param>
         /// <returns></returns>
-        public static T ConvertToObject<T>(this object value) where T : class
+        public static T ToObject<T>(this object value) where T : class
         {
             return ChangeType(value, typeof(T)) as T;
         }
@@ -106,7 +106,7 @@ namespace WLib.Data
         /// <param name="value">要转换的对象，注意对象应包含可读属性（get）</param>
         /// <param name="dataTable">保存对象属性值的表格，表格列应允许空值（column.AllowDBNull = true）</param>
         /// <returns>返回新增了一行的表格数据</returns>
-        public static DataTable ConvertToDataTable<T>(this T value, DataTable dataTable)
+        public static DataTable ToDataTable<T>(this T value, DataTable dataTable)
         {
             Type type = value.GetType();
             PropertyInfo[] properties = type.GetProperties();
@@ -132,7 +132,7 @@ namespace WLib.Data
         /// <param name="values">要转换的对象，注意对象应包含可读属性（get）</param>
         /// <param name="dataTable">保存对象属性值的表格，表格列应允许空值（column.AllowDBNull = true）</param>
         /// <returns>返回新增了多行的表格数据</returns>
-        public static DataTable ConvertToDataTable<T>(this IEnumerable<T> values, DataTable dataTable)
+        public static DataTable ToDataTable<T>(this IEnumerable<T> values, DataTable dataTable)
         {
             Type t = typeof(T);
             PropertyInfo[] properties = t.GetProperties();
@@ -178,7 +178,7 @@ namespace WLib.Data
         /// <param name="useDescriptionAttribute">如果对象属性包含<see cref="DescriptionAttribute"/>特性，
         /// 是否将特性的<see cref="DescriptionAttribute.Description"/>属性作为列标题(<see cref="DataColumn.Caption"/>)</param>
         /// <returns>返回一行表格数据</returns>
-        public static DataTable ConvertToDataTable<T>(this T value, string tableName = null, bool useDescriptionAttribute = true)
+        public static DataTable ToDataTable<T>(this T value, string tableName = null, bool useDescriptionAttribute = true)
         {
             var dataTable = new DataTable(tableName);
             Type t = value.GetType();
@@ -212,7 +212,7 @@ namespace WLib.Data
         /// <param name="useDescriptionAttribute">如果对象属性包含<see cref="DescriptionAttribute"/>特性，
         /// 是否将特性的<see cref="DescriptionAttribute.Description"/>属性作为列标题(<see cref="DataColumn.Caption"/>)</param>
         /// <returns>返回多行表格数据</returns>
-        public static DataTable ConvertToDataTable<T>(this IEnumerable<T> values, string tableName = null, bool useDescriptionAttribute = true)
+        public static DataTable ToDataTable<T>(this IEnumerable<T> values, string tableName = null, bool useDescriptionAttribute = true)
         {
             var dataTable = new DataTable(tableName);
 
@@ -250,7 +250,7 @@ namespace WLib.Data
         /// <param name="useDescriptionAttribute">如果对象属性包含<see cref="DescriptionAttribute"/>特性，
         /// 是否将特性的<see cref="DescriptionAttribute.Description"/>属性作为列标题(<see cref="DataColumn.Caption"/>)</param>
         /// <returns>返回多行表格数据</returns>
-        public static DataTable ConvertToDataTable(this IEnumerable<object> values, Type type, string tableName = null, bool useDescriptionAttribute = true)
+        public static DataTable ToDataTable(this IEnumerable<object> values, Type type, string tableName = null, bool useDescriptionAttribute = true)
         {
             var dataTable = new DataTable(tableName);
 

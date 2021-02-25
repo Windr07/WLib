@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Debug\WLib.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,27 +51,45 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
+    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Runtime, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Description\ClassDescriptionHelper.cs" />
     <Compile Include="Attributes\Table\ForeignKeyInfo.cs" />
+    <Compile Include="Attributes\Table\NullableAttribute.cs" />
     <Compile Include="Attributes\Table\TableAttributeHelper.cs" />
     <Compile Include="Attributes\Table\AliasNameAttribute.cs" />
     <Compile Include="Attributes\Table\CandidateAttribute.cs" />
@@ -78,7 +97,14 @@
     <Compile Include="Attributes\Table\HiddenAttribute.cs" />
     <Compile Include="Attributes\Table\KeyAttribute.cs" />
     <Compile Include="Attributes\Table\ReadOnlyAttribute.cs" />
+    <Compile Include="Database\ORM\DbToCSharpEntityCode.cs" />
+    <Compile Include="Database\ORM\DbToEntityCode.cs" />
+    <Compile Include="Database\ORM\DbToJavaEntityCode.cs" />
+    <Compile Include="Database\TableInfo\DefaultInpuTips.cs" />
+    <Compile Include="Database\TableInfo\DictionaryPair.cs" />
+    <Compile Include="Database\TableInfo\EditItem.cs" />
     <Compile Include="Data\Calculate\ChineseRound.cs" />
+    <Compile Include="Data\Encrypt.cs" />
     <Compile Include="Data\Types\DbTypeInfo.cs" />
     <Compile Include="Data\Types\DbTypeInfoCollection.cs" />
     <Compile Include="Data\Types\TypeConvert.cs" />
@@ -103,8 +129,13 @@
     <Compile Include="ExtProgress\ProLogManager.cs" />
     <Compile Include="ExtProgress\ProLogOperation.cs" />
     <Compile Include="Files\PathEx.Directory.cs" />
+    <Compile Include="Model\EModifyType.cs" />
+    <Compile Include="Model\EntityDb.cs" />
+    <Compile Include="Model\EntityGroup.cs" />
+    <Compile Include="Model\EntityInfo.cs" />
+    <Compile Include="Model\EntityModify.cs" />
     <Compile Include="Model\NodeObject.cs" />
-    <Compile Include="Model\ObjectCopy.cs" />
+    <Compile Include="Data\ObjectCopy.cs" />
     <Compile Include="Model\VisibleObject.cs" />
     <Compile Include="Plugins\Enum\EPluginContainerType.cs" />
     <Compile Include="Plugins\Enum\EPluginInvokeType.cs" />
@@ -125,21 +156,20 @@
     <Compile Include="Data\ModelConvert.cs" />
     <Compile Include="Data\NullableConvert.cs" />
     <Compile Include="Database\DbHelper.ConnStrBuilder.cs" />
-    <Compile Include="Database\DbBase\PreExcuteEventArgs.cs" />
+    <Compile Include="Database\DbBase\ExcuteEventArgs.cs" />
     <Compile Include="Database\DbBase\EDbProviderType.cs" />
     <Compile Include="Database\DbBase\ProviderFactory.cs" />
     <Compile Include="Database\DbHelper.cs" />
     <Compile Include="Database\TableInfo\DictionaryTable.cs" />
-    <Compile Include="Database\TableInfo\DictionaryTableHelper.cs" />
-    <Compile Include="Database\TableInfo\FieldClass.cs" />
+    <Compile Include="Database\TableInfo\FieldItem.cs" />
     <Compile Include="Database\TableInfo\FieldDomain\EFieldDomainType.cs" />
     <Compile Include="Database\TableInfo\FieldDomain\EFieldValueRanage.cs" />
     <Compile Include="Database\TableInfo\FieldDomain\FieldDictDomain.cs" />
     <Compile Include="Database\TableInfo\FieldDomain\FieldEmptyDomain.cs" />
     <Compile Include="Database\TableInfo\FieldDomain\FieldRangeDomain.cs" />
     <Compile Include="Database\TableInfo\FieldDomain\IFieldDomain.cs" />
-    <Compile Include="Database\TableInfo\TableStructure.cs" />
-    <Compile Include="Database\TableInfo\TableStructureHelper.cs" />
+    <Compile Include="Database\TableInfo\TableItem.cs" />
+    <Compile Include="Database\TableInfo\TableInfoHelper.cs" />
     <Compile Include="DesignPattern\Singleton.cs" />
     <Compile Include="Attributes\Description\DescriptionExAttribute.cs" />
     <Compile Include="Attributes\Description\EnumDescriptionExHelper.cs" />
@@ -174,8 +204,9 @@
     <Compile Include="Plugins\Model\PluginView.cs" />
     <Compile Include="Plugins\Model\PluginView`T1.cs" />
     <Compile Include="Plugins\Model\SystemInfo.cs" />
-    <Compile Include="Model\JsonConverterEx.cs" />
+    <Compile Include="Data\JsonConverterEx.cs" />
     <Compile Include="Plugins\PluginHelper.cs" />
+    <Compile Include="ProcessEx.cs" />
     <Compile Include="Register\AppInfo.cs" />
     <Compile Include="Register\RegAppInfo.cs" />
     <Compile Include="Register\SoftRegister.cs" />
@@ -206,8 +237,16 @@
   <ItemGroup>
     <Compile Include="Database\DbHelper.Creator.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

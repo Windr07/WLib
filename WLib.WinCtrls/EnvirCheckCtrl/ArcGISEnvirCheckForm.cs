@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2016
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -88,8 +95,7 @@ namespace WLib.WinCtrls.EnvirCheckCtrl
                 //操作系统和.NET Framework信息
                 var sb = new StringBuilder($"操作系统版本：{OSEnvironment.OSName}\r\n\r\n");
                 sb.AppendLine("已安装的.NET Framework版本：");
-                DotNetFrameworkInfo[] infos = DotNetEnvironment.GetAllNetFrameworkInfo();
-                foreach (var info in infos)
+                foreach (var info in DotNetEnvironment.GetAllNetFrameworkInfo())
                 {
                     sb.AppendLine(info.ToString());
                     if (info.Name.StartsWith("v3.5") && info.Sp == "1") this.btnInstallDotNet35.Image = Resources.ok;

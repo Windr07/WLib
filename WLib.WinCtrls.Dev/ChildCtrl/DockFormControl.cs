@@ -40,6 +40,7 @@ namespace WLib.WinCtrls.Dev.ChildCtrl
 
         /// <summary>
         /// 提供窗体停靠的容器控件
+        /// <para>使用方法：①将该控件拖入窗口 ②设置Dock属性 ③调用该控件的<see cref="AddFormToFloatPanel"/>等方法</para>
         /// </summary>
         public DockFormControl() => InitializeComponent();
         /// <summary>

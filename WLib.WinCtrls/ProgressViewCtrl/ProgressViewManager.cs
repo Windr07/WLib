@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WLib.ExtProgress;
 using WLib.ExtProgress.Core;
@@ -132,6 +133,19 @@ namespace WLib.WinCtrls.ProgressViewCtrl
                 (RunningOpt = opt).Run();
             }
         }
+        /// <summary>
+        /// 异步执行操作
+        /// </summary>
+        public async virtual Task RunAsync()
+        {
+            StopRunning = false;
+            foreach (var opt in Opts)
+            {
+                if (StopRunning) break;
+                await (RunningOpt = opt).RunAsync();
+            }
+        }
+
         /// <summary>
         /// 创建新线程并在线程中执行操作
         /// </summary>
@@ -260,7 +274,8 @@ namespace WLib.WinCtrls.ProgressViewCtrl
 
         protected virtual void ProgressOperation_OperationStart(object sender, EventArgs e)
         {
-            ChangeView?.Invoke(true);
+            if (ChangeView != null) FormCtrl.Invoke(new Action(() => ChangeView.Invoke(true)));
+            //ChangeView?.Invoke(true);
         }
 
         protected virtual void ProgressOperation_MessageChanged(object sender, ProMsgChangedEventArgs e)

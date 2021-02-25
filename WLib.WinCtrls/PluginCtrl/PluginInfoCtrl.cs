@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -53,7 +60,7 @@ namespace WLib.WinCtrls.PluginCtrl
                     this.cmbShortcutKeys.SelectedItem = _plugin.ShortcutKeys;
                 else
                     this.cmbShortcutKeys.SelectedIndex = 0;
-                this.cmbInvokeType.SelectedItem = _plugin.InvokType.GetDescription();
+                this.cmbInvokeType.SelectedItem = _plugin.InvokType.GetDescriptionEx();
                 this.txtTips.Text = _plugin.Tips;
                 this.txtCmd.Text = _plugin.TypeName;
                 this.txtAssembly.Text = _plugin.AssemblyPath;
@@ -88,7 +95,7 @@ namespace WLib.WinCtrls.PluginCtrl
             InitializeComponent();
             this.cmbShortcutKeys.Items.AddRange(Enum.GetNames(typeof(Shortcut)));
             this.cmbShortcutKeys.SelectedIndex = 0;
-            this.cmbInvokeType.Items.AddRange(EnumDescriptionExHelper.GetDescriptions<EPluginInvokeType>());
+            this.cmbInvokeType.Items.AddRange(EnumDescriptionExHelper.GetDescriptionExs<EPluginInvokeType>());
             this.cmbInvokeType.SelectedIndex = 0;
         }
 

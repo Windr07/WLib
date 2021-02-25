@@ -10,7 +10,7 @@ using System;
 namespace WLib.ExtProgress.ProEventArgs
 {
     /// <summary>
-    /// 为<see cref="ProgressOperation{TData, TMsgGroup}.ProgressChanged"/>事件提供数据（进度值信息）
+    /// 为<see cref="WLib.ExtProgress.Core.IProgressOperation.ProgressChanged"/>事件提供数据（进度值信息）
     /// </summary>
     public class ProChangedEventArgs : EventArgs
     {
@@ -32,7 +32,7 @@ namespace WLib.ExtProgress.ProEventArgs
         public string Message { get; set; }
 
         /// <summary>
-        /// 为<see cref="ProgressOperation{TData, TMsgGroup}.ProgressChanged"/>事件提供数据（进度值信息）
+        /// 为<see cref="WLib.ExtProgress.Core.IProgressOperation.ProgressChanged"/>事件提供数据（进度值信息）
         /// </summary>
         /// <param name="curValue">当前进度值</param>
         /// <param name="maxValue">总进度值</param>
@@ -42,7 +42,7 @@ namespace WLib.ExtProgress.ProEventArgs
             MaxValue = maxValue;
         }
         /// <summary>
-        /// 为<see cref="ProgressOperation{TData, TMsgGroup}.ProgressChanged"/>事件提供数据（进度值信息）
+        /// 为<see cref="WLib.ExtProgress.Core.IProgressOperation.ProgressChanged"/>事件提供数据（进度值信息）
         /// </summary>
         /// <param name="curValue">当前进度值</param>
         /// <param name="maxValue">总进度值</param>

@@ -180,6 +180,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// </summary>
         /// <param name="geometries"></param>
         /// <returns></returns>
+        [Obsolete("建议改用UnionGeometryEx方法以提高合并效率")]
         public static IGeometry UnionGeometry(this IEnumerable<IGeometry> geometries)
         {
             IGeometry unionGeometry = null;
@@ -190,7 +191,8 @@ namespace WLib.ArcGis.Analysis.OnShape
             return unionGeometry;
         }
         /// <summary>
-        /// 将多个图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
+        /// 将查询获取的多个图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
+        /// <para>若查询获得的图形为0个，则返回null</para>
         /// </summary>
         /// <param name="featureClass">从中查询图形的要素类</param>
         /// <param name="whereCluase">查询条件</param>
@@ -206,15 +208,20 @@ namespace WLib.ArcGis.Analysis.OnShape
                 object missing = Type.Missing;
                 geometryCollection.AddGeometry(f.ShapeCopy, ref missing, ref missing);
             });
+
+            if (geometryCollection.GeometryCount == 0) return null;
             return UnionGeometryEx(geometryBag, featureClass.ShapeType);
         }
         /// <summary>
         /// 将多个图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
+        /// <para>若合并的图形集为空或数量为0，则返回null</para>
         /// </summary>
         /// <param name="geometries">需要合并的几何图形（注意这些图形必须是相同的几何类型）</param>
         /// <returns></returns>
         public static IGeometry UnionGeometryEx(this IEnumerable<IGeometry> geometries)
         {
+            if (geometries == null || geometries.Count() == 0) return null;
+
             IGeometry geometryBag = new GeometryBagClass();
             geometryBag.SpatialReference = geometries.First().SpatialReference;
             IGeometryCollection geometryCollection = geometryBag as IGeometryCollection;
@@ -227,10 +234,10 @@ namespace WLib.ArcGis.Analysis.OnShape
             return UnionGeometryEx(geometryBag, geometries.First().GeometryType);
         }
         /// <summary>
-        /// 将多个要素中的图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
+        /// 将多个图形合并(Union)成一个图形（使用GeometryBag提高合并效率）
+        /// <para>若输入的图形集为空或数量为0，则返回null</para>
         /// </summary>
-        /// <param name="features"></param>
-        /// <param name="geometryType"></param>
+        /// <param name="features">需要合并的几何图形所在的要素（注意这些要素的图形必须是相同的几何类型）</param>
         /// <returns></returns>
         public static IGeometry UnionGeometryEx(this IEnumerable<IFeature> features)
         {
@@ -264,7 +271,6 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// </summary>
         /// <param name="geometries"></param>
         /// <param name="geometry"></param>
-        /// <param name="dimensioin"></param>
         /// <returns></returns>
         private static ITopologicalOperator ValidateGeometryParams(IEnumerable<IGeometry> geometries, IGeometry geometry)
         {

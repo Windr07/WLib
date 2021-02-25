@@ -112,7 +112,7 @@ namespace WLib.Computer
         /// <param name="typePath"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        private static string GetHardWareInfo(string typePath, string key)
+        public static string GetHardWareInfo(string typePath, string key)
         {
             try
             {

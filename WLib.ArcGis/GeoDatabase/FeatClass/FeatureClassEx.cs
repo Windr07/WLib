@@ -3,6 +3,8 @@
 // date： 2018
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.Carto;
@@ -13,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using WLib.ArcGis.Analysis.OnShape;
+using WLib.ArcGis.GeoDatabase.Fields;
 using WLib.ArcGis.GeoDatabase.Table;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 
@@ -40,14 +44,15 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         #region 新增要素
         /// <summary>
         /// 在要素类中创建若干条新要素，遍历新要素并在委托中对其内容执行赋值操作，最后保存全部新要素并释放资源
+        /// 
+        /// <para>* 如果报错：无法在编辑会话之外更新此类的对象（Objects in this class cannot be updated outside an edit session）</para>
+        /// <para>* 可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；</para>
         /// </summary>
         /// <param name="featureClass">操作的要素类</param>
         /// <param name="insertCount">创建新要素的数量</param>
-        /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作，整型参数是新增要素的索引</param>
+        /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作（通常是<see cref="IFeatureBuffer.set_Value"/>赋值操作），整型参数是新增要素的索引</param>
         public static void InsertFeatures(this IFeatureClass featureClass, int insertCount, Action<IFeatureBuffer, int> doActionByFeatures)
         {
-            //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
-            //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
             var featureCursor = featureClass.Insert(true);
             var featureBuffer = featureClass.CreateFeatureBuffer();
             for (var i = 0; i < insertCount; i++)
@@ -61,14 +66,15 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，遍历新要素并在委托中对其内容执行赋值操作，最后保存全部新要素并释放资源
+        /// 
+        /// <para>* 如果报错：无法在编辑会话之外更新此类的对象（Objects in this class cannot be updated outside an edit session）</para>
+        /// <para>* 可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；</para>
         /// </summary>
         /// <param name="featureClass">操作的要素类</param>
         /// <param name="insertCount">创建新要素的数量</param>
-        /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作，整型参数是新增要素的索引， bool型返回值表示是否立即跳出新增要素操作</param>
+        /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作（通常是<see cref="IFeatureBuffer.set_Value"/>赋值操作），整型参数是新增要素的索引， bool型返回值表示是否立即跳出新增要素操作</param>
         public static void InsertFeatures(this IFeatureClass featureClass, int insertCount, Func<IFeatureBuffer, int, bool> doActionByFeatures)
         {
-            //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
-            //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
             var featureCursor = featureClass.Insert(true);
             var featureBuffer = featureClass.CreateFeatureBuffer();
             for (var i = 0; i < insertCount; i++)
@@ -84,13 +90,14 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，将游标提供给委托以在委托中指定具体操作，最后保存全部新要素并释放资源
+        /// 
+        /// <para>* 如果报错：无法在编辑会话之外更新此类的对象（Objects in this class cannot be updated outside an edit session）</para>
+        /// <para>* 可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；</para>
         /// </summary>
         /// <param name="featureClass"></param>
-        /// <param name="doActionByFeatures"></param>
+        /// <param name="doActionByFeatures">在保存要素前，对要素执行的操作（通常是<see cref="IFeatureBuffer.set_Value"/>赋值和<see cref="IFeatureCursor.InsertFeature(IFeatureBuffer)"/>操作）</param>
         public static void InsertFeatures(this IFeatureClass featureClass, Action<IFeatureCursor, IFeatureBuffer> doActionByFeatures)
         {
-            //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
-            //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
             var featureCursor = featureClass.Insert(true);
             var featureBuffer = featureClass.CreateFeatureBuffer();
 
@@ -102,21 +109,25 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         }
         /// <summary>
         ///  在要素类中创建一条新要素，在委托中对其内容执行赋值操作，最后保存新要素并释放资源
+        /// 
+        /// <para>* 如果报错：无法在编辑会话之外更新此类的对象（Objects in this class cannot be updated outside an edit session）</para>
+        /// <para>* 可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；</para>
         /// </summary>
         /// <param name="featureClass">操作的要素类</param>
         /// <param name="doActionByFeature">在保存要素前，对要素执行的操作</param>
         public static void InsertOneFeature(this IFeatureClass featureClass, Action<IFeatureBuffer> doActionByFeature)
         {
-            //如果报错：无法在编辑会话之外更新此类的对象，或Objects in this class cannot be updated outside an edit session
-            //可能原因：数据库与该图层存在关联的拓扑/注记层/几何网络等；License权限不足；是否注册版本；空间索引是否缺失；
-            var featureCursor = featureClass.Insert(true);
-            var featureBuffer = featureClass.CreateFeatureBuffer();
-            doActionByFeature(featureBuffer);
+            featureClass.UseFeatureClassLoad(() =>
+            {
+                var featureCursor = featureClass.Insert(true);
+                var featureBuffer = featureClass.CreateFeatureBuffer();
 
-            featureCursor.InsertFeature(featureBuffer);
-            featureCursor.Flush();
-            Marshal.ReleaseComObject(featureBuffer);
-            Marshal.ReleaseComObject(featureCursor);
+                doActionByFeature(featureBuffer);
+                featureCursor.InsertFeature(featureBuffer);
+
+                Marshal.ReleaseComObject(featureBuffer);
+                Marshal.ReleaseComObject(featureCursor);
+            });
         }
 
         /// <summary>
@@ -128,16 +139,9 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         public static void InsertFeaturesEx(this IFeatureClass featureClass, int insertCount, Action<IFeatureBuffer, int> doActionByFeatures)
         {
             var featureClassLoad = featureClass as IFeatureClassLoad;
-            if (featureClassLoad == null)
-                throw new Exception("不受支持的数据源类型！InsertFeaturesEx方法仅支持SDE或FileGDB");
-            var schemaLock = (ISchemaLock)featureClass;
-            schemaLock.ChangeSchemaLock(esriSchemaLock.esriExclusiveSchemaLock);
-            featureClassLoad.LoadOnlyMode = true;
-
-            InsertFeatures(featureClass, insertCount, doActionByFeatures);
-
-            featureClassLoad.LoadOnlyMode = false;
-            schemaLock.ChangeSchemaLock(esriSchemaLock.esriSharedSchemaLock);
+            featureClass.UseFeatureClassLoad(() =>
+                InsertFeatures(featureClass, insertCount, doActionByFeatures)
+            );
         }
         /// <summary>
         /// 在要素类中创建若干条新要素，将游标提供给委托以在委托中指定具体操作，最后保存全部新要素并释放资源(使用IFeatureClassLoad提高效率，仅用于SDE或FileGDB)
@@ -147,16 +151,30 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         public static void InsertFeaturesEx(this IFeatureClass featureClass, Action<IFeatureCursor, IFeatureBuffer> doActionByFeatures)
         {
             var featureClassLoad = (IFeatureClassLoad)featureClass;
-            if (featureClassLoad == null)
-                throw new Exception("不受支持的数据源类型！InsertFeaturesEx方法仅支持SDE或FileGDB");
-            var schemaLock = (ISchemaLock)featureClass;
-            schemaLock.ChangeSchemaLock(esriSchemaLock.esriExclusiveSchemaLock);
-            featureClassLoad.LoadOnlyMode = true;
+            featureClass.UseFeatureClassLoad(() =>
+                InsertFeatures(featureClass, doActionByFeatures)
+            );
+        }
+        /// <summary>
+        /// 使用IFeatureClassLoad提高效率（仅在SDE或FileGDB中有效）
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <param name="action"></param>
+        private static void UseFeatureClassLoad(this IFeatureClass featureClass, Action action)
+        {
+            var featureClassLoad = featureClass as IFeatureClassLoad;
+            var schemaLock = featureClass as ISchemaLock;
+            schemaLock?.ChangeSchemaLock(esriSchemaLock.esriExclusiveSchemaLock);
 
-            InsertFeatures(featureClass, doActionByFeatures);
+            if (featureClassLoad != null)
+                featureClassLoad.LoadOnlyMode = true;
 
-            featureClassLoad.LoadOnlyMode = false;
-            schemaLock.ChangeSchemaLock(esriSchemaLock.esriSharedSchemaLock);
+            action();
+
+            if (featureClassLoad != null)
+                featureClassLoad.LoadOnlyMode = false;
+
+            schemaLock?.ChangeSchemaLock(esriSchemaLock.esriSharedSchemaLock);
         }
         #endregion
 
@@ -396,7 +414,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="whereClause">查询条件，此值为null时查询所有要素</param>
         /// <param name="doActionByFeatures">针对要素执行的操作</param>
         /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
-        public static void QueryFeatures(this IFeatureClass featureClass, string whereClause, Action<IFeature> doActionByFeatures, bool nullRecordException = false)
+        /// <param name="stopOperation">根据情况中止查询的操作，返回true则中止查询，返回false则继续查询</param>
+        public static void QueryFeatures(this IFeatureClass featureClass, string whereClause, Action<IFeature> doActionByFeatures, bool nullRecordException = false, Func<bool> stopOperation = null)
         {
             var featureCursor = GetSearchCursor(featureClass, whereClause);
             var feature = featureCursor.NextFeature();
@@ -407,10 +426,22 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 throw new Exception($"在{featureClass.AliasName}图层中，找不到{msg}记录");
             }
 
-            while (feature != null)
+            if (stopOperation == null)
             {
-                doActionByFeatures(feature);
-                feature = featureCursor.NextFeature();
+                while (feature != null)
+                {
+                    doActionByFeatures(feature);
+                    feature = featureCursor.NextFeature();
+                }
+            }
+            else
+            {
+                while (feature != null)
+                {
+                    if (stopOperation()) break;
+                    doActionByFeatures(feature);
+                    feature = featureCursor.NextFeature();
+                }
             }
             Marshal.ReleaseComObject(featureCursor);
         }
@@ -421,7 +452,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="whereClause">查询条件，此值为null时查询所有要素</param>
         /// <param name="doActionByFeatures">针对要素执行的操作（<see cref="IFeature"/>参数代表执行操作的要素，<see cref="int"/>参数代表当前是从0开始的第几条要素）</param>
         /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
-        public static void QueryFeatures(this IFeatureClass featureClass, string whereClause, Action<IFeature, int> doActionByFeatures, bool nullRecordException = false)
+        /// <param name="stopOperation">根据情况中止查询的操作，返回true则中止查询，返回false则继续查询</param>
+        public static void QueryFeatures(this IFeatureClass featureClass, string whereClause, Action<IFeature, int> doActionByFeatures, bool nullRecordException = false, Func<bool> stopOperation = null)
         {
             var featureCursor = GetSearchCursor(featureClass, whereClause);
             var feature = featureCursor.NextFeature();
@@ -433,11 +465,24 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             }
 
             int index = -1;
-            while (feature != null)
+            if (stopOperation == null)
             {
-                doActionByFeatures(feature, ++index);
-                feature = featureCursor.NextFeature();
+                while (feature != null)
+                {
+                    doActionByFeatures(feature, ++index);
+                    feature = featureCursor.NextFeature();
+                }
             }
+            else
+            {
+                while (feature != null)
+                {
+                    if (stopOperation()) break;
+                    doActionByFeatures(feature, ++index);
+                    feature = featureCursor.NextFeature();
+                }
+            }
+
             Marshal.ReleaseComObject(featureCursor);
         }
         /// <summary>
@@ -465,7 +510,8 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="whereClause">查询条件，此值为null时查询所有要素</param>
         /// <param name="doFuncByFeatures">针对要素执行的操作</param>
         /// <param name="nullRecordException">在查询不到记录时是否抛出异常，默认false</param>
-        public static IEnumerable<TResult> QueryFeatures<TResult>(this IFeatureClass featureClass, string whereClause, Func<IFeature, TResult> doFuncByFeatures, bool nullRecordException = false)
+        /// <param name="stopOperation">根据情况中止查询的操作，返回true则中止查询，返回false则继续查询</param>
+        public static IEnumerable<TResult> QueryFeatures<TResult>(this IFeatureClass featureClass, string whereClause, Func<IFeature, TResult> doFuncByFeatures, bool nullRecordException = false, Func<bool> stopOperation = null)
         {
             var featureCursor = GetSearchCursor(featureClass, whereClause);
             var feature = featureCursor.NextFeature();
@@ -475,12 +521,24 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 var msg = string.IsNullOrEmpty(whereClause) ? null : $"“{whereClause}”的";
                 throw new Exception($"在{featureClass.AliasName}图层中，找不到{msg}记录");
             }
-
-            while (feature != null)
+            if (stopOperation == null)
             {
-               yield return doFuncByFeatures(feature);
-                feature = featureCursor.NextFeature();
+                while (feature != null)
+                {
+                    yield return doFuncByFeatures(feature);
+                    feature = featureCursor.NextFeature();
+                }
             }
+            else
+            {
+                while (feature != null)
+                {
+                    if (stopOperation()) break;
+                    yield return doFuncByFeatures(feature);
+                    feature = featureCursor.NextFeature();
+                }
+            }
+
             Marshal.ReleaseComObject(featureCursor);
         }
         #endregion
@@ -499,36 +557,15 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             return feature?.Shape;
         }
         /// <summary>
-        /// 查询符合条件的图斑，如果查询到多个图斑则取其union后的范围
+        /// 查询符合条件的图斑，如果查询到多个图斑则取其union后的范围，若查询到0个图斑则返回null
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="whereClause"></param>
         /// <returns></returns>
         public static IGeometry QueryUnionGeometry(this IFeatureClass featureClass, string whereClause = null)
         {
-            if (featureClass == null) return null;
-            IQueryFilter filter = new QueryFilterClass();
-            filter.WhereClause = whereClause;
-            var cursor = featureClass.Search(filter, false);
-            var feature = cursor.NextFeature();
-            if (feature == null) return null;
-            var isFirstFeature = true;
-            IGeometry union = null;
-            while (feature != null)
-            {
-                if (isFirstFeature)
-                {
-                    union = feature.Shape;
-                    isFirstFeature = false;
-                }
-                else
-                {
-                    union = ((ITopologicalOperator)union).Union(feature.Shape);
-                }
-                feature = cursor.NextFeature();
-            }
-            Marshal.ReleaseComObject(cursor);
-            return union;
+            var geometries = featureClass.QueryGeometries(whereClause);
+            return TopologicalOpt.UnionGeometryEx(geometries);
         }
         /// <summary>
         /// 查询符合条件的图形
@@ -538,9 +575,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static IEnumerable<IGeometry> QueryGeometries(this IFeatureClass featureClass, string whereClause = null)
         {
-            IQueryFilter queryFilter = new QueryFilterClass();
-            queryFilter.WhereClause = whereClause;
-            var featureCursor = featureClass.Search(queryFilter, false);
+            var featureCursor = featureClass.GetSearchCursor(whereClause);
             IFeature feature;
             while ((feature = featureCursor.NextFeature()) != null)
                 yield return feature.Shape;
@@ -553,22 +588,14 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="featureClass"></param>
         /// <param name="whereClause"></param>
         /// <returns></returns>
-        public static List<IGeometry> QueryGeometriesCopy(this IFeatureClass featureClass, string whereClause = null)
+        public static IEnumerable<IGeometry> QueryGeometriesCopy(this IFeatureClass featureClass, string whereClause = null)
         {
-            if (featureClass == null) return null;
-            IQueryFilter filter = new QueryFilterClass();
-            filter.WhereClause = whereClause;
-            var cursor = featureClass.Search(filter, false);
-            var feature = cursor.NextFeature();
-            if (feature == null) return null;
-            var result = new List<IGeometry>();
-            while (feature != null)
-            {
-                result.Add(feature.ShapeCopy);
-                feature = cursor.NextFeature();
-            }
+            var cursor = featureClass.GetSearchCursor(whereClause);
+            IFeature feature;
+            while ((feature = cursor.NextFeature()) != null)
+                yield return feature.ShapeCopy;
+
             Marshal.ReleaseComObject(cursor);
-            return result;
         }
         #endregion
 
@@ -801,9 +828,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                     return featureWorkspace;
             }
             if (featureDataset == null)
-            {
                 throw new Exception($"图层{featureClass.AliasName}不在要素数据集（Feature Dataset）中");
-            }
 
             return (featureDataset.Workspace as IFeatureWorkspace);
         }
@@ -839,20 +864,20 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClass">要素类</param>
         /// <param name="newAliasName">新要素类别名</param>
-        public static void RenameFeatureClassAliasName(this IFeatureClass featureClass, string newAliasName)
+        public static void RenameAliasName(this IFeatureClass featureClass, string newAliasName)
         {
             var classSchemaEdit2 = featureClass as IClassSchemaEdit2;
             classSchemaEdit2.AlterAliasName(newAliasName);
         }
         /// <summary>
         /// 修改要素类名称以及别名
-        /// （修改成功的条件：①需要Advanced级别的License权限，②要素类不能被其他程序锁定）
+        /// <para>修改成功的条件：①需要Advanced级别的License权限，②要素类不能被其他程序锁定，③符合命名规范、在工作空间中不能有同名要素类</para>
         /// </summary> 
         /// <param name="featureClass">要素类</param>
         ///<param name="newName">新要素类名</param>
         ///<param name="newAliasName">新要素类别名</param>
         ///<returns>修改成功返回True,否则False</returns>
-        public static bool RenameFeatureClassName(this IFeatureClass featureClass, string newName, string newAliasName = null)
+        public static bool Rename(this IFeatureClass featureClass, string newName, string newAliasName = null)
         {
             var dataset = featureClass as IDataset;
             var isRename = false;
@@ -860,7 +885,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             try
             {
                 if (!string.IsNullOrEmpty(newAliasName))
-                    RenameFeatureClassAliasName(featureClass, newAliasName);
+                    RenameAliasName(featureClass, newAliasName);
 
                 if (dataset.CanRename())
                 {
@@ -884,7 +909,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClasses">要素类集合</param>
         /// <returns></returns>
-        public static List<IFeatureClass> SortByGeoType(this IEnumerable<IFeatureClass> featureClasses)
+        public static List<IFeatureClass> SortByShapeType(this IEnumerable<IFeatureClass> featureClasses)
         {
             var newClasses = new List<IFeatureClass>();
             newClasses.AddRange(featureClasses.Where(v => v.ShapeType == esriGeometryType.esriGeometryPoint || v.ShapeType == esriGeometryType.esriGeometryMultipoint));
@@ -898,7 +923,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="featureClasses">要素类集合</param>
         /// <param name="geometryTypes">几何类型</param>
         /// <returns></returns>
-        public static List<IFeatureClass> FilterByGeoType(this IEnumerable<IFeatureClass> featureClasses, params esriGeometryType[] geometryTypes)
+        public static List<IFeatureClass> FilterByShapeType(this IEnumerable<IFeatureClass> featureClasses, params esriGeometryType[] geometryTypes)
         {
             var newClasses = new List<IFeatureClass>();
             foreach (var geometryType in geometryTypes)
@@ -1114,6 +1139,15 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             return (featureClass as IDatasetEdit).IsBeingEdited();
         }
         /// <summary>
+        /// 获取几何定义
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <returns></returns>
+        public static IGeometryDef GetGeometryDef(this IFeatureClass featureClass)
+        {
+            return FieldEx.GetShapeField(featureClass).GeometryDef;
+        }
+        /// <summary>
         /// 获取要素类范围
         /// </summary>
         /// <param name="featureClass"></param>
@@ -1123,16 +1157,43 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// </summary>
         /// <param name="featureClass"></param>
         /// <returns></returns>
-        public static IFeatureLayer CreateToLayer(this IFeatureClass featureClass) => new FeatureLayer() { FeatureClass = featureClass };
+        public static IFeatureLayer CreateToLayer(this IFeatureClass featureClass)
+        {
+            if (featureClass == null)
+                throw new Exception("创建图层时，图层对应的要素类不能为空！");
+            return new FeatureLayer()
+            {
+                FeatureClass = featureClass,
+                Name = featureClass.AliasName
+            };
+        }
         /// <summary>
         /// 判断要素类是否被占用
         /// </summary>
         /// <param name="featureClass"></param>
         /// <param name="message">被占用情况信息，未被占用则值为null</param>
         /// <returns>对象被占用返回True，未被占用返回False</returns>
-        public static bool IsLock(this IFeatureClass featureClass, out string message)
+        public static bool IsLock(this IFeatureClass featureClass, out string message) => TableEx.IsLock(featureClass as IObjectClass, out message);
+        /// <summary>
+        ///  将<see cref="IFeatureClassContainer"/>转成可枚举数组，获取全部要素类
+        /// </summary>
+        /// <param name="featureClassContainer"></param>
+        /// <returns></returns>
+        public static IEnumerable<IFeatureClass> ToEnumerable(this IFeatureClassContainer featureClassContainer)
         {
-            return TableEx.IsLock(featureClass as IObjectClass, out message);
+            return featureClassContainer.Classes.ToEnumerable();
+        }
+        /// <summary>
+        /// 将<see cref="IEnumFeatureClass"/>转成可枚举数组，获取全部要素类
+        /// </summary>
+        /// <param name="enumFeatureClass"></param>
+        /// <returns></returns>
+        public static IEnumerable<IFeatureClass> ToEnumerable(this IEnumFeatureClass enumFeatureClass)
+        {
+            enumFeatureClass.Reset();
+            IFeatureClass featureClass = null;
+            while ((featureClass = enumFeatureClass.Next()) != null)
+                yield return featureClass;
         }
     }
 }

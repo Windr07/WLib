@@ -3,6 +3,8 @@
 // date： 2019/4/10 10:37:06
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using System;

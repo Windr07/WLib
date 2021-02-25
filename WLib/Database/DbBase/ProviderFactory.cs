@@ -9,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
-using System.Data.OracleClient;
-using System.Data.SqlClient;
 
 namespace WLib.Database.DbBase
 {
@@ -61,9 +59,13 @@ namespace WLib.Database.DbBase
         internal static DbProviderFactory GetDbProviderFactory(EDbProviderType providerType)
         {
             if (!ProviderFactoryDict.ContainsKey(providerType))
-                ProviderFactoryDict.Add(providerType, DbProviderFactories.GetFactory(ProviderNameDict[providerType]));
-            //在.net core中使用下面这行代码
-            //ProviderFactoryDict.Add(providerType, GetDbProviderFactory2(providerType));
+            {
+                //在.net framework中使用下面这行代码
+                //ProviderFactoryDict.Add(providerType, DbProviderFactories.GetFactory(ProviderNameDict[providerType]));
+
+                //在.net core中使用下面这行代码
+                ProviderFactoryDict.Add(providerType, GetDbProviderFactory2(providerType));
+            }
             return ProviderFactoryDict[providerType];
         }
         /// <summary>
@@ -86,7 +88,7 @@ namespace WLib.Database.DbBase
                 case EDbProviderType.Firebird: return GetFactory("FirebirdSql.Data.FirebirdClient.FirebirdClientFactory, FirebirdSql.Data.FirebirdClient");
                 case EDbProviderType.PostgreSql: return GetFactory("Npgsql.NpgsqlFactory, Npgsql, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7");
                 case EDbProviderType.OleDb: return GetFactory("System.Data.OleDb.OleDbFactory, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
-                case EDbProviderType.Odbc:
+                case EDbProviderType.Odbc: return GetFactory("System.Data.Odbc.OdbcFactory, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
                 case EDbProviderType.Db2:
                 case EDbProviderType.Informix:
                 default: return null;

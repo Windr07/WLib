@@ -1,4 +1,11 @@
-﻿using System.Drawing;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace WLib.WinCtrls.GridViewCtrl

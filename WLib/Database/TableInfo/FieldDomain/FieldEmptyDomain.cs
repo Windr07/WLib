@@ -17,6 +17,12 @@ namespace WLib.Database.TableInfo.FieldDomain
         /// </summary>
         public EFieldDomainType FieldDomianType => EFieldDomainType.None;
 
+
+        /// <summary>
+        /// 无限制值域
+        /// </summary>
+        public FieldEmptyDomain() { }
+
         /// <summary>
         /// 判断输入值是否符合值域要求
         /// </summary>

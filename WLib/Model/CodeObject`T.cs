@@ -21,6 +21,13 @@ namespace WLib.Model
         /// </summary>
         public T Tag { get; set; }
 
+
+        /// <summary>
+        /// 表示具有唯一值编码的对象
+        /// </summary>
+        public CodeObject()
+        {
+        }
         /// <summary>
         /// 表示具有唯一值编码的对象
         /// </summary>

@@ -1,8 +1,15 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WLib.WinCtrls.GridViewCtrl
@@ -10,6 +17,11 @@ namespace WLib.WinCtrls.GridViewCtrl
     /// <summary>
     /// 分页栏控件
     /// <para>辅助<see cref="DataGridView"/>等控件进行数据分页查询的控件</para>
+    /// <para>使用示例：</para>
+    /// <code>var pgBar = new PaginationBar();</code>
+    /// <code>pgBar.PageChanged += (sender, e) => gridControl.DataSource = DbHelper.GetDataTable(@"select * from table1 limit {pgBar.StartRow}, {pgBar.EndRow}"); </code>
+    /// <code>//pgBar.PageRecordCnt = 100; </code>
+    /// <code>pgBar.GotoPage(3); </code>
     /// </summary>
     [DefaultEvent(nameof(PageChanged))]
     [DefaultProperty(nameof(PageRecordCnt))]
@@ -19,11 +31,22 @@ namespace WLib.WinCtrls.GridViewCtrl
         /// <summary>
         /// 总记录数
         /// </summary>
-        public int SumRecord { get => _sumRecord; private set => this.lblPages.Text = $"共{_sumRecord = value}条记录"; }
+        public int SumRecord { get => _sumRecord; private set => this.lblSumRecord.Text = $"共{_sumRecord = value}条记录"; }
         /// <summary>
         /// 每页显示记录数
         /// </summary>
-        public int PageRecordCnt { get => (int)this.cmbRecordCnt.SelectedItem; set { this.cmbRecordCnt.SelectedItem = value; GotoPage(1); } }
+        public int PageRecordCnt
+        {
+            get => (int)this.cmbRecordCnt.SelectedItem;
+            set
+            {
+                if (value <= 0)
+                    throw new Exception($"每页显示的记录数应当大于0！）实际赋值为{value}）");
+                if (!this.cmbRecordCnt.Items.Cast<int>().Contains(value))
+                    this.cmbRecordCnt.Items.Add(value);
+                this.cmbRecordCnt.SelectedItem = value;
+            }
+        }
         /// <summary>
         /// 总页数
         /// </summary>
@@ -33,11 +56,11 @@ namespace WLib.WinCtrls.GridViewCtrl
         /// </summary>
         public int CurrentPage { get; private set; }
         /// <summary>
-        /// 当前页开始行在总记录的行号
+        /// 当前页开始行在总记录的行号（从1开始算）
         /// </summary>
         public int StartRow { get; private set; }
         /// <summary>
-        /// 当前页结束行在总记录的行号
+        /// 当前页结束行在总记录的行号（从1开始算）
         /// </summary>
         public int EndRow { get; private set; }
         /// <summary>
@@ -79,6 +102,13 @@ namespace WLib.WinCtrls.GridViewCtrl
             this.lblPages.Text = $"{CurrentPage} / {PageCount}";
             PageChanged?.Invoke(this, new EventArgs());
         }
+
+        /// <summary>
+        /// 跳转到指定分页
+        /// </summary>
+        /// <param name="pageNum">跳转的分页</param>
+        /// <param name="sumRecord">设置总记录数，若值小于0则不设置新的总记录数，保持原总记录数</param>
+        public async Task GotoPageAsync(int pageNum, int sumRecord = -1) => await Task.Run(() => GotoPage(pageNum, sumRecord));
 
 
         private void cmbRecordCount_SelectedIndexChanged(object sender, EventArgs e)//选择每页记录数后，加载数据

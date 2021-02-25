@@ -41,19 +41,17 @@
             this.panel1.Controls.Add(this.btnCopyAll);
             this.panel1.Controls.Add(this.lblTips);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 690);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel1.Location = new System.Drawing.Point(0, 361);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1928, 60);
+            this.panel1.Size = new System.Drawing.Size(849, 30);
             this.panel1.TabIndex = 1;
             // 
             // btnCopyAll
             // 
             this.btnCopyAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopyAll.Location = new System.Drawing.Point(1692, 8);
-            this.btnCopyAll.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnCopyAll.Location = new System.Drawing.Point(716, 1);
             this.btnCopyAll.Name = "btnCopyAll";
-            this.btnCopyAll.Size = new System.Drawing.Size(230, 46);
+            this.btnCopyAll.Size = new System.Drawing.Size(130, 26);
             this.btnCopyAll.TabIndex = 1;
             this.btnCopyAll.Text = "复制全部";
             this.btnCopyAll.UseVisualStyleBackColor = true;
@@ -62,10 +60,9 @@
             // lblTips
             // 
             this.lblTips.AutoSize = true;
-            this.lblTips.Location = new System.Drawing.Point(24, 18);
-            this.lblTips.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblTips.Location = new System.Drawing.Point(12, 9);
             this.lblTips.Name = "lblTips";
-            this.lblTips.Size = new System.Drawing.Size(298, 24);
+            this.lblTips.Size = new System.Drawing.Size(149, 12);
             this.lblTips.TabIndex = 0;
             this.lblTips.Text = "总共0个机器码，0个注册码";
             // 
@@ -76,24 +73,21 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(1928, 690);
+            this.dataGridView1.Size = new System.Drawing.Size(849, 361);
             this.dataGridView1.TabIndex = 2;
-            this.dataGridView1.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridView1_RowsAdded);
             // 
             // RegInfoForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1928, 750);
+            this.ClientSize = new System.Drawing.Size(849, 391);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "RegInfoForm";
             this.Text = "注册信息";
             this.Load += new System.EventHandler(this.RegInfoForm_Load);

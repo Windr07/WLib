@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WLib.WinCtrls</RootNamespace>
     <AssemblyName>WLib.WinCtrls</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -22,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\WLib.WinCtrls.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -43,6 +46,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -52,72 +56,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ESRI.ArcGIS.ADF, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.AxControls, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Carto, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Controls, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.ConversionTools, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataManagementTools, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataSourcesFile, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataSourcesGDB, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Display, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Geometry, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Geoprocessor, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Output, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.System, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Version, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel">
       <HintPath>..\DLL\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -142,10 +83,7 @@
     <Reference Include="System.ValueTuple">
       <HintPath>..\DLL\System.ValueTuple.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -180,43 +118,11 @@
     <Compile Include="AddItemCtrl\Base\IConcatStrConfig.cs" />
     <Compile Include="AddItemCtrl\Base\IMatchModeConfig.cs" />
     <Compile Include="AddItemCtrl\Base\SplitStrDef.cs" />
-    <Compile Include="ArcGisCtrl\AttributeCtrl.cs">
+    <Compile Include="CodeGenerateCtrl\EntityCodeGenerator.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeCtrl.Designer.cs">
-      <DependentUpon>AttributeCtrl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
-      <DependentUpon>AttributeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\FieldInfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\FieldInfoForm.Designer.cs">
-      <DependentUpon>FieldInfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
-      <DependentUpon>MapNavigationTools.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapViewerManager.cs" />
-    <Compile Include="ArcGisCtrl\SymbolSelector.cs" />
-    <Compile Include="ArcGisCtrl\TableListBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\TableListBox.Designer.cs">
-      <DependentUpon>TableListBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
-      <DependentUpon>MapViewer.cs</DependentUpon>
+    <Compile Include="CodeGenerateCtrl\EntityCodeGenerator.Designer.cs">
+      <DependentUpon>EntityCodeGenerator.cs</DependentUpon>
     </Compile>
     <Compile Include="ComboCtrl\ComboBoxPlus.cs">
       <SubType>Component</SubType>
@@ -274,6 +180,15 @@
     </Compile>
     <Compile Include="ExplorerCtrl\PathFolderCtrl\PathFolderBrowser.Designer.cs">
       <DependentUpon>PathFolderBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListCtrl\EditListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PathCtrl\PathBoxSimple.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PathCtrl\PathBoxSimple.Designer.cs">
+      <DependentUpon>PathBoxSimple.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginCtrl\PluginForm.cs">
       <SubType>Form</SubType>
@@ -355,12 +270,6 @@
     <Compile Include="RegisterCtrl\RegisterMachineForm.designer.cs">
       <DependentUpon>RegisterMachineForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SqlCtrl\OleDbQueryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SqlCtrl\OleDbQueryForm.Designer.cs">
-      <DependentUpon>OleDbQueryForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="PathCtrl\EObjectFilter.cs" />
     <Compile Include="UpdateCtrl\UpdateForm.cs">
       <SubType>Form</SubType>
@@ -379,31 +288,7 @@
       <DependentUpon>OfficeEmbed.cs</DependentUpon>
     </Compile>
     <Compile Include="FileCtrl\Office\WordBase.cs" />
-    <Compile Include="PathCtrl\DataSelectorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PathCtrl\DataSelectorForm.Designer.cs">
-      <DependentUpon>DataSelectorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PathCtrl\PathBoxSimple.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PathCtrl\PathBoxSimple.Designer.cs">
-      <DependentUpon>PathBoxSimple.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\WorkspaceSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\WorkspaceSelector.Designer.cs">
-      <DependentUpon>WorkspaceSelector.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ArcGisCtrl\SymbolSelectorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\SymbolSelectorForm.Designer.cs">
-      <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="InputCtrl\InputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -415,12 +300,6 @@
     </Compile>
     <Compile Include="ListCtrl\ListBoxPlus.Designer.cs">
       <DependentUpon>ListBoxPlus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeQueryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeQueryForm.Designer.cs">
-      <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FileCtrl\Picture\EPicViewerAction.cs" />
     <Compile Include="FileCtrl\IFileViewer.cs" />
@@ -461,25 +340,8 @@
     <EmbeddedResource Include="AddItemCtrl\ConcatPathForm.resx">
       <DependentUpon>ConcatPathForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeCtrl.resx">
-      <DependentUpon>AttributeCtrl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
-      <DependentUpon>AttributeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\FieldInfoForm.resx">
-      <DependentUpon>FieldInfoForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\MapNavigationTools.resx">
-      <DependentUpon>MapNavigationTools.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\TableListBox.resx">
-      <DependentUpon>TableListBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\MapViewer.resx">
-      <DependentUpon>MapViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="CodeGenerateCtrl\EntityCodeGenerator.resx">
+      <DependentUpon>EntityCodeGenerator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EnvirCheckCtrl\ArcGISEnvirCheckForm.resx">
       <DependentUpon>ArcGISEnvirCheckForm.cs</DependentUpon>
@@ -508,6 +370,9 @@
     <EmbeddedResource Include="MessageCtrl\InfoTipBox.resx">
       <DependentUpon>InfoTipBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PathCtrl\PathBoxSimple.resx">
+      <DependentUpon>PathBoxSimple.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PluginCtrl\PluginContainerInfoCtrl.resx">
       <DependentUpon>PluginContainerInfoCtrl.cs</DependentUpon>
     </EmbeddedResource>
@@ -529,18 +394,6 @@
     <EmbeddedResource Include="RegisterCtrl\RegisterMachineForm.resx">
       <DependentUpon>RegisterMachineForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SqlCtrl\OleDbQueryForm.resx">
-      <DependentUpon>OleDbQueryForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PathCtrl\DataSelectorForm.resx">
-      <DependentUpon>DataSelectorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PathCtrl\PathBoxSimple.resx">
-      <DependentUpon>PathBoxSimple.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\WorkspaceSelector.resx">
-      <DependentUpon>WorkspaceSelector.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -551,17 +404,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ArcGisCtrl\SymbolSelectorForm.resx">
-      <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="InputCtrl\InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListCtrl\ListBoxPlus.resx">
       <DependentUpon>ListBoxPlus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeQueryForm.resx">
-      <DependentUpon>AttributeQueryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileCtrl\Picture\PicViewer.resx">
       <DependentUpon>PicViewer.cs</DependentUpon>

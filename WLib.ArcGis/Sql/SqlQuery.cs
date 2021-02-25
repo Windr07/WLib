@@ -14,7 +14,7 @@ namespace WLib.ArcGis.Sql
     /// <summary>
     /// 提供构造、使用SQL增删改查表格数据的方法
     /// </summary>
-    public class SqlQuery
+    public static class SqlQuery
     {
         /// <summary>
         /// 构造Sql Update语句的“set 字段1 = {0}, 字段2 = {1}, ...”格式部分
@@ -22,7 +22,7 @@ namespace WLib.ArcGis.Sql
         /// <param name="table">表格</param>
         /// <param name="fieldNames">需要更新的字段</param>
         /// <returns></returns>
-        public static string InitSetValueSqlFormat(ITable table, string[] fieldNames)
+        public static string InitSetValueSqlFormat(this ITable table, string[] fieldNames)
         {
             string[] setValueSqlFormats = new string[fieldNames.Length];
             for (int i = 0; i < fieldNames.Length; i++)
@@ -41,7 +41,7 @@ namespace WLib.ArcGis.Sql
         /// <param name="table">表格</param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public static string InitWhereSqlFormat(ITable table, string fieldName)
+        public static string InitWhereSqlFormat(this ITable table, string fieldName)
         {
             string whereClauseFormat = fieldName + " = {0} ";
             var idField = table.Fields.get_Field(table.FindField(fieldName));
@@ -56,7 +56,7 @@ namespace WLib.ArcGis.Sql
         /// <param name="updateTable"></param>
         /// <param name="updateDataTable"></param>
         /// <param name="idFieldName">OID字段或其他符合唯一值规范的字段</param>
-        public static void Update(ITable updateTable, DataTable updateDataTable, string idFieldName)
+        public static void Update(this ITable updateTable, DataTable updateDataTable, string idFieldName)
         {
             var updateFieldNames = updateDataTable.Columns.Cast<DataColumn>().Select(v => v.ColumnName).ToArray();
 

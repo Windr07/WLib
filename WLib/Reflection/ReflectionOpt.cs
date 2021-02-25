@@ -18,6 +18,67 @@ namespace WLib.Reflection
     public static class ReflectionOpt
     {
         /// <summary>
+        /// C#默认的13种简单类型（包括数值类型、bool、char）
+        /// </summary>
+        public static Type[] DefaultSimpleType = new Type[]
+        {
+             typeof(sbyte),
+             typeof(byte),
+             typeof(short),
+             typeof(ushort),
+             typeof(int),
+             typeof(uint),
+             typeof(long),
+             typeof(ulong),
+             typeof(float),
+             typeof(double),
+             typeof(decimal),
+             typeof(char),
+             typeof(bool),
+        };
+        /// <summary>
+        /// C#默认的11种数值类型
+        /// </summary>
+        public static Type[] DefaultNumericType = new Type[]
+        {
+             typeof(sbyte),
+             typeof(byte),
+             typeof(short),
+             typeof(ushort),
+             typeof(int),
+             typeof(uint),
+             typeof(long),
+             typeof(ulong),
+             typeof(float),
+             typeof(double),
+             typeof(decimal),
+        };
+        /// <summary>
+        /// C#默认的8种整数类型
+        /// </summary>
+        public static Type[] DefaultIntegerType = new Type[]
+        {
+             typeof(sbyte),
+             typeof(byte),
+             typeof(short),
+             typeof(ushort),
+             typeof(int),
+             typeof(uint),
+             typeof(long),
+             typeof(ulong),
+        };
+        /// <summary>
+        /// C#默认的3种浮点类型（float、double、decimal）
+        /// </summary>
+        public static Type[] DefaultFloatType = new Type[]
+        {
+             typeof(float),
+             typeof(double),
+             typeof(decimal),
+        };
+
+
+        /// <summary>
         /// 判断类型是否为指定类型或继承自指定类型（类、抽象类、接口）
         /// </summary>
         /// <param name="type">被判断的类型</param>
@@ -33,20 +94,20 @@ namespace WLib.Reflection
                 return IsType(type.BaseType, compareType) || type.GetInterfaces().Contains(compareType);
         }
         /// <summary>
-        /// 判断类型是否为简单类型
-        /// <para>值类型、IntPtr、UIntPtr、String、DateTime、DateTimeOffset、TimeSpan、Guid等均是简单类型</para>
+        /// 判断类型是否为扩展意义上的简单类型
+        /// <para>包括：数值类型、bool、char、string、IntPtr、UIntPtr、String、DateTime、DateTimeOffset、TimeSpan、Guid等</para>
+        /// <para>这些类型通常用于直接数据编辑而不必进行结构细分</para>
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsSimpleType(this Type type)
+        public static bool IsExtSimpleType(this Type type)
         {
             return
-                type.IsValueType ||
+                type.IsSimpleType() ||
                 type.IsPrimitive ||
                 new Type[]
                 {
                     typeof(String),
-                    typeof(Decimal),
                     typeof(DateTime),
                     typeof(DateTimeOffset),
                     typeof(TimeSpan),
@@ -54,10 +115,85 @@ namespace WLib.Reflection
                 }.Contains(type) ||
                 Convert.GetTypeCode(type) != TypeCode.Object;
         }
+        /// <summary>
+        /// 判断类型是否为数值类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsNumericType(this Type type) => DefaultNumericType.Contains(type);
+        /// <summary>
+        /// 判断类型是否为C#默认的简单类型
+        /// <para>13种简单类型：包括数值类型、bool、char</para>
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsSimpleType(this Type type) => DefaultSimpleType.Contains(type);
+        /// <summary>
+        ///  判断类型是否为C#默认的整数类型
+        /// <para>8种整数类型：sbyte、byte、short、ushort、int、uint、long、ulong</para>
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsIntegerType(this Type type) => DefaultIntegerType.Contains(type);
+        /// <summary>
+        ///  判断类型是否为C#默认的浮点类型
+        /// <para>3种浮点类型：float、double、decimal</para>
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsFloatType(this Type type) => DefaultFloatType.Contains(type);
+        /// <summary>
+        /// 判断类型是否为基元类型
+        /// <para>14种基元类型：包括除了decimal外的数值类型、bool、char、IntPtr、UIntPtr</para>
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [Obsolete("请直接使用.NET默认的属性Type.IsPrimitive")]
+        public static bool IsPrimitiveType(this Type type) => type.IsPrimitive;
+        /// <summary>
+        /// 获取数值类型的最大值（<see cref="decimal"/>类型除外）
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException"></exception>
+        public static double GetMaxValue(this Type type)
+        {
+            if (type == typeof(sbyte)) return sbyte.MaxValue;
+            else if (type == typeof(byte)) return byte.MaxValue;
+            else if (type == typeof(short)) return short.MaxValue;
+            else if (type == typeof(ushort)) return ushort.MaxValue;
+            else if (type == typeof(int)) return int.MaxValue;
+            else if (type == typeof(uint)) return uint.MaxValue;
+            else if (type == typeof(long)) return long.MaxValue;
+            else if (type == typeof(ulong)) return ulong.MaxValue;
+            else if (type == typeof(float)) return float.MaxValue;
+            else if (type == typeof(double)) return double.MaxValue;
+            else throw new InvalidCastException($"类型{type.Name}不是数值类型！");
+        }
+        /// <summary>
+        /// 获取数值类型的最小值（<see cref="decimal"/>类型除外）
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException"></exception>
+        public static double GetMinValue(this Type type)
+        {
+            if (type == typeof(sbyte)) return sbyte.MinValue;
+            else if (type == typeof(byte)) return byte.MinValue;
+            else if (type == typeof(short)) return short.MinValue;
+            else if (type == typeof(ushort)) return ushort.MinValue;
+            else if (type == typeof(int)) return int.MinValue;
+            else if (type == typeof(uint)) return uint.MinValue;
+            else if (type == typeof(long)) return long.MinValue;
+            else if (type == typeof(ulong)) return ulong.MinValue;
+            else if (type == typeof(float)) return float.MinValue;
+            else if (type == typeof(double)) return double.MinValue;
+            else throw new InvalidCastException($"类型{type.Name}不是数值类型！");
+        }
 
 
         /// <summary>
-        /// 判断指定的类型 <paramref name="type"/> 是否是指定泛型类型的子类型，或实现了指定泛型接口。
+        /// 判断指定的类型 <paramref name="type"/> 是否是指定泛型类型的子类型，或实现了指定泛型接口（例如IList&lt;&gt;）。
         /// </summary>
         /// <remarks>来源：https://www.cnblogs.com/walterlv/p/10236419.html </remarks>
         /// <param name="type">需要测试的类型。</param>
@@ -90,7 +226,7 @@ namespace WLib.Reflection
 
 
         /// <summary>
-        /// 递归获得类型的继承树，包括类型继承的各级父类和接口
+        /// 递归获得类型继承的各级父类和接口
         /// </summary>
         /// <param name="type"></param>
         /// <param name="containSelfType">返回结果中是否包含当前类型本身</param>

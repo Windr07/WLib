@@ -1,9 +1,17 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.Data;
 using WLib.Register;
+using WLib.WinCtrls.GridViewCtrl;
 
 namespace WLib.WinCtrls.RegisterCtrl
 {
@@ -20,10 +28,7 @@ namespace WLib.WinCtrls.RegisterCtrl
         /// <summary>
         /// 显示已生成过的注册信息的窗体（列出每次授权情况的窗体）
         /// </summary>
-        public RegInfoForm()
-        {
-            InitializeComponent();
-        }
+        public RegInfoForm() => InitializeComponent();
 
         private void RegInfoForm_Load(object sender, EventArgs e)
         {
@@ -35,33 +40,19 @@ namespace WLib.WinCtrls.RegisterCtrl
                     return;
                 }
 
-                this.dataGridView1.Rows.Clear();
                 RegAppInfo[] regInfos = RegAppInfo.ReadFromFile(RegInfoPath);
-                var dataTable = regInfos.AsEnumerable().ConvertToDataTable();
-                this.dataGridView1.DataSource = dataTable;
-
+                this.dataGridView1.DataSource = regInfos.AsEnumerable().ToDataTable();
                 var count = regInfos.Select(v => v.MachineCode).Distinct().Count();
                 this.lblTips.Text = string.Format("总共{0}个机器码，{1}个注册码", count, regInfos.Length);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            this.dataGridView1.ShowRowNumber();
         }
 
         private void btnCopyAll_Click(object sender, EventArgs e)
         {
-            var dataTable = this.dataGridView1.DataSource as DataTable;
-            var text = dataTable.ToText("\t");
+            var text = (this.dataGridView1.DataSource as DataTable).ToText("\t");
             Clipboard.SetDataObject(text);
-        }
-
-        private void dataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-        {
-            for (int i = 0; i < e.RowCount; i++)
-                this.dataGridView1.Rows[e.RowIndex + i].HeaderCell.Value = (e.RowIndex + i + 1).ToString();
-            for (int i = e.RowIndex + e.RowCount; i < this.dataGridView1.Rows.Count; i++)
-                this.dataGridView1.Rows[i].HeaderCell.Value = (i + 1).ToString();
         }
     }
 }

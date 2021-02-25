@@ -49,7 +49,7 @@ namespace WLib.WinCtrls.Dev.PluginCtrl
                             bindingEvent(plugin.Command);
                             group.ItemLinks.Add(item);
                         }
-                        catch(Exception ex) { sbErrorCmds.AppendLine($"程序集：{ plugin.AssemblyPath}\t命令：{plugin.TypeName}\t{ex.Message}"); }
+                        catch (Exception ex) { sbErrorCmds.AppendLine($"程序集：{ plugin.AssemblyPath}\t命令：{plugin.TypeName}\t{ex.Message}"); }
                         Application.DoEvents();
                     }
                 }

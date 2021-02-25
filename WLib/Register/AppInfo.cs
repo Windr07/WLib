@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/9
+// desc： None
+// mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
+//----------------------------------------------------------------*/
+
+using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;

@@ -191,7 +191,7 @@ namespace WLib.ArcGis.DataCheck.Core
         {
             if (resultFeature == null)
                 MessageHandler?.Invoke(NoneMatchHandlers[ENoneMatchTypes.NoneMatchRecord], CheckerName,
-                    $"图层“{featureClass.AliasName}”中找不到与要素(OID={feature.OID})的图斑{spatialMatchType.GetDescription()}且符合过滤条件“{whereClause}”的要素");
+                    $"图层“{featureClass.AliasName}”中找不到与要素(OID={feature.OID})的图斑{spatialMatchType.GetDescriptionEx()}且符合过滤条件“{whereClause}”的要素");
         }
         /// <summary>
         /// 判断和处理“没有匹配的记录”的情况
@@ -202,7 +202,7 @@ namespace WLib.ArcGis.DataCheck.Core
             {
                 var whereClauseMsg = string.IsNullOrWhiteSpace(whereClause) ? null : $"且符合过滤条件“{whereClause}”";
                 MessageHandler?.Invoke(NoneMatchHandlers[ENoneMatchTypes.NoneMatchRecord], CheckerName,
-                    $"图层“{featureClass.AliasName}”中找不到与要素(OID={feature.OID})的图斑{spatialMatchType.GetDescription()}{whereClauseMsg}的要素");
+                    $"图层“{featureClass.AliasName}”中找不到与要素(OID={feature.OID})的图斑{spatialMatchType.GetDescriptionEx()}{whereClauseMsg}的要素");
             }
         }
         /// <summary>
@@ -214,7 +214,7 @@ namespace WLib.ArcGis.DataCheck.Core
             {
                 var whereClauseMsg = string.IsNullOrWhiteSpace(whereClause) ? null : $"且符合过滤条件“{whereClause}”";
                 var oids = noneCompareFeatures.Select(v => v.OID.ToString()).ToArray();
-                var strMatchTypeMsg = spatialMatchType.Select(v => v.GetDescription()).Aggregate((a, b) => a + "、" + b);
+                var strMatchTypeMsg = spatialMatchType.Select(v => v.GetDescriptionEx()).Aggregate((a, b) => a + "、" + b);
                 MessageHandler?.Invoke(NoneMatchHandlers[ENoneMatchTypes.NoneMatchRecord], CheckerName,
                     $"以下图斑无法在图层“{featureClass.AliasName}”中与之{strMatchTypeMsg}{whereClauseMsg}的要素：OID=" + oids.Aggregate((a, b) => a + ", " + b));
             }

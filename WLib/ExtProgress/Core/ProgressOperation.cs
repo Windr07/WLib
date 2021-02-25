@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using WLib.ExtProgress.ProEventArgs;
 
 namespace WLib.ExtProgress.Core
@@ -110,7 +111,7 @@ namespace WLib.ExtProgress.Core
 
         /// <summary>
         /// 当前操作包含的子操作
-        /// <para>这些子操作应当在外部或者构造函数中创建和加入，在<see cref="MainOperation"/>方法中运行</para>
+        /// <para>这些子操作应当在外部或者构造函数中创建和加入，在<see cref="MainOperation"/>方法中显式指定其运行</para>
         /// </summary>
         public List<IProgressOperation> SubProgressOperations { get; protected set; }
         #endregion
@@ -204,11 +205,12 @@ namespace WLib.ExtProgress.Core
             IsRunning = false;
             IsPause = false;
             Msgs = new ProgressMsgs();
+            SubProgressOperations = new List<IProgressOperation>();
+
             OperationStart = (sender, e) => { InitToOperation(); IsRunning = true; Msgs.Info(START_MESSAGE); StartTime = DateTime.Now; };
             OperationStoped = (sender, e) => { Msgs.Info(STOPPED_MESSAGE); IsRunning = false; EndTime = DateTime.Now; GetMsgs(this); };
             OperationFinished = (sender, e) => { Msgs.Info(FINISHED_MESSAGE); IsRunning = false; EndTime = DateTime.Now; GetMsgs(this); };
-            OperationError = (sender, e) => { Msgs.Info(ERROR_MESSAGE); EndTime = DateTime.Now; GetMsgs(this); };
-            SubProgressOperations = new List<IProgressOperation>();
+            OperationError = (sender, e) => { Msgs.Info(ERROR_MESSAGE); IsRunning = false; EndTime = DateTime.Now; GetMsgs(this); };
         }
         /// <summary>
         /// 可进行进度控制的操作
@@ -244,7 +246,7 @@ namespace WLib.ExtProgress.Core
         /// </summary>
         protected abstract void MainOperation();//在子类中重写该方法
         /// <summary>
-        /// 清空消息，执行操作
+        /// 执行操作
         /// </summary>
         public virtual void Run()
         {
@@ -258,10 +260,22 @@ namespace WLib.ExtProgress.Core
                 else
                     OnOperationFinished();
             }
-            catch (Exception ex) { OnOperationError(ex); IsRunning = false; }
+            catch (Exception ex) { OnOperationError(ex); }
         }
+
+
+        protected CancellationTokenSource CancellationTokenSource { get; set; }
         /// <summary>
-        /// 清空消息，创建新线程并在线程中执行操作
+        /// 异步执行操作
+        /// </summary>
+        public async virtual Task RunAsync()
+        {
+            CancellationTokenSource = new CancellationTokenSource();
+            await Task.Factory.StartNew(() => Run(), CancellationTokenSource.Token);
+        }
+
+        /// <summary>
+        /// 创建新线程并在线程中执行操作
         /// </summary>
         public virtual void RunByThread()
         {
@@ -277,18 +291,23 @@ namespace WLib.ExtProgress.Core
                     else
                         OnOperationFinished();
                 }
-                catch (Exception ex) { OnOperationError(ex); IsRunning = false; }
+                catch (Exception ex) { OnOperationError(ex); }
                 _thread.Abort();
                 _thread = null;
             });
+            _thread.IsBackground = true;
             _thread.Start();
         }
+
         /// <summary>
         /// 停止操作
         /// </summary>
         public virtual void Stop()
         {
             StopRunning = true;
+            CancellationTokenSource.CancelAfter(TimeSpan.FromMilliseconds(100));
+            var completionSource = new TaskCompletionSource<object>();
+            CancellationTokenSource.Token.Register(() => completionSource.TrySetCanceled());
         }
         /// <summary>
         /// 暂停操作（仅在RunByThread方法执行线程操作期间有效）

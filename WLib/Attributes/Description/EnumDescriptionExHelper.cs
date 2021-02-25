@@ -12,8 +12,8 @@ using System.Linq;
 namespace WLib.Attributes.Description
 {
     /// <summary>
-    /// 获取对枚举描述特性的帮助类
-    /// (使用反射机制，调用时注意效率优化)
+    /// 提供获取枚举值拥有的<see cref="DescriptionExAttribute"/>特性的方法
+    /// <para>使用反射机制，调用时注意效率优化</para>
     /// </summary> 
     public static class EnumDescriptionExHelper
     {
@@ -24,7 +24,7 @@ namespace WLib.Attributes.Description
         /// <param name="value">枚举值</param>
         /// <param name="decriptionTag">对枚举的描述的分类标签，用于对描述进行分组</param>
         /// <returns></returns>
-        public static string GetDescription(this Enum value, int decriptionTag = 0)
+        public static string GetDescriptionEx(this Enum value, int decriptionTag = 0)
         {
             if (value == null)
                 throw new ArgumentException($"枚举参数{nameof(value)}为空，请确认参数{nameof(value)}为枚举类型！");
@@ -45,13 +45,13 @@ namespace WLib.Attributes.Description
         /// <param name="value">某个枚举名对应的常量值</param>
         /// <param name="descriptionTag">对枚举的描述的分类标签</param>
         /// <returns></returns>
-        public static string GetDescription<T>(this int value, int descriptionTag = 0) where T : struct
+        public static string GetDescriptionEx<T>(this int value, int descriptionTag = 0) where T : struct
         {
             var type = typeof(T);
             if (!type.IsEnum) throw new Exception($"类型{type.Name}不是枚举类型！");
 
             var enumName = Enum.GetName(type, value);
-            var dict = GetNameAndDescriptionDict<T>(descriptionTag);
+            var dict = GetNameAndDescriptionExDict<T>(descriptionTag);
             if (dict.ContainsKey(enumName))
                 return dict[enumName];
 
@@ -62,9 +62,9 @@ namespace WLib.Attributes.Description
         /// <para>即获取附加在枚举值上的特性<see cref="DescriptionExAttribute.Description"/>属性，泛型T必须是枚举类型</para>
         /// </summary>
         /// <returns></returns>
-        public static string[] GetDescriptions<T>(int descriptionTag = 0) where T : struct
+        public static string[] GetDescriptionExs<T>(int descriptionTag = 0) where T : struct
         {
-            return GetNameAndDescriptionDict<T>(descriptionTag).Values.ToArray();
+            return GetNameAndDescriptionExDict<T>(descriptionTag).Values.ToArray();
         }
         /// <summary>
         /// 获得多个枚举值对应的第一个描述
@@ -73,9 +73,9 @@ namespace WLib.Attributes.Description
         /// <param name="values">枚举值集合</param>
         /// <param name="descriptionTag">对枚举的描述的分类标签</param>
         /// <returns></returns>
-        public static string[] GetDescriptions<T>(this IEnumerable<T> values, int descriptionTag = 0) where T : struct
+        public static string[] GetDescriptionExs<T>(this IEnumerable<T> values, int descriptionTag = 0) where T : struct
         {
-            return values.Select(v => GetDescription(v as Enum, descriptionTag)).ToArray();
+            return values.Select(v => GetDescriptionEx(v as Enum, descriptionTag)).ToArray();
         }
         /// <summary>
         /// 获得枚举的所有枚举值的名称和第一个描述的键值对
@@ -83,7 +83,7 @@ namespace WLib.Attributes.Description
         /// </summary>
         /// <param name="decriptionTag">对枚举的描述的分类标签</param>
         /// <returns></returns>
-        public static Dictionary<string, string> GetNameAndDescriptionDict<T>(int decriptionTag = 0) where T : struct
+        public static Dictionary<string, string> GetNameAndDescriptionExDict<T>(int decriptionTag = 0) where T : struct
         {
             var enumType = typeof(T);
             if (!enumType.IsEnum) throw new Exception($"类型{enumType.Name}不是枚举类型！");
@@ -112,10 +112,10 @@ namespace WLib.Attributes.Description
         /// </summary>
         /// <param name="descriptionTag">对枚举的描述的分类标签</param>
         /// <returns></returns>
-        public static Dictionary<int, string> GetConstAndDescriptionDict<T>(int descriptionTag = 0) where T : struct
+        public static Dictionary<int, string> GetConstAndDescriptionExDict<T>(int descriptionTag = 0) where T : struct
         {
             var constValues = GetEnumConst<T>();
-            var descptValues = GetDescriptions<T>(descriptionTag);
+            var descptValues = GetDescriptionExs<T>(descriptionTag);
             var dict = new Dictionary<int, string>();
             for (int i = 0; i < constValues.Length; i++)
                 dict.Add(constValues[i], descptValues[i]);
@@ -127,10 +127,10 @@ namespace WLib.Attributes.Description
         /// </summary>
         /// <param name="descriptionTag">对枚举的描述的分类标签</param>
         /// <returns></returns>
-        public static Dictionary<T, string> GetValueAndDescriptionDict<T>(int descriptionTag = 0) where T : struct
+        public static Dictionary<T, string> GetValueAndDescriptionExDict<T>(int descriptionTag = 0) where T : struct
         {
             var values = GetEnums<T>();
-            var descptValues = GetDescriptions<T>(descriptionTag);
+            var descptValues = GetDescriptionExs<T>(descriptionTag);
             var dict = new Dictionary<T, string>();
             for (int i = 0; i < values.Length; i++)
                 dict.Add(values[i], descptValues[i]);
@@ -141,7 +141,7 @@ namespace WLib.Attributes.Description
         /// </summary>
         /// <param name="value">枚举值</param>
         /// <returns></returns>
-        public static DescriptionExAttribute[] GetEnumDescriptionAttributes(this Enum value)
+        public static DescriptionExAttribute[] GetEnumDescriptionExAttributes(this Enum value)
         {
             var name = value.ToString();
             var fieldInfo = value.GetType().GetField(name);
@@ -160,7 +160,7 @@ namespace WLib.Attributes.Description
         public static T GetEnum<T>(this string description, int descriptionTag = 0) where T : struct
         {
             object result = null;
-            var dict = GetNameAndDescriptionDict<T>(descriptionTag);
+            var dict = GetNameAndDescriptionExDict<T>(descriptionTag);
             if (dict.ContainsValue(description))
             {
                 var enumName = dict.First(v => v.Value.Equals(description)).Key;
@@ -210,7 +210,7 @@ namespace WLib.Attributes.Description
         public static int GetEnumConst<T>(this string description, int descriptionTag = 0) where T : struct
         {
             object result = null;
-            var dict = GetNameAndDescriptionDict<T>(descriptionTag);
+            var dict = GetNameAndDescriptionExDict<T>(descriptionTag);
             if (dict.ContainsValue(description))
             {
                 var enumName = dict.First(v => v.Value.Equals(description)).Key;

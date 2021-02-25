@@ -3,6 +3,8 @@
 // date： 2018
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using System.Linq;
@@ -36,7 +38,7 @@ namespace WLib.ArcGis.Control.AttributeCtrl
         /// <summary>
         /// 字段集
         /// </summary>
-        public FieldItem[] FieldItems => SearchTable.Fields.ToFieldItems(QueryFieldNames).ToArray();
+        public GFieldItem[] FieldItems => SearchTable.Fields.ToGFieldItems(QueryFieldNames).ToArray();
         /// <summary>
         /// 属性查询帮助类
         /// </summary>
@@ -56,13 +58,13 @@ namespace WLib.ArcGis.Control.AttributeCtrl
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public FieldItem QueryField(string value) => FieldItems.FirstOrDefault(v => v.Name.StartsWith(value) || v.AliasName.StartsWith(value));
+        public GFieldItem QueryField(string value) => FieldItems.FirstOrDefault(v => v.Name.StartsWith(value) || v.AliasName.StartsWith(value));
         /// <summary>
         /// 获取指定字段的全部唯一值
         /// </summary>
         /// <param name="fieldItem"></param>
         /// <returns></returns>
-        public object[] GetUnqiueValues(FieldItem fieldItem) => SearchTable.GetUniqueValues(fieldItem.Name).ToArray();
+        public object[] GetUnqiueValues(GFieldItem fieldItem) => SearchTable.GetUniqueValues(fieldItem.Name).ToArray();
         /// <summary>
         /// 显示表格名称
         /// </summary>

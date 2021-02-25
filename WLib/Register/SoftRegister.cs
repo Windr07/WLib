@@ -1,4 +1,13 @@
-﻿using Microsoft.Win32;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/9
+// desc： None
+// mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
+//----------------------------------------------------------------*/
+
+using Microsoft.Win32;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -122,6 +131,8 @@ namespace WLib.Register
         /// <returns></returns>
         public string CreateRegCode(string hardwareCode, DateTime startTime, DateTime endTime) => InnerCreateRegCode(hardwareCode, startTime, endTime);
 
+
+        #region 内部方法
 
         #region 生成机器码
         /// <summary>
@@ -480,6 +491,8 @@ namespace WLib.Register
             }
             return true;
         }
+        #endregion
+
         #endregion
     }
 }

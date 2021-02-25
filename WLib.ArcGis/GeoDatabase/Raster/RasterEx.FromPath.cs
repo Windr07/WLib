@@ -3,6 +3,8 @@
 // date： 2020/06/11
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.DataSourcesRaster;

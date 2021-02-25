@@ -49,10 +49,10 @@ namespace WLib.ArcGis.Data
                     return typeof(IGeometry);
                 case esriFieldType.esriFieldTypeDate:
                     return typeof(DateTime);
-                case esriFieldType.esriFieldTypeString:
-                case esriFieldType.esriFieldTypeGUID:
-                case esriFieldType.esriFieldTypeGlobalID:
-                case esriFieldType.esriFieldTypeXML:
+                //case esriFieldType.esriFieldTypeString:
+                //case esriFieldType.esriFieldTypeGUID:
+                //case esriFieldType.esriFieldTypeGlobalID:
+                //case esriFieldType.esriFieldTypeXML:
                 default:
                     return typeof(string);
             }

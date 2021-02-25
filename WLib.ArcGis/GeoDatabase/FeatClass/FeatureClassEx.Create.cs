@@ -138,9 +138,19 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             #endregion
 
             #region 添加OID和SHAPE字段
+            bool hasZ = false, hasM = false;
             if (fields == null)
                 fields = new FieldsClass();
-            fields.AddBaseFields(geometryType, spatialRef);
+            else
+            {
+                var geometryDef = fields.GetGeometryDef();
+                if (geometryDef != null)
+                {
+                    hasZ = geometryDef.HasZ;
+                    hasM = geometryDef.HasM;
+                }
+            }
+            fields.AddBaseFields(geometryType, spatialRef, hasZ, hasM);
             #endregion
 
             if (obj is IFeatureWorkspace featureWorkspace) //创建独立的FeatureClass
@@ -159,7 +169,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <returns></returns>
         public static IFeatureClass CreateInMemory(string name, IFields fields, string strWorkspaceName = "InMemoryWorkspace")
         {
-            var workspace = WorkspaceEx.NewInMemoryWorkspace(strWorkspaceName);
+            var workspace = WorkspaceEx.CreateInMemoryWorkspace(strWorkspaceName);
             IFeatureWorkspace featureWorkspace = (IFeatureWorkspace)workspace;
             return featureWorkspace.CreateFeatureClass(name, fields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
         }

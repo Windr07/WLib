@@ -3,6 +3,8 @@
 // date： 2019/4
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using ESRI.ArcGIS.Carto;
@@ -21,9 +23,9 @@ using WLib.ArcGis.Control;
 using WLib.ArcGis.GeoDatabase.FeatClass;
 using WLib.ArcGis.GeoDatabase.WorkSpace;
 using WLib.ArcGis.Geometry;
+using WLib.Data;
 using WLib.ExtProgress;
 using WLib.Files;
-using WLib.Model;
 using Path = System.IO.Path;
 
 namespace WLib.ArcGis.Carto.MapExport
@@ -327,8 +329,8 @@ namespace WLib.ArcGis.Carto.MapExport
             newDbDir = newDbDir ?? cfg.ExportDirectory;
             newDbName = newDbName ?? cfg.ExportFileName + ".mdb";
 
-            var workspace = WorkspaceEx.NewWorkspace(newDbDir, newDbName);
-            var newCfg = ObjectCopy.CopyBySerialize(cfg);
+            var workspace = WorkspaceEx.CreateWorkspace(newDbDir, newDbName);
+            var newCfg = cfg.CopyBySerialize();
             var paths = new List<string>();//记录图层路径，路径相同时不重复复制图层
             var names = new List<string>();//记录图层名称，名称相同时在名称后加上序号
             foreach (var mapFrame in cfg.MapFrames)

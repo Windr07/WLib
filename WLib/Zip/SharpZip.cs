@@ -142,38 +142,38 @@ namespace WLib.Files.Zip
         /// <summary>
         /// 压缩单个文件/文件夹
         /// </summary>
-        /// <param name="filePath">源文件/文件夹路径</param>
+        /// <param name="sourcePath">源文件/文件夹路径</param>
         /// <param name="zipFilePath">压缩结果文件路径</param>
         /// <param name="comment">注释信息</param>
         /// <param name="password">压缩密码</param>
         /// <param name="zipLevel">压缩等级，范围从0到9，可选，默认为6</param>
         /// <returns></returns>
-        public static void ZipFile(string filePath, string zipFilePath, string comment = null, string password = null, int zipLevel = 6)
+        public static void ZipFile(string sourcePath, string zipFilePath, string comment = null, string password = null, int zipLevel = 6)
         {
-            ZipFiles(new[] { filePath }, zipFilePath, comment, password, zipLevel);
+            ZipFiles(new[] { sourcePath }, zipFilePath, comment, password, zipLevel);
         }
         /// <summary>
         /// 压缩单个文件/文件夹
         /// </summary>
-        /// <param name="filePath">源文件/文件夹路径</param>
+        /// <param name="sourcePath">源文件/文件夹路径</param>
         /// <param name="stream">压缩结果流（文件流或内存流等）</param>
         /// <param name="comment">注释信息</param>
         /// <param name="password">压缩密码</param>
         /// <param name="zipLevel">压缩等级，范围从0到9，可选，默认为6</param>
         /// <returns></returns>
-        public static void ZipFile(string filePath, Stream stream, string comment = null, string password = null, int zipLevel = 6)
+        public static void ZipFile(string sourcePath, Stream stream, string comment = null, string password = null, int zipLevel = 6)
         {
-            ZipFiles(new[] { filePath }, stream, comment, password, zipLevel);
+            ZipFiles(new[] { sourcePath }, stream, comment, password, zipLevel);
         }
         /// <summary>
         /// 压缩多个文件/文件夹
         /// </summary>
-        /// <param name="filePaths">源文件/文件夹路径列表</param>
+        /// <param name="sourcePaths">源文件/文件夹路径列表</param>
         /// <param name="zipFilePath">压缩结果文件路径</param>
         /// <param name="comment">注释信息</param>
         /// <param name="password">压缩密码</param>
         /// <param name="zipLevel">压缩等级，范围从0到9，可选，默认为6</param>
-        public static void ZipFiles(IEnumerable<string> filePaths, string zipFilePath, string comment = null, string password = null, int zipLevel = 6)
+        public static void ZipFiles(IEnumerable<string> sourcePaths, string zipFilePath, string comment = null, string password = null, int zipLevel = 6)
         {
             //检测目标文件所属的文件夹是否存在，如果不存在则建立
             var zipFileDirectory = Path.GetDirectoryName(zipFilePath);
@@ -182,22 +182,22 @@ namespace WLib.Files.Zip
 
             using (var stream = File.Create(zipFilePath))
             {
-                ZipFiles(filePaths, stream, comment, password, zipLevel);
+                ZipFiles(sourcePaths, stream, comment, password, zipLevel);
             }
         }
         /// <summary>
         /// 压缩多个文件/文件夹
         /// </summary>
-        /// <param name="filePaths">源文件/文件夹路径列表</param>
+        /// <param name="sourcePaths">源文件/文件夹路径列表</param>
         /// <param name="stream">压缩结果流（文件流或内存流等）</param>
         /// <param name="comment">注释信息</param>
         /// <param name="password">压缩密码</param>
         /// <param name="zipLevel">压缩等级，范围从0到9，可选，默认为6</param>
-        public static void ZipFiles(IEnumerable<string> filePaths, Stream stream, string comment = null, string password = null, int zipLevel = 6)
+        public static void ZipFiles(IEnumerable<string> sourcePaths, Stream stream, string comment = null, string password = null, int zipLevel = 6)
         {
             try
             {
-                var dictionary = GetFileSystemEntities(filePaths);
+                var dictionary = GetFileSystemEntities(sourcePaths);
                 using (ZipOutputStream zipStream = new ZipOutputStream(stream))
                 {
                     zipStream.Password = password;//设置密码
@@ -243,22 +243,22 @@ namespace WLib.Files.Zip
         /// <summary>
         /// 解压文件到指定文件夹
         /// </summary>
-        /// <param name="sourceFilePath">压缩文件</param>
+        /// <param name="sourcePath">压缩文件</param>
         /// <param name="destinationDirectory">目标文件夹，如果为空则解压到当前文件夹下</param>
         /// <param name="password">密码</param>
-        public static void UnZipFile(string sourceFilePath, string destinationDirectory = null, string password = null)
+        public static void UnZipFile(string sourcePath, string destinationDirectory = null, string password = null)
         {
-            if (!File.Exists(sourceFilePath))
-                throw new FileNotFoundException("要解压的文件不存在", sourceFilePath);
+            if (!File.Exists(sourcePath))
+                throw new FileNotFoundException("要解压的文件不存在", sourcePath);
 
             try
             {
                 if (string.IsNullOrWhiteSpace(destinationDirectory))
-                    destinationDirectory = Path.GetDirectoryName(sourceFilePath);
+                    destinationDirectory = Path.GetDirectoryName(sourcePath);
                 if (!Directory.Exists(destinationDirectory))
                     Directory.CreateDirectory(destinationDirectory);
 
-                using (var zipStream = new ZipInputStream(File.Open(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                using (var zipStream = new ZipInputStream(File.Open(sourcePath, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {
                     zipStream.Password = password;
                     ZipEntry zipEntry = null;

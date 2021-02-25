@@ -12,7 +12,7 @@ namespace WLib.Attributes.Table
     /// <summary>
     /// 表示隐藏字段
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class HiddenAttribute : Attribute
     {
     }

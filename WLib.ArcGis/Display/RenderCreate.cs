@@ -57,14 +57,14 @@ namespace WLib.ArcGis.Display
         ///  要素图层简单渲染：用指定填充颜色字符串RRGGBB渲染图层，使用默认的边线颜色（灰色),可设置透明度
         /// </summary>
         /// <param name="geoLayer">图层</param>
-        /// <param name="mainColorStr">主颜色字符串RRGGBB,如"ff0000"为红色，主颜色即多边形图层的填充颜色，线图层的线条颜色，点图层的符号颜色</param>
-        /// <param name="outlineColorStr">面或点的边线颜色字符串RRGGBB，若为null，则设置边线颜色为RGB：128, 138, 135</param>
+        /// <param name="mainColor">主颜色字符串RRGGBB,如"ff0000"为红色，主颜色即多边形图层的填充颜色，线图层的线条颜色，点图层的符号颜色</param>
+        /// <param name="outlineColor">面或点的边线颜色字符串RRGGBB，若为null，则设置边线颜色为RGB：128, 138, 135</param>
         /// <param name="transparency">图层的透明度，0为不透明，100为全透明</param>
         /// <param name="widthOrSize">面/线图层的线宽，或点图层点的大小</param>
-        public static IFeatureRenderer SimpleRenderer(this IGeoFeatureLayer geoLayer, string mainColorStr, string outlineColorStr = null, short transparency = 0, double widthOrSize = 1)
+        public static IFeatureRenderer SimpleRenderer(this IGeoFeatureLayer geoLayer, string mainColor, string outlineColor = null, short transparency = 0, double widthOrSize = 1)
         {
-            IColor lineColor = outlineColorStr == null ? null : ColorCreate.GetIColor(outlineColorStr);
-            return SimpleRenderer(geoLayer, ColorCreate.GetIColor(mainColorStr), lineColor, transparency, widthOrSize);
+            IColor lineColor = outlineColor == null ? null : ColorCreate.GetIColor(outlineColor);
+            return SimpleRenderer(geoLayer, ColorCreate.GetIColor(mainColor), lineColor, transparency, widthOrSize);
         }
 
         /// <summary>
@@ -191,6 +191,7 @@ namespace WLib.ArcGis.Display
             }
             return geoFeatureLayer.Renderer = (IFeatureRenderer)uvRenderer;
         }
+
         /// <summary>
         /// 根据几何类型，获得该类型的简单样式符号（Simple Symbol）
         /// </summary>
@@ -211,6 +212,26 @@ namespace WLib.ArcGis.Display
             }
             return null;
         }
+        /// <summary>
+        /// 构建随机色带
+        /// </summary>
+        /// <param name="size">表示要构建多少种色彩</param>
+        /// <returns></returns>
+        private static IRandomColorRamp GetRandomColorRamp(int size)
+        {
+            var randomColorRamp = new RandomColorRampClass
+            {
+                StartHue = 10,
+                EndHue = 300,
+                MaxSaturation = 100,
+                MinSaturation = 0,
+                MaxValue = 100,
+                MinValue = 0,
+                Size = size
+            };
+            randomColorRamp.CreateRamp(out _);
+            return randomColorRamp;
+        }
         #endregion
 
 
@@ -227,6 +248,39 @@ namespace WLib.ArcGis.Display
             return rasterLayer.Renderer = ClassifyRenderer(rasterLayer.Raster, classifyCount, fromColor, toColor);
         }
         /// <summary>
+        /// 栅格数据分级渲染
+        /// </summary>
+        /// <param name="raster">栅格</param>
+        /// <param name="classifyCount">分级数，即分成多少级别进行渲染</param>
+        /// <param name="fromColor">开始色彩</param>
+        /// <param name="toColor">结束色彩</param>
+        /// <returns></returns>
+        public static IRasterRenderer ClassifyRenderer(this IRaster raster, int classifyCount = 3, IColor fromColor = null, IColor toColor = null)
+        {
+            IRasterClassifyColorRampRenderer classifyRenderer = new RasterClassifyColorRampRendererClass();
+            IRasterRenderer rasterRenderer = (IRasterRenderer)classifyRenderer;
+
+            rasterRenderer.Raster = raster;
+            classifyRenderer.ClassCount = classifyCount;
+            rasterRenderer.Update();
+
+            IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
+            colorRamp.Size = classifyCount;
+            if (fromColor != null) colorRamp.FromColor = fromColor;
+            if (toColor != null) colorRamp.ToColor = toColor;
+            colorRamp.CreateRamp(out var ok);
+
+            IFillSymbol fillSymbol = new SimpleFillSymbolClass();
+            for (int i = 0; i < classifyRenderer.ClassCount; i++)
+            {
+                fillSymbol.Color = colorRamp.get_Color(i);
+                classifyRenderer.set_Symbol(i, (ISymbol)fillSymbol);
+                classifyRenderer.set_Label(i, Convert.ToString(i));
+            }
+            return rasterRenderer;
+        }
+
+        /// <summary>
         /// 栅格图层拉伸渲染
         /// </summary>
         /// <param name="rasterLayer">栅格图层</param>
@@ -236,6 +290,35 @@ namespace WLib.ArcGis.Display
         {
             return rasterLayer.Renderer = StretchRenderer(rasterLayer.Raster, formColor, toColor);
         }
+        /// <summary>
+        /// 栅格数据拉伸渲染
+        /// </summary>
+        /// <param name="raster">栅格</param>
+        /// <param name="fromColor">开始色彩</param>
+        /// <param name="toColor">结束色彩</param>
+        /// <returns></returns>
+        public static IRasterRenderer StretchRenderer(this IRaster raster, IColor fromColor, IColor toColor)
+        {
+            IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
+            colorRamp.Size = 255;
+            colorRamp.FromColor = fromColor;
+            colorRamp.ToColor = toColor;
+            colorRamp.CreateRamp(out var createColorRamp);
+
+            IRasterStretchColorRampRenderer stretchRenderer = new RasterStretchColorRampRendererClass();
+            IRasterRenderer rasterRenderer = (IRasterRenderer)stretchRenderer;
+
+            rasterRenderer.Raster = raster;
+            rasterRenderer.Update();
+            stretchRenderer.BandIndex = 0;
+            stretchRenderer.ColorRamp = colorRamp;
+
+            IRasterStretch stretchType = (IRasterStretch)rasterRenderer;
+            stretchType.StretchType = esriRasterStretchTypesEnum.esriRasterStretch_StandardDeviations;
+            stretchType.StandardDeviationsParam = 2;
+            return rasterRenderer;
+        }
+
         /// <summary>
         /// 栅格数据唯一值渲染
         /// </summary>
@@ -275,88 +358,9 @@ namespace WLib.ArcGis.Display
             }
             return rasterRenderer;
         }
-        /// <summary>
-        /// 栅格数据分级渲染
-        /// </summary>
-        /// <param name="raster">栅格</param>
-        /// <param name="classifyCount">分级数，即分成多少级别进行渲染</param>
-        /// <param name="fromColor">开始色彩</param>
-        /// <param name="toColor">结束色彩</param>
-        /// <returns></returns>
-        public static IRasterRenderer ClassifyRenderer(this IRaster raster, int classifyCount = 3, IColor fromColor = null, IColor toColor = null)
-        {
-            IRasterClassifyColorRampRenderer classifyRenderer = new RasterClassifyColorRampRendererClass();
-            IRasterRenderer rasterRenderer = (IRasterRenderer)classifyRenderer;
-
-            rasterRenderer.Raster = raster;
-            classifyRenderer.ClassCount = classifyCount;
-            rasterRenderer.Update();
-
-            IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
-            colorRamp.Size = classifyCount;
-            if (fromColor != null) colorRamp.FromColor = fromColor;
-            if (toColor != null) colorRamp.ToColor = toColor;
-            colorRamp.CreateRamp(out var ok);
-
-            IFillSymbol fillSymbol = new SimpleFillSymbolClass();
-            for (int i = 0; i < classifyRenderer.ClassCount; i++)
-            {
-                fillSymbol.Color = colorRamp.get_Color(i);
-                classifyRenderer.set_Symbol(i, (ISymbol)fillSymbol);
-                classifyRenderer.set_Label(i, Convert.ToString(i));
-            }
-            return rasterRenderer;
-        }
-        /// <summary>
-        /// 栅格数据拉伸渲染
-        /// </summary>
-        /// <param name="raster">栅格</param>
-        /// <param name="fromColor">开始色彩</param>
-        /// <param name="toColor">结束色彩</param>
-        /// <returns></returns>
-        public static IRasterRenderer StretchRenderer(this IRaster raster, IColor fromColor, IColor toColor)
-        {
-            IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
-            colorRamp.Size = 255;
-            colorRamp.FromColor = fromColor;
-            colorRamp.ToColor = toColor;
-            colorRamp.CreateRamp(out var createColorRamp);
-
-            IRasterStretchColorRampRenderer stretchRenderer = new RasterStretchColorRampRendererClass();
-            IRasterRenderer rasterRenderer = (IRasterRenderer)stretchRenderer;
-
-            rasterRenderer.Raster = raster;
-            rasterRenderer.Update();
-            stretchRenderer.BandIndex = 0;
-            stretchRenderer.ColorRamp = colorRamp;
-
-            IRasterStretch stretchType = (IRasterStretch)rasterRenderer;
-            stretchType.StretchType = esriRasterStretchTypesEnum.esriRasterStretch_StandardDeviations;
-            stretchType.StandardDeviationsParam = 2;
-            return rasterRenderer;
-        }
         #endregion
 
 
-        /// <summary>
-        /// 构建随机色带
-        /// </summary>
-        /// <param name="size">表示要构建多少种色彩</param>
-        /// <returns></returns>
-        private static IRandomColorRamp GetRandomColorRamp(int size)
-        {
-            var randomColorRamp = new RandomColorRampClass
-            {
-                StartHue = 10,
-                EndHue = 300,
-                MaxSaturation = 100,
-                MinSaturation = 0,
-                MaxValue = 100,
-                MinValue = 0,
-                Size = size
-            };
-            randomColorRamp.CreateRamp(out _);
-            return randomColorRamp;
-        }
+    
     }
 }

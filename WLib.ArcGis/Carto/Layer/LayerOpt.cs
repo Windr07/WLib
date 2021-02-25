@@ -157,7 +157,7 @@ namespace WLib.ArcGis.Carto.Layer
                     {
                         IDatasetName datasetName = (IDatasetName)dataLayer.DataSourceName;
                         EWorkspaceType eWorkspaceType = WorkspaceEx.GetDefaultWorkspaceType(workspacePath);
-                        datasetName.WorkspaceName.WorkspaceFactoryProgID = eWorkspaceType.GetDescription(1);
+                        datasetName.WorkspaceName.WorkspaceFactoryProgID = eWorkspaceType.GetDescriptionEx(1);
                         datasetName.WorkspaceName.PathName = workspacePath;
                         //TODO:
                         if (!string.IsNullOrWhiteSpace(dataSetName)) datasetName.Category = dataSetName;

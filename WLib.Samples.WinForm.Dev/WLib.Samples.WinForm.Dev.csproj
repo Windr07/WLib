@@ -170,6 +170,14 @@
       <Project>{0e418c82-3534-4604-bee4-4e5bd0bb926d}</Project>
       <Name>WLib.ArcGis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WLib.WinCtrls.ArcGisCtrl\WLib.WinCtrls.ArcGisCtrl.csproj">
+      <Project>{73F72B77-3ED3-44CF-A1FD-52C4FB6531B5}</Project>
+      <Name>WLib.WinCtrls.ArcGisCtrl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WLib.WinCtrls.Dev.ArcGisCtrl\WLib.WinCtrls.Dev.ArcGisCtrl.csproj">
+      <Project>{55D27368-8376-4E12-B06D-330AE8DEF47C}</Project>
+      <Name>WLib.WinCtrls.Dev.ArcGisCtrl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WLib.WinCtrls.Dev\WLib.WinCtrls.Dev.csproj">
       <Project>{5ac4fbca-7dc4-49ad-b3ef-f5a7ba5a5a47}</Project>
       <Name>WLib.WinCtrls.Dev</Name>
@@ -187,6 +195,9 @@
     <None Include="Data\SampleData.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

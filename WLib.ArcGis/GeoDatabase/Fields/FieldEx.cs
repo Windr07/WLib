@@ -3,6 +3,8 @@
 // date： 2018
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using System;
@@ -10,7 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.Data;
 using WLib.ArcGis.GeoDatabase.Table;
+using WLib.Database.TableInfo;
 
 namespace WLib.ArcGis.GeoDatabase.Fields
 {
@@ -23,16 +27,33 @@ namespace WLib.ArcGis.GeoDatabase.Fields
     public static class FieldEx
     {
         /// <summary>
-        /// 讲自定义类FieldItem转成ArcGIS的IField对象
+        /// 将自定义类<see cref="GFieldItem"/>转成ArcGIS的<see cref="IField"/>对象
         /// </summary>
         /// <param name="fieldItem"></param>
         /// <returns></returns>
-        public static IField ToFiled(this FieldItem fieldItem)
+        public static IField ToFiled(this GFieldItem fieldItem)
         {
-            return CreateField(fieldItem.Name, fieldItem.AliasName, fieldItem.FieldType);
+            return CreateField(fieldItem.Name, fieldItem.AliasName, fieldItem.eFieldType);
         }
         /// <summary>
-        /// 将ArcGIS表格的字段转为自定义类FieldItem集
+        /// 将ArcGIS表格的字段转为自定义类<see cref="GFieldItem"/>集
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
+        /// <returns></returns>
+        public static IEnumerable<GFieldItem> ToGFieldItems(this IFields fields, string[] fieldNames = null)
+        {
+            var eFields = ToEnumerable(fields);
+            if (fieldNames == null || fieldNames.Length == 0)
+                return eFields.Select(v => new GFieldItem(
+                    v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
+
+            var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
+            return filterFields.Select(v => new GFieldItem(
+                v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
+        }
+        /// <summary>
+        /// 将ArcGIS表格的字段转为自定义类<see cref="FieldItem"/>集
         /// </summary>
         /// <param name="fields"></param>
         /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
@@ -41,27 +62,12 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         {
             var eFields = ToEnumerable(fields);
             if (fieldNames == null || fieldNames.Length == 0)
-                return eFields.Select(v => new FieldItem(v.Name, v.AliasName, v.Type));
+                return eFields.Select(v => new FieldItem(
+                    v.Name, v.AliasName, v.Type.ToCSharpType(), v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
 
             var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
-            return filterFields.Select(v => new FieldItem(v.Name, v.AliasName, v.Type));
-        }
-        /// <summary>
-        /// 将ArcGIS表格的字段转为自定义类FieldItemEx集
-        /// </summary>
-        /// <param name="fields"></param>
-        /// <param name="fieldNames">从表格获取的字段集（名称或别名均可），值为null时获取全部字段</param>
-        /// <returns></returns>
-        public static IEnumerable<FieldItemEx> ToFieldItemExs(this IFields fields, string[] fieldNames = null)
-        {
-            var eFields = ToEnumerable(fields);
-            if (fieldNames == null || fieldNames.Length == 0)
-                return eFields.Select(v => new FieldItemEx(
-                    v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
-
-            var filterFields = eFields.Where(v => fieldNames.Contains(v.Name) || fieldNames.Contains(v.AliasName));
-            return filterFields.Select(v => new FieldItemEx(
-                v.Name, v.AliasName, v.Type, v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
+            return filterFields.Select(v => new FieldItem(
+                v.Name, v.AliasName, v.Type.ToCSharpType(), v.Length, v.Precision, v.Scale, v.IsNullable, v.Required, v.Editable));
         }
 
 
@@ -133,7 +139,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="featureClass">源要素类</param>
         /// <param name="factoryCode">坐标系代码</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFields(this IFeatureClass featureClass, int factoryCode)
+        public static IFields CloneFields(this IFeatureClass featureClass, int factoryCode)
         {
             IFields outputFields;
             IFieldChecker fieldChecker = new FieldCheckerClass();
@@ -155,11 +161,11 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// </summary>
         /// <param name="featureClass">源要素类</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFields(this IFeatureClass featureClass)
+        public static IFields CloneFields(this IFeatureClass featureClass)
         {
             IField souceGeoField = featureClass.Fields.get_Field(featureClass.FindField(featureClass.ShapeFieldName));
             int factoryCode = souceGeoField.GeometryDef.SpatialReference.FactoryCode;
-            IFields result = CloneFeatureClassFields(featureClass, factoryCode);
+            IFields result = CloneFields(featureClass, factoryCode);
             return result;
         }
         /// <summary>
@@ -169,7 +175,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="spatialRef">空间坐标系</param>
         /// <param name="fieldNames">指定的字段名列表，若指定的字段在源要素类中找不到，则跳过该字段</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFields(this IFeatureClass featureClass, ISpatialReference spatialRef, IEnumerable<string> fieldNames)
+        public static IFields CloneFields(this IFeatureClass featureClass, ISpatialReference spatialRef, IEnumerable<string> fieldNames)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
@@ -209,7 +215,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// </summary>
         /// <param name="featureClass">源要素类</param>
         /// <returns></returns>
-        public static IFields CloneFeatureClassFieldsSimple(this IFeatureClass featureClass)
+        public static IFields CloneFieldsSimple(this IFeatureClass featureClass)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
@@ -229,7 +235,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="table">源表格</param>
         /// <param name="containsOidField">是否复制OID字段</param>
         /// <returns></returns>
-        public static IFields CloneTableFields(this ITable table, bool containsOidField = false)
+        public static IFields CloneFields(this ITable table, bool containsOidField = false)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
@@ -253,13 +259,15 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// </summary>
         /// <param name="geometryType">几何类型</param>
         /// <param name="spatialRef">坐标系（若Shape字段所在要素类位于工作空间中，则此值不可为null，若位于要素数据集则应设置为null</param>
+        /// <param name="hasZ">是否有高程值（Z值）</param>
+        /// <param name="hasM">是否有M值，存储其他数据（存储温度、浓度等）</param>
         /// <returns></returns>
-        public static IFields CreateBaseFields(esriGeometryType geometryType, ISpatialReference spatialRef)
+        public static IFields CreateBaseFields(esriGeometryType geometryType, ISpatialReference spatialRef, bool hasZ = false, bool hasM = false)
         {
             IFields fields = new FieldsClass();
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
             fieldsEdit.AddField(CreateOidField());
-            fieldsEdit.AddField(CreateShapeField(geometryType, spatialRef));
+            fieldsEdit.AddField(CreateShapeField(geometryType, spatialRef, hasZ, hasM));
             return fields;
         }
         /// <summary>
@@ -278,9 +286,10 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         }
         /// <summary>
         /// 创建ObjectID字段
-        /// （ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID，关于OID、FID、OBJECTID参考
+        /// <para>ObjectID会在不同数据源中自动转换为OID/FID/OJBECTID</para>
+        /// <para>关于OID、FID、OBJECTID参考
         ///  http://support.esrichina.com.cn/2009/1229/595.html 或
-        ///  http://blog.csdn.net/yh0503/article/details/27862401）
+        ///  http://blog.csdn.net/yh0503/article/details/27862401 </para>
         /// </summary>
         /// <returns></returns>
         public static IField CreateOidField()
@@ -298,8 +307,10 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// </summary>
         /// <param name="geometryType">几何类型</param>
         /// <param name="spatialRef">坐标系（若Shape字段所在要素类在工作空间中则此值不可为null，若位于要素数据集则应设置为null</param>
+        /// <param name="hasZ">是否有高程值（Z值）</param>
+        /// <param name="hasM">是否有M值，存储其他数据（存储温度、浓度等）</param>
         /// <returns></returns>
-        public static IField CreateShapeField(esriGeometryType geometryType, ISpatialReference spatialRef)
+        public static IField CreateShapeField(esriGeometryType geometryType, ISpatialReference spatialRef, bool hasZ = false, bool hasM = false)
         {
             //创建几何字段
             IField shapeField = new FieldClass();
@@ -307,7 +318,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             shapeFieldEdit.Name_2 = "SHAPE";
             shapeFieldEdit.AliasName_2 = "SHAPE";
             shapeFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
-            shapeFieldEdit.GeometryDef_2 = CreateGeometryDef(geometryType, spatialRef);
+            shapeFieldEdit.GeometryDef_2 = CreateGeometryDef(geometryType, spatialRef, hasZ, hasM);
             return shapeField;
         }
         /// <summary>
@@ -315,8 +326,10 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// </summary>
         /// <param name="geometryType"></param>
         /// <param name="spatialRef"></param>
+        /// <param name="hasZ">是否有高程值（Z值）</param>
+        /// <param name="hasM">是否有M值，存储其他数据（存储温度、浓度等）</param>
         /// <returns></returns>
-        private static IGeometryDef CreateGeometryDef(esriGeometryType geometryType, ISpatialReference spatialRef)
+        private static IGeometryDef CreateGeometryDef(esriGeometryType geometryType, ISpatialReference spatialRef, bool hasZ = false, bool hasM = false)
         {
             //创建几何对象字段定义字段
             IGeometryDef geometryDef = new GeometryDefClass();
@@ -326,6 +339,8 @@ namespace WLib.ArcGis.GeoDatabase.Fields
             geometryDefEdit.GeometryType_2 = geometryType;
             geometryDefEdit.GridCount_2 = 1;
             geometryDefEdit.set_GridSize(0, 1000);
+            geometryDefEdit.HasZ_2 = hasZ;//图层是否有高程值（Z值）
+            geometryDefEdit.HasM_2 = hasM;//图层是否有M值，存储其他数据（温度、浓度等）
             if (spatialRef != null)
                 geometryDefEdit.SpatialReference_2 = spatialRef;
 
@@ -368,10 +383,11 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="otherFields"></param>
         public static void AddFields(this IFields iFields, IEnumerable<IField> otherFields)
         {
+            if (otherFields == null) return;
+
             var fieldsEdit = (IFieldsEdit)iFields;
-            if (otherFields != null)
-                foreach (var field in otherFields)
-                    fieldsEdit.AddField(field);
+            foreach (var field in otherFields)
+                fieldsEdit.AddField(field);
         }
         /// <summary>
         /// 向字段集添加或修改ObjectID和拥有指定几何类型与坐标系Shape字段，若字段存在且符合要求则不添加或修改
@@ -380,8 +396,10 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="fields">字段集</param>
         /// <param name="geometryType">需要添加的Shape字段存储的几何类型</param>
         /// <param name="spatialRef">需要添加的Shape字段存储的坐标系</param>
+        /// <param name="hasZ">是否有高程值（Z值）</param>
+        /// <param name="hasM">是否有M值，存储其他数据（存储温度、浓度等）</param>
         /// <returns></returns>
-        public static IFields AddBaseFields(this IFields fields, esriGeometryType geometryType, ISpatialReference spatialRef)
+        public static IFields AddBaseFields(this IFields fields, esriGeometryType geometryType, ISpatialReference spatialRef, bool hasZ = false, bool hasM = false)
         {
             IFieldsEdit fieldsEdit = (IFieldsEdit)fields;
             var oidField = fields.GetFirstField(esriFieldType.esriFieldTypeOID);
@@ -390,12 +408,12 @@ namespace WLib.ArcGis.GeoDatabase.Fields
 
             var shapeField = fields.GetFirstField(esriFieldType.esriFieldTypeGeometry);
             if (shapeField == null)
-                fieldsEdit.AddField(CreateShapeField(geometryType, spatialRef));
+                fieldsEdit.AddField(CreateShapeField(geometryType, spatialRef, hasZ, hasM));
             else if (shapeField.GeometryDef.GeometryType != geometryType ||
                      shapeField.GeometryDef.SpatialReference != spatialRef)
             {
                 IFieldEdit shapeFieldEdit = (IFieldEdit)shapeField;
-                shapeFieldEdit.GeometryDef_2 = CreateGeometryDef(geometryType, spatialRef);
+                shapeFieldEdit.GeometryDef_2 = CreateGeometryDef(geometryType, spatialRef, hasZ, hasM);
             }
 
             return fields;
@@ -572,6 +590,7 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         }
         /// <summary>
         /// 查找第一个符合指定类型的字段
+        /// <para>找不到则返回null</para>
         /// </summary>
         /// <param name="fields"></param>
         /// <param name="fieldType"></param>
@@ -616,6 +635,33 @@ namespace WLib.ArcGis.GeoDatabase.Fields
                     yield return table.Fields.get_Field(index);
             }
         }
+        /// <summary>
+        /// 获取几何字段（Shape字段）
+        /// </summary>
+        /// <param name="featureClass"></param>
+        /// <returns></returns>
+        public static IField GetShapeField(this IFeatureClass featureClass)
+        {
+            return GetFirstField(featureClass.Fields, esriFieldType.esriFieldTypeGeometry);
+        }
+        /// <summary>
+        /// 获取几何字段（Shape字段），不存在几何字段则返回null
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static IField GetShapeField(this IFields fields)
+        {
+            return GetFirstField(fields, esriFieldType.esriFieldTypeGeometry);
+        }
+        /// <summary>
+        /// 获取几何定义，不存在几何定义则返回null
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static IGeometryDef GetGeometryDef(this IFields fields)
+        {
+            return GetShapeField(fields)?.GeometryDef;
+        }
         #endregion
 
 
@@ -631,25 +677,39 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <summary>
         /// 获取系统字段
         /// <para>表格的系统字段为：OID字段（OBJECTID或FID）</para>
-        /// <para>要素类的系统字段为：OID字段（OBJECTID或FID）、SHAPE字段、"SHAPE_LENGTH"、"SHAPE_AREA"</para>
+        /// <para>要素类的系统字段为：OID字段（OBJECTID或FID）、Shape字段、"SHAPE_LENGTH"、"SHAPE_AREA"</para>
         /// </summary>
         /// <param name="table"></param>
+        /// <param name="toUpper">是否将返回的系统字段名全部转为大写</param>
         /// <returns></returns>
-        public static string[] GetSystemFieldNames(this ITable table)
+        public static string[] GetSystemFieldNames(this ITable table, bool toUpper = false, ESysFields eSysFields = ESysFields.All)
         {
             if (table is IFeatureClass featureClass)
-                return new[] { featureClass.OIDFieldName, featureClass.ShapeFieldName, SHAPE_LENGTH, SHAPE_AREA };
+                return GetSystemFieldNames(featureClass, toUpper, eSysFields);
             else
-                return new[] { table.OIDFieldName };
+                return new[] { table.OIDFieldName.ToUpper() };
         }
         /// <summary>
         /// 获取系统字段：OID字段（OBJECTID或FID）、SHAPE字段、"SHAPE_LENGTH"、"SHAPE_AREA"
         /// </summary>
         /// <param name="featureClass"></param>
         /// <returns></returns>
-        public static string[] GetSystemFieldNames(this IFeatureClass featureClass)
+        public static string[] GetSystemFieldNames(this IFeatureClass featureClass, bool toUpper = false, ESysFields eSysFields = ESysFields.All)
         {
-            return new[] { featureClass.OIDFieldName, featureClass.ShapeFieldName, SHAPE_LENGTH, SHAPE_AREA };
+            var fields = new List<string>();
+            switch (eSysFields)
+            {
+                case ESysFields.OID: fields.Add(featureClass.OIDFieldName); break;
+                case ESysFields.Shape: fields.Add(featureClass.ShapeFieldName); break;
+                case ESysFields.Length: fields.Add(SHAPE_LENGTH); break;
+                case ESysFields.Area: fields.Add(SHAPE_AREA); break;
+                case ESysFields.OID_Shape: fields.AddRange(new[] { featureClass.OIDFieldName, featureClass.ShapeFieldName }); break;
+                case ESysFields.Length_Area: fields.AddRange(new[] { SHAPE_LENGTH, SHAPE_AREA }); break;
+                case ESysFields.OID_Lenth_Area: fields.AddRange(new[] { featureClass.OIDFieldName, SHAPE_LENGTH, SHAPE_AREA }); break;
+                case ESysFields.ShapeAll: fields.AddRange(new[] { featureClass.ShapeFieldName, SHAPE_LENGTH, SHAPE_AREA }); break;
+                case ESysFields.All: fields.AddRange(new[] { featureClass.OIDFieldName, featureClass.ShapeFieldName, SHAPE_LENGTH, SHAPE_AREA }); break;
+            }
+            return toUpper ? fields.Select(v => v.ToUpper()).ToArray() : fields.ToArray();
         }
         /// <summary>
         /// 获取要素类的所有字段名
@@ -657,19 +717,19 @@ namespace WLib.ArcGis.GeoDatabase.Fields
         /// <param name="featureClass">要素类</param>
         /// <param name="getSystemFields">是否获取系统字段：包括OID（OBJECTID或FID）, SHAPE, SHAPE_LENGTH, SHAPE_AREA</param>
         /// <returns></returns>
-        public static List<string> GetFieldsNames(this IFeatureClass featureClass, bool getSystemFields = true)
+        public static List<string> GetFieldsNames(this IFeatureClass featureClass, ESysFields eSysFields = ESysFields.All)
         {
-            return GetFieldsNames(featureClass as ITable, getSystemFields);
+            return GetFieldsNames(featureClass as ITable, eSysFields);
         }
         /// <summary>
         /// 获取表格的所有字段名
         /// </summary>
         /// <param name="table">表格</param>
-        /// <param name="getSystemFields">是否获取系统字段：
+        /// <param name="eSysFields">获取系统字段
         /// <para>表格的系统字段为：OID字段（OBJECTID或FID），</para>
         /// 要素类的系统字段为：OID字段（OBJECTID或FID）、SHAPE字段、"SHAPE_LENGTH"、"SHAPE_AREA"</param>
         /// <returns></returns>
-        public static List<string> GetFieldsNames(this ITable table, bool getSystemFields = true)
+        public static List<string> GetFieldsNames(this ITable table, ESysFields eSysFields = ESysFields.All)
         {
             List<string> names = new List<string>();
             int cnt = table.Fields.FieldCount;
@@ -678,9 +738,10 @@ namespace WLib.ArcGis.GeoDatabase.Fields
                 names.Add(table.Fields.get_Field(i).Name);
             }
 
-            if (!getSystemFields)
+            if (eSysFields != ESysFields.All)
             {
-                string[] sysFieldNames = GetSystemFieldNames(table);
+                string[] sysFieldNames = GetSystemFieldNames(table, true, eSysFields);
+                sysFieldNames = GetSystemFieldNames(table, true).Except(sysFieldNames).ToArray();
                 names.RemoveAll(v => sysFieldNames.Contains(v.ToUpper()));
             }
             return names;

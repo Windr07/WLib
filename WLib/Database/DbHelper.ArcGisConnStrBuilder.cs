@@ -3,6 +3,8 @@
 // date： 2019/4/27 11:31:17
 // desc： 构建连接ArcGIS的shp/gdb/mdb/sde等数据的连接字符串，以便通过ADO.NET使用sql操作相关GIS数据
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using System;

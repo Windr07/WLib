@@ -17,7 +17,7 @@ namespace WLib.WindowsAPI
 
     /// <summary>
     /// 提供Windows API调用
-    /// (参考：http://www.office-cn.net/t/api/api_content.htm)
+    /// <para>参考：http://www.office-cn.net/t/api/api_content.htm </para>
     /// </summary>
     public class WinApi
     {

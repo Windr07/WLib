@@ -3,6 +3,8 @@
 // date： 2018
 // desc： None
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using System;
@@ -630,20 +632,20 @@ namespace WLib.ArcGis.GeoDatabase.Table
 
         #region 创建、删除索引
         /// <summary>
-        /// 创建要素类的字段索引
+        /// 创建表格的字段索引
         /// </summary>
-        /// <param name="featureClass">要创建索引的要素类</param>
+        /// <param name="table">要创建索引的表格</param>
         /// <param name="fieldName">要创建索引的字段</param>
         /// <param name="indexName">要创建的索引的名称，值为null则索引名称为字段名后加上“_Index”：即“{<paramref name="fieldName"/>}_Index”</param>
-        public static void CreateIndex(this IFeatureClass featureClass, string fieldName, string indexName = null)
+        public static void CreateIndex(this ITable table, string fieldName, string indexName = null)
         {
-            int fieldIndex = featureClass.FindField(fieldName);
+            int fieldIndex = table.FindField(fieldName);
             if (fieldIndex < 0)
                 throw new Exception($"找不到字段{fieldName}");
 
-            IField field = featureClass.Fields.Field[fieldIndex];
+            IField field = table.Fields.Field[fieldIndex];
             IIndex index = CreateIndex(field, indexName);
-            featureClass.AddIndex(index);
+            table.AddIndex(index);
         }
         /// <summary>
         /// 创建字段索引

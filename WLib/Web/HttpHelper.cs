@@ -20,9 +20,9 @@ namespace WLib.Web
         /// Get请求
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="timeout"></param>
+        /// <param name="timeout">超时等待时间（毫秒）</param>
         /// <returns></returns>
-        public static string Get(string url, int timeout = 12000)
+        public static string Get(string url, int timeout = 10000)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
@@ -44,11 +44,13 @@ namespace WLib.Web
         /// </summary>
         /// <param name="url"></param>
         /// <param name="json"></param>
-        public static HttpWebResponse Post(string url, string json)
+        /// <param name="timeout">超时等待时间（毫秒）</param>
+        public static HttpWebResponse Post(string url, string json, int timeout = 10000)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
+            httpWebRequest.Timeout = timeout;
 
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
@@ -56,7 +58,6 @@ namespace WLib.Web
                 streamWriter.Flush();
                 streamWriter.Close();
             }
-
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             return httpResponse;
         }
@@ -72,7 +73,7 @@ namespace WLib.Web
                 var directory = Path.GetDirectoryName(savePath);
                 if (!Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
-                var fileStream = new FileStream(directory, FileMode.Create);
+                var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite);
                 var bytes = new byte[1024];
                 int size = stream.Read(bytes, 0, bytes.Length);
                 while (size > 0)

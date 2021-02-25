@@ -51,7 +51,7 @@ namespace WLib.ArcGis.DataCheck.Compare.Plan
             sb.AppendLine("右表筛选：" + WhereClause2);
             sb.AppendLine("左表ID：" + IdField);
             sb.AppendLine("右表ID：" + IdField);
-            sb.AppendLine("空间匹配方式：" + SpatialMatchTypes.Select(v => v.GetDescription()).Aggregate((a, b) => a + " and " + b));
+            sb.AppendLine("空间匹配方式：" + SpatialMatchTypes.Select(v => v.GetDescriptionEx()).Aggregate((a, b) => a + " and " + b));
             sb.AppendLine("空间匹配容差：" + Tolerance);
             foreach (var line in CompareItems.GetAllInfo())
                 sb.AppendLine(line);

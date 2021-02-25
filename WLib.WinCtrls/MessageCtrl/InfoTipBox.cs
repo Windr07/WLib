@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Windows.Forms;
 
 namespace WLib.WinCtrls.MessageCtrl
@@ -19,7 +26,7 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <summary>
         /// 信息提示框关闭后执行的操作
         /// </summary>
-        public Action AfterFormClosed;
+        public event EventHandler AfterFormClosed;
 
         /// <summary>
         /// 信息提示框
@@ -29,7 +36,7 @@ namespace WLib.WinCtrls.MessageCtrl
         /// <param name="title">提示标题</param>
         /// <param name="sumCloseSecond">总共多少秒后自动关闭当前窗口，值小于等于0则不会自动关闭</param>
         /// <param name="afterFormClosed">信息提示框关闭后执行的操作</param>
-        public InfoTipBox(string info, string title = null, int sumCloseSecond  = 3, Action afterFormClosed = null)
+        public InfoTipBox(string info, string title = null, int sumCloseSecond  = 3, EventHandler afterFormClosed = null)
         {
             InitializeComponent();
             lblInfo.Text = info;
@@ -42,7 +49,7 @@ namespace WLib.WinCtrls.MessageCtrl
         {
             timer1.Enabled = false;
             Close();
-            AfterFormClosed?.Invoke();
+            AfterFormClosed?.Invoke(this, new EventArgs());
         }
 
         private void InfoTipBox_Load(object sender, EventArgs e) => timer1.Enabled = _sumSecond > 0;
@@ -55,7 +62,7 @@ namespace WLib.WinCtrls.MessageCtrl
             {
                 timer1.Enabled = false;
                 Close();
-                AfterFormClosed?.Invoke();
+                AfterFormClosed?.Invoke(this, new EventArgs());
             }
         }
     }

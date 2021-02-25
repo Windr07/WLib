@@ -94,6 +94,16 @@ namespace WLib.ArcGis.Geometry
             }
             return iArea.Area;
         }
+        /// <summary>
+        /// 去掉图形中的Z值（高程值）
+        /// </summary>
+        /// <param name="geometry"></param>
+        public static void DropZs(this IGeometry geometry)
+        {
+            IZAware pZaware = geometry as IZAware;
+            pZaware.DropZs();
+            pZaware.ZAware = false;
+        }
 
 
         #region 获取点集
@@ -302,10 +312,10 @@ namespace WLib.ArcGis.Geometry
         /// <summary>
         /// 通过起点和终点创建线段(IPolyline对象)
         /// </summary>
-        /// <param name="pt1">起点</param>
-        /// <param name="pt2">终点</param>
+        /// <param name="point1">起点</param>
+        /// <param name="point2">终点</param>
         /// <returns></returns>
-        public static IPolyline CreatePolyline(IPoint pt1, IPoint pt2)
+        public static IPolyline CreatePolyline(IPoint point1, IPoint point2)
         {
             //a. 创建Line对象(也可是其他Segment对象)，
             //b. QI到Segment对象
@@ -315,7 +325,7 @@ namespace WLib.ArcGis.Geometry
 
 
             ILine line = new LineClass();// 创建一个Line对象
-            line.PutCoords(pt1, pt2);// 设置LIne对象的起始终止点
+            line.PutCoords(point1, point2);// 设置LIne对象的起始终止点
             ISegment segment = line as ISegment; // QI到ISegment
             ISegmentCollection path = new PathClass();// 创建一个Path对象
 
@@ -332,15 +342,15 @@ namespace WLib.ArcGis.Geometry
         /// <summary>
         /// 通过点集创建线段(IPolyline对象)
         /// </summary>
-        /// <param name="pts"></param>
+        /// <param name="points"></param>
         /// <returns></returns>
-        public static IPolyline CreatePolyline(IPoint[] pts)
+        public static IPolyline CreatePolyline(params IPoint[] points)
         {
             var segments = new List<ISegment>();//存放单条线的每一段(Line对象)
-            for (int i = 0; i < pts.Length - 1; i++)
+            for (int i = 0; i < points.Length - 1; i++)
             {
                 Line line = new LineClass();
-                line.PutCoords(pts[i], pts[i + 1]);
+                line.PutCoords(points[i], points[i + 1]);
                 segments.Add((ISegment)line);
             }
 

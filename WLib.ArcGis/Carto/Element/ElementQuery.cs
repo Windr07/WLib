@@ -91,7 +91,8 @@ namespace WLib.ArcGis.Carto.Element
         /// <param name="graphicsContainer">图形容器</param>
         /// <param name="elementName">元素名称</param>
         /// <returns></returns>
-        public static IElement GetFirstElementByName(this IGraphicsContainer graphicsContainer, string elementName)
+        public static IElement GetFirstElement
+            (this IGraphicsContainer graphicsContainer, string elementName)
         {
             graphicsContainer.Reset();
             IElement element;
@@ -100,7 +101,7 @@ namespace WLib.ArcGis.Carto.Element
                 var tmpElementName = (element as IElementProperties)?.Name;
                 if ((element as IGroupElement) != null)
                 {
-                    element = GetFirstElementByName(element as IGroupElement, elementName);
+                    element = GetFirstElement(element as IGroupElement, elementName);
                     if (element != null && tmpElementName == elementName)
                         break;
                 }
@@ -115,7 +116,7 @@ namespace WLib.ArcGis.Carto.Element
         /// <param name="groupElement"></param>
         /// <param name="elementName"></param>
         /// <returns></returns>
-        public static IElement GetFirstElementByName(this IGroupElement groupElement, string elementName)
+        public static IElement GetFirstElement(this IGroupElement groupElement, string elementName)
         {
             IElement resultElement = null;
             IEnumElement enumEle = groupElement.Elements;
@@ -124,7 +125,7 @@ namespace WLib.ArcGis.Carto.Element
             {
                 if ((tmpEle as IGroupElement) != null)
                 {
-                    resultElement = GetFirstElementByName(tmpEle as IGroupElement, elementName);
+                    resultElement = GetFirstElement(tmpEle as IGroupElement, elementName);
                     if (resultElement != null) break;
                 }
                 else
@@ -186,7 +187,7 @@ namespace WLib.ArcGis.Carto.Element
         /// <param name="graphicsContainer">图形容器</param>
         /// <param name="elementName">元素名称</param>
         /// <returns></returns>
-        public static List<IElement> GetElementsByName(this IGraphicsContainer graphicsContainer, string elementName)
+        public static List<IElement> GetElements(this IGraphicsContainer graphicsContainer, string elementName)
         {
             List<IElement> elements = new List<IElement>();
             graphicsContainer.Reset();
@@ -194,10 +195,31 @@ namespace WLib.ArcGis.Carto.Element
             while ((element = graphicsContainer.Next()) != null)
             {
                 if ((element as IGroupElement) != null)
-                    elements.AddRange(GetElementsByName(element as IGroupElement, elementName));
+                    elements.AddRange(GetElements(element as IGroupElement, elementName));
 
                 else if ((element as IElementProperties)?.Name == elementName)
                     elements.Add(element);
+            }
+            return elements;
+        }
+        /// <summary>
+        /// 查找符合指定名称的所有元素
+        /// </summary>
+        /// <param name="groupElement">组合元素</param>
+        /// <param name="elementName">元素名称</param>
+        /// <returns></returns>
+        public static List<IElement> GetElements(this IGroupElement groupElement, string elementName)
+        {
+            List<IElement> elements = new List<IElement>();
+            IEnumElement enumEle = groupElement.Elements;
+            IElement tmpEle;
+            while ((tmpEle = enumEle.Next()) != null)
+            {
+                if ((tmpEle as IGroupElement) != null)
+                    elements.AddRange(GetElements(tmpEle as IGroupElement, elementName));
+
+                else if ((tmpEle as IElementProperties)?.Name == elementName)
+                    elements.Add(tmpEle);
             }
             return elements;
         }
@@ -222,27 +244,6 @@ namespace WLib.ArcGis.Carto.Element
 
                 else if (element is ITextElement textElement && textElement.Text.Contains(keyword))
                     elements.Add(element);
-            }
-            return elements;
-        }
-        /// <summary>
-        /// 查找符合指定名称的所有元素
-        /// </summary>
-        /// <param name="groupElement">组合元素</param>
-        /// <param name="elementName">元素名称</param>
-        /// <returns></returns>
-        public static List<IElement> GetElementsByName(this IGroupElement groupElement, string elementName)
-        {
-            List<IElement> elements = new List<IElement>();
-            IEnumElement enumEle = groupElement.Elements;
-            IElement tmpEle;
-            while ((tmpEle = enumEle.Next()) != null)
-            {
-                if ((tmpEle as IGroupElement) != null)
-                    elements.AddRange(GetElementsByName(tmpEle as IGroupElement, elementName));
-
-                else if ((tmpEle as IElementProperties)?.Name == elementName)
-                    elements.Add(tmpEle);
             }
             return elements;
         }
@@ -276,7 +277,7 @@ namespace WLib.ArcGis.Carto.Element
         /// <param name="graphicsContainer">图形容器</param>
         /// <param name="elementNames">元素名称数组，注意不能有相同的元素名称</param>
         /// <returns></returns>
-        public static Dictionary<string, List<IElement>> GetElementsByNames(this IGraphicsContainer graphicsContainer, params string[] elementNames)
+        public static Dictionary<string, List<IElement>> GetElements(this IGraphicsContainer graphicsContainer, params string[] elementNames)
         {
             Dictionary<string, List<IElement>> dict = elementNames.ToDictionary(name => name, name => new List<IElement>());
             graphicsContainer.Reset();
@@ -372,7 +373,7 @@ namespace WLib.ArcGis.Carto.Element
             for (IElement element = graphicsContainer.Next(); element != null; element = graphicsContainer.Next())
             {
                 if (element is IGroupElement)
-                    element = GetFirstElementByName(element as IGroupElement, mapName);
+                    element = GetFirstElement(element as IGroupElement, mapName);
 
                 if (element is IMapFrame frame)
                 {

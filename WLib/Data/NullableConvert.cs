@@ -20,7 +20,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static double? NullableDouble(this object value)
+        public static double? ToNullableDouble(this object value)
         {
             return Convert.IsDBNull(value) ? null : new double?(Convert.ToDouble(value));
         }
@@ -30,7 +30,7 @@ namespace WLib.Data
         /// <param name="value"></param>
         /// <param name="digits">小数位数</param>
         /// <returns></returns>
-        public static double? NullableDouble(this object value, int digits)
+        public static double? ToNullableDouble(this object value, int digits)
         {
             return Convert.IsDBNull(value) ? null : new double?(Math.Round(Convert.ToDouble(value), digits));
         }
@@ -39,7 +39,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static decimal? NullableDecimal(this object value)
+        public static decimal? ToNullableDecimal(this object value)
         {
             return Convert.IsDBNull(value) ? null : new decimal?(Convert.ToDecimal(value));
         }
@@ -49,7 +49,7 @@ namespace WLib.Data
         /// <param name="value"></param>
         /// <param name="digits">小数位数</param>
         /// <returns></returns>
-        public static decimal? NullableDecimal(this object value, int digits)
+        public static decimal? ToNullableDecimal(this object value, int digits)
         {
             return Convert.IsDBNull(value) ? null : new decimal?(Math.Round(Convert.ToDecimal(value), digits));
         }
@@ -58,7 +58,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static float? NullableSingle(this object value)
+        public static float? ToNullableSingle(this object value)
         {
             return Convert.IsDBNull(value) ? null : new float?(Convert.ToSingle(value));
         }
@@ -67,7 +67,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static int? NullableInt32(this object value)
+        public static int? ToNullableInt32(this object value)
         {
             return Convert.IsDBNull(value) ? null : new int?(Convert.ToInt32(value));
         }
@@ -76,7 +76,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool? NullableBoolean(this object value)
+        public static bool? ToNullableBoolean(this object value)
         {
             return Convert.IsDBNull(value) ? null : new bool?(Convert.ToBoolean(value));
         }
@@ -85,7 +85,7 @@ namespace WLib.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static DateTime? NullableDateTime(this object value)
+        public static DateTime? ToNullableDateTime(this object value)
         {
             return Convert.IsDBNull(value) ? null : new DateTime?(Convert.ToDateTime(value));
         }

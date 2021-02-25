@@ -66,7 +66,7 @@
             // 
             this.txtMachineCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMachineCode.Location = new System.Drawing.Point(12, 129);
+            this.txtMachineCode.Location = new System.Drawing.Point(12, 130);
             this.txtMachineCode.Multiline = true;
             this.txtMachineCode.Name = "txtMachineCode";
             this.txtMachineCode.Size = new System.Drawing.Size(465, 56);
@@ -132,7 +132,7 @@
             // 
             this.btnGetRegisterCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGetRegisterCode.Location = new System.Drawing.Point(320, 276);
+            this.btnGetRegisterCode.Location = new System.Drawing.Point(320, 290);
             this.btnGetRegisterCode.Name = "btnGetRegisterCode";
             this.btnGetRegisterCode.Size = new System.Drawing.Size(157, 33);
             this.btnGetRegisterCode.TabIndex = 3;
@@ -214,7 +214,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.numYear);
-            this.groupBox1.Location = new System.Drawing.Point(12, 191);
+            this.groupBox1.Location = new System.Drawing.Point(12, 193);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(465, 81);
             this.groupBox1.TabIndex = 6;
@@ -307,8 +307,8 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(359, 48);
             this.label10.TabIndex = 7;
-            this.label10.Text = "1、确保本机时间是标准北京时间，授权开始时间自动提前两分钟，\r\n2、提醒用户方确保当前系统时间是正确的时间。\r\n3、提醒用户在发送机器码并注册成功前不要关闭软件注" +
-    "册窗口，\r\n否则下次打开注册窗口需要重新发送机器码。";
+            this.label10.Text = "1、确保本机时间是标准北京时间，授权开始时间自动提前两分钟；\r\n2、提醒用户确保授权的机器的系统时间是正确的时间；\r\n3、提醒用户在发送机器码并注册成功前不要关闭" +
+    "软件注册窗口，\r\n   否则下次打开注册窗口需要重新发送机器码。";
             // 
             // linkLabelRegInfos
             // 
@@ -363,7 +363,6 @@
             this.KeyPreview = true;
             this.Name = "RegisterMachineForm";
             this.Text = "注册机";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RegisterMachineForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.numYear)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMonth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDay)).EndInit();

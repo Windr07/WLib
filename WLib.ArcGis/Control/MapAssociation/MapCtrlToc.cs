@@ -119,6 +119,22 @@ namespace WLib.ArcGis.Control.MapAssociation
             }
         }
         /// <summary>
+        /// 显示指定图层指定字段的标注
+        /// </summary>
+        /// <param name="layerName">显示标注的图层的图层名</param>
+        /// <param name="fieldName">标注的字段名或字段别名</param>
+        /// <param name="fontName">标注字体</param>
+        /// <param name="size">标注大小</param>
+        public void ShowLabels(string layerName, string fieldName, string fontName = "宋体", int size = 12)
+        {
+            var lyr = this.MapControl.GetLayer(layerName);
+            if (lyr != null)
+            {
+                var geoLayer = lyr as IGeoFeatureLayer;
+                ShowLabels(geoLayer, fieldName, fontName, size);
+            }
+        }
+        /// <summary>
         /// 将图层的字段名作为菜单显示，用于设置标注
         /// </summary>
         /// <param name="setFieldLabelLayer">显示标注的图层</param>
@@ -202,7 +218,7 @@ namespace WLib.ArcGis.Control.MapAssociation
             {
                 var layer = MapControl.get_Layer(e.LayerIndex);
                 if (layer is IFeatureLayer featureLayer && featureLayer.Name == e.LayerName)
-                    MapControl.MapZoomToAndSelectFirst(featureLayer, e.WhereClause);
+                    MapControl.MapZoomTo(featureLayer, e.WhereClause);
             }
         }
 

@@ -10,7 +10,7 @@ using System;
 namespace WLib.ExtProgress.ProEventArgs
 {
     /// <summary>
-    /// 为<see cref="ProgressOperation{TData, TMsgGroup}.OperationError"/>事件提供数据（异常信息）
+    /// 为<see cref="WLib.ExtProgress.Core.IProgressOperation.OperationError"/>事件提供数据（异常信息）
     /// </summary>
     public class ProErrorEventArgs : EventArgs
     {
@@ -19,7 +19,7 @@ namespace WLib.ExtProgress.ProEventArgs
         /// </summary>
         public Exception OptException { get; }
         /// <summary>
-        /// 为<see cref="ProgressOperation{TData, TMsgGroup}.OperationError"/>事件提供数据（异常信息）
+        /// 为<see cref="WLib.ExtProgress.Core.IProgressOperation.OperationError"/>事件提供数据（异常信息）
         /// </summary>
         /// <param name="optException">异常</param>
         public ProErrorEventArgs(Exception optException) => OptException = optException;

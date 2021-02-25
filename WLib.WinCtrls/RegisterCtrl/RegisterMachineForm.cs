@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using WLib.Register;
@@ -22,8 +29,6 @@ namespace WLib.WinCtrls.RegisterCtrl
             if (this.cmbSoftware.Items.Count > 0)
                 this.cmbSoftware.SelectedIndex = 0;
         }
-
-
         /// <summary>
         /// 验证机器码、授权时长是否有误
         /// </summary>
@@ -60,20 +65,13 @@ namespace WLib.WinCtrls.RegisterCtrl
                 int day = (int)this.numDay.Value;
                 int hour = (int)this.numHour.Value;
                 int minute = (int)this.numMinute.Value;
-
                 var startTime = DateTime.Now.AddMinutes(-2);
                 var endTime = startTime.AddYears(year).AddMonths(month).AddDays(day).AddHours(hour).AddMinutes(minute);
                 var hardwareCode = this.txtMachineCode.Text.Trim();
                 var comment = this.txtComment.Text.Trim();
+
                 var appInfo = (AppInfo)this.cmbSoftware.SelectedItem;
-
                 var regCode = new SoftRegister(appInfo).CreateRegCode(hardwareCode, startTime, endTime);
-                //通过反射，调用内部方法SoftRegister.CreateRegCode
-                //var type = typeof(SoftRegister);
-                //var obj = Activator.CreateInstance(type, new object[] { AppCompany, appInfo.AppKey });
-                //var method = type.GetMethod("CreateRegCode", new Type[] { typeof(string), typeof(DateTime), typeof(DateTime) });
-                //var regCode = (string)method.Invoke(obj, new object[] { hardwareCode, startTime, endTime });
-
                 this.lblStartTime.Text = startTime.ToString();
                 this.lblEndTime.Text = endTime.ToString();
                 this.txtRegisterCode.Text = regCode;
@@ -82,21 +80,10 @@ namespace WLib.WinCtrls.RegisterCtrl
                 new RegAppInfo(appInfo.Name, appInfo.Id, appInfo.Version, appInfo.Company, hardwareCode, regCode, startTime, endTime, comment).
                     WriteToFile(regInfoPath);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
-        private void RegisterMachineForm_KeyDown(object sender, KeyEventArgs e)//显示已生成过的注册信息
-        {
-            if ((e.KeyCode == Keys.E) && e.Control)
-                new RegInfoForm().ShowDialog();
-        }
-
-        private void linkLabelRegInfos_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)//显示已生成过的注册信息
-        {
-            new RegInfoForm().ShowDialog();
-        }
+        private void linkLabelRegInfos_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            => new RegInfoForm().ShowDialog();//显示已生成过的注册信息
     }
 }

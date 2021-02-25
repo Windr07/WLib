@@ -1,5 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/6
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;

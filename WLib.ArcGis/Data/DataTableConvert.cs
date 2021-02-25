@@ -31,9 +31,9 @@ namespace WLib.ArcGis.Data
         /// <param name="fieldNames">指定将ITable哪些字段填充到DataTable中，值为null时获取ITable的全部字段</param>
         /// <param name="ignoredUnExistField">指定在ITable找不到的字段是否跳过，找不到时，True为跳过，False将抛出异常</param>
         /// <returns></returns>
-        public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, IEnumerable<string> fieldNames = null, bool ignoredUnExistField = true)
+        public static DataTable CreateDataTableScheme(this ITable iTable, IEnumerable<string> fieldNames = null, string tableName = null, bool ignoredUnExistField = true)
         {
-            var dataTable = new DataTable(tableName);
+            var dataTable = new DataTable(tableName ?? iTable.GetName());
             if (fieldNames == null)
                 fieldNames = iTable.GetFieldsNames();
 
@@ -65,9 +65,9 @@ namespace WLib.ArcGis.Data
         /// <param name="nameToAliasNameDict">字段名(作为DataTable列的columnName)及别名(作为DataTable列的Caption)的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
         /// <param name="ignoredUnExistField">指定在ITable找不到的字段是否跳过，找不到时，True为跳过，False将抛出异常</param>
         /// <returns></returns>
-        public static DataTable CreateDataTableScheme(this ITable iTable, string tableName, Dictionary<string, string> nameToAliasNameDict, bool ignoredUnExistField = true)
+        public static DataTable CreateDataTableScheme(this ITable iTable, Dictionary<string, string> nameToAliasNameDict, string tableName = null, bool ignoredUnExistField = true)
         {
-            DataTable dataTable = new DataTable(tableName);
+            DataTable dataTable = new DataTable(tableName ?? iTable.GetName());
             foreach (var pair in nameToAliasNameDict)
             {
                 int index = iTable.Fields.FindField(pair.Key);
@@ -88,6 +88,26 @@ namespace WLib.ArcGis.Data
             }
             return dataTable;
         }
+        /// <summary>
+        /// 根据IFeatureClass字段创建一个只含指定字段的空DataTable
+        /// </summary>
+        /// <param name="featureClass">ArcGIS IFeatureClass对象</param>
+        /// <param name="tableName">DataTable表名</param>
+        /// <param name="fieldNames">指定将ITable哪些字段填充到DataTable中，值为null时获取ITable的全部字段</param>
+        /// <param name="ignoredUnExistField">指定在ITable找不到的字段是否跳过，找不到时，True为跳过，False将抛出异常</param>
+        /// <returns></returns>
+        public static DataTable CreateDataTableScheme(this IFeatureClass featureClass, IEnumerable<string> fieldNames = null, string tableName = null, bool ignoredUnExistField = true)
+            => CreateDataTableScheme(featureClass as ITable, fieldNames, tableName, ignoredUnExistField);
+        /// <summary>
+        /// 根据IFeatureClass字段创建一个只含指定字段的空DataTable
+        /// </summary>
+        /// <param name="featureClass">ArcGIS IFeatureClass对象</param>
+        /// <param name="tableName">DataTable表名</param>
+        /// <param name="nameToAliasNameDict">字段名(作为DataTable列的columnName)及别名(作为DataTable列的Caption)的键值对，用于指定将ITable哪些字段填充到DataTable中</param>
+        /// <param name="ignoredUnExistField">指定在ITable找不到的字段是否跳过，找不到时，True为跳过，False将抛出异常</param>
+        /// <returns></returns>
+        public static DataTable CreateDataTableScheme(this IFeatureClass featureClass, Dictionary<string, string> nameToAliasNameDict, string tableName = null, bool ignoredUnExistField = true)
+            => CreateDataTableScheme(featureClass as ITable, nameToAliasNameDict, tableName, ignoredUnExistField);
         #endregion
 
 
@@ -121,8 +141,7 @@ namespace WLib.ArcGis.Data
         public static DataTable CreateDataTableEx(this ITable iTable,
             Dictionary<string, string> nameToAliasNamesDict, string tableName = null, string whereClause = null, int startRow = 1, int endRow = int.MaxValue)
         {
-            tableName = tableName ?? (iTable as IDataset)?.Name;
-            var dataTable = CreateDataTableScheme(iTable, tableName, nameToAliasNamesDict);
+            var dataTable = CreateDataTableScheme(iTable, nameToAliasNamesDict, tableName);
             var cursor = iTable.Search(new QueryFilterClass { WhereClause = whereClause }, true);
 
             int curRow = 0;
@@ -151,7 +170,7 @@ namespace WLib.ArcGis.Data
         /// <param name="endRow">分页查询的结束记录行</param>
         /// <returns></returns>
         public static DataTable CreateDataTable(this IFeatureClass featureClass,
-            IEnumerable<string> fieldNames, string whereClause = null, string tableName = null, int startRow = 1, int endRow = int.MaxValue)
+            IEnumerable<string> fieldNames = null, string whereClause = null, string tableName = null, int startRow = 1, int endRow = int.MaxValue)
         {
             var dict = (featureClass as ITable).GetFieldNameAndAliasName(fieldNames);
             return CreateDataTableEx(featureClass, dict, whereClause, tableName, startRow, endRow);
@@ -169,8 +188,7 @@ namespace WLib.ArcGis.Data
             Dictionary<string, string> nameToAliasNamesDict, string whereClause = null, string tableName = null, int startRow = 1, int endRow = int.MaxValue)
         {
             var iTable = featureClass as ITable;
-            tableName = tableName ?? featureClass.AliasName;
-            var dataTable = CreateDataTableScheme(iTable, tableName, nameToAliasNamesDict).ChangedFieldToString(featureClass.ShapeFieldName);
+            var dataTable = CreateDataTableScheme(iTable, nameToAliasNamesDict, tableName).ChangedFieldToString(featureClass.ShapeFieldName);
             var fieldNames = nameToAliasNamesDict.Keys;
             var geoTypeString = TypeConvert.GetGeoTypeStr(featureClass.ShapeType);
 
@@ -188,6 +206,7 @@ namespace WLib.ArcGis.Data
             Marshal.ReleaseComObject(featureCursor);
             return dataTable;
         }
+
         /// <summary>
         /// 获取要素的指定字段的值，特殊字段值将转为字符串（Blob和Geometry转为字符串）
         /// </summary>

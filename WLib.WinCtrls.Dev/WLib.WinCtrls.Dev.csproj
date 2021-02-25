@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\WLib.WinCtrls.Dev.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,6 +47,9 @@
     <Reference Include="ChineseLanguage">
       <HintPath>..\DLL\ChineseLanguage.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.0\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Office">
       <HintPath>..\DLL\Office.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -54,10 +58,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="DevExpress.BonusSkins.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
@@ -198,83 +199,10 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.ADF, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.AxControls, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Carto, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Controls, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.ConversionTools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataManagementTools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataSourcesFile, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataSourcesGDB, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Display, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Geometry, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Geoprocessor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Output, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.System, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.Version, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddItemCtrl\AddItemConfigForm.cs">
@@ -295,29 +223,25 @@
     <Compile Include="AddItemCtrl\ConcatItemForm.Designer.cs">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeCtrl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeCtrl.Designer.cs">
-      <DependentUpon>AttributeCtrl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeForm.cs">
+    <Compile Include="EditCtrl\EOptState.cs" />
+    <Compile Include="GridViewCtrl\EntityEdit\DapperExtension.cs" />
+    <Compile Include="GridViewCtrl\EntityEdit\DbEditGridForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\AttributeForm.Designer.cs">
-      <DependentUpon>AttributeForm.cs</DependentUpon>
+    <Compile Include="GridViewCtrl\EntityEdit\DbEditGridForm.Designer.cs">
+      <DependentUpon>DbEditGridForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\FieldInfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\FieldInfoForm.Designer.cs">
-      <DependentUpon>FieldInfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.cs">
+    <Compile Include="GridViewCtrl\EntityEdit\EditGridView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ArcGisCtrl\MapViewer.Designer.cs">
-      <DependentUpon>MapViewer.cs</DependentUpon>
+    <Compile Include="GridViewCtrl\EntityEdit\EditGridView.Designer.cs">
+      <DependentUpon>EditGridView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GridViewCtrl\EntityEdit\DbEditGridView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GridViewCtrl\EntityEdit\DbEditGridView.Designer.cs">
+      <DependentUpon>DbEditGridView.cs</DependentUpon>
     </Compile>
     <Compile Include="PathCtrl\LabelPathBoxControl.cs">
       <SubType>UserControl</SubType>
@@ -332,18 +256,6 @@
     </Compile>
     <Compile Include="ListCtrl\ImageListBoxControlEx.Designer.cs">
       <DependentUpon>ImageListBoxControlEx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapNavigationTools.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\MapNavigationTools.Designer.cs">
-      <DependentUpon>MapNavigationTools.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\PageNavigationTools.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\PageNavigationTools.Designer.cs">
-      <DependentUpon>PageNavigationTools.cs</DependentUpon>
     </Compile>
     <Compile Include="ChildCtrl\ChildFormHelper.cs" />
     <Compile Include="ChildCtrl\ChildSizableForm.cs">
@@ -360,6 +272,24 @@
     </Compile>
     <Compile Include="ChildCtrl\EMouseDirection.cs" />
     <Compile Include="PluginCtrl\PluginRibbonFormHelper.cs" />
+    <Compile Include="RegisterCtrl\RegInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegisterCtrl\RegInfoForm.Designer.cs">
+      <DependentUpon>RegInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterCtrl\RegisterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegisterCtrl\RegisterForm.Designer.cs">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterCtrl\RegisterMachineForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegisterCtrl\RegisterMachineForm.Designer.cs">
+      <DependentUpon>RegisterMachineForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StyleCtrl\ImageColorful\IamgeColorfulControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -383,7 +313,6 @@
       <DependentUpon>StyleSettingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="`Extension\ChartControlEx.cs" />
-    <Compile Include="EditCtrl\EditItem.cs" />
     <Compile Include="EditCtrl\ESaveState.cs" />
     <Compile Include="EditCtrl\RowDataEditForm.cs">
       <SubType>Form</SubType>
@@ -413,12 +342,6 @@
     <Compile Include="PathCtrl\PathBoxControl.Designer.cs">
       <DependentUpon>PathBoxControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ArcGisCtrl\WorkspaceSelectorControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\WorkspaceSelectorControl.Designer.cs">
-      <DependentUpon>WorkspaceSelectorControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="ProbarCtrl\ProbarForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -430,18 +353,6 @@
     </Compile>
     <Compile Include="ProbarCtrl\ProgressBarControl.Designer.cs">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeQueryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\AttributeQueryForm.Designer.cs">
-      <DependentUpon>AttributeQueryForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArcGisCtrl\SymbolSelectorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArcGisCtrl\SymbolSelectorForm.Designer.cs">
-      <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -463,27 +374,6 @@
     <EmbeddedResource Include="AddItemCtrl\ConcatItemForm.resx">
       <DependentUpon>ConcatItemForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeCtrl.resx">
-      <DependentUpon>AttributeCtrl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeForm.resx">
-      <DependentUpon>AttributeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\FieldInfoForm.resx">
-      <DependentUpon>FieldInfoForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\MapNavigationTools.resx">
-      <DependentUpon>MapNavigationTools.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\MapViewer.resx">
-      <DependentUpon>MapViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\PageNavigationTools.resx">
-      <DependentUpon>PageNavigationTools.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ChildCtrl\ChildSizableForm.resx">
       <DependentUpon>ChildSizableForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -492,6 +382,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditCtrl\RowDataEditForm.resx">
       <DependentUpon>RowDataEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GridViewCtrl\EntityEdit\DbEditGridForm.resx">
+      <DependentUpon>DbEditGridForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GridViewCtrl\EntityEdit\EditGridView.resx">
+      <DependentUpon>EditGridView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GridViewCtrl\EntityEdit\DbEditGridView.resx">
+      <DependentUpon>DbEditGridView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputCtrl\InputForm.resx">
       <DependentUpon>InputForm.cs</DependentUpon>
@@ -505,22 +404,23 @@
     <EmbeddedResource Include="PathCtrl\PathBoxControl.resx">
       <DependentUpon>PathBoxControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\WorkspaceSelectorControl.resx">
-      <DependentUpon>WorkspaceSelectorControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ProbarCtrl\ProbarForm.resx">
       <DependentUpon>ProbarForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProbarCtrl\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\AttributeQueryForm.resx">
-      <DependentUpon>AttributeQueryForm.cs</DependentUpon>
+    <None Include="packages.config" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="RegisterCtrl\RegInfoForm.resx">
+      <DependentUpon>RegInfoForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ArcGisCtrl\SymbolSelectorForm.resx">
-      <DependentUpon>SymbolSelectorForm.cs</DependentUpon>
+    <EmbeddedResource Include="RegisterCtrl\RegisterForm.resx">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="RegisterCtrl\RegisterMachineForm.resx">
+      <DependentUpon>RegisterMachineForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StyleCtrl\ImageColorful\IamgeColorfulControl.resx">
       <DependentUpon>IamgeColorfulControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -557,6 +457,7 @@
       <Name>WLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

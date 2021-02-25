@@ -9,14 +9,56 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ESRI.ArcGIS.Geometry;
+using WLib.ArcGis.Geometry;
 
 namespace WLib.ArcGis.Analysis.OnShape
 {
     /// <summary>
-    /// 提供切分多边形的方法
+    /// 提供切分几何图形的方法
     /// </summary>
-    public class GeometrySplit
+    public static class GeometrySplit
     {
+        #region 分割线分割图斑
+        /// <summary>
+        /// 根据起止点坐标构成的分割线分割图斑（线或面）
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="x1">分割线起点X坐标</param>
+        /// <param name="y1">分割线起点Y坐标</param>
+        /// <param name="x2">分割线终点X坐标</param>
+        /// <param name="y2">分割线终点Y坐标</param>
+        /// <returns></returns>
+        public static List<IPolygon> SplitPolygonByLine(this IGeometry geometry, double x1, double y1, double x2, double y2)
+            => geometry.SplitPolygonByLine(GeometryOpt.CreatePolyline(x1, y1, x2, y2));
+        /// <summary>
+        /// 根据两个点构成的分割线分割图斑（线或面）
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="fromPoint">分割线起点</param>
+        /// <param name="toPoint">分割线终点</param>
+        /// <returns></returns>
+        public static List<IPolygon> SplitPolygonByLine(this IGeometry geometry, IPoint fromPoint, IPoint toPoint)
+            => geometry.SplitPolygonByLine(GeometryOpt.CreatePolyline(fromPoint, toPoint));
+        /// <summary>
+        /// 根据分割线分割图斑（线或面）
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <param name="polyline"></param>
+        /// <returns></returns>
+        public static List<IPolygon> SplitPolygonByLine(this IGeometry geometry, IPolyline polyline)
+        {
+            ITopologicalOperator topo = geometry as ITopologicalOperator;
+            topo.Cut(polyline, out var leftGeometry, out var rightGeometry);
+            return new IPolygon[]
+            {
+                leftGeometry as IPolygon,
+                rightGeometry as IPolygon
+            }.ToList();
+        }
+        #endregion
+
+
+        #region 面积或权重分割多边形
         /// <summary>
         /// 按照指定的各部分的权重将一个多边形切分成多个
         /// </summary>
@@ -25,7 +67,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="direction">切分多边形的方向，0为横向，1为纵向</param>
         /// <param name="tolerance">面积容差</param>
         /// <returns></returns>
-        public static List<IPolygon> SplitPolygonByAreaWeights(IPolygon polygon, double[] weights, int direction, double tolerance = 0.001)
+        public static List<IPolygon> SplitPolygonByAreaWeights(this IPolygon polygon, double[] weights, int direction, double tolerance = 0.001)
         {
             if (polygon.IsEmpty)
                 throw new Exception("几何图形不能为空(Empty)！");
@@ -51,7 +93,6 @@ namespace WLib.ArcGis.Analysis.OnShape
             }
             return resultPolygons;
         }
-
         /// <summary>
         /// 按照指定的各部分的面积将一个多边形切分成多个
         /// （注意：指定的各部分的面积总和大于原多边形面积时，抛出异常；小于原多边形面积时，剩余的部分也将加入返回结果中）
@@ -61,7 +102,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="direction">切分多边形的方向，0为横向，1为纵向</param>
         /// <param name="tolerance">面积容差</param>
         /// <returns></returns>
-        public static List<IPolygon> SplitPolygonByAreas(IPolygon polygon, double[] areas, int direction, double tolerance = 0.001)
+        public static List<IPolygon> SplitPolygonByAreas(this IPolygon polygon, double[] areas, int direction, double tolerance = 0.001)
         {
             if (polygon.IsEmpty)
                 throw new Exception("几何图形不能为空(Empty)！");
@@ -92,7 +133,6 @@ namespace WLib.ArcGis.Analysis.OnShape
             return resultPolygons;
         }
 
-
         /// <summary>
         /// 按照指定的面积占比截取多边形
         /// </summary>
@@ -101,7 +141,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="direction">切分多边形的方向，0为横向，1为纵向</param>
         /// <param name="tolerance">面积容差</param>
         /// <returns></returns>
-        private static IGeometry SplitPolygonByAreaRate(IPolygon polygon, double rate, int direction, double tolerance = 0.001)
+        private static IGeometry SplitPolygonByAreaRate(this IPolygon polygon, double rate, int direction, double tolerance = 0.001)
         {
             if (rate > 1)
                 throw new ArgumentException("从多边形截取的面积占比(参数：rate)应该小于或等于1");
@@ -119,7 +159,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <param name="direction">切分多边形的方向，0为横向，1为纵向</param>
         /// <param name="tolerance">面积容差</param>
         /// <returns></returns>
-        private static IGeometry SplitPolygonByArea(IPolygon polygon, double clipArea, int direction, double tolerance = 0.001)
+        private static IGeometry SplitPolygonByArea(this IPolygon polygon, double clipArea, int direction, double tolerance = 0.001)
         {
             IGeometry resultGeometry = null;
             ITopologicalOperator logicalOpt = polygon as ITopologicalOperator;
@@ -164,5 +204,6 @@ namespace WLib.ArcGis.Analysis.OnShape
             }
             return resultGeometry;
         }
+        #endregion 
     }
 }

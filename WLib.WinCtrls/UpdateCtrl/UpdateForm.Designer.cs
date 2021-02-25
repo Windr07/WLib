@@ -29,56 +29,54 @@
         private void InitializeComponent()
         {
             this.lblTips = new System.Windows.Forms.Label();
-            this.btnCheckUpdate = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // lblTips
             // 
             this.lblTips.AutoSize = true;
-            this.lblTips.Location = new System.Drawing.Point(22, 15);
+            this.lblTips.Location = new System.Drawing.Point(22, 12);
             this.lblTips.Name = "lblTips";
             this.lblTips.Size = new System.Drawing.Size(143, 12);
             this.lblTips.TabIndex = 0;
             this.lblTips.Text = "正在检查更新，请稍后...";
             // 
-            // btnCheckUpdate
+            // btnCancel
             // 
-            this.btnCheckUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCheckUpdate.Location = new System.Drawing.Point(108, 67);
-            this.btnCheckUpdate.Name = "btnCheckUpdate";
-            this.btnCheckUpdate.Size = new System.Drawing.Size(168, 46);
-            this.btnCheckUpdate.TabIndex = 1;
-            this.btnCheckUpdate.Text = "检查更新";
-            this.btnCheckUpdate.UseVisualStyleBackColor = true;
-            this.btnCheckUpdate.Click += new System.EventHandler(this.btnCheckUpdate_Click);
+            this.btnCancel.Location = new System.Drawing.Point(108, 59);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(168, 39);
+            this.btnCancel.TabIndex = 1;
+            this.btnCancel.Text = "取消";
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(12, 38);
+            this.progressBar1.Location = new System.Drawing.Point(16, 30);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(367, 23);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar1.TabIndex = 2;
             // 
-            // Form1
+            // UpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(391, 121);
+            this.ClientSize = new System.Drawing.Size(391, 105);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.btnCheckUpdate);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblTips);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1000, 160);
+            this.MaximumSize = new System.Drawing.Size(995, 144);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(300, 160);
-            this.Name = "Form1";
+            this.MinimumSize = new System.Drawing.Size(295, 144);
+            this.Name = "UpdateForm";
             this.Text = "软件更新";
-            this.Shown += new System.EventHandler(this.btnCheckUpdate_Click);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -87,7 +85,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblTips;
-        private System.Windows.Forms.Button btnCheckUpdate;
+        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

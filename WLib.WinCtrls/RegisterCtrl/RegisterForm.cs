@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Windows.Forms;
 using WLib.Register;
 
@@ -17,7 +24,6 @@ namespace WLib.WinCtrls.RegisterCtrl
         /// 软件注册窗体
         /// </summary>
         /// <param name="appInfo">需要授权的软件信息</param>
-        /// <param name="appCompany">软件开发商名称</param>
         public RegisterForm(AppInfo appInfo)
         {
             InitializeComponent();
@@ -27,30 +33,29 @@ namespace WLib.WinCtrls.RegisterCtrl
         /// <summary>
         /// 验证输入的注册码并执行注册
         /// </summary>
-        private bool RegisterByRegCode(string hardwareCode, string regCode)
+        private void RegisterByRegCode(string hardwareCode, string regCode)
         {
             int registeState = -1;
             try
             {
                 var softReg = new SoftRegister(AppInfo);
                 registeState = softReg.CheckRegistered(hardwareCode, regCode);
-
                 switch (registeState)
                 {
                     case 0:
                         softReg.WriteToRegistry(hardwareCode, regCode);
                         MessageBox.Show("注册成功！", null, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return true;
+                        Application.Restart();
+                        break;
                     case 1:
                         MessageBox.Show("注册码错误！", null, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
+                        break;
                     case 2:
                         MessageBox.Show("授权已过期", null, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return false;
+                        break;
                 }
             }
             catch (Exception ex) { MessageBox.Show("代码-" + registeState + ex.Message, null, MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            return false;
         }
 
 
@@ -64,12 +69,9 @@ namespace WLib.WinCtrls.RegisterCtrl
                 MessageBox.Show("请填写注册码！");
                 return;
             }
-            if (RegisterByRegCode(this.txtMachineCode.Text.Trim(), this.txtRegCode.Text.Trim()))
-                Application.Restart();
+            RegisterByRegCode(this.txtMachineCode.Text.Trim(), this.txtRegCode.Text.Trim());
         }
 
         private void btnCopy_Click(object sender, EventArgs e) => Clipboard.SetDataObject(this.txtMachineCode.Text);//复制机器码
-
-        private void btnClose_Click(object sender, EventArgs e) => Application.Exit();//关闭
     }
 }

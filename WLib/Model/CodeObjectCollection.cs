@@ -24,11 +24,12 @@ namespace WLib.Model
         /// <summary>
         /// 具有唯一值编码的对象的集合，提供排序方法
         /// </summary>
+        public CodeObjectCollection() { }
+        /// <summary>
+        /// 具有唯一值编码的对象的集合，提供排序方法
+        /// </summary>
         /// <param name="listName">列表名</param>
-        public CodeObjectCollection(string listName)
-        {
-            this.ListName = listName;
-        }
+        public CodeObjectCollection(string listName) => ListName = listName;
 
 
         /// <summary>
@@ -36,20 +37,14 @@ namespace WLib.Model
         /// </summary>
         /// <param name="code">编码</param>
         /// <param name="name">名称</param>
-        public void Add(string code, string name)
-        {
-            this.Add(new CodeObject(code, name));
-        }
+        public void Add(string code, string name) => Add(new CodeObject(code, name));
         /// <summary>
         /// 添加一个包含编码、名称、序号的列表项对象
         /// </summary>
         /// <param name="code">编码</param>
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
-        public void Add(string code, string name, int index)
-        {
-            this.Add(new CodeObject(code, name, index));
-        }
+        public void Add(string code, string name, int index) => Add(new CodeObject(code, name, index));
         /// <summary>
         /// 添加一个包含编码、名称、序号、所在分类的列表项对象
         /// </summary>
@@ -57,10 +52,7 @@ namespace WLib.Model
         /// <param name="name">名称</param>
         /// <param name="index">序号</param>
         /// <param name="classify">所在分类</param>
-        public void Add(string code, string name, int index, string classify)
-        {
-            this.Add(new CodeObject(code, name, index, classify));
-        }
+        public void Add(string code, string name, int index, string classify) => Add(new CodeObject(code, name, index, classify));
         /// <summary>
         /// 添加一个包含编码、名称、序号、所在分类、关联数据的列表项对象
         /// </summary>
@@ -69,10 +61,7 @@ namespace WLib.Model
         /// <param name="index">序号</param>
         /// <param name="classify">所在分类</param>
         /// <param name="tag">与对象关联的用户定义数据</param>
-        public void Add<T>(string code, string name, int index, string classify, T tag)
-        {
-            this.Add(new CodeObject<T>(code, name, index, classify, tag));
-        }
+        public void Add<T>(string code, string name, int index, string classify, T tag) => Add(new CodeObject<T>(code, name, index, classify, tag));
 
 
         /// <summary>
@@ -80,7 +69,7 @@ namespace WLib.Model
         /// </summary>
         public void SortByName()
         {
-            this.Sort((x, y) =>
+            Sort((x, y) =>
             {
                 if (x.Name == y.Name)
                     return 0;
@@ -95,7 +84,7 @@ namespace WLib.Model
         /// </summary>
         public void SortByCode()
         {
-            this.Sort((x, y) =>
+            Sort((x, y) =>
             {
                 if (x.Code == y.Code)
                     return 0;
@@ -110,7 +99,7 @@ namespace WLib.Model
         /// </summary>
         public void SortByClassifyName()
         {
-            this.Sort((x, y) =>
+            Sort((x, y) =>
             {
                 if (x.Classify == y.Classify && x.Name == y.Name)
                     return 0;
@@ -126,16 +115,13 @@ namespace WLib.Model
         /// 获取分组
         /// </summary>
         /// <returns></returns>
-        public CodeObject[] GetClassify(string classify)
-        {
-            return this.Where(v => v.Classify == classify).ToArray();
-        }
+        public CodeObject[] GetClassify(string classify) => this.Where(v => v.Classify == classify).ToArray();
         /// <summary>
         /// 重新设置序号（一般用在排序之后）
         /// </summary>
         public void ResetIndex()
         {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
                 this[i].Index = i + 1;
         }
     }

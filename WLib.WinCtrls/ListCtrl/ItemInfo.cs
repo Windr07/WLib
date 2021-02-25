@@ -1,4 +1,11 @@
-﻿namespace WLib.WinCtrls.ListCtrl
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+namespace WLib.WinCtrls.ListCtrl
 {
     /// <summary>
     /// <see cref="ImageListBoxEx"/>的列表项的索引及列表项对应关联信息（图片索引、是否显示删除按钮）

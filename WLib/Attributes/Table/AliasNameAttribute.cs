@@ -12,7 +12,7 @@ namespace WLib.Attributes.Table
     /// <summary>
     /// 表示字段别名
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class AliasNameAttribute : Attribute
     {
         /// <summary>

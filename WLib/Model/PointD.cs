@@ -1,11 +1,9 @@
 ﻿/*---------------------------------------------------------------- 
 // auth： Windragon
-// date： 2019/05/06 19:02
+// date： 2020/9
 // desc： None
 // mdfy:  None
 //----------------------------------------------------------------*/
-
-using System;
 
 namespace WLib.Model
 {
@@ -14,7 +12,6 @@ namespace WLib.Model
     /// <para>由于<see cref="System.Drawing.Point"/>和<see cref="System.Drawing.PointF"/>的X和Y属性为
     /// <see cref="int"/>或<see cref="float"/>类型而非<see cref="double"/>类型，因此编写此类代替之</para>
     /// </summary>
-    [Serializable]
     public struct PointD
     {
         /// <summary>

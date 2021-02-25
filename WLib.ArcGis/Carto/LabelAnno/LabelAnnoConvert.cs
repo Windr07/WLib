@@ -80,8 +80,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
 
             //设置标注转注记的参数：①地图、②注记存储位置(数据库注记/地图注记)、③哪些要素生成注记（所有要素/当前范围的要素/选择的要素）
             //④是否生成地位注记、⑥取消操作、⑦异常事件处理
-            convertLabelsToAnnotation.Initialize(map, esriAnnotationStorageType.esriMapAnnotation,
-                whichFeatures, true, trackCancel, null);
+            convertLabelsToAnnotation.Initialize(map, esriAnnotationStorageType.esriMapAnnotation, whichFeatures, true, trackCancel, null);
 
             //添加要进行转换的图层
             for (int i = 0; i < geoFeatureLayer.Length; i++)
@@ -99,8 +98,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
             }
 
             //刷新地图
-            IActiveView activeView = map as IActiveView;
-            activeView.Refresh();
+            (map as IActiveView).Refresh();
         }
         /// <summary>
         /// 将地图上的标注转注记，存储在地图中
@@ -116,8 +114,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
 
             //设置标注转注记的参数：①地图、②注记存储位置(数据库注记/地图注记)、③哪些要素生成注记（所有要素/当前范围的要素/选择的要素）
             //④是否生成地位注记、⑥取消操作、⑦异常事件处理
-            convertLabelsToAnnotation.Initialize(map, esriAnnotationStorageType.esriMapAnnotation,
-                whichFeatures, true, trackCancel, null);
+            convertLabelsToAnnotation.Initialize(map, esriAnnotationStorageType.esriMapAnnotation, whichFeatures, true, trackCancel, null);
 
             //添加要进行转换的图层
             IGeoFeatureLayer geoFeatureLayer;
@@ -141,8 +138,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
             }
 
             //刷新地图
-            IActiveView activeView = map as IActiveView;
-            activeView.Refresh();
+            (map as IActiveView).Refresh();
         }
         #endregion
 
@@ -157,7 +153,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
         /// <param name="whichFeatures">标示哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</param>
         /// <param name="outWorkspace">保存注记的工作空间</param>
         /// <param name="suffix">注记图层名称后缀</param>
-        public static void ConvertLabelsToGdbAnnotationLayers(this IMap map, bool featureLinked = false,
+        public static void ConvertLabelsToGdbAnnotation(this IMap map, bool featureLinked = false,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures, IWorkspace outWorkspace = null, string suffix = "_Anno")
         {
             IConvertLabelsToAnnotation convertLabelsToAnnotation = new ConvertLabelsToAnnotationClass();
@@ -211,8 +207,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
             map.AddLayers(enumLayer, true);
 
             //刷新地图
-            IActiveView pActiveView = map as IActiveView;
-            pActiveView.Refresh();
+            (map as IActiveView).Refresh();
         }
         /// <summary>
         ///  将指定图层的标注转注记，生成注记图层存储在数据库中
@@ -223,7 +218,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
         /// <param name="featureLinked">是否关联要素（关联要素的注记必须与其所关联的要素类存储在同一地理数据库中）</param>
         /// <param name="whichFeatures"></param>
         /// <parparam name="whichFeatures">标示哪些要素生成注记的枚举（所有要素/当前范围的要素/选择的要素）</parparam>
-        public static void ConvertLabelsToGdbAnnotationSingleLayer(this IMap map, ILayer layer, bool featureLinked = false,
+        public static void ConvertLabelsToGdbAnnotation(this IMap map, ILayer layer, bool featureLinked = false,
             esriLabelWhichFeatures whichFeatures = esriLabelWhichFeatures.esriVisibleFeatures)
         {
             IConvertLabelsToAnnotation convertLabelsToAnnotation = new ConvertLabelsToAnnotationClass();
@@ -258,8 +253,7 @@ namespace WLib.ArcGis.Carto.LabelAnno
                 map.AddLayers(enumLayer, true);
 
                 //刷新地图
-                IActiveView pActiveView = map as IActiveView;
-                pActiveView.Refresh();
+                (map as IActiveView).Refresh();
             }
         }
         #endregion

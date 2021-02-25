@@ -12,14 +12,13 @@ using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geoprocessing;
 using ESRI.ArcGIS.Geoprocessor;
 using System;
-using System.Linq;
 using WLib.ArcGis.Analysis.GpEnum;
 
 namespace WLib.ArcGis.Analysis.Gp
 {
     /// <summary>
     /// 运行GP（<see cref=" Geoprocessor"/>）工具的帮助类
-    /// <para> 使用示例：new GpHelper().RunTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
+    /// <para> 使用示例：GpHelper.RunTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
     /// </summary>
     public partial class GpHelper
     {
@@ -101,22 +100,6 @@ namespace WLib.ArcGis.Analysis.Gp
                 clip_features = clipFeatureClassPath,
                 out_feature_class = outFeatureClassPath
             };
-        }
-        /// <summary>
-        /// 调用相交工具，将一个或多个图层的相交部分输出到指定路径中（注意输入要素类和叠加要素类不能有空几何等问题）
-        /// <para>关于相交：</para>
-        /// <para>（1）输入单个要素类，则输出该要素类内部存在重叠的图斑的重叠区域，输出字段也仅有一个要素类的字段，通过面积相同等方式判断是哪两个图斑重叠</para>
-        /// <para>（2）输入多个要素类，则输出各个要素类两两之间存在重叠的图斑的重叠区域，输出字段也包含各个要素类的字段，重名字段以"_1"等形式重命名</para>
-        /// </summary>
-        /// <param name="paths">进行相交的一个或多个要素类或要素类的完整路径，e.g. @"F:\foshan\Data\wuqutu_b.shp","F:\foshan\Data\world30.shp"</param>
-        /// <param name="outFeatureClassPath">相交结果要素类的存放路径，e.g. @"F:\foshan\Data\intersect_result.shp"</param>
-        /// <param name="joinAttributes">输入要素的哪些属性将传递到输出要素类：ALL, NO_FID, ONLY_FID</param>
-        /// <param name="tolerance">XY容差，建议设置为0.001（创建要素类时的默认XY容差）,若值小于0则不设置容差</param>
-        /// <returns></returns>
-        public static IGPProcess Intersect(string[] paths, string outFeatureClassPath, EIsJoinAttributes joinAttributes = EIsJoinAttributes.ALL, double tolerance = -1)
-        {
-            var path = paths.Aggregate((a, b) => a + ";" + b);
-            return Intersect(path, outFeatureClassPath, joinAttributes, tolerance);
         }
         /// <summary>
         /// 调用相交工具，将一个或多个图层的相交部分输出到指定路径中（注意输入要素类和叠加要素类不能有空几何等问题）
@@ -232,6 +215,25 @@ namespace WLib.ArcGis.Analysis.Gp
                 join_operation = Enum.GetName(typeof(ESjOperation), joinOperation),
                 match_option = Enum.GetName(typeof(ESjMatchOption), matchOption)
             };
+        }
+        /// <summary>
+        /// 调用擦除工具，获取擦除后的图斑，即与“擦除要素类”不重叠的“输入要素类”。
+        /// </summary>
+        /// <param name="in_features">需要擦除要素的要素类或要素类的完整路径</param>
+        /// <param name="erase_features">用于擦除重叠输入要素的要素类或要素类的完整路径</param>
+        /// <param name="outFeatureClassPath">输出要素类，即擦除结果要素类的存放路径</param>
+        /// <param name="tolerance">XY容差，值小于0代表不设置容差</param>
+        /// <returns></returns>
+        public static IGPProcess Erase(object in_features, object erase_features, string outFeatureClassPath, double tolerance = -1)
+        {
+            var erase = new Erase
+            {
+                in_features = in_features,//输入要素类或图层
+                erase_features = erase_features,//用于擦除重叠输入要素的要素
+                out_feature_class = outFeatureClassPath,//输出要素类，该要素类只包含与“擦除要素”不重叠的“输入要素”。
+            };
+            if (tolerance >= 0) erase.cluster_tolerance = tolerance;
+            return erase;
         }
     }
 }

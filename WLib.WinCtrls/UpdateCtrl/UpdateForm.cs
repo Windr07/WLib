@@ -1,6 +1,13 @@
-﻿using System;
-using System.Threading;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/9
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Windows.Forms;
+using WLib.Attributes.Description;
 using WLib.Web.Update;
 
 namespace WLib.WinCtrls.UpdateCtrl
@@ -11,71 +18,39 @@ namespace WLib.WinCtrls.UpdateCtrl
     public partial class UpdateForm : Form
     {
         /// <summary>
-        /// 进行软件联网更新检查和执行软件更新的线程
-        /// </summary>
-        private Thread _thread;
-        /// <summary>
-        /// 提供软件自动更新操作的对象
-        /// </summary>
-        public UpdaterClient UpdaterClient { get; set; }
-
-        /// <summary>
         /// 进行软件联网更新检查和执行软件更新操作的窗体
         /// </summary>
-        /// <param name="updater">提供软件自动更新操作的对象</param>
-        public UpdateForm(UpdaterClient updaterClinet)
+        /// <param name="updaterClient">提供软件自动更新操作的对象</param>
+        public UpdateForm(UpdaterClient updaterClient)
         {
             InitializeComponent();
-            this.UpdaterClient = updaterClinet;
-        }
-
-
-        private void btnCheckUpdate_Click(object sender, EventArgs e)
-        {
-            switch (this.btnCheckUpdate.Text)
+            this.btnCancel.Click += (sender, e) => this.Close();
+            this.Shown += async (sender, e) =>
             {
-                case "检查更新":
-                    this.btnCheckUpdate.Text = "取消";
-                    _thread = new Thread(() => CheckAndUpdate());
-                    _thread.Start();
-                    break;
-                case "取消":
-                    this.btnCheckUpdate.Text = "检查更新";
-                    _thread.Abort();
-                    this.Close();
-                    break;
-            }
-        }
-        /// <summary>
-        /// 判断软件是否需要更新，若需要更新则下载更新包，重启软件进行软件文件的替换更新
-        /// </summary>
-        private void CheckAndUpdate()
-        {
-            try
-            {
-                if (UpdaterClient.CheckUpdate(@""))
-                {
-                    var state = UpdaterClient.DownloadUpdateFiles(@"http://localhost:8080/Update", out var msg);
-                    if (state == EDownloadState.Dowloaded)
+                try
+                {   
+                    if (await updaterClient.CheckUpdateAsync())//判断软件是否需要更新
                     {
-                        Invoke(new Action(() =>
+                        this.lblTips.Text = "已发现新版本，正在下载信息...";
+                        var state = await updaterClient.DownloadFilesAsync();//若需要更新则下载更新包
+                        var msg = state.GetDescriptionEx();
+                        if (state == EDownloadState.Dowloaded)
                         {
-                            if (MessageBox.Show(msg + "\r\n是否立即重启软件完成更新？", this.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
-                                UpdaterClient.RestartForUpdate("");
-                        }));
+                            if (MessageBox.Show(msg + "\r\n是否立即重启软件完成更新？", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                this.lblTips.Text = "正在更新软件...";
+                                await updaterClient.RestartForUpdateAsync();//重启软件，解压更新包文件并且替换现有程序文件
+                            }
+                        }
+                        else
+                            MessageBox.Show(msg);
                     }
                     else
-                    {
-                        Invoke(new Action(() => MessageBox.Show(msg, this.Text)));
-                    }
+                        MessageBox.Show("软件已是最新版本！");
                 }
-            }
-            catch (ThreadAbortException ex) { }
-            catch (Exception ex)
-            {
-                if (!this.IsDisposed)
-                    Invoke(new Action(() => MessageBox.Show(ex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error)));
-            }
+                catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+                this.Close();
+            };
         }
     }
 }

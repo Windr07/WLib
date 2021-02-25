@@ -8,7 +8,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using WLib.Model;
+using WLib.Data;
 using WLib.Plugins.Interface;
 
 namespace WLib.Plugins.Model

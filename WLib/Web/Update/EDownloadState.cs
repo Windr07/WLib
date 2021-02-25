@@ -1,4 +1,11 @@
-﻿using WLib.Attributes.Description;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/6
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using WLib.Attributes.Description;
 
 namespace WLib.Web.Update
 {

@@ -57,7 +57,7 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
                 var dbPath = fullPath.Substring(0, fullPath.IndexOf(_mdb, StringComparison.OrdinalIgnoreCase));
                 if (!File.Exists(dbPath))
                 {
-                    var workspace = WorkspaceEx.NewWorkspace(EWorkspaceType.Access, Path.GetDirectoryName(dbPath), Path.GetFileNameWithoutExtension(dbPath));
+                    var workspace = WorkspaceEx.CreateWorkspace(EWorkspaceType.Access, Path.GetDirectoryName(dbPath), Path.GetFileNameWithoutExtension(dbPath));
                     Marshal.ReleaseComObject(workspace);
                 }
 
@@ -67,12 +67,12 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
             }
             else if (fullPath.Contains(_gdb))
             {
-                var dbPath = fullPath.Substring(0, fullPath.IndexOf(_gdb, StringComparison.OrdinalIgnoreCase));
+                var dbPath = fullPath.Substring(0, fullPath.IndexOf(_gdb, StringComparison.OrdinalIgnoreCase) + 4);
                 if (!Directory.Exists(dbPath))
                 {
                     var dirInfo = new DirectoryInfo(dbPath);
                     if (dirInfo.Parent == null) throw new Exception($"路径“{dbPath}”不是有效的文件地理数据库路径！");
-                    var workspace = WorkspaceEx.NewWorkspace(EWorkspaceType.FileGDB, dirInfo.Parent.FullName, dirInfo.Name);
+                    var workspace = WorkspaceEx.GetOrCreateWorkspace(dbPath);
                     Marshal.ReleaseComObject(workspace);
                 }
                 var names = fullPath.Replace(dbPath, "").Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
@@ -93,10 +93,12 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="geoType">要素类的几何类型</param>
         /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="SpatialRefOpt.CreateSpatialRef(int, ESrType)"/>及该方法的重载</param>
         /// <param name="otherFields">除了OID和SHAPE字段的其他字段</param>
+        /// <param name="hasZ">是否有高程值（Z值）</param>
+        /// <param name="hasM">是否有M值，存储其他数据（存储温度、浓度等）</param>
         /// <returns></returns>
-        public static IFeatureClass CreateToPath(string fullPath, esriGeometryType geoType, ISpatialReference spatialRef, IEnumerable<IField> otherFields = null)
+        public static IFeatureClass CreateToPath(string fullPath, esriGeometryType geoType, ISpatialReference spatialRef, IEnumerable<IField> otherFields = null, bool hasZ = false, bool hasM = false)
         {
-            IFields fields = FieldEx.CreateBaseFields(geoType, spatialRef);
+            IFields fields = FieldEx.CreateBaseFields(geoType, spatialRef, hasZ, hasM);
             fields.AddFields(otherFields);
             return CreateToPath(fullPath, fields);
         }
@@ -137,11 +139,14 @@ namespace WLib.ArcGis.GeoDatabase.FeatClass
         /// <param name="geoType">要素类的几何类型</param>
         /// <param name="spatialRef">空间参考（坐标系），创建方法参考<see cref="SpatialRefOpt.CreateSpatialRef(int, ESrType)"/>及该方法的重载</param>
         /// <param name="otherFields">除了OID和SHAPE字段的其他字段</param>
+        /// <param name="hasZ">是否有高程值（Z值）</param>
+        /// <param name="hasM">是否有M值，存储其他数据（存储温度、浓度等）</param>
         /// <returns></returns>
         public static IFeatureClass CreateToDb(string geoDbPath, string datasetName, string className, esriGeometryType geoType,
-            ISpatialReference spatialRef, IEnumerable<IField> otherFields = null)
+            ISpatialReference spatialRef, IEnumerable<IField> otherFields = null, bool hasZ = false, bool hasM = false)
         {
-            var fields = FieldEx.CreateFields(geoType, spatialRef, otherFields);
+            IFields fields = FieldEx.CreateBaseFields(geoType, spatialRef, hasZ, hasM);
+            fields.AddFields(otherFields);
             var workspace = WorkspaceEx.GetWorkSpace(geoDbPath);
             IFeatureClass featureClass;
             if (!string.IsNullOrEmpty(datasetName))

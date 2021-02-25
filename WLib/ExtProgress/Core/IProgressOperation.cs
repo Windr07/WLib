@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WLib.ExtProgress.Core
 {
@@ -73,11 +74,15 @@ namespace WLib.ExtProgress.Core
 
         #region 方法
         /// <summary>
-        /// 清空消息，执行操作
+        /// 执行操作
         /// </summary>
         void Run();
         /// <summary>
-        /// 清空消息，创建新线程并在线程中执行操作
+        /// 异步执行操作
+        /// </summary>
+        Task RunAsync();
+        /// <summary>
+        /// 创建新线程并在线程中执行操作
         /// </summary>
         void RunByThread();
         /// <summary>

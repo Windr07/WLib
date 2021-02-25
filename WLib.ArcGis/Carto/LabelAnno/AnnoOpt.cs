@@ -19,15 +19,25 @@ namespace WLib.ArcGis.Carto.LabelAnno
     public static class AnnoOpt
     {
         /// <summary>
-        /// 设置存储在地图上的注记的字体和大小
+        /// 设置存储在地图上的指定注记图层的注记的字体和大小
         /// </summary>
         /// <param name="map"></param>
         /// <param name="graphicsLayerName"></param>
         /// <param name="fontName">注记字体（此值为""、空白字符或null，则不改变注记字体）</param>
         /// <param name="size">注记大小（此值小于等于0，则不改变注记大小）</param>
-        public static void SetAnnotationFontOnMap(this IMap map, string graphicsLayerName, string fontName = null, int size = 0)
+        public static void SetAnnotationFont(this IMap map, string graphicsLayerName, string fontName = null, int size = 0)
         {
             IGraphicsLayer graphicsLayer = map.GetGraphicsLayer(graphicsLayerName);
+            SetAnnotationFont(graphicsLayer, fontName, size);
+        }
+        /// <summary>
+        /// 设置注记图层注记的字体和大小
+        /// </summary>
+        /// <param name="graphicsLayer"></param>
+        /// <param name="fontName">注记字体（此值为""、空白字符或null，则不改变注记字体）</param>
+        /// <param name="size">注记大小（此值小于等于0，则不改变注记大小）</param>
+        public static void SetAnnotationFont(this IGraphicsLayer graphicsLayer,  string fontName = null, int size = 0)
+        {
             IGraphicsContainer graphicContainer = graphicsLayer as IGraphicsContainer;
             var txtElements = graphicContainer.GetTextElements();
             foreach (var txtElement in txtElements)

@@ -19,6 +19,11 @@ namespace WLib.ArcGis.DataCheck.Compare
         public string 字段2 { get; set; }
         public string 字段值2 { get; set; }
 
+
+        /// <summary>
+        /// 表格或图层数据对比操作结果
+        /// </summary>
+        public CompareRecord()  {  }
         /// <summary>
         /// 表格或图层数据对比操作结果
         /// </summary>

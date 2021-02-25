@@ -1,4 +1,11 @@
-﻿using Microsoft.Win32;
+﻿/*---------------------------------------------------------------- 
+// auth： https://download.csdn.net/download/ZhengZhiRen/1013102
+// date： 2019
+// desc： None
+// mdfy:  Windragon
+//----------------------------------------------------------------*/
+
+using Microsoft.Win32;
 using System;
 using System.Drawing;
 using System.IO;

@@ -101,7 +101,7 @@ namespace WLib.WinCtrls.Extension
         {
             if (obj == null) return;
             var objType = obj.GetType();
-            if (typeof(IEnumerable).IsAssignableFrom(objType) && !objType.IsSimpleType())
+            if (typeof(IEnumerable).IsAssignableFrom(objType) && !objType.IsExtSimpleType())
             {
                 foreach (object child in (IEnumerable)obj)
                 {
@@ -119,7 +119,7 @@ namespace WLib.WinCtrls.Extension
                     if (property.CanRead)
                         propValue = property.GetValue(obj, null);
 
-                    if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && !property.PropertyType.IsSimpleType())
+                    if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && !property.PropertyType.IsExtSimpleType())
                         EnumerableValueToTreeNode(propValue, parentNode);
                 }
             }
@@ -176,7 +176,7 @@ namespace WLib.WinCtrls.Extension
 
                 if (string.IsNullOrEmpty(textFormat)) textFormat = GetTextFormat(attributes[0]);
                 var text = textFormat.Replace("N", property.Name).Replace("V", propValue?.ToString());
-                if (property.PropertyType.IsSimpleType())
+                if (property.PropertyType.IsExtSimpleType())
                     parentNode.AddSubNode(property.Name, text, propValue);
                 else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 {

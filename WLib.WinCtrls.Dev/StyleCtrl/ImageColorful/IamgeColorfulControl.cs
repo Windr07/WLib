@@ -45,7 +45,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
         public EImageColorType ImageColorType
         {
             get => this.listBoxColors.SelectedItem == null ? EImageColorType.Default : this.listBoxColors.SelectedItem.ToString().GetEnum<EImageColorType>();
-            set => this.listBoxColors.SelectedItem = value.GetDescription();
+            set => this.listBoxColors.SelectedItem = value.GetDescriptionEx();
         }
         /// <summary>
         /// 支持的图片格式
@@ -67,9 +67,9 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
         public IamgeColorfulControl()
         {
             InitializeComponent();
-            var descriptions = EnumDescriptionExHelper.GetDescriptions<EImageColorType>();
+            var descriptions = EnumDescriptionExHelper.GetDescriptionExs<EImageColorType>();
             this.listBoxColors.Items.AddRange(descriptions);
-            this.listBoxColors.SelectedItem = EImageColorType.Default.GetDescription();
+            this.listBoxColors.SelectedItem = EImageColorType.Default.GetDescriptionEx();
             this.cmbIconLib.Properties.Items.AddRange(new[] { "动物世界", "中国省份" });
         }
         /// <summary>
@@ -163,7 +163,7 @@ namespace WLib.WinCtrls.Dev.StyleCtrl.ImageColorful
         private void btnReset_Click(object sender, EventArgs e)//重置图标
         {
             var paths = Directory.GetFiles(ImageDir).Where(v => ImageExtensions.Contains(Path.GetExtension(v))).ToArray();
-            foreach (var description in EnumDescriptionExHelper.GetDescriptions<EImageColorType>())
+            foreach (var description in EnumDescriptionExHelper.GetDescriptionExs<EImageColorType>())
             {
                 var subDir = Path.Combine(ImageDir, description);
                 if (!Directory.Exists(subDir)) continue;

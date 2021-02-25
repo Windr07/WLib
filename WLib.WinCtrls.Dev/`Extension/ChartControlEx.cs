@@ -12,7 +12,7 @@ using System.Data;
 namespace WLib.WinCtrls.Dev.Extension
 {
     /// <summary>
-    /// <see cref="ChartControl"/>控件的扩展功能
+    /// <see cref="ChartControl"/>统计图控件的扩展功能
     /// </summary>
     public static class ChartControlEx
     {

@@ -57,7 +57,7 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// 根据<see cref="esriNonSimpleReasonEnum"/>可判断的几何错误有：自相交、非闭合环、不正确环走向、不正确线段方向、短线段等
         /// </summary>
         /// <param name="geometry"></param>
-        /// <param name="eNonSimpleReason">几何错误类型，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 ，或参考<see cref="GeometryCheckInfo.GetGeometryCheckInfos"/></param>
+        /// <param name="eNonSimpleReason">几何错误类型，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 ，或参考<see cref="GeometryCheckInfo.GeometryCheckInfos"/></param>
         /// <returns>True表示存在指定几何错误，False表示不存在指定几何错误</returns>
         public static bool Check(this IGeometry geometry, esriNonSimpleReasonEnum eNonSimpleReason)
         {
@@ -74,10 +74,10 @@ namespace WLib.ArcGis.Analysis.OnShape
         /// <summary>
         /// 判断图形是否存在几何错误， 
         /// <para>True表示存在错误，False表示未检查出错误，</para>
-        /// <para>esriNonSimpleReasonEnum参数表示检查出的错误类型（自相交、非闭合环、不正确环走向、不正确线段方向、短线段等）</para>
+        /// <para><paramref name="eNonSimpleReason"/>参数表示检查出的错误类型（自相交、非闭合环、不正确环走向、不正确线段方向、短线段等）</para>
         /// </summary>
         /// <param name="geometry"></param>
-        /// <param name="eNonSimpleReason">几何错误类型，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 ，或参考<see cref="GeometryCheckInfo.GetGeometryCheckInfos"/></param>
+        /// <param name="eNonSimpleReason">几何错误类型，参考：http://resources.arcgis.com/zh-cn/help/main/10.2/index.html#//001700000034000000 ，或参考<see cref="GeometryCheckInfo.GeometryCheckInfos"/></param>
         /// <returns>True表示存在指定几何错误，False表示不存在指定几何错误</returns>
         public static bool Check(this IGeometry geometry, out esriNonSimpleReasonEnum eNonSimpleReason)
         {

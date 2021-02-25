@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Windows.Forms;
 using WLib.Attributes.Description;
 using WLib.Plugins.Interface;
@@ -37,7 +44,7 @@ namespace WLib.WinCtrls.PluginCtrl
                 this._pluginContainer = value;
                 this.txtName.Text = _pluginContainer.Name;
                 this.txtCaption.Text = _pluginContainer.Text;
-                this.txtContainerType.Text = _pluginContainer.Type.GetDescription();
+                this.txtContainerType.Text = _pluginContainer.Type.GetDescriptionEx();
                 this.cbVisible.Checked = _pluginContainer.Visible;
                 if (!string.IsNullOrWhiteSpace(_pluginContainer.ShortcutKeys))
                     this.cmbShortcutKeys.SelectedItem = _pluginContainer.ShortcutKeys;

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/9
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,7 +18,7 @@ namespace WLib.Data.Types
     public class DbTypeInfoCollection : List<DbTypeInfo>
     {
         /// <summary>
-        /// 根据数据库类型，在集合中获取类型关系信息
+        /// 根据数据库类型，在集合中获取类型关系信息，找不到则返回null
         /// </summary>
         /// <param name="dbTypeName"></param>
         /// <returns></returns>
@@ -22,7 +29,7 @@ namespace WLib.Data.Types
                 dbTypeName = dbTypeName.ToLower();
                 var result = this.FirstOrDefault(v => dbTypeName == v.DbTypeName.ToLower());
                 if (result == null)
-                    result = this.First(v => dbTypeName.Contains(v.DbTypeName.ToLower()));
+                    result = this.FirstOrDefault(v => dbTypeName.Contains(v.DbTypeName.ToLower()));
                 return result;
             }
         }

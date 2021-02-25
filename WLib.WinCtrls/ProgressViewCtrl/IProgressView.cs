@@ -1,4 +1,11 @@
-﻿using WLib.ExtProgress.Core;
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2019
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using WLib.ExtProgress.Core;
 
 namespace WLib.WinCtrls.ProgressViewCtrl
 {

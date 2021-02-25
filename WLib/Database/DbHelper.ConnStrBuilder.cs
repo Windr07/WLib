@@ -3,6 +3,8 @@
 // date： 2019/1/1
 // desc： 构建连接字符串，也可直接参考https://www.connectionstrings.com/
 // mdfy:  None
+// sorc:  https://gitee.com/windr07/WLib
+//        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
 using System;
@@ -93,7 +95,13 @@ namespace WLib.Database
                 return $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={filePath};Extended Properties='Excel 12.0;HDR={hdr};IMEX={imex}'";
         }
         /// <summary>
-        ///  构建连接Oracle的连接字符串（连接Oracle需要安装Oracle客户端，引用oracle.dataaccess.dll）
+        ///  构建连接Oracle的连接字符串
+        ///  
+        ///  <para>连接Oracle方式一：下载安装Oracle客户端，引用oracle.dataaccess.dll
+        ///  （存放在Oracle安装目录\product\11.2.0\dbhome_1\ODP.NET\bin\2.x或者 product\11.2.0\client_1\ODP.NET\bin\2.x）</para>
+        ///  
+        ///  <para>连接Oracle方式二：下载引用Oracle.ManagedDataAccess.dll
+        ///  （http://www.oracle.com/technetwork/database/windows/downloads/index-090165.html）</para>
         /// </summary>
         /// <param name="dataSource"></param>
         /// <param name="userId"></param>

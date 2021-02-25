@@ -8,7 +8,8 @@
 namespace WLib.ArcGis.Analysis.Topology
 {
     /// <summary>
-    /// 中文版的拓扑规则类型枚举，各枚举项对应的整型常量值与esriTopologyRuleType枚举项的常量值是一致的
+    /// 中文版的拓扑规则类型枚举
+    /// <para>各枚举项对应的整型常量值与<see cref="ESRI.ArcGIS.Geodatabase.esriTopologyRuleType"/>枚举项的常量值是一致的</para>
     /// </summary>
     public enum ECnTopoRuleType
     {

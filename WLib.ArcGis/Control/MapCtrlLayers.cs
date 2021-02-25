@@ -59,14 +59,24 @@ namespace WLib.ArcGis.Control
         /// </summary>
         /// <param name="mapControl"></param>
         /// <returns></returns>
-        public static List<ILayer> GetLayers(this AxMapControl mapControl)
+        public static IEnumerable<ILayer> GetLayers(this AxMapControl mapControl)
         {
-            List<ILayer> layers = new List<ILayer>();
+            for (int i = 0; i < mapControl.LayerCount; i++)
+                yield return mapControl.get_Layer(i);
+        }
+        /// <summary>
+        /// 根据图层名称，在地图控件上查找对应图层
+        /// <para>找不到图层则返回空数据组，若有多个同名图层则都返回</para>
+        /// </summary>
+        /// <param name="mapControl"></param>
+        /// <returns></returns>
+        public static IEnumerable<ILayer> GetLayers(this AxMapControl mapControl, string layerName)
+        {
             for (int i = 0; i < mapControl.LayerCount; i++)
             {
-                layers.Add(mapControl.get_Layer(i));
+                if (mapControl.get_Layer(i).Name.Equals(layerName))
+                    yield return mapControl.get_Layer(i);
             }
-            return layers;
         }
         /// <summary>
         /// 获取地图控件上的所有图层的图层名
@@ -212,9 +222,9 @@ namespace WLib.ArcGis.Control
         /// <param name="zoomToClass">指定要素类名称或别名，地图将缩放到此要素类的显示范围</param>
         public static void LoadAllFeatureLayers(this AxMapControl mapControl, IWorkspace workspace, string zoomToClass = null)
         {
-            var featureClasses = workspace.GetFeatureClasses();
+            var featureClasses = workspace.GetFeatureClasses().ToList();
 
-            featureClasses = featureClasses.SortByGeoType();
+            featureClasses = featureClasses.SortByShapeType();
 
             //将要素类作为图层加入地图控件中
             for (int i = featureClasses.Count - 1; i >= 0; i--)
@@ -242,7 +252,7 @@ namespace WLib.ArcGis.Control
         /// <param name="loadClasses">指定要加载的要素类集合</param>
         public static void LoadFeatureLayers(this AxMapControl mapControl, IWorkspace workspace, string zoomToClass, params string[] loadClasses)
         {
-            var featureClasses = workspace.GetFeatureClasses();
+            var featureClasses = workspace.GetFeatureClasses().ToList();
             for (int i = 0; i < featureClasses.Count; i++)
             {
                 var featureClass = featureClasses[i];
@@ -263,5 +273,46 @@ namespace WLib.ArcGis.Control
             }
         }
         #endregion
+
+
+        /// <summary>
+        /// 添加图层
+        /// </summary>
+        /// <param name="layers"></param>
+        public static void AddLayers(this AxMapControl mapCtrl, params ILayer[] layers)
+        {
+            foreach (var layer in layers)
+                mapCtrl.AddLayer(layer);
+        }
+        /// <summary>
+        /// 添加图层
+        /// </summary>
+        /// <param name="layers"></param>
+        public static void AddLayers(this AxMapControl mapCtrl, IEnumerable<ILayer> layers)
+        {
+            foreach (var layer in layers)
+                mapCtrl.AddLayer(layer);
+        }
+        /// <summary>
+        /// 添加图层
+        /// </summary>
+        /// <param name="layers"></param>
+        public static void RemoveLayers(this AxMapControl mapCtrl, params ILayer[] layers)
+        {
+            foreach (var layer in layers)
+                mapCtrl.Map.DeleteLayer(layer);
+        }
+        /// <summary>
+        /// 添加图层
+        /// </summary>
+        /// <param name="layers"></param>
+        public static void RemoveLayers(this AxMapControl mapCtrl, params string[] layerNames)
+        {
+            foreach (var layerName in layerNames)
+            {
+                var layer = mapCtrl.GetLayer(layerName);
+                mapCtrl.Map.DeleteLayer(layer);
+            }
+        }
     }
 }

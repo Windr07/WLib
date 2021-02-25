@@ -1,9 +1,19 @@
-﻿namespace WLib.Model
+﻿/*---------------------------------------------------------------- 
+// auth： Windragon
+// date： 2020/9
+// desc： None
+// mdfy:  None
+//----------------------------------------------------------------*/
+
+using System;
+
+namespace WLib.Model
 {
     /// <summary>
     /// 表示可查看的对象（例如列表中的一项）
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [Serializable]
     public class VisibleObject<T>
     {
         /// <summary>

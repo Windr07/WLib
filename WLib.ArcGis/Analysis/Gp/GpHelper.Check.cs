@@ -25,7 +25,7 @@ namespace WLib.ArcGis.Analysis.Gp
 {
     /// <summary>
     /// 运行GP（<see cref=" Geoprocessor"/>）工具的帮助类
-    /// <para> 使用示例：new GpHelper().RunTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
+    /// <para> 使用示例：GpHelper.RunTool(GpHelper.Intersect("a.shp;b.shp", "result.shp"), out _, out _); </para>
     /// </summary>
     public partial class GpHelper
     {
@@ -33,7 +33,7 @@ namespace WLib.ArcGis.Analysis.Gp
         /// 检查路径及数据是否符合GP工具以下规范：
         /// <para>路径长度限制、特殊字符限制、小数点限制、空格限制，文件或图层占用限制，坐标系一致</para>
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="paths">要检查的多个数据路径</param>
         /// <returns>符合规范返回null,否则返回提示信息</returns>
         public static string CheckClassesValidate(params string[] paths)
         {
@@ -200,7 +200,6 @@ namespace WLib.ArcGis.Analysis.Gp
         public static string CheckGeometryValidate(IFeatureClass featureClass, string whereClause = null, bool showDetail = false)
         {
             var sbMessage = new StringBuilder();
-            var geoCheckInfos = GeometryCheckInfo.GetGeometryCheckInfos();
             var oidFieldName = featureClass.OIDFieldName;
             featureClass.QueryFeatures(whereClause, feature =>
             {
@@ -213,7 +212,7 @@ namespace WLib.ArcGis.Analysis.Gp
                     if (esriNonSimpleReason == esriNonSimpleReasonEnum.esriNonSimpleOK)
                         return;
 
-                    var checkInfo = geoCheckInfos.FirstOrDefault(v => v.eType == esriNonSimpleReason);
+                    var checkInfo = GeometryCheckInfo.GetGeometryCheckInfo(esriNonSimpleReason);
                     if (checkInfo != null)
                         sbMessage.AppendLine(
                             showDetail ? $"{oidFieldName}为{oid}的图斑{checkInfo.AliasName}，即{checkInfo.Description}" : $"{oidFieldName}为{oid}的图斑{checkInfo.AliasName}");

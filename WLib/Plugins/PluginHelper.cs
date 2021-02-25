@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using WLib.Data;
 using WLib.Drawing;
 using WLib.Files;
 using WLib.Plugins.Enum;
@@ -69,7 +70,7 @@ namespace WLib.Plugins
         {
             var container = pluginView.Containers.FirstOrDefault(v => v.Name == name && v.Text == text);
             if (container == null)
-                throw new Exception($"在插件视图“{pluginView.Name}”中找不到容器控件“{text}”（{name}）的对应的插件配置！");
+                throw new Exception($"插件视图【{pluginView.Name}】中找不到容器控件【{text}】（{name}）对应的插件配置，请检查配置一致性或控件语言版本一致性（汉化问题）");
             return container;
         }
         #endregion

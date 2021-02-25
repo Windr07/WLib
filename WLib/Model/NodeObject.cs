@@ -5,11 +5,14 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
+using System;
+
 namespace WLib.Model
 {
     /// <summary>
     /// 表示一个节点，通常用于将树节点映射到二维表中
     /// </summary>
+    [Serializable]
     public class NodeObject
     {
         /// <summary>

@@ -5,15 +5,15 @@
 // mdfy:  None
 //----------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using WLib.ArcGis.Analysis.OnShape;
 using WLib.ArcGis.Display;
 using WLib.ArcGis.GeoDatabase.FeatClass;
@@ -25,14 +25,30 @@ namespace WLib.ArcGis.Control
     /// </summary>
     public static class ZoomTo
     {
+        #region 缩放至图层
+        /// <summary>
+        /// 缩放至图层
+        /// </summary>
+        /// <param name="axMapControl">地图控件</param>
+        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
+        public static void MapZoomToLayer(this AxMapControl axMapControl, string featureLayerName)
+        {
+            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
+            if (featureLayer == null)
+                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
+            MapZoomTo(axMapControl.ActiveView, featureLayer.AreaOfInterest);
+        }
+        #endregion
+
+
         #region 缩放至图斑
         /// <summary>
         /// 地图缩放至指定点的位置，visualRange是显示范围Evelope的宽度(或高度)
         /// </summary>
         /// <param name="activeView"></param>
-        /// <param name="point"></param>
-        /// <param name="visualRange"></param>
-        public static void MapZoomToPoint(this IActiveView activeView, IPoint point, double visualRange)
+        /// <param name="point">地图移动和缩放的中心点</param>
+        /// <param name="visualRange">地图的显示范围：以缩放点为中心，上下左右各延伸<paramref name="visualRange"/>的一半作为显示范围</param>
+        public static void MapZoomTo(this IActiveView activeView, IPoint point, double visualRange, bool hightLight = false)
         {
             IEnvelope envelope = new EnvelopeClass();
             envelope.SpatialReference = point.SpatialReference;
@@ -44,6 +60,8 @@ namespace WLib.ArcGis.Control
             envelope.CenterAt(point);
             activeView.Extent = envelope;
             activeView.Refresh();
+
+            if (hightLight) HightLightGeo(activeView, point, true);
         }
         /// <summary>
         /// 地图缩放至指定图形位置
@@ -51,51 +69,10 @@ namespace WLib.ArcGis.Control
         /// <param name="activeView"></param>
         /// <param name="geometry"></param>
         /// <param name="expendRate">实际显示范围与图形范围框的比值，即放大的倍数</param>
-        public static void MapZoomTo(this IActiveView activeView, IGeometry geometry, double expendRate = 2)
+        public static void MapZoomTo(this IActiveView activeView, IGeometry geometry, double expendRate = 2, bool hightLight = false)
         {
-            if (activeView != null && geometry != null && !geometry.IsEmpty)
-            {
-                IEnvelope envelope = new EnvelopeClass();
-                envelope.SpatialReference = geometry.SpatialReference;
-                envelope.XMax = geometry.Envelope.XMax;
-                envelope.XMin = geometry.Envelope.XMin;
-                envelope.YMax = geometry.Envelope.YMax;
-                envelope.YMin = geometry.Envelope.YMin;
-                envelope.Width = geometry.Envelope.Width;
-                envelope.Height = geometry.Envelope.Height;
-                IPoint point = new PointClass();
-                point.SpatialReference = geometry.SpatialReference;
-                point.X = (envelope.XMin + envelope.XMax) / 2.0;
-                point.Y = (envelope.YMin + envelope.YMax) / 2.0;
-                if (geometry.GeometryType == esriGeometryType.esriGeometryPoint)
-                {
-                    if (envelope.XMax > 360 && envelope.YMax > 360)
-                    {
-                        envelope.Width = 1000;
-                        envelope.Height = 1000;
-                    }
-                    else
-                    {
-                        envelope.Width = 0.01;
-                        envelope.Height = 0.01;
-                    }
-                }
-                else
-                {
-                    if (envelope.XMax == 0.0 && envelope.YMax == 0.0)
-                    {
-                        envelope.Width = 10;
-                        envelope.Height = 10;
-                    }
-                    else
-                    {
-                        envelope.Expand(expendRate, expendRate, true);
-                    }
-                }
-                envelope.CenterAt(point);
-                activeView.Extent = envelope;
-                activeView.Refresh();
-            }
+            InnerZoomToGeo(activeView, geometry, expendRate);
+            if (hightLight) HightLightGeo(activeView, geometry, true);
         }
         /// <summary>
         /// 地图定跳转到指定图形位置
@@ -103,63 +80,10 @@ namespace WLib.ArcGis.Control
         /// <param name="activeView"></param>
         /// <param name="geometries"></param>
         /// <param name="expendRate">实际显示范围与图形范围框的比值，即放大的倍数</param>
-        public static void MapZoomTo(this IActiveView activeView, IEnumerable<IGeometry> geometries, double expendRate = 2)
+        public static void MapZoomTo(this IActiveView activeView, IEnumerable<IGeometry> geometries, double expendRate = 2, bool hightLight = false)
         {
-            var unionGeometry = TopologicalOpt.UnionGeometry(geometries);
-            MapZoomTo(activeView, unionGeometry, expendRate);
-        }
-        #endregion
-
-
-        #region 缩放至图斑、高亮显示
-        /// <summary>
-        /// 地图定跳转到指定图形位置(单个图形)，并高亮显示此图形，会清除其它高亮
-        /// </summary>
-        /// <param name="activeView"></param>
-        /// <param name="point"></param>
-        /// <param name="visualRange"></param>
-        public static void MapZoomToPointAndHightLight(this IActiveView activeView, IPoint point, double visualRange)
-        {
-            activeView.GraphicsContainer.DeleteAllElements();
-            MapZoomToPoint(activeView, point, visualRange);
-            HightLightGeo(activeView, point);
-        }
-        /// <summary>
-        /// 地图缩放至指定点集的第一个点的位置，visualRange是显示范围Evelope的宽度(或高度)，并高亮显示这些点，会清除其它高亮
-        /// </summary>
-        /// <param name="activeView"></param>
-        /// <param name="points"></param>
-        /// <param name="visualRange"></param>
-        public static void MapZoomToPointAndHightLight(this IActiveView activeView, IPoint[] points, double visualRange)
-        {
-            activeView.GraphicsContainer.DeleteAllElements();
-            MapZoomToPoint(activeView, points[0], visualRange);
-            HightLightGeo(activeView, points);
-        }
-        /// <summary>
-        /// 地图缩放至指定图形位置(单个图形)，并高亮显示此图形，会清除其它高亮
-        /// </summary>
-        /// <param name="activeView"></param>
-        /// <param name="geometry"></param>
-        public static void MapZoomToAndHightLight(this IActiveView activeView, IGeometry geometry)
-        {
-            activeView.GraphicsContainer.DeleteAllElements();
-            MapZoomTo(activeView, geometry);
-            HightLightGeo(activeView, geometry);
-        }
-        /// <summary>
-        /// 地图缩放至指定的多个图形，并高亮显示这些图形，会清除其它高亮
-        /// </summary>
-        /// <param name="activeView"></param>
-        /// <param name="geomtries"></param>
-        public static void MapZoomToAndHightLight(this IActiveView activeView, IEnumerable<IGeometry> geomtries)
-        {
-            activeView.GraphicsContainer.DeleteAllElements();
-            var unionGeometry = TopologicalOpt.UnionGeometry(geomtries);
-            foreach (IGeometry geometry in geomtries)
-                HightLightGeo(activeView, geometry);
-
-            MapZoomTo(activeView, unionGeometry);
+            var unionGeometry = TopologicalOpt.UnionGeometryEx(geometries);
+            MapZoomTo(activeView, unionGeometry, expendRate, hightLight);
         }
         /// <summary>
         /// 地图缩放至查询所得的所有图形，并高亮显示这些图形，会清除其它高亮
@@ -167,113 +91,13 @@ namespace WLib.ArcGis.Control
         /// <param name="activeView">地图控件</param>
         /// <param name="featureLayer">查询图层</param>
         /// <param name="whereClause">查询条件</param>
-        public static void MapZoomToAndHightLight(this IActiveView activeView, IFeatureLayer featureLayer, string whereClause)
+        public static void MapZoomTo(this IActiveView activeView, IFeatureLayer featureLayer, string whereClause, double expendRate = 2, bool hightLight = false)
         {
             var geometries = featureLayer.FeatureClass.QueryGeometries(whereClause);
-            MapZoomToAndHightLight(activeView, geometries);
+            MapZoomTo(activeView, geometries, expendRate, hightLight);
         }
 
-        /// <summary>
-        /// 高亮显示指定图形,不会清除原有的高亮
-        /// </summary>
-        /// <param name="activeView"></param>
-        /// <param name="geometry"></param>
-        public static void HightLightGeo(this IActiveView activeView, IGeometry geometry)
-        {
-            IElement element = CreateHightLightElement(geometry);
-            if (element != null)
-                activeView.GraphicsContainer.AddElement(element, 0);
-            activeView.PartialRefresh(esriViewDrawPhase.esriViewForeground, geometry, activeView.Extent);
-        }
-        /// <summary>
-        ///  高亮显示多个图形,不会清除原有的高亮
-        /// </summary>
-        /// <param name="activeView"></param>
-        /// <param name="geometries"></param>
-        public static void HightLightGeo(this IActiveView activeView, IGeometry[] geometries)
-        {
-            foreach (var geo in geometries)
-            {
-                IElement element = CreateHightLightElement(geo);
-                if (element != null)
-                    activeView.GraphicsContainer.AddElement(element, 0);
-            }
-            activeView.PartialRefresh(esriViewDrawPhase.esriViewForeground, geometries, activeView.Extent);
-        }
-        /// <summary>
-        /// 创建几何图形对应的用于高亮显示的元素
-        /// </summary>
-        /// <param name="geometry"></param>
-        /// <returns></returns>
-        private static IElement CreateHightLightElement(IGeometry geometry)
-        {
-            IElement element = null;
-            IColor redcolor = ColorCreate.GetIColor(255, 0, 0, 50);
-            IColor bluecolor = ColorCreate.GetIColor(0, 0, 255);
-            switch (geometry.GeometryType)
-            {
-                case esriGeometryType.esriGeometryLine:
-                case esriGeometryType.esriGeometryPolyline:
-                    element = new LineElementClass();
-                    element.Geometry = geometry;
-                    ((ILineElement)element).Symbol = SymbolCreate.GetSimpleLineSymbol(redcolor);
-                    break;
-                case esriGeometryType.esriGeometryPolygon:
-                    element = new PolygonElementClass();
-                    element.Geometry = geometry;
-                    ((PolygonElementClass)element).Symbol = SymbolCreate.GetSimpleFillSymbol(redcolor, bluecolor);
-                    break;
-                case esriGeometryType.esriGeometryPoint:
-                    element = new MarkerElementClass();
-                    element.Geometry = geometry;
-                    IMarkerSymbol pisymbol = new SimpleMarkerSymbolClass();
-                    pisymbol.Color = (IColor)redcolor;
-                    pisymbol.Size = 6;
-                    ((MarkerElementClass)element).Symbol = pisymbol;
-                    break;
-            }
-            return element;
-        }
-        #endregion
 
-
-        #region 缩放至要素、选中要素
-        /// <summary>
-        /// 地图缩放并选中至指定要素
-        /// </summary>
-        /// <param name="axMapControl"></param>
-        /// <param name="featureLayer"></param>
-        /// <param name="feature"></param>
-        public static void MapZoomToAndSelect(this AxMapControl axMapControl, IFeatureLayer featureLayer, IFeature feature)
-        {
-            if (feature != null)
-            {
-                axMapControl.Map.ClearSelection();
-                axMapControl.Map.SelectFeature(featureLayer, feature);
-                MapZoomTo(axMapControl.ActiveView, feature.ShapeCopy);
-            }
-        }
-        /// <summary>
-        /// 地图缩放并选中至查询获得的第一个要素
-        /// </summary>
-        /// <param name="axMapControl">地图控件</param>
-        /// <param name="featureLayer">查询图层</param>
-        /// <param name="whereClause">查询条件</param>
-        public static void MapZoomToAndSelectFirst(this AxMapControl axMapControl, IFeatureLayer featureLayer, string whereClause)
-        {
-            IQueryFilter filter = new QueryFilterClass();
-            filter.WhereClause = whereClause;
-            IFeatureCursor cusor = featureLayer.FeatureClass.Search(filter, true);
-            IFeature feature = cusor.NextFeature();
-            if (feature != null)
-                MapZoomToAndSelect(axMapControl, featureLayer, feature);
-
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(cusor);
-        }
-        #endregion
-
-
-        #region 缩放至图斑、闪烁图斑
         /// <summary>
         /// 地图缩放至指定要素并闪烁
         /// </summary>
@@ -281,15 +105,12 @@ namespace WLib.ArcGis.Control
         /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
         /// <param name="whereClause">筛选要素的where条件</param>
         /// <param name="nFlashes">闪烁次数</param>
-        public static void MapZoomToAndFlash(this AxMapControl axMapControl, string featureLayerName, int[] oids, int nFlashes = 2)
+        public static void MapZoomTo(this AxMapControl axMapControl, IFeatureLayer featureLayer, string whereClause, double expendRate = 2, bool hightLight = false, bool selectShape = false)
         {
-            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
-            if (featureLayer == null)
-                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
+            var geometries = featureLayer.FeatureClass.QueryGeometries(whereClause);
+            MapZoomTo(axMapControl.ActiveView, geometries, expendRate, hightLight);
 
-            var strOids = oids.Select(v => v.ToString()).Aggregate((a, b) => a + "," + b);
-            var whereClause = $"{featureLayer.FeatureClass.OIDFieldName} In ({strOids})";
-            MapZoomToAndFlash(axMapControl, featureLayer, whereClause, nFlashes);
+            if (selectShape) SelectFeatures(axMapControl.Map, featureLayer, whereClause);
         }
         /// <summary>
         /// 地图缩放至指定要素并闪烁
@@ -298,54 +119,39 @@ namespace WLib.ArcGis.Control
         /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
         /// <param name="whereClause">筛选要素的where条件</param>
         /// <param name="nFlashes">闪烁次数</param>
-        public static void MapZoomToAndFlash(this AxMapControl axMapControl, string featureLayerName, string whereClause, int nFlashes = 2)
+        public static void MapZoomTo(this AxMapControl axMapControl, IFeatureLayer featureLayer, int[] oids, double expendRate = 2, bool hightLight = false, bool selectShape = false)
         {
-            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
-            if (featureLayer == null)
-                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
-
-            MapZoomToAndFlash(axMapControl, featureLayer, whereClause, nFlashes);
+            var whereClause = $"{featureLayer.FeatureClass.OIDFieldName} In ({string.Join(",", oids.Select(v => v.ToString()))})";
+            MapZoomTo(axMapControl, featureLayer, whereClause, expendRate, hightLight, selectShape);
         }
         /// <summary>
         /// 地图缩放至指定要素并闪烁
         /// </summary>
         /// <param name="axMapControl">地图控件</param>
-        /// <param name="featureLayer">要素图层，该图层应当存在于地图控件中</param>
+        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
         /// <param name="whereClause">筛选要素的where条件</param>
         /// <param name="nFlashes">闪烁次数</param>
-        public static void MapZoomToAndFlash(this AxMapControl axMapControl, IFeatureLayer featureLayer, string whereClause, int nFlashes = 2)
+        public static void MapZoomTo(this AxMapControl axMapControl, string featureLayerName, int[] oids, double expendRate = 2, bool hightLight = false, bool selectShape = false)
         {
-            var geometries = featureLayer.FeatureClass.QueryGeometriesCopy(whereClause);
-            var geometry = geometries.UnionGeometry();
-            MapZoomToAndFlash(axMapControl, geometry, nFlashes);
+            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
+            if (featureLayer == null) throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
+
+            MapZoomTo(axMapControl, featureLayer, oids, expendRate, hightLight, selectShape);
         }
         /// <summary>
-        /// 地图缩放至指定图形并闪烁
+        /// 地图缩放至指定要素并闪烁
         /// </summary>
         /// <param name="axMapControl">地图控件</param>
-        /// <param name="geometry">闪烁的图像</param>
-        /// <param name="nFlashes">闪烁次数</param>
-        public static void MapZoomToAndFlash(this AxMapControl axMapControl, IGeometry geometry, int nFlashes = 2)
+        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
+        /// <param name="whereClause">筛选要素的where条件</param>
+        /// <param name="expendRate"></param>
+        /// <param name="hightLight"></param>
+        public static void MapZoomTo(this AxMapControl axMapControl, string featureLayerName, string whereClause, double expendRate = 2, bool hightLight = false, bool selectShape = false)
         {
-            MapZoomTo(axMapControl.ActiveView, geometry);
+            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
+            if (featureLayer == null) throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
 
-            //地图闪烁
-            object symbol = null;
-            switch (geometry.GeometryType)
-            {
-                case esriGeometryType.esriGeometryPoint:
-                    symbol = SymbolCreate.GetSimpleMarkerSymbol("ff0000");
-                    break;
-                case esriGeometryType.esriGeometryLine:
-                case esriGeometryType.esriGeometryPolyline:
-                    symbol = SymbolCreate.GetSimpleLineSymbol("ff0000");
-                    break;
-                case esriGeometryType.esriGeometryPolygon:
-                    symbol = SymbolCreate.GetSimpleFillSymbol("99ccff", "ff0000");
-                    break;
-            }
-            if (symbol == null) return;
-            axMapControl.FlashShape(geometry, nFlashes, 200, symbol);
+            MapZoomTo(axMapControl, featureLayer, whereClause, expendRate, hightLight, selectShape);
         }
         /// <summary>
         /// 地图缩放至指定图形并以选中形式闪烁
@@ -397,19 +203,171 @@ namespace WLib.ArcGis.Control
         #endregion
 
 
-        #region 缩放至图层
+
         /// <summary>
-        /// 缩放至图层
+        /// 闪烁图斑
         /// </summary>
         /// <param name="axMapControl">地图控件</param>
-        /// <param name="featureLayerName">要素图层名称，该图层应当存在于地图控件中</param>
-        public static void MapZoomToLayer(this AxMapControl axMapControl, string featureLayerName)
+        /// <param name="geometry">闪烁的图斑</param>
+        /// <param name="nFlashes">闪烁次数</param>
+        public static void FlashGeometry(this AxMapControl axMapControl, IGeometry geometry, int nFlashes = 2)
         {
-            var featureLayer = axMapControl.GetFeatureLayer(featureLayerName);
-            if (featureLayer == null)
-                throw new Exception($"在地图控件中，找不到名为“{featureLayerName}的要素图层”");
-            MapZoomTo(axMapControl.ActiveView, featureLayer.AreaOfInterest);
+            object symbol = null;
+            switch (geometry.GeometryType)
+            {
+                case esriGeometryType.esriGeometryPoint:
+                    symbol = SymbolCreate.GetSimpleMarkerSymbol("ff0000");
+                    break;
+                case esriGeometryType.esriGeometryLine:
+                case esriGeometryType.esriGeometryPolyline:
+                    symbol = SymbolCreate.GetSimpleLineSymbol("ff0000");
+                    break;
+                case esriGeometryType.esriGeometryPolygon:
+                    symbol = SymbolCreate.GetSimpleFillSymbol("99ccff", "ff0000");
+                    break;
+            }
+            if (symbol == null) return;
+            axMapControl.FlashShape(geometry, nFlashes, 200, symbol);
         }
-        #endregion
+        /// <summary>
+        /// 高亮显示指定图形,不会清除原有的高亮
+        /// </summary>
+        /// <param name="activeView"></param>
+        /// <param name="geometry"></param>
+        /// <param name="clearOtherHightLight">是否清除地图上其他高亮显示的图斑</param>
+        public static void HightLightGeo(this IActiveView activeView, IGeometry geometry, bool clearOtherHightLight = false)
+        {
+            if (clearOtherHightLight)
+                activeView.GraphicsContainer.DeleteAllElements();
+
+            IElement element = CreateHightLightElement(geometry);
+            if (element != null)
+                activeView.GraphicsContainer.AddElement(element, 0);
+            activeView.PartialRefresh(esriViewDrawPhase.esriViewForeground, geometry, activeView.Extent);
+        }
+        /// <summary>
+        ///  高亮显示多个图形
+        /// </summary>
+        /// <param name="activeView"></param>
+        /// <param name="geometries"></param>
+        /// <param name="clearOtherHightLight">是否清除地图上其他高亮显示的图斑</param>
+        public static void HightLightGeo(this IActiveView activeView, IEnumerable<IGeometry> geometries, bool clearOtherHightLight = false)
+        {
+            if (clearOtherHightLight)
+                activeView.GraphicsContainer.DeleteAllElements();
+
+            foreach (var geometry in geometries)
+            {
+                IElement element = CreateHightLightElement(geometry);
+                if (element != null)
+                    activeView.GraphicsContainer.AddElement(element, 0);
+            }
+            activeView.PartialRefresh(esriViewDrawPhase.esriViewForeground, geometries, activeView.Extent);
+        }
+        /// <summary>
+        /// 查询并选中要素
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="featureLayer"></param>
+        /// <param name="wherClause"></param>
+        public static void SelectFeatures(this IMap map, IFeatureLayer featureLayer, string wherClause)
+        {
+            IQueryFilter queryFilter = new QueryFilterClass() { WhereClause = wherClause };
+            IFeatureSelection featureSelection = featureLayer as IFeatureSelection;
+            featureSelection.SelectFeatures(queryFilter, esriSelectionResultEnum.esriSelectionResultNew, false);
+
+            featureSelection.SelectionSet.Search(null, true, out var cursor);
+            IFeatureCursor featureCursor = cursor as IFeatureCursor;
+            IFeature feature;
+            while ((feature = featureCursor.NextFeature()) != null)
+                map.SelectFeature(featureLayer, feature);
+        }
+        /// <summary>
+        /// 缩放到指定的图斑
+        /// </summary>
+        /// <param name="activeView"></param>
+        /// <param name="geometry"></param>
+        /// <param name="expendRate"></param>
+        /// <returns></returns>
+        private static IPoint InnerZoomToGeo(this IActiveView activeView, IGeometry geometry, double expendRate)
+        {
+            if (activeView == null) throw new ArgumentException("ActiveView不能为空（Null）！", nameof(activeView));
+            if (geometry == null) throw new ArgumentException("缩放的图斑不能为空（Null）！", nameof(geometry));
+            if (geometry.IsEmpty) throw new ArgumentException("缩放的图斑不能为空（IsEmpty）！", nameof(geometry));
+
+            IEnvelope envelope = new EnvelopeClass();
+            envelope.SpatialReference = geometry.SpatialReference;
+            envelope.XMax = geometry.Envelope.XMax;
+            envelope.XMin = geometry.Envelope.XMin;
+            envelope.YMax = geometry.Envelope.YMax;
+            envelope.YMin = geometry.Envelope.YMin;
+            envelope.Width = geometry.Envelope.Width;
+            envelope.Height = geometry.Envelope.Height;
+            IPoint point = new PointClass();
+            point.SpatialReference = geometry.SpatialReference;
+            point.X = (envelope.XMin + envelope.XMax) / 2.0;
+            point.Y = (envelope.YMin + envelope.YMax) / 2.0;
+            if (geometry.GeometryType == esriGeometryType.esriGeometryPoint)
+            {
+                if (envelope.XMax > 360 && envelope.YMax > 360)
+                {
+                    envelope.Width = 1000;
+                    envelope.Height = 1000;
+                }
+                else
+                {
+                    envelope.Width = 0.01;
+                    envelope.Height = 0.01;
+                }
+            }
+            else
+            {
+                if (envelope.XMax == 0.0 && envelope.YMax == 0.0)
+                {
+                    envelope.Width = 10;
+                    envelope.Height = 10;
+                }
+                else
+                    envelope.Expand(expendRate, expendRate, true);
+            }
+            envelope.CenterAt(point);
+            activeView.Extent = envelope;
+            activeView.Refresh();
+            return point;
+        }
+        /// <summary>
+        /// 创建几何图形对应的用于高亮显示的元素
+        /// </summary>
+        /// <param name="geometry"></param>
+        /// <returns></returns>
+        private static IElement CreateHightLightElement(IGeometry geometry)
+        {
+            IElement element = null;
+            IColor redcolor = ColorCreate.GetIColor(255, 0, 0, 50);
+            IColor bluecolor = ColorCreate.GetIColor(0, 0, 255);
+            switch (geometry.GeometryType)
+            {
+                case esriGeometryType.esriGeometryLine:
+                case esriGeometryType.esriGeometryPolyline:
+                    element = new LineElementClass();
+                    element.Geometry = geometry;
+                    ((ILineElement)element).Symbol = SymbolCreate.GetSimpleLineSymbol(redcolor);
+                    break;
+                case esriGeometryType.esriGeometryPolygon:
+                    element = new PolygonElementClass();
+                    element.Geometry = geometry;
+                    ((PolygonElementClass)element).Symbol = SymbolCreate.GetSimpleFillSymbol(redcolor, bluecolor);
+                    break;
+                case esriGeometryType.esriGeometryPoint:
+                    element = new MarkerElementClass();
+                    element.Geometry = geometry;
+                    IMarkerSymbol pisymbol = new SimpleMarkerSymbolClass();
+                    pisymbol.Color = (IColor)redcolor;
+                    pisymbol.Size = 6;
+                    ((MarkerElementClass)element).Symbol = pisymbol;
+                    break;
+            }
+            return element;
+        }
     }
 }

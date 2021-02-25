@@ -62,7 +62,7 @@ namespace WLib.Files
             if (!File.Exists(filePath))
                 throw new ArgumentException(string.Format("文件“{0}”不存在！", filePath));
 
-            using (FileStream file = new FileStream(filePath, FileMode.Open))
+            using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] retVal = md5.ComputeHash(file);
@@ -88,7 +88,7 @@ namespace WLib.Files
                 throw new ArgumentException(string.Format("<{0}>, 不存在", filePath));
             int bufferSize = 1024 * 16;//自定义缓冲区大小16K
             byte[] buffer = new byte[bufferSize];
-            Stream inputStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Stream inputStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             HashAlgorithm hashAlgorithm = new MD5CryptoServiceProvider();
             int readLength = 0;//每次读取长度
             var output = new byte[bufferSize];

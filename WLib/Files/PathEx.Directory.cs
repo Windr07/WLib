@@ -39,6 +39,7 @@ namespace WLib.Files
         /// <returns></returns>
         public static List<string> GetAllFilePaths(string rootDirectory, params string[] extensions)
         {
+            bool selectAll = extensions == null || extensions.Length == 0;
             var paths = Directory.GetFiles(rootDirectory, "*", SearchOption.AllDirectories);
             var resultPaths = new List<string>();
             foreach (var path in paths)
@@ -47,7 +48,7 @@ namespace WLib.Files
                 var extension = Path.GetExtension(path).ToLower();
                 if (fileName.Substring(0, 2).Equals("~$")) continue; //跳过以"~$"开头的文件
 
-                if (extensions == null || extensions.Any(v => extension.Equals(v, StringComparison.OrdinalIgnoreCase)))
+                if (selectAll || extensions.Any(v => extension.Equals(v, StringComparison.OrdinalIgnoreCase)))
                     resultPaths.Add(path);
             }
             return resultPaths;
@@ -88,7 +89,8 @@ namespace WLib.Files
 
 
         /// <summary>
-        /// 按照给定的“各层级子级文件夹名或文件名（<paramref name="subNames"/>）（可以包含*或?等通配符）”，依次查找各级子目录或文件，返回最后可查找的子目录或文件路径
+        /// 按层级查找子目录或文件
+        /// <para>指定各层级的子级文件夹名或文件名<paramref name="subNames"/>（可以包含*或?等通配符），依次查找各级子目录或文件，返回最后可查找的子目录或文件路径</para>
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="unfindException">找不到时是否抛出异常</param>
@@ -114,7 +116,8 @@ namespace WLib.Files
             return resultPath;
         }
         /// <summary>
-        /// 按照给定的“各层级子级文件夹名或文件名（<paramref name="subNames"/>）（支持正则表达式）”，依次查找各级子目录或文件，返回最后可查找的子目录或文件路径
+        /// 按层级查找子目录或文件
+        /// <para>指定各层级的子级文件夹名或文件名<paramref name="subNames"/>（支持正则表达式），依次查找各级子目录或文件，返回最后可查找的子目录或文件路径</para>
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="unfindException">找不到时是否抛出异常</param>
@@ -203,23 +206,23 @@ namespace WLib.Files
         public static void CopyDir(DirectoryInfo sourceDir, DirectoryInfo targetDir, bool overwrite)
         {
             //判断目标文件夹是否是源文件夹的子目录
-            for (DirectoryInfo temp = targetDir.Parent; temp != null; temp = temp.Parent)
+            for (var dirInfo = targetDir.Parent; dirInfo != null; dirInfo = dirInfo.Parent)
             {
-                if (temp.FullName == sourceDir.FullName)
+                if (dirInfo.FullName == sourceDir.FullName)
                     throw new Exception("无法复制！目标文件夹是源文件夹的子目录！");
             }
-            var files = sourceDir.GetFiles();
-            var dirs = sourceDir.GetDirectories();
+            var fileInfos = sourceDir.GetFiles();
+            var dirInfos = sourceDir.GetDirectories();
             if (Directory.Exists(targetDir.FullName) == false) // 检查目标文件夹是否存在，不存在则创建
                 Directory.CreateDirectory(targetDir.FullName);
 
-            foreach (FileInfo file in files)  //复制所有文件
-                file.CopyTo(Path.Combine(targetDir.ToString(), file.Name), overwrite);
+            foreach (var fileInfo in fileInfos)  //复制所有文件
+                fileInfo.CopyTo(Path.Combine(targetDir.ToString(), fileInfo.Name), overwrite);
 
-            foreach (DirectoryInfo diSourceSubDir in dirs) //递归复制子目录
+            foreach (var dirInfo in dirInfos) //递归复制子目录
             {
-                DirectoryInfo targetSubDir = targetDir.CreateSubdirectory(diSourceSubDir.Name);
-                CopyDir(diSourceSubDir, targetSubDir, overwrite);
+                DirectoryInfo targetSubDir = targetDir.CreateSubdirectory(dirInfo.Name);
+                CopyDir(dirInfo, targetSubDir, overwrite);
             }
         }
         /// <summary>
