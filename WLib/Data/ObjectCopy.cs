@@ -75,13 +75,13 @@ namespace WLib.Data
             return (T)newObject;
         }
         /// <summary>
-        /// 通过表达式树深拷贝对象
+        /// 获取通过表达式树深拷贝对象的函数（委托）
         /// </summary>
         /// <typeparam name="TIn"></typeparam>
         /// <typeparam name="TOut"></typeparam>
         /// <param name="tIn"></param>
         /// <returns></returns>
-        public static TOut CopyByExpTree<TIn, TOut>(this TIn tIn)
+        public static Func<TIn,TOut> GetCopyExpTreeFunc<TIn, TOut>()
         {
             ParameterExpression parameterExpression = Expression.Parameter(typeof(TIn), "p");
             List<MemberBinding> memberBindings = new List<MemberBinding>();
@@ -100,7 +100,18 @@ namespace WLib.Data
             MemberInitExpression memberInitExpression = Expression.MemberInit(Expression.New(typeof(TOut)), memberBindings.ToArray());
             Expression<Func<TIn, TOut>> lambda = Expression.Lambda<Func<TIn, TOut>>(memberInitExpression, new ParameterExpression[] { parameterExpression });
 
-            var func = lambda.Compile();
+            return lambda.Compile();
+        }
+        /// <summary>
+        /// 通过表达式树深拷贝对象
+        /// </summary>
+        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="TOut"></typeparam>
+        /// <param name="tIn"></param>
+        /// <returns></returns>
+        public static TOut CopyByExpTree<TIn, TOut>(this TIn tIn)
+        {
+            var func = GetCopyExpTreeFunc<TIn, TOut>();
             return func(tIn);
         }
 
