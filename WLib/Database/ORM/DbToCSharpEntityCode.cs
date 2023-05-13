@@ -8,9 +8,11 @@
 //        https://github.com/Windr07/WLib
 //----------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using WLib.Database.DbBase;
 
 namespace WLib.Database.ORM
 {
@@ -18,6 +20,7 @@ namespace WLib.Database.ORM
     /// 根据数据库的表生成C#实体类代码
     /// <para>Generate C# entity class code based on database tables</para>
     /// </summary>
+    [Serializable]
     public class DbToCSharpEntityCode : DbToEntityCode
     {
         /// <summary>
@@ -27,11 +30,11 @@ namespace WLib.Database.ORM
         /// <summary>
         /// 引用的命名空间
         /// </summary>
-        public List<string> Usings { get; set; } = new List<string> { "System" };
+        public List<string> Usings { get; set; } = new List<string>();
         /// <summary>
         /// 在实体类名中加入的特性
         /// </summary>
-        public List<string> ClassAttributes { get; set; } = new List<string> { "Serializable" };
+        public List<string> ClassAttributes { get; set; } = new List<string>();
         /// <summary>
         /// 在实体类的每个属性（字段）中加入的特性
         /// </summary>
@@ -55,6 +58,7 @@ namespace WLib.Database.ORM
             {"Double","double" },
             {"Decimal","decimal" },
             {"Boolean","bool" },
+            {"Byte[]","byte[]" },
         };
 
 
@@ -62,8 +66,19 @@ namespace WLib.Database.ORM
         /// 根据数据库的表生成C#实体类代码
         /// <para>Generate C# entity class code based on database tables</para>
         /// </summary>
+        public DbToCSharpEntityCode() : base(null) => CodeFileExtension = ".cs";
+        /// <summary>
+        /// 根据数据库的表生成C#实体类代码
+        /// <para>Generate C# entity class code based on database tables</para>
+        /// </summary>
         /// <param name="dbHelper"></param>
         public DbToCSharpEntityCode(DbHelper dbHelper) : base(dbHelper) => CodeFileExtension = ".cs";
+        /// <summary>
+        /// 根据数据库的表生成C#实体类代码
+        /// <para>Generate C# entity class code based on database tables</para>
+        /// </summary>
+        public DbToCSharpEntityCode(string connectionString, EDbProviderType dbType, int commandTimeOut = 30) :
+            base(connectionString, dbType, commandTimeOut) => CodeFileExtension = ".cs";
 
 
         /// <summary>
@@ -75,8 +90,7 @@ namespace WLib.Database.ORM
         protected override string CreateCodeByTable(string tableName, DataColumn[] columns)
         {
             var sb = new StringBuilder();
-            foreach (var @using in Usings)//引用
-                sb.AppendLine($"using {@using};");
+            Usings.ForEach(@using => sb.AppendLine($"using {@using};"));//引用
 
             sb.AppendLine();
             sb.AppendLine($"namespace {NameSpace}");//命名空间
@@ -88,8 +102,7 @@ namespace WLib.Database.ORM
                 sb.AppendLine($"\t/// {tableName}");
                 sb.AppendLine("\t/// </summary>");
             }
-            foreach (var classAttribute in ClassAttributes)//类特性
-                sb.AppendLine($"\t[{classAttribute}]");
+            ClassAttributes.ForEach(classAttribute => sb.AppendLine($"\t[{classAttribute}]"));//类特性
 
             var inherits = string.IsNullOrWhiteSpace(Inherits) ? string.Empty : " : " + Inherits;
             sb.AppendLine($"\tpublic class {tableName}{inherits}");
@@ -103,8 +116,7 @@ namespace WLib.Database.ORM
                     sb.AppendLine($"\t\t/// {column.Caption}");
                     sb.AppendLine("\t\t/// </summary>");
                 }
-                foreach (var propertyAttribute in PropertyAttributes)
-                    sb.AppendLine($"\t\t[{propertyAttribute}]");
+                PropertyAttributes.ForEach(propertyAttribute => sb.AppendLine($"\t\t[{propertyAttribute}]"));
 
                 var colTypeName = column.DataType.Name;
                 var typeName = BaseTypeNameAndKeywords.ContainsKey(colTypeName) ? BaseTypeNameAndKeywords[colTypeName] : colTypeName;

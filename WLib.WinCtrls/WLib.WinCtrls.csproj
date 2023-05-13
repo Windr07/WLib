@@ -67,6 +67,10 @@
       <HintPath>..\DLL\Microsoft.Office.Interop.Word.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Office, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -124,6 +128,7 @@
     <Compile Include="CodeGenerateCtrl\EntityCodeGenerator.Designer.cs">
       <DependentUpon>EntityCodeGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="CodeGenerateCtrl\GeneratorSettings.cs" />
     <Compile Include="ComboCtrl\ComboBoxPlus.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -433,10 +438,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WLib.ArcGis\WLib.ArcGis.csproj">
-      <Project>{0e418c82-3534-4604-bee4-4e5bd0bb926d}</Project>
-      <Name>WLib.ArcGis</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WLib.Envir\WLib.Envir.csproj">
       <Project>{32fb07dd-7400-4011-bebc-72ed503b4911}</Project>
       <Name>WLib.Envir</Name>

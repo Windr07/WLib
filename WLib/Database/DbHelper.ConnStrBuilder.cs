@@ -8,6 +8,7 @@
 //----------------------------------------------------------------*/
 
 using System;
+using WLib.Database.DbBase;
 
 namespace WLib.Database
 {
@@ -20,6 +21,29 @@ namespace WLib.Database
     /// </summary>
     public partial class DbHelper
     {
+        /// <summary>
+        /// 获取各种类型的数据库连接字符串示例
+        /// </summary>
+        /// <param name="eType"></param>
+        /// <returns></returns>
+        public static string GetConnectionStringExample(EDbProviderType eType)
+        {
+            switch (eType)
+            {
+                case EDbProviderType.SqlServer: return "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;";
+                case EDbProviderType.MySql: return "Database=databaseName;Data Source=myServerAddress;User Id=myUsername;Password=myPassword;pooling=false;CharSet=utf8;port=3306";
+                case EDbProviderType.SqLite: return "Data Source=c:\\mydb.db;Version=3;";
+                case EDbProviderType.Oracle: return "Data Source=dataSource; User ID=userId;Password=password;";
+                case EDbProviderType.Odbc: return "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\myFolder\\myAccessFile.accdb;Persist Security Info=False;";
+                case EDbProviderType.OleDb: return "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\myFolder\\myAccessFile.accdb;Jet OLEDB:Database Password=password;";
+                case EDbProviderType.Firebird: return "User=SYSDBA;Password=masterkey;Database=SampleDatabase.fdb;DataSource=localhost;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0;";
+                case EDbProviderType.PostgreSql: return "PORT=5432;DATABASE=databaseName;HOST=myServerAddress;PASSWORD=myPassword;USER ID=postgres";
+                case EDbProviderType.Db2: return "Server=myAddress:myPortNumber;Database=myDataBase;UID=myUsername;PWD=myPassword;";
+                case EDbProviderType.Informix: return "Database=myDataBase;Host=192.168.10.10;Server=db_engine_tcp;Service=1492;Protocol=onsoctcp;UID=myUsername;Password=myPassword;";
+                case EDbProviderType.SqlServerCe: return "Data Source=MyDatabase#1.sdf;Persist Security Info=False;Password=xxx;";
+                default: return string.Empty;
+            }
+        }
         /// <summary>
         ///  构建OLEDB.4.0连接Access的连接字符串
         /// </summary>
