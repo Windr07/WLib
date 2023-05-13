@@ -12,7 +12,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 
-namespace WLib.Files.Excel.NPOI
+namespace ClimateWebApi.Util
 {
     //NPOI是一个开源的C#读写Excel的项目（不需要安装MS Office即可读写Excel文档）:https://github.com/tonyqus/npoi
     //使用NPOI时，请注意引用NPOI.dll, NPOI.OOXML.dll, NPOI.OpenXml4Net.dll, NPOI.OpenXmlFormats.dll
@@ -26,12 +26,13 @@ namespace WLib.Files.Excel.NPOI
         /// 打开Excel工作簿（兼容xls和xlsx）
         /// </summary>
         /// <param name="filePath">文件名</param>
+        /// <param name="fileAccess"></param>
         /// <returns></returns>
-        public static IWorkbook OpenWorkbook(string filePath)
+        public static IWorkbook OpenWorkbook(string filePath, FileAccess fileAccess = FileAccess.Read)
         {
             IWorkbook workbook = null;
             string fileExt = Path.GetExtension(filePath);
-            using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            using (var file = new FileStream(filePath, FileMode.Open, fileAccess))
             {
                 if (fileExt == ".xls")
                     workbook = new HSSFWorkbook(file);
@@ -78,7 +79,7 @@ namespace WLib.Files.Excel.NPOI
                 {
                     var cell = rows.CreateCell(j);
                     sheet.GetRow(i).GetCell(j).CellStyle = style;
-                    SetBorderLine(workbook, i, j);
+                    workbook.SetBorderLine(i, j);
                 }
             }
             return workbook;
@@ -90,8 +91,8 @@ namespace WLib.Files.Excel.NPOI
         /// （单元格cell为空则返回string.Empty，若为日期则返回yyyy/MM/dd格式的日期字符串）
         /// </summary>
         /// <param name="sheet"></param>
-        /// <param name="row"></param>
-        /// <param name="col"></param>
+        /// <param name="row">行号，从0开始</param>
+        /// <param name="col">列号，从0开始</param>
         /// <returns></returns>
         public static string GetCellValue(this ISheet sheet, int row, int col)
         {
@@ -131,11 +132,11 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="workbook">指定工作簿</param>
         /// <param name="sheet">指定工作表</param>
         /// <param name="value">需要单元格的值</param>
-        /// <param name="row">开始行</param>
-        /// <param name="col">开始列</param>
-        /// <param name="eRow">结束行</param>
-        /// <param name="eCol">结束列</param>
-        public static void MergeCells(this ISheet sheet, Object value, int row, int eRow, int col, int eCol)
+        /// <param name="row">开始行号（从0开始）</param>
+        /// <param name="col">开始列号（从0开始）</param>
+        /// <param name="eRow">结束行号（从0开始）</param>
+        /// <param name="eCol">结束列号（从0开始）</param>
+        public static void MergeCells(this ISheet sheet, object value, int row, int eRow, int col, int eCol)
         {
             sheet.AddMergedRegion(new CellRangeAddress(row, eRow, col, eCol));
             sheet.GetRow(row).GetCell(col).SetCellValue(value.ToString());
@@ -144,8 +145,8 @@ namespace WLib.Files.Excel.NPOI
         /// 获取合并单元格的值
         /// </summary>
         /// <param name="sheet">指定工作表</param>
-        /// <param name="rowIndex">行号</param>
-        /// <param name="columnIndex">列号</param>
+        /// <param name="rowIndex">行号（从0开始）</param>
+        /// <param name="columnIndex">列号（从0开始）</param>
         /// <param name="firstColumnIndex">返回合并单元格的列号（合并范围的第一列的列号）</param>
         /// <param name="firstRowIndex">返回合并单元格的行号（合并范围的第一行的行号）</param>
         /// <returns></returns>
@@ -178,9 +179,9 @@ namespace WLib.Files.Excel.NPOI
         /// 插入行
         /// </summary>
         /// <param name="sheet">指定操作的Sheet</param>
-        /// <param name="insertRowIndex">指定在第几行插入（插入行的位置）</param>
+        /// <param name="insertRowIndex">指定在第几行插入（插入行的位置，从0开始算）</param>
         /// <param name="insertRowCount">指定要插入多少行</param>
-        /// <param name="sourceStyleRow">源单元格格式的行，注意源格式行应为插入行之前的行</param>
+        /// <param name="sourceStyleRow">源单元格格式的行，注意源格式行应为插入行之前的行（从0开始算）</param>
         public static void InsertRow(this ISheet sheet, int insertRowIndex, int insertRowCount, IRow sourceStyleRow, int lastRowNum = -1)
         {
             if (lastRowNum < 0)
@@ -199,19 +200,19 @@ namespace WLib.Files.Excel.NPOI
             //对批量移动后空出的空行插，创建相应的行，并以插入行的上一行为格式源(即：插入行-1的那一行)
             for (int i = insertRowIndex; i < insertRowIndex + insertRowCount - 1; i++)
             {
-                CopyCellStyle(sourceStyleRow, sheet.CreateRow(i + 1));
+                sourceStyleRow.CopyCellStyle(sheet.CreateRow(i + 1));
             }
 
-            CopyCellStyle(sourceStyleRow, sheet.GetRow(insertRowIndex));
+            sourceStyleRow.CopyCellStyle(sheet.GetRow(insertRowIndex));
         }
 
 
         /// <summary>
         /// 设置边框
         /// </summary>
-        /// <param name="workbook">工作表</param
-        /// <param name="row">设置行</param>
-        /// <param name="col">设置列</param>
+        /// <param name="workbook">工作表</param>
+        /// <param name="row">设置行（从0开始算）</param>
+        /// <param name="col">设置列（从0开始算）</param>
         public static void SetBorderLine(this IWorkbook workbook, int row, int col)
         {
             ISheet sheet = workbook.GetSheetAt(0);
@@ -229,16 +230,16 @@ namespace WLib.Files.Excel.NPOI
         /// 设置单元格为无边框
         /// </summary>
         /// <param name="workbook">工作表</param>
-        /// <param name="row">开始行</param>
-        /// <param name="col">开始列</param>
-        /// <param name="endRow">结束行</param>
-        /// <param name="endCol">结束列</param>
+        /// <param name="row">开始行（从0开始算）</param>
+        /// <param name="col">开始列（从0开始算）</param>
+        /// <param name="endRow">结束行（从0开始算）</param>
+        /// <param name="endCol">结束列（从0开始算）</param>
         public static void SetBorderLine(this IWorkbook workbook, int row, int col, int endRow, int endCol)
         {
             ISheet sheet = workbook.GetSheetAt(0);
             for (int i = row; i <= endRow; i++)
             {
-                for (int j = 0; j <= endCol; j++)
+                for (int j = col; j <= endCol; j++)
                 {
                     ICell cell = sheet.GetRow(i).GetCell(j);
                     ICellStyle style = workbook.CreateCellStyle();
@@ -282,7 +283,7 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="fontName">字体名称</param>
         public static IFont ApplyFont(this ISheet sheet, IRichTextString richText, short fontSize, string fontName = "宋体")
         {
-            return ApplyFont(sheet.Workbook, richText, fontSize, fontName);
+            return sheet.Workbook.ApplyFont(richText, fontSize, fontName);
         }
         /// <summary>
         /// 在字符串的指定起止位置设置下划线
@@ -313,35 +314,34 @@ namespace WLib.Files.Excel.NPOI
         /// <param name="fontName">字体名称</param>
         public static IFont SetUnderline(this ISheet sheet, IRichTextString richText, short fontSize, int startIndex, int endIndex, string fontName = "宋体")
         {
-            return SetUnderline(sheet.Workbook, richText, fontSize, startIndex, endIndex, fontName);
+            return sheet.Workbook.SetUnderline(richText, fontSize, startIndex, endIndex, fontName);
         }
         /// <summary>
         /// 对单元格赋值，设置字符串的下划线
         /// </summary>
         /// <param name="sheet">需要添加下划线的工作表</param>
-        /// <param name="row">单元格行号</param>
-        /// <param name="cell">单元格列号</param>
+        /// <param name="row">单元格行号（从0开始算）</param>
+        /// <param name="col">单元格列号（从0开始算）</param>
         /// <param name="vaule">需要单元格所需传入的值</param>
         /// <param name="startIndex">需要添加下划线的起始位置</param>
         /// <param name="endIndex">需要添加下划线的末尾位置</param>
-        public static void SetUnderline(this ISheet sheet, int row, int cell, string vaule, int startIndex, int endIndex)
+        public static void SetUnderline(this ISheet sheet, int row, int col, string vaule, int startIndex, int endIndex)
         {
             HSSFRichTextString richtext = new HSSFRichTextString(vaule);
-            ApplyFont(sheet, richtext, 11);
-            SetUnderline(sheet, richtext, 11, startIndex, endIndex);
-            sheet.GetRow(row).GetCell(cell).SetCellValue(richtext);
+            sheet.ApplyFont(richtext, 11);
+            sheet.SetUnderline(richtext, 11, startIndex, endIndex);
+            sheet.GetRow(row).GetCell(col).SetCellValue(richtext);
         }
         /// <summary>
-        /// 对单元格赋值，设置时间下划线
+        /// 对单元格赋值，赋值格式为“x年x月x日至x年x月x日”，同时设置时间下划线
         /// </summary>
         /// <param name="workbook">需要添加下划线的工作簿</param>
-        /// <param name="row">单元格行号</param>
-        /// <param name="row">单元格列号</param>
-        /// <param name="cell"></param>
+        /// <param name="row">单元格行号（从0开始算）</param>
+        /// <param name="cell">单元格列号（从0开始算）</param>
         /// <param name="vaule"></param>
         /// <param name="startTime">起始日期</param>
         /// <param name="endTime">截止日期</param>
-        public static void SetDateTimeUnderline(this IWorkbook workbook, int row, int cell, string vaule, DateTime startTime, DateTime endTime)
+        public static void SetDateTimeUnderline(this IWorkbook workbook, int row, int cell, DateTime startTime, DateTime endTime)
         {
             string startYear = startTime.Year.ToString();
             string startMonth = startTime.Month.ToString();
@@ -353,9 +353,9 @@ namespace WLib.Files.Excel.NPOI
             string strValue = $"{startYear}年{startMonth}月{startDay}日至{endYear}年{endMonth}月{endDay}日";
 
             HSSFRichTextString richtext = new HSSFRichTextString(strValue);
-            ApplyFont(workbook, richtext, 11);
+            workbook.ApplyFont(richtext, 11);
 
-            var font2 = SetUnderline(workbook, richtext, 11, 0, 4);
+            var font2 = workbook.SetUnderline(richtext, 11, 0, 4);
             int monthEndIndex = 5 + startMonth.Length;
             richtext.ApplyFont(5, monthEndIndex, font2);
             richtext.ApplyFont(monthEndIndex + 1, monthEndIndex + 1 + startDay.Length, font2);
